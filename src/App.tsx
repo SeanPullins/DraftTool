@@ -54,6 +54,7 @@ const start: Prospect = {
 const positions = ['QB', 'RB', 'WR', 'TE', 'OT', 'IOL', 'EDGE', 'IDL', 'LB', 'CB', 'S']
 const outcomeOrder: Category[] = ['Bust', 'Reserve', 'Role', 'Starter', 'High-end starter', 'Star']
 const group: Record<string, string> = { QB: 'QB', RB: 'SKILL', WR: 'SKILL', TE: 'SKILL', OT: 'OL', IOL: 'OL', EDGE: 'FRONT', IDL: 'FRONT', LB: 'FRONT', CB: 'DB', S: 'DB' }
+const assetBase = import.meta.env.BASE_URL
 
 export default function App() {
   const [prospects, setProspects] = useState<Historical[]>([])
@@ -66,8 +67,8 @@ export default function App() {
     async function load() {
       try {
         const [combineCsv, draftCsv] = await Promise.all([
-          fetch('/data/combine.csv').then((r) => r.text()),
-          fetch('/data/draft_picks.csv').then((r) => r.text()),
+          fetch(`${assetBase}data/combine.csv`).then((r) => r.text()),
+          fetch(`${assetBase}data/draft_picks.csv`).then((r) => r.text()),
         ])
         setProspects(buildHistory(parseCsv(combineCsv), parseCsv(draftCsv)))
       } catch {
