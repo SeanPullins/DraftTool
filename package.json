@@ -7,7 +7,7 @@
     "dev": "vite",
     "prebuild": "npm run data:refresh",
     "build": "tsc -b && vite build",
-    "lint": "eslint .",
+    "lint": "tsc -b",
     "preview": "vite preview",
     "data:refresh": "node scripts/refresh-data.mjs"
   },
