@@ -4,6 +4,13 @@ A free, deployable NFL prospect projection tool. It uses nflverse combine data a
 
 No model can project exact NFL success. DraftLens is built to be honest about that: it reports probabilities, ranges, comps, and confidence instead of pretending the future is deterministic.
 
+## Use it
+
+- Search for an existing player in **Existing prospect**, then load them into the board.
+- Click **New prospect** to enter a player who is not in the nflverse data yet.
+- Click **Save current** to store a prospect in **My prospects**. Saved prospects live in your browser's local storage.
+- Use **Export** and **Import** to move your saved prospect list between browsers or devices.
+
 ## Run locally
 
 ```bash

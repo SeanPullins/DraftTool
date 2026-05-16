@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState, type ChangeEvent, type CSSProperties } from 'react'
 
 type Row = Record<string, string>
 type Category = 'Bust' | 'Reserve' | 'Role' | 'Starter' | 'High-end starter' | 'Star'
@@ -21,6 +21,7 @@ type Prospect = {
   health: number
   processing: number
 }
+type SavedProspect = Prospect & { id: string; updatedAt: string }
 type Historical = {
   id: string
   name: string
@@ -45,19 +46,31 @@ type Historical = {
 }
 
 type Projection = ReturnType<typeof project>
+type LoaderMessage = { tone: 'good' | 'warn'; text: string } | null
 
 const start: Prospect = {
   name: 'Elite Prospect', school: 'College', pos: 'WR', pick: 18, age: 21, height: 74, weight: 205,
   forty: 4.43, vertical: 38, broad: 126, cone: 6.9, shuttle: 4.15, film: 86, production: 84, fit: 82, health: 80, processing: 78,
 }
 
+const blankProspect: Prospect = {
+  name: 'New Prospect', school: '', pos: 'WR', pick: 100, age: 21.5, height: 73, weight: 205,
+  forty: 4.55, vertical: 34, broad: 120, cone: 7.1, shuttle: 4.3, film: 70, production: 70, fit: 70, health: 80, processing: 70,
+}
+
 const positions = ['QB', 'RB', 'WR', 'TE', 'OT', 'IOL', 'EDGE', 'IDL', 'LB', 'CB', 'S']
 const outcomeOrder: Category[] = ['Bust', 'Reserve', 'Role', 'Starter', 'High-end starter', 'Star']
 const group: Record<string, string> = { QB: 'QB', RB: 'SKILL', WR: 'SKILL', TE: 'SKILL', OT: 'OL', IOL: 'OL', EDGE: 'FRONT', IDL: 'FRONT', LB: 'FRONT', CB: 'DB', S: 'DB' }
 const assetBase = import.meta.env.BASE_URL
+const savedKey = 'draftlens.savedProspects.v1'
 
 export default function App() {
   const [prospects, setProspects] = useState<Historical[]>([])
+  const [lookupPool, setLookupPool] = useState<Historical[]>([])
+  const [saved, setSaved] = useState<SavedProspect[]>(readSavedProspects)
+  const [selectedSavedId, setSelectedSavedId] = useState('')
+  const [lookupQuery, setLookupQuery] = useState('')
+  const [message, setMessage] = useState<LoaderMessage>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   const [input, setInput] = useState(start)
@@ -70,7 +83,9 @@ export default function App() {
           fetch(`${assetBase}data/combine.csv`).then((r) => r.text()),
           fetch(`${assetBase}data/draft_picks.csv`).then((r) => r.text()),
         ])
-        setProspects(buildHistory(parseCsv(combineCsv), parseCsv(draftCsv)))
+        const allProspects = buildProspectPool(parseCsv(combineCsv), parseCsv(draftCsv))
+        setLookupPool(allProspects)
+        setProspects(allProspects.filter((p) => p.year >= 2000 && p.year <= 2021 && p.pick < 260))
       } catch {
         setError('Data files are missing. Run npm run data:refresh, then reload.')
       } finally {
@@ -80,8 +95,127 @@ export default function App() {
     load()
   }, [])
 
+  useEffect(() => {
+    writeSavedProspects(saved)
+  }, [saved])
+
+  const lookupOptions = useMemo(
+    () => lookupPool
+      .slice()
+      .sort((a, b) => b.year - a.year || a.pick - b.pick || a.name.localeCompare(b.name))
+      .slice(0, 9000)
+      .map((player) => ({ id: player.id, label: lookupLabel(player) })),
+    [lookupPool],
+  )
+
   function update<K extends keyof Prospect>(key: K, value: Prospect[K]) {
     setInput((current) => ({ ...current, [key]: value }))
+  }
+
+  function loadExistingProspect() {
+    const normalized = clean(lookupQuery)
+    if (!normalized) {
+      setMessage({ tone: 'warn', text: 'Type a player name first.' })
+      return
+    }
+
+    const option = lookupOptions.find((item) => item.label === lookupQuery)
+      ?? lookupOptions.find((item) => clean(item.label).includes(normalized))
+    const match = lookupPool.find((player) => player.id === option?.id)
+
+    if (!match) {
+      setMessage({ tone: 'warn', text: 'No matching player found.' })
+      return
+    }
+
+    setInput(prospectFromHistorical(match))
+    setSelectedSavedId('')
+    setMessage({ tone: 'good', text: `Loaded ${match.name}. Edit any missing testing or scouting fields, then run the projection.` })
+  }
+
+  function saveCurrentProspect() {
+    const now = new Date().toISOString()
+    const id = selectedSavedId && saved.some((player) => player.id === selectedSavedId)
+      ? selectedSavedId
+      : `${Date.now()}-${slug(input.name || 'prospect')}`
+    const record: SavedProspect = { ...input, id, updatedAt: now }
+
+    setSaved((current) => {
+      const next = current.some((player) => player.id === id)
+        ? current.map((player) => player.id === id ? record : player)
+        : [record, ...current]
+      return next.sort((a, b) => b.updatedAt.localeCompare(a.updatedAt)).slice(0, 250)
+    })
+    setSelectedSavedId(id)
+    setMessage({ tone: 'good', text: `Saved ${input.name} to My prospects.` })
+  }
+
+  function loadSavedProspect(id: string) {
+    setSelectedSavedId(id)
+    const match = saved.find((player) => player.id === id)
+    if (!match) return
+    setInput(stripSavedFields(match))
+    setLookupQuery('')
+    setMessage({ tone: 'good', text: `Loaded saved prospect ${match.name}.` })
+  }
+
+  function deleteSavedProspect() {
+    if (!selectedSavedId) return
+    const deleted = saved.find((player) => player.id === selectedSavedId)
+    setSaved((current) => current.filter((player) => player.id !== selectedSavedId))
+    setSelectedSavedId('')
+    setMessage({ tone: 'warn', text: deleted ? `Removed ${deleted.name} from My prospects.` : 'Saved prospect removed.' })
+  }
+
+  function startNewProspect() {
+    setInput(blankProspect)
+    setSelectedSavedId('')
+    setLookupQuery('')
+    setMessage({ tone: 'good', text: 'New prospect is ready.' })
+  }
+
+  function exportSavedProspects() {
+    if (!saved.length) {
+      setMessage({ tone: 'warn', text: 'There are no saved prospects to export yet.' })
+      return
+    }
+
+    const blob = new Blob([JSON.stringify(saved, null, 2)], { type: 'application/json' })
+    const url = URL.createObjectURL(blob)
+    const link = document.createElement('a')
+    link.href = url
+    link.download = 'draftlens-prospects.json'
+    link.click()
+    URL.revokeObjectURL(url)
+    setMessage({ tone: 'good', text: 'Exported My prospects.' })
+  }
+
+  async function importSavedProspects(event: ChangeEvent<HTMLInputElement>) {
+    const file = event.target.files?.[0]
+    if (!file) return
+
+    try {
+      const parsed = JSON.parse(await file.text()) as unknown
+      const list = Array.isArray(parsed) ? parsed : null
+      if (!list) throw new Error('Expected an array')
+
+      const now = new Date().toISOString()
+      const imported = list
+        .map((item, index) => {
+          const prospect = prospectFromUnknown(item)
+          return prospect ? { ...prospect, id: `${Date.now()}-${index}-${slug(prospect.name)}`, updatedAt: now } : null
+        })
+        .filter((item): item is SavedProspect => item !== null)
+
+      if (!imported.length) throw new Error('No prospects')
+
+      setSaved((current) => [...imported, ...current].slice(0, 250))
+      setMessage({ tone: 'good', text: `Imported ${imported.length} prospect${imported.length === 1 ? '' : 's'}.` })
+    } catch {
+      setMessage({ tone: 'warn', text: 'Import failed. Use the JSON file exported from this tool.' })
+    } finally {
+      event.target.value = ''
+    }
   }
 
   return <main className="shell">
@@ -93,6 +227,18 @@ export default function App() {
     {error ? <section className="card empty">{error}</section> : <div className="grid">
       <aside className="card inputs">
         <div className="cardHead"><h2>Prospect Board</h2><button onClick={() => setInput(start)}>Reset</button></div>
+
+        <section className="loader">
+          <h3>Add Player</h3>
+          <label className="full"><span>Existing prospect</span><input list="prospect-lookup" value={lookupQuery} onChange={(e) => setLookupQuery(e.target.value)} placeholder="Search name, school, year, position" /></label>
+          <datalist id="prospect-lookup">{lookupOptions.map((item) => <option key={item.id} value={item.label} />)}</datalist>
+          <div className="actions"><button type="button" onClick={loadExistingProspect}>Load existing</button><button type="button" className="secondary" onClick={startNewProspect}>New prospect</button></div>
+
+          <label className="full"><span>My prospects</span><select value={selectedSavedId} onChange={(e) => loadSavedProspect(e.target.value)}><option value="">Select saved player</option>{saved.map((player) => <option key={player.id} value={player.id}>{player.name} / {player.pos} / {player.school || 'No school'}</option>)}</select></label>
+          <div className="actions"><button type="button" onClick={saveCurrentProspect}>Save current</button><button type="button" className="secondary" onClick={exportSavedProspects}>Export</button><label className="fileButton">Import<input type="file" accept="application/json,.json" onChange={importSavedProspects} /></label><button type="button" className="danger" onClick={deleteSavedProspect} disabled={!selectedSavedId}>Delete</button></div>
+          {message ? <p className={`status ${message.tone}`}>{message.text}</p> : null}
+        </section>
+
         <Text label="Name" value={input.name} onChange={(v) => update('name', v)} />
         <Text label="School" value={input.school} onChange={(v) => update('school', v)} />
         <label><span>Position</span><select value={input.pos} onChange={(e) => update('pos', e.target.value)}>{positions.map((p) => <option key={p}>{p}</option>)}</select></label>
@@ -114,7 +260,7 @@ export default function App() {
 
       <section className="results">
         <section className="card hero">
-          <div className="gauge" style={{ '--angle': `${projection.score * 3.6}deg` } as React.CSSProperties}><b>{Math.round(projection.score)}</b><span>/100</span></div>
+          <div className="gauge" style={{ '--angle': `${projection.score * 3.6}deg` } as CSSProperties}><b>{Math.round(projection.score)}</b><span>/100</span></div>
           <div><p>{input.pos} / round {round(input.pick)}</p><h2>{input.name}</h2><h3>{projection.grade}</h3></div>
           <Metric label="Expected AV" value={projection.expectedAv.toFixed(1)} />
           <Metric label="Games" value={Math.round(projection.games).toString()} />
@@ -140,6 +286,81 @@ function Slider({ label, value, onChange }: { label: string; value: number; onCh
 function Metric({ label, value }: { label: string; value: string }) { return <div className="metric"><span>{label}</span><b>{value}</b></div> }
 function Bar({ label, value }: { label: string; value: number }) { return <div className="bar"><span>{label}</span><i><b style={{ width: `${value * 100}%` }} /></i><strong>{(value * 100).toFixed(1)}%</strong></div> }
 
+function readSavedProspects(): SavedProspect[] {
+  if (typeof window === 'undefined') return []
+  try {
+    const parsed = JSON.parse(window.localStorage.getItem(savedKey) || '[]') as unknown
+    if (!Array.isArray(parsed)) return []
+    return parsed
+      .map((item, index) => {
+        const prospect = prospectFromUnknown(item)
+        if (!prospect) return null
+        const record = asRecord(item)
+        return { ...prospect, id: stringField(record, 'id', `${Date.now()}-${index}`), updatedAt: stringField(record, 'updatedAt', new Date().toISOString()) }
+      })
+      .filter((item): item is SavedProspect => item !== null)
+  } catch {
+    return []
+  }
+}
+
+function writeSavedProspects(saved: SavedProspect[]) {
+  if (typeof window === 'undefined') return
+  window.localStorage.setItem(savedKey, JSON.stringify(saved))
+}
+
+function stripSavedFields(saved: SavedProspect): Prospect {
+  const { id: _id, updatedAt: _updatedAt, ...prospect } = saved
+  return prospect
+}
+
+function prospectFromHistorical(player: Historical): Prospect {
+  const baseline = player.pick <= 32 ? 84 : player.pick <= 64 ? 78 : player.pick <= 100 ? 72 : player.pick <= 150 ? 66 : 60
+  return {
+    name: player.name,
+    school: player.school,
+    pos: player.pos,
+    pick: player.pick || blankProspect.pick,
+    age: player.age ?? blankProspect.age,
+    height: player.height ?? blankProspect.height,
+    weight: player.weight ?? blankProspect.weight,
+    forty: player.forty ?? blankProspect.forty,
+    vertical: player.vertical ?? blankProspect.vertical,
+    broad: player.broad ?? blankProspect.broad,
+    cone: player.cone ?? blankProspect.cone,
+    shuttle: player.shuttle ?? blankProspect.shuttle,
+    film: baseline,
+    production: Math.max(55, baseline - 2),
+    fit: baseline,
+    health: 80,
+    processing: player.pos === 'QB' ? baseline : Math.max(55, baseline - 4),
+  }
+}
+
+function prospectFromUnknown(value: unknown): Prospect | null {
+  const record = asRecord(value)
+  if (!record) return null
+  return {
+    name: stringField(record, 'name', 'Saved Prospect'),
+    school: stringField(record, 'school', ''),
+    pos: norm(stringField(record, 'pos', 'WR')),
+    pick: numberField(record, 'pick', blankProspect.pick),
+    age: numberField(record, 'age', blankProspect.age),
+    height: numberField(record, 'height', blankProspect.height),
+    weight: numberField(record, 'weight', blankProspect.weight),
+    forty: numberField(record, 'forty', blankProspect.forty),
+    vertical: numberField(record, 'vertical', blankProspect.vertical),
+    broad: numberField(record, 'broad', blankProspect.broad),
+    cone: numberField(record, 'cone', blankProspect.cone),
+    shuttle: numberField(record, 'shuttle', blankProspect.shuttle),
+    film: clamp(numberField(record, 'film', blankProspect.film), 1, 99),
+    production: clamp(numberField(record, 'production', blankProspect.production), 1, 99),
+    fit: clamp(numberField(record, 'fit', blankProspect.fit), 1, 99),
+    health: clamp(numberField(record, 'health', blankProspect.health), 1, 99),
+    processing: clamp(numberField(record, 'processing', blankProspect.processing), 1, 99),
+  }
+}
+
 function parseCsv(text: string): Row[] {
   const rows: string[][] = []; let row: string[] = []; let cell = ''; let q = false
   for (let i = 0; i < text.length; i++) { const ch = text[i], next = text[i + 1]; if (ch === '"') { if (q && next === '"') { cell += '"'; i++ } else q = !q } else if (ch === ',' && !q) { row.push(cell); cell = '' } else if ((ch === '\n' || ch === '\r') && !q) { if (ch === '\r' && next === '\n') i++; row.push(cell); rows.push(row); row = []; cell = '' } else cell += ch }
@@ -149,11 +370,60 @@ function parseCsv(text: string): Row[] {
 function n(v: unknown): number | null { const x = Number(String(v ?? '').replaceAll(',', '').trim()); return Number.isFinite(x) ? x : null }
 function height(v: string): number | null { if (!v) return null; if (v.includes('-')) { const [f, i] = v.split('-').map(Number); return f * 12 + i } return n(v) }
 function norm(p: string): string { const x = p.toUpperCase(); if (['OT', 'T', 'LT', 'RT'].includes(x)) return 'OT'; if (['G', 'OG', 'C', 'OL', 'IOL'].includes(x)) return 'IOL'; if (['DE', 'OLB', 'EDGE'].includes(x)) return 'EDGE'; if (['DT', 'NT', 'DL', 'IDL'].includes(x)) return 'IDL'; if (['FS', 'SS', 'DB', 'S'].includes(x)) return 'S'; return positions.includes(x) ? x : 'S' }
-function buildHistory(combine: Row[], draft: Row[]): Historical[] {
-  const byPfr = new Map(draft.map((r) => [r.pfr_player_id, r])); const byNameYear = new Map(draft.map((r) => [`${r.season}-${clean(r.pfr_player_name)}`, r]))
-  return combine.map((r, i) => { const year = n(r.draft_year) || n(r.season) || 0; const d = byPfr.get(r.pfr_id) || byNameYear.get(`${year}-${clean(r.player_name)}`); const av = n(d?.w_av) || n(d?.car_av) || 0; const games = n(d?.games) || 0; const starts = n(d?.seasons_started) || 0; const proBowls = n(d?.probowls) || 0; const allPros = n(d?.allpro) || 0; return { id: `${year}-${r.player_name}-${i}`, name: r.player_name || d?.pfr_player_name || 'Unknown', school: r.school || d?.college || '', year, pos: norm(r.pos || d?.position || ''), pick: n(r.draft_ovr) || n(d?.pick) || 260, age: n(d?.age), height: height(r.ht), weight: n(r.wt), forty: n(r.forty), vertical: n(r.vertical), broad: n(r.broad_jump), cone: n(r.cone), shuttle: n(r.shuttle), games, av, starts, proBowls, allPros, category: category(av, games, starts, proBowls, allPros) } }).filter((p) => p.year >= 2000 && p.year <= 2021 && p.av >= 0 && p.pick < 260)
+function buildProspectPool(combine: Row[], draft: Row[]): Historical[] {
+  const byPfr = new Map(draft.filter((r) => r.pfr_player_id).map((r) => [r.pfr_player_id, r]))
+  const byNameYear = new Map(draft.map((r) => [`${r.season}-${clean(r.pfr_player_name)}`, r]))
+  const usedDraftRows = new Set<Row>()
+  const fromCombine = combine.map((r, i) => {
+    const year = n(r.draft_year) || n(r.season) || 0
+    const d = byPfr.get(r.pfr_id) || byNameYear.get(`${year}-${clean(r.player_name)}`)
+    if (d) usedDraftRows.add(d)
+    return rowToHistorical(r, d, i, year)
+  })
+
+  const fromDraftOnly = draft
+    .filter((r) => !usedDraftRows.has(r))
+    .map((r, i) => rowToHistorical({}, r, combine.length + i, n(r.season) || 0))
+
+  return [...fromCombine, ...fromDraftOnly]
+    .filter((p) => p.year >= 2000 && p.name !== 'Unknown' && positions.includes(p.pos))
 }
+function rowToHistorical(combineRow: Row, draftRow: Row | undefined, index: number, year: number): Historical {
+  const av = n(draftRow?.w_av) || n(draftRow?.car_av) || 0
+  const games = n(draftRow?.games) || 0
+  const starts = n(draftRow?.seasons_started) || 0
+  const proBowls = n(draftRow?.probowls) || 0
+  const allPros = n(draftRow?.allpro) || 0
+  return {
+    id: `${year}-${combineRow.player_name || draftRow?.pfr_player_name || 'unknown'}-${index}`,
+    name: combineRow.player_name || draftRow?.pfr_player_name || 'Unknown',
+    school: combineRow.school || draftRow?.college || '',
+    year,
+    pos: norm(combineRow.pos || draftRow?.position || ''),
+    pick: n(combineRow.draft_ovr) || n(draftRow?.pick) || 260,
+    age: n(draftRow?.age),
+    height: height(combineRow.ht),
+    weight: n(combineRow.wt),
+    forty: n(combineRow.forty),
+    vertical: n(combineRow.vertical),
+    broad: n(combineRow.broad_jump),
+    cone: n(combineRow.cone),
+    shuttle: n(combineRow.shuttle),
+    games,
+    av,
+    starts,
+    proBowls,
+    allPros,
+    category: category(av, games, starts, proBowls, allPros),
+  }
+}
+function lookupLabel(player: Historical) { return `${player.name} | ${player.year} | ${player.pos} | ${player.school || 'No school'} | pick ${player.pick}` }
 function clean(s = '') { return s.toLowerCase().replace(/[^a-z0-9]/g, '') }
+function slug(s = '') { return clean(s).slice(0, 30) || 'prospect' }
+function asRecord(value: unknown): Record<string, unknown> | null { return typeof value === 'object' && value !== null ? value as Record<string, unknown> : null }
+function stringField(record: Record<string, unknown> | null, key: string, fallback: string) { const value = record?.[key]; return typeof value === 'string' && value.trim() ? value : fallback }
+function numberField(record: Record<string, unknown>, key: string, fallback: number) { return n(record[key]) ?? fallback }
+function clamp(value: number, min: number, max: number) { return Math.max(min, Math.min(max, value)) }
 function category(av: number, games: number, starts: number, pb: number, ap: number): Category { if (ap || pb >= 2 || av >= 70) return 'Star'; if (pb || (starts >= 5 && av >= 45)) return 'High-end starter'; if (starts >= 3 || (games >= 48 && av >= 20)) return 'Starter'; if (games >= 32 || av >= 8) return 'Role'; if (games >= 12 || av >= 3) return 'Reserve'; return 'Bust' }
 function project(input: Prospect, history: Historical[]) {
   const pool = history.filter((p) => p.pos === input.pos || group[p.pos] === group[input.pos])
