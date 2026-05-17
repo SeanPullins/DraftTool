@@ -5,11 +5,14 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "prebuild": "npm run data:refresh",
+    "predev": "npm run sources:prepare",
+    "prebuild": "npm run sources:prepare && npm run data:refresh",
     "build": "tsc -b && vite build",
     "lint": "tsc -b",
     "preview": "vite preview",
-    "data:refresh": "node scripts/refresh-data.mjs"
+    "sources:prepare": "node scripts/prepare-sources.mjs",
+    "data:refresh": "node scripts/refresh-data.mjs",
+    "data:pff": "npm run sources:prepare && node scripts/build-pff-comparison-data.mjs"
   },
   "dependencies": {
     "@vitejs/plugin-react": "^6.0.1",
