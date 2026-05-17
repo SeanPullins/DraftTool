@@ -1074,6 +1074,155 @@ td small {
   font-size: 11px;
 }
 
+/* ── Injury badge ────────────────────────────────── */
+.injuryBadge {
+  font-size: 10px;
+  font-weight: 700;
+  border-radius: 5px;
+  padding: 4px 8px;
+  margin: 3px 0 6px;
+  line-height: 1.4;
+}
+.injurySeverity-major {
+  background: rgba(239,68,68,0.15);
+  color: #fca5a5;
+  border: 1px solid rgba(239,68,68,0.3);
+}
+.injurySeverity-moderate {
+  background: rgba(251,146,60,0.15);
+  color: #fdba74;
+  border: 1px solid rgba(251,146,60,0.3);
+}
+.injurySeverity-minor {
+  background: rgba(251,191,36,0.12);
+  color: #fcd34d;
+  border: 1px solid rgba(251,191,36,0.25);
+}
+
+/* ── Positional scarcity ─────────────────────────── */
+.scarcityTag {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  margin: 2px 0 6px;
+}
+.scarcity-deep { color: rgba(134,239,172,0.8); }
+.scarcity-shallow { color: rgba(251,191,36,0.85); }
+.scarcity-average { color: rgba(148,163,184,0.7); }
+
+/* ── Board grid / card view ──────────────────────── */
+.boardControls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.viewToggle {
+  display: flex;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  overflow: hidden;
+}
+.viewToggle button {
+  height: 28px;
+  border: 0;
+  border-radius: 0;
+  background: #fff;
+  color: #64748b;
+  padding: 0 10px;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  min-height: 0;
+  transition: background .1s, color .1s;
+}
+.viewToggle button:hover { background: #f1f5f9; transform: none; border-color: transparent; }
+.viewToggle button.on { background: #1e40af; color: #fff; }
+
+.boardGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 10px;
+}
+
+.boardCard {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 9px;
+  padding: 11px 12px;
+  cursor: grab;
+  transition: box-shadow .15s, border-color .15s, transform .1s;
+  user-select: none;
+}
+.boardCard:hover {
+  box-shadow: 0 4px 12px rgba(15,23,42,.1);
+  border-color: #cbd5e1;
+}
+.boardCard:active { cursor: grabbing; }
+.boardCardActive {
+  border-color: #3b82f6;
+  background: #eff6ff;
+}
+.boardCardDragging {
+  opacity: 0.45;
+  transform: scale(0.97);
+}
+
+.cardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+.cardRank {
+  font-size: 11px;
+  font-weight: 800;
+  color: #94a3b8;
+}
+.cardPos {
+  font-size: 10px;
+  font-weight: 800;
+  background: #e2e8f0;
+  color: #475569;
+  border-radius: 3px;
+  padding: 1px 5px;
+}
+.cardName {
+  font-size: 13px;
+  font-weight: 700;
+  color: #0f172a;
+  line-height: 1.2;
+  margin-bottom: 3px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.cardMeta {
+  font-size: 10px;
+  color: #64748b;
+  margin-bottom: 8px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.cardFooter {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.cardScore {
+  font-size: 16px;
+  font-weight: 800;
+  color: #1e40af;
+  min-width: 28px;
+}
+
+/* ── Career arc sparkline ────────────────────────── */
+.arcSparkline { vertical-align: middle; }
+
 /* ── Error / empty states ─────────────────────────── */
 .empty {
   width: min(900px, 100%);
