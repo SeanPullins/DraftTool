@@ -4,6 +4,8 @@ A free, deployable NFL prospect projection tool. It uses nflverse combine data, 
 
 No model can project exact NFL success. DraftLens is built to be honest about that: it reports probabilities, ranges, comps, and confidence instead of pretending the future is deterministic.
 
+The projected AV model is calibrated on 2016-2023 draft classes. 2024 and newer NFL results are treated as early samples, not final bust/starter/star labels.
+
 ## Use it
 
 - Search **College PFF profile** to load a prospect with PFF composite, grade, production, efficiency, and clean-play signals.
