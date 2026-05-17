@@ -1862,10 +1862,10 @@ function project(input: Prospect, history: Historical[], pffProfiles: PffProfile
   const histExpectedAv = comps.reduce((sum, c) => sum + c.player.av * c.sim, 0) / histWeight
   const pffExpectedAv = pffComps.reduce((sum, c) => sum + (c.profile.nfl?.av || 0) * c.sim, 0) / pffWeight
   const compExpectedAv = blend(histExpectedAv, pffExpectedAv, pffBlend)
-  const expectedAv = blend(compExpectedAv, calibratedAv, 0.40)
+  const expectedAv = blend(compExpectedAv, calibratedAv, 0.10)
   const posAvValues = pool.filter((p) => p.av >= 0).map((p) => p.av)
   const posRelScore = posAvValues.length >= 15 ? pct(expectedAv, posAvValues) : avToScore(expectedAv)
-  const avScore = avToScore(expectedAv) * 0.35 + posRelScore * 0.65
+  const avScore = posRelScore
   const score = clamp(rawScore * 0.46 + avScore * 0.54, 1, 99)
   const games = blend(comps.reduce((sum, c) => sum + c.player.games * c.sim, 0) / histWeight, pffComps.reduce((sum, c) => sum + (c.profile.nfl?.games || 0) * c.sim, 0) / pffWeight, pffBlend)
   const starts = blend(comps.reduce((sum, c) => sum + c.player.starts * c.sim, 0) / histWeight, pffComps.reduce((sum, c) => sum + (c.profile.nfl?.starts || 0) * c.sim, 0) / pffWeight / 16, pffBlend)
