@@ -28,7 +28,7 @@ type Prospect = {
   pffEfficiency: number
   pffClean: number
 }
-type SavedProspect = Prospect & { id: string; updatedAt: string }
+type SavedProspect = Prospect & { id: string; updatedAt: string; notes?: string }
 type Historical = {
   id: string
   name: string
@@ -227,6 +227,7 @@ export default function App() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   const [input, setInput] = useState(start)
+  const [notes, setNotes] = useState('')
   const [mobileTab, setMobileTab] = useState<MobileTab>('edit')
   const [page, setPage] = useState<Page>(() => readPageFromHash())
   const projection = useMemo(() => project(input, prospects, pffProfiles), [input, prospects, pffProfiles])
@@ -270,7 +271,7 @@ export default function App() {
         const existingKeys = new Set(allProspects.map((p) => `${p.year}-${clean(p.name)}`))
         const uniqueExtras = extraProspects.filter((p) => !existingKeys.has(`${p.year}-${clean(p.name)}`))
         setLookupPool([...allProspects, ...uniqueExtras])
-        setProspects(allProspects.filter((p) => p.year >= 2000 && p.year <= 2022 && p.pick < 260))
+        setProspects(allProspects.filter((p) => p.year >= 2000 && p.year <= 2022 && p.pick < 260 && (p.year > 2020 || p.games >= 16)))
         if (pffPayload?.profiles?.length) {
           setPffProfiles(normalizePffProfiles(pffPayload.profiles))
           setPffSummary(pffPayload.summary)
@@ -328,6 +329,7 @@ export default function App() {
     const pffMatch = pffProfiles.find((profile) => samePlayerSeason(profile, match.name, match.year, match.pos))
     setInput(prospectFromHistorical(match, pffMatch))
     setSelectedSavedId('')
+    setNotes('')
     setPffQuery(pffMatch ? pffLabel(pffMatch) : '')
     setMessage({ tone: 'good', text: `Loaded ${match.name}.` })
   }
@@ -352,6 +354,7 @@ export default function App() {
     setInput(prospectFromPff(match, historical, input))
     setLookupQuery(historical ? lookupLabel(historical) : '')
     setSelectedSavedId('')
+    setNotes('')
     setMessage({ tone: 'good', text: `Loaded ${match.name} with college PFF signals.` })
   }
 
@@ -360,7 +363,7 @@ export default function App() {
     const id = selectedSavedId && saved.some((player) => player.id === selectedSavedId)
       ? selectedSavedId
       : `${Date.now()}-${slug(input.name || 'prospect')}`
-    const record: SavedProspect = { ...input, id, updatedAt: now }
+    const record: SavedProspect = { ...input, id, updatedAt: now, notes: notes.trim() || undefined }
 
     setSaved((current) => {
       const next = current.some((player) => player.id === id)
@@ -377,6 +380,7 @@ export default function App() {
     const match = saved.find((player) => player.id === id)
     if (!match) return
     setInput(stripSavedFields(match))
+    setNotes(match.notes ?? '')
     setLookupQuery('')
     const pffMatch = pffProfiles.find((profile) => profile.id === match.pffProfileId)
     setPffQuery(pffMatch ? pffLabel(pffMatch) : '')
@@ -388,12 +392,14 @@ export default function App() {
     const deleted = saved.find((player) => player.id === selectedSavedId)
     setSaved((current) => current.filter((player) => player.id !== selectedSavedId))
     setSelectedSavedId('')
+    setNotes('')
     setMessage({ tone: 'warn', text: deleted ? `Removed ${deleted.name} from My prospects.` : 'Saved prospect removed.' })
   }
 
   function startNewProspect() {
     setInput(blankProspect)
     setSelectedSavedId('')
+    setNotes('')
     setLookupQuery('')
     setPffQuery('')
     setMessage({ tone: 'good', text: 'New prospect is ready.' })
@@ -514,6 +520,7 @@ export default function App() {
             <label className="fileButton">Import<input type="file" accept="application/json,.json,text/csv,.csv" onChange={importSavedProspects} /></label>
             <button type="button" className="danger" onClick={deleteSavedProspect} disabled={!selectedSavedId}>Delete</button>
           </div>
+          <label className="field wide"><span>Scout notes</span><textarea className="notesArea" value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="Add scouting observations, traits, concerns…" rows={3} /></label>
           {message ? <p className={`status ${message.tone}`}>{message.text}</p> : null}
         </section>
 
@@ -571,6 +578,7 @@ export default function App() {
             <p>{input.draftSeason} / {input.pos} / round {round(input.pick)}</p>
             <h2>{input.name}</h2>
             <h3>{projection.grade}</h3>
+            {projection.percentile != null && <p className="scoreRank">Top {100 - projection.percentile}% at this pick slot</p>}
             <div className="heroMeta">
               <span>{input.school || 'No school'}</span>
               <span>PFF {Math.round(input.pffComposite)}</span>
@@ -1187,7 +1195,7 @@ function writeSavedProspects(saved: SavedProspect[]) {
 }
 
 function stripSavedFields(saved: SavedProspect): Prospect {
-  const { id: _id, updatedAt: _updatedAt, ...prospect } = saved
+  const { id: _id, updatedAt: _updatedAt, notes: _notes, ...prospect } = saved
   return prospect
 }
 
@@ -1607,6 +1615,11 @@ function project(input: Prospect, history: Historical[], pffProfiles: PffProfile
   const pffOdds = Object.fromEntries(outcomeOrder.map((cat) => [cat, pffComps.filter((c) => c.profile.nfl?.category === cat).reduce((sum, c) => sum + c.sim, 0) / pffWeight])) as Record<Category, number>
   const odds = Object.fromEntries(outcomeOrder.map((cat) => [cat, blend(histOdds[cat], pffOdds[cat], pffBlend)])) as Record<Category, number>
 
+  const slotComps = pool.filter((p) => p.year <= 2020 && Math.abs(p.pick - input.pick) <= 32)
+  const percentile = slotComps.length >= 8
+    ? Math.round(slotComps.filter((p) => p.av < expectedAv).length / slotComps.length * 100)
+    : null
+
   return {
     score,
     grade: gradeLabel(score),
@@ -1624,6 +1637,7 @@ function project(input: Prospect, history: Historical[], pffProfiles: PffProfile
     comps: comps.slice(0, 12),
     pffComps: pffComps.slice(0, 12),
     pffBlend,
+    percentile,
     signals: { draft, athletic, size, scout, age, pff: pffSignal },
   }
 }
@@ -1639,7 +1653,8 @@ function sim(input: Prospect, player: Historical) {
     z(input.cone, player.cone, .28) * .05 +
     z(input.shuttle, player.shuttle, .2) * .05 +
     (input.pos === player.pos ? 0 : .12)
-  return Math.exp(-distance)
+  const recency = Math.pow(0.96, Math.max(0, 2022 - player.year))
+  return Math.exp(-distance) * recency
 }
 
 function pffSim(input: Prospect, profile: PffProfile) {
