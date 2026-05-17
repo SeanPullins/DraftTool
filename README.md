@@ -9,8 +9,11 @@ No model can project exact NFL success. DraftLens is built to be honest about th
 - Search **College PFF profile** to load a prospect with PFF composite, grade, production, efficiency, and clean-play signals.
 - Search **Historical draft/combine player** to load an older player from the nflverse baseline.
 - Click **New** to enter a player who is not in the loaded datasets yet.
+- Use **Defaults** after choosing a position to prefill realistic baseline size/testing values for a new prospect.
 - Click **Save** to store a prospect in **My prospects**. Saved prospects live in your browser's local storage.
-- Use **Export** and **Import** to move your saved prospect list between browsers or devices.
+- Use **Template** to download the CSV layout for bulk prospect entry, then **Import** that CSV to add new prospects.
+- Use **Export** and **Import** to move your saved prospect list between browsers or devices. Import accepts DraftLens JSON exports or the CSV template.
+- Review saved players in **My Draft Board**, ranked by projected score with median AV and best-outcome labels.
 
 ## Run locally
 
