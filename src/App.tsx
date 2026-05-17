@@ -28,7 +28,7 @@ type Prospect = {
   pffEfficiency: number
   pffClean: number
 }
-type SavedProspect = Prospect & { id: string; updatedAt: string }
+type SavedProspect = Prospect & { id: string; updatedAt: string; notes?: string }
 type Historical = {
   id: string
   name: string
@@ -140,6 +140,13 @@ const group: Record<string, string> = {
   CB: 'DB',
   S: 'DB',
 }
+const signalWeights: Record<string, { draft: number; athletic: number; size: number; scout: number; age: number }> = {
+  QB:    { draft: .36, athletic: .06, size: .06, scout: .40, age: .12 },
+  SKILL: { draft: .28, athletic: .22, size: .06, scout: .34, age: .10 },
+  OL:    { draft: .30, athletic: .10, size: .20, scout: .30, age: .10 },
+  FRONT: { draft: .28, athletic: .22, size: .10, scout: .30, age: .10 },
+  DB:    { draft: .30, athletic: .24, size: .04, scout: .32, age: .10 },
+}
 const assetBase = import.meta.env.BASE_URL
 const savedKey = 'draftlens.savedProspects.v2'
 const previousSavedKey = 'draftlens.savedProspects.v1'
@@ -227,6 +234,7 @@ export default function App() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   const [input, setInput] = useState(start)
+  const [notes, setNotes] = useState('')
   const [mobileTab, setMobileTab] = useState<MobileTab>('edit')
   const [page, setPage] = useState<Page>(() => readPageFromHash())
   const projection = useMemo(() => project(input, prospects, pffProfiles), [input, prospects, pffProfiles])
@@ -270,7 +278,7 @@ export default function App() {
         const existingKeys = new Set(allProspects.map((p) => `${p.year}-${clean(p.name)}`))
         const uniqueExtras = extraProspects.filter((p) => !existingKeys.has(`${p.year}-${clean(p.name)}`))
         setLookupPool([...allProspects, ...uniqueExtras])
-        setProspects(allProspects.filter((p) => p.year >= 2000 && p.year <= 2022 && p.pick < 260))
+        setProspects(allProspects.filter((p) => p.year >= 2000 && p.year <= 2022 && p.pick < 260 && (p.year > 2020 || p.games >= 16)))
         if (pffPayload?.profiles?.length) {
           setPffProfiles(normalizePffProfiles(pffPayload.profiles))
           setPffSummary(pffPayload.summary)
@@ -328,6 +336,7 @@ export default function App() {
     const pffMatch = pffProfiles.find((profile) => samePlayerSeason(profile, match.name, match.year, match.pos))
     setInput(prospectFromHistorical(match, pffMatch))
     setSelectedSavedId('')
+    setNotes('')
     setPffQuery(pffMatch ? pffLabel(pffMatch) : '')
     setMessage({ tone: 'good', text: `Loaded ${match.name}.` })
   }
@@ -352,6 +361,7 @@ export default function App() {
     setInput(prospectFromPff(match, historical, input))
     setLookupQuery(historical ? lookupLabel(historical) : '')
     setSelectedSavedId('')
+    setNotes('')
     setMessage({ tone: 'good', text: `Loaded ${match.name} with college PFF signals.` })
   }
 
@@ -360,7 +370,7 @@ export default function App() {
     const id = selectedSavedId && saved.some((player) => player.id === selectedSavedId)
       ? selectedSavedId
       : `${Date.now()}-${slug(input.name || 'prospect')}`
-    const record: SavedProspect = { ...input, id, updatedAt: now }
+    const record: SavedProspect = { ...input, id, updatedAt: now, notes: notes.trim() || undefined }
 
     setSaved((current) => {
       const next = current.some((player) => player.id === id)
@@ -377,6 +387,7 @@ export default function App() {
     const match = saved.find((player) => player.id === id)
     if (!match) return
     setInput(stripSavedFields(match))
+    setNotes(match.notes ?? '')
     setLookupQuery('')
     const pffMatch = pffProfiles.find((profile) => profile.id === match.pffProfileId)
     setPffQuery(pffMatch ? pffLabel(pffMatch) : '')
@@ -388,12 +399,14 @@ export default function App() {
     const deleted = saved.find((player) => player.id === selectedSavedId)
     setSaved((current) => current.filter((player) => player.id !== selectedSavedId))
     setSelectedSavedId('')
+    setNotes('')
     setMessage({ tone: 'warn', text: deleted ? `Removed ${deleted.name} from My prospects.` : 'Saved prospect removed.' })
   }
 
   function startNewProspect() {
     setInput(blankProspect)
     setSelectedSavedId('')
+    setNotes('')
     setLookupQuery('')
     setPffQuery('')
     setMessage({ tone: 'good', text: 'New prospect is ready.' })
@@ -514,6 +527,7 @@ export default function App() {
             <label className="fileButton">Import<input type="file" accept="application/json,.json,text/csv,.csv" onChange={importSavedProspects} /></label>
             <button type="button" className="danger" onClick={deleteSavedProspect} disabled={!selectedSavedId}>Delete</button>
           </div>
+          <label className="field wide"><span>Scout notes</span><textarea className="notesArea" value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="Add scouting observations, traits, concerns…" rows={3} /></label>
           {message ? <p className={`status ${message.tone}`}>{message.text}</p> : null}
         </section>
 
@@ -571,6 +585,8 @@ export default function App() {
             <p>{input.draftSeason} / {input.pos} / round {round(input.pick)}</p>
             <h2>{input.name}</h2>
             <h3>{projection.grade}</h3>
+            {projection.percentile != null && <p className="scoreRank">Top {100 - projection.percentile}% at this pick slot</p>}
+            {projection.pffBlend === 0 && <p className="slotWarn">Pick-slot projection only — no PFF comps</p>}
             <div className="heroMeta">
               <span>{input.school || 'No school'}</span>
               <span>PFF {Math.round(input.pffComposite)}</span>
@@ -749,7 +765,12 @@ function CompareView({ pool, history, pffProfiles }: { pool: Historical[]; histo
       <button type="button" onClick={load}>Compare</button>
     </div>
     {msg ? <p className="status warn">{msg}</p> : null}
-    {p1 && p2 && proj1 && proj2 && <CompareTable p1={p1} p2={p2} proj1={proj1} proj2={proj2} pff1={pff1} pff2={pff2} />}
+    {p1 && p2 && proj1 && proj2 && <>
+      <div className="compareVisual">
+        <RadarChart a={proj1.signals} b={proj2.signals} aLabel={p1.name} bLabel={p2.name} />
+      </div>
+      <CompareTable p1={p1} p2={p2} proj1={proj1} proj2={proj2} pff1={pff1} pff2={pff2} />
+    </>}
   </section>
 }
 
@@ -856,6 +877,51 @@ function CompareTable({ p1, p2, proj1, proj2, pff1, pff2 }: {
       </tbody>
     </table>
   </TableWrap>
+}
+
+function RadarChart({ a, b, aLabel, bLabel }: {
+  a: { draft: number; athletic: number; size: number; scout: number; age: number; pff: number }
+  b: { draft: number; athletic: number; size: number; scout: number; age: number; pff: number }
+  aLabel: string; bLabel: string
+}) {
+  const axes: { key: keyof typeof a; label: string }[] = [
+    { key: 'draft', label: 'Draft' },
+    { key: 'athletic', label: 'Athletic' },
+    { key: 'size', label: 'Size' },
+    { key: 'scout', label: 'Scouting' },
+    { key: 'age', label: 'Age' },
+    { key: 'pff', label: 'PFF' },
+  ]
+  const cx = 130, cy = 130, r = 90
+  function pt(i: number, value: number): [number, number] {
+    const angle = (i / axes.length) * 2 * Math.PI - Math.PI / 2
+    const ratio = Math.min(1, Math.max(0, value / 100))
+    return [cx + r * ratio * Math.cos(angle), cy + r * ratio * Math.sin(angle)]
+  }
+  function poly(sig: typeof a) {
+    return axes.map((ax, i) => pt(i, sig[ax.key]).join(',')).join(' ')
+  }
+  return <div className="radarWrap">
+    <svg viewBox="0 0 260 260" className="radarChart" aria-label="Signal comparison chart">
+      {[25, 50, 75, 100].map((level) => <polygon key={level}
+        points={axes.map((_, i) => pt(i, level).join(',')).join(' ')}
+        fill="none" stroke="rgba(15,23,42,0.08)" strokeWidth="1" />)}
+      {axes.map((ax, i) => {
+        const [x, y] = pt(i, 100)
+        return <line key={ax.key} x1={cx} y1={cy} x2={x} y2={y} stroke="rgba(15,23,42,0.1)" strokeWidth="1" />
+      })}
+      <polygon points={poly(a)} fill="rgba(59,130,246,0.18)" stroke="#3b82f6" strokeWidth="2.5" strokeLinejoin="round" />
+      <polygon points={poly(b)} fill="rgba(245,158,11,0.18)" stroke="#f59e0b" strokeWidth="2.5" strokeLinejoin="round" />
+      {axes.map((ax, i) => {
+        const [x, y] = pt(i, 118)
+        return <text key={ax.key} x={x} y={y} textAnchor="middle" dominantBaseline="middle" className="radarLabel">{ax.label}</text>
+      })}
+    </svg>
+    <div className="compareLegend">
+      <span className="legendDot" style={{ background: '#3b82f6' }} /><span className="legendName">{aLabel}</span>
+      <span className="legendDot" style={{ background: '#f59e0b' }} /><span className="legendName">{bLabel}</span>
+    </div>
+  </div>
 }
 
 function PlayerBrowser({ pool }: { pool: Historical[] }) {
@@ -1187,7 +1253,7 @@ function writeSavedProspects(saved: SavedProspect[]) {
 }
 
 function stripSavedFields(saved: SavedProspect): Prospect {
-  const { id: _id, updatedAt: _updatedAt, ...prospect } = saved
+  const { id: _id, updatedAt: _updatedAt, notes: _notes, ...prospect } = saved
   return prospect
 }
 
@@ -1573,8 +1639,11 @@ function project(input: Prospect, history: Historical[], pffProfiles: PffProfile
   const size = avg([pct(input.height, stats('height')), pct(input.weight, stats('weight'))])
   const scout = input.film * .32 + input.production * .23 + input.fit * .17 + input.health * .12 + input.processing * .16
   const age = input.age <= 20.8 ? 92 : input.age <= 21.6 ? 82 : input.age <= 22.5 ? 68 : input.age <= 23.5 ? 52 : 36
-  const pffSignal = input.pffComposite * .38 + input.pffGrade * .18 + input.pffProduction * .18 + input.pffEfficiency * .17 + input.pffClean * .09
-  const baseScore = draft * .32 + athletic * .16 + size * .09 + scout * .34 + age * .09
+  const normPff = normalizePffInput(input, pffProfiles)
+  const pffSignal = normPff.composite * .38 + normPff.grade * .18 + normPff.production * .18 + normPff.efficiency * .17 + normPff.clean * .09
+  const grp = group[input.pos] ?? 'SKILL'
+  const wt = signalWeights[grp] ?? signalWeights['SKILL']
+  const baseScore = draft * wt.draft + athletic * wt.athletic + size * wt.size + scout * wt.scout + age * wt.age
   const pffPool = pffProfiles.filter((p) => p.nfl && isMatureOutcome(p.draftSeason) && p.id !== input.pffProfileId && (p.position === input.pos || group[p.position] === group[input.pos]))
   const pffComps = pffPool.map((profile) => ({ profile, sim: pffSim(input, profile) })).sort((a, b) => b.sim - a.sim).slice(0, 80)
   const pffBlend = pffComps.length >= 12 ? .35 : 0
@@ -1607,6 +1676,11 @@ function project(input: Prospect, history: Historical[], pffProfiles: PffProfile
   const pffOdds = Object.fromEntries(outcomeOrder.map((cat) => [cat, pffComps.filter((c) => c.profile.nfl?.category === cat).reduce((sum, c) => sum + c.sim, 0) / pffWeight])) as Record<Category, number>
   const odds = Object.fromEntries(outcomeOrder.map((cat) => [cat, blend(histOdds[cat], pffOdds[cat], pffBlend)])) as Record<Category, number>
 
+  const slotComps = pool.filter((p) => p.year <= 2020 && Math.abs(p.pick - input.pick) <= 32)
+  const percentile = slotComps.length >= 8
+    ? Math.round(slotComps.filter((p) => p.av < expectedAv).length / slotComps.length * 100)
+    : null
+
   return {
     score,
     grade: gradeLabel(score),
@@ -1624,6 +1698,7 @@ function project(input: Prospect, history: Historical[], pffProfiles: PffProfile
     comps: comps.slice(0, 12),
     pffComps: pffComps.slice(0, 12),
     pffBlend,
+    percentile,
     signals: { draft, athletic, size, scout, age, pff: pffSignal },
   }
 }
@@ -1639,7 +1714,8 @@ function sim(input: Prospect, player: Historical) {
     z(input.cone, player.cone, .28) * .05 +
     z(input.shuttle, player.shuttle, .2) * .05 +
     (input.pos === player.pos ? 0 : .12)
-  return Math.exp(-distance)
+  const recency = Math.pow(0.96, Math.max(0, 2022 - player.year))
+  return Math.exp(-distance) * recency
 }
 
 function pffSim(input: Prospect, profile: PffProfile) {
@@ -1678,6 +1754,25 @@ function calibratedExpectedAv(input: Prospect, signals: { draft: number; athleti
     calibratedAvModel.intercept,
   )
   return clamp(Math.expm1(logAv), 0, 110)
+}
+
+function normalizePffInput(input: Prospect, pffProfiles: PffProfile[]) {
+  const posGroup = group[input.pos] ?? 'SKILL'
+  const pool = pffProfiles.filter((p) => group[p.position] === posGroup)
+  if (pool.length < 10) return { composite: input.pffComposite, grade: input.pffGrade, production: input.pffProduction, efficiency: input.pffEfficiency, clean: input.pffClean }
+  function normField(values: number[], raw: number): number {
+    const m = avg(values)
+    const sd = Math.sqrt(avg(values.map((v) => (v - m) ** 2)))
+    if (sd < 0.01) return 50
+    return clamp(50 + ((raw - m) / sd) * 15, 1, 99)
+  }
+  return {
+    composite: normField(pool.map((p) => p.pff.composite), input.pffComposite),
+    grade: normField(pool.map((p) => p.pff.grade), input.pffGrade),
+    production: normField(pool.map((p) => p.pff.production), input.pffProduction),
+    efficiency: normField(pool.map((p) => p.pff.efficiency), input.pffEfficiency),
+    clean: normField(pool.map((p) => p.pff.clean), input.pffClean),
+  }
 }
 
 function avToScore(av: number) {
