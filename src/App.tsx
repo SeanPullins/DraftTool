@@ -140,6 +140,13 @@ const group: Record<string, string> = {
   CB: 'DB',
   S: 'DB',
 }
+const signalWeights: Record<string, { draft: number; athletic: number; size: number; scout: number; age: number }> = {
+  QB:    { draft: .36, athletic: .06, size: .06, scout: .40, age: .12 },
+  SKILL: { draft: .28, athletic: .22, size: .06, scout: .34, age: .10 },
+  OL:    { draft: .30, athletic: .10, size: .20, scout: .30, age: .10 },
+  FRONT: { draft: .28, athletic: .22, size: .10, scout: .30, age: .10 },
+  DB:    { draft: .30, athletic: .24, size: .04, scout: .32, age: .10 },
+}
 const assetBase = import.meta.env.BASE_URL
 const savedKey = 'draftlens.savedProspects.v2'
 const previousSavedKey = 'draftlens.savedProspects.v1'
@@ -579,6 +586,7 @@ export default function App() {
             <h2>{input.name}</h2>
             <h3>{projection.grade}</h3>
             {projection.percentile != null && <p className="scoreRank">Top {100 - projection.percentile}% at this pick slot</p>}
+            {projection.pffBlend === 0 && <p className="slotWarn">Pick-slot projection only — no PFF comps</p>}
             <div className="heroMeta">
               <span>{input.school || 'No school'}</span>
               <span>PFF {Math.round(input.pffComposite)}</span>
@@ -757,7 +765,12 @@ function CompareView({ pool, history, pffProfiles }: { pool: Historical[]; histo
       <button type="button" onClick={load}>Compare</button>
     </div>
     {msg ? <p className="status warn">{msg}</p> : null}
-    {p1 && p2 && proj1 && proj2 && <CompareTable p1={p1} p2={p2} proj1={proj1} proj2={proj2} pff1={pff1} pff2={pff2} />}
+    {p1 && p2 && proj1 && proj2 && <>
+      <div className="compareVisual">
+        <RadarChart a={proj1.signals} b={proj2.signals} aLabel={p1.name} bLabel={p2.name} />
+      </div>
+      <CompareTable p1={p1} p2={p2} proj1={proj1} proj2={proj2} pff1={pff1} pff2={pff2} />
+    </>}
   </section>
 }
 
@@ -864,6 +877,51 @@ function CompareTable({ p1, p2, proj1, proj2, pff1, pff2 }: {
       </tbody>
     </table>
   </TableWrap>
+}
+
+function RadarChart({ a, b, aLabel, bLabel }: {
+  a: { draft: number; athletic: number; size: number; scout: number; age: number; pff: number }
+  b: { draft: number; athletic: number; size: number; scout: number; age: number; pff: number }
+  aLabel: string; bLabel: string
+}) {
+  const axes: { key: keyof typeof a; label: string }[] = [
+    { key: 'draft', label: 'Draft' },
+    { key: 'athletic', label: 'Athletic' },
+    { key: 'size', label: 'Size' },
+    { key: 'scout', label: 'Scouting' },
+    { key: 'age', label: 'Age' },
+    { key: 'pff', label: 'PFF' },
+  ]
+  const cx = 130, cy = 130, r = 90
+  function pt(i: number, value: number): [number, number] {
+    const angle = (i / axes.length) * 2 * Math.PI - Math.PI / 2
+    const ratio = Math.min(1, Math.max(0, value / 100))
+    return [cx + r * ratio * Math.cos(angle), cy + r * ratio * Math.sin(angle)]
+  }
+  function poly(sig: typeof a) {
+    return axes.map((ax, i) => pt(i, sig[ax.key]).join(',')).join(' ')
+  }
+  return <div className="radarWrap">
+    <svg viewBox="0 0 260 260" className="radarChart" aria-label="Signal comparison chart">
+      {[25, 50, 75, 100].map((level) => <polygon key={level}
+        points={axes.map((_, i) => pt(i, level).join(',')).join(' ')}
+        fill="none" stroke="rgba(15,23,42,0.08)" strokeWidth="1" />)}
+      {axes.map((ax, i) => {
+        const [x, y] = pt(i, 100)
+        return <line key={ax.key} x1={cx} y1={cy} x2={x} y2={y} stroke="rgba(15,23,42,0.1)" strokeWidth="1" />
+      })}
+      <polygon points={poly(a)} fill="rgba(59,130,246,0.18)" stroke="#3b82f6" strokeWidth="2.5" strokeLinejoin="round" />
+      <polygon points={poly(b)} fill="rgba(245,158,11,0.18)" stroke="#f59e0b" strokeWidth="2.5" strokeLinejoin="round" />
+      {axes.map((ax, i) => {
+        const [x, y] = pt(i, 118)
+        return <text key={ax.key} x={x} y={y} textAnchor="middle" dominantBaseline="middle" className="radarLabel">{ax.label}</text>
+      })}
+    </svg>
+    <div className="compareLegend">
+      <span className="legendDot" style={{ background: '#3b82f6' }} /><span className="legendName">{aLabel}</span>
+      <span className="legendDot" style={{ background: '#f59e0b' }} /><span className="legendName">{bLabel}</span>
+    </div>
+  </div>
 }
 
 function PlayerBrowser({ pool }: { pool: Historical[] }) {
@@ -1581,8 +1639,11 @@ function project(input: Prospect, history: Historical[], pffProfiles: PffProfile
   const size = avg([pct(input.height, stats('height')), pct(input.weight, stats('weight'))])
   const scout = input.film * .32 + input.production * .23 + input.fit * .17 + input.health * .12 + input.processing * .16
   const age = input.age <= 20.8 ? 92 : input.age <= 21.6 ? 82 : input.age <= 22.5 ? 68 : input.age <= 23.5 ? 52 : 36
-  const pffSignal = input.pffComposite * .38 + input.pffGrade * .18 + input.pffProduction * .18 + input.pffEfficiency * .17 + input.pffClean * .09
-  const baseScore = draft * .32 + athletic * .16 + size * .09 + scout * .34 + age * .09
+  const normPff = normalizePffInput(input, pffProfiles)
+  const pffSignal = normPff.composite * .38 + normPff.grade * .18 + normPff.production * .18 + normPff.efficiency * .17 + normPff.clean * .09
+  const grp = group[input.pos] ?? 'SKILL'
+  const wt = signalWeights[grp] ?? signalWeights['SKILL']
+  const baseScore = draft * wt.draft + athletic * wt.athletic + size * wt.size + scout * wt.scout + age * wt.age
   const pffPool = pffProfiles.filter((p) => p.nfl && isMatureOutcome(p.draftSeason) && p.id !== input.pffProfileId && (p.position === input.pos || group[p.position] === group[input.pos]))
   const pffComps = pffPool.map((profile) => ({ profile, sim: pffSim(input, profile) })).sort((a, b) => b.sim - a.sim).slice(0, 80)
   const pffBlend = pffComps.length >= 12 ? .35 : 0
@@ -1693,6 +1754,25 @@ function calibratedExpectedAv(input: Prospect, signals: { draft: number; athleti
     calibratedAvModel.intercept,
   )
   return clamp(Math.expm1(logAv), 0, 110)
+}
+
+function normalizePffInput(input: Prospect, pffProfiles: PffProfile[]) {
+  const posGroup = group[input.pos] ?? 'SKILL'
+  const pool = pffProfiles.filter((p) => group[p.position] === posGroup)
+  if (pool.length < 10) return { composite: input.pffComposite, grade: input.pffGrade, production: input.pffProduction, efficiency: input.pffEfficiency, clean: input.pffClean }
+  function normField(values: number[], raw: number): number {
+    const m = avg(values)
+    const sd = Math.sqrt(avg(values.map((v) => (v - m) ** 2)))
+    if (sd < 0.01) return 50
+    return clamp(50 + ((raw - m) / sd) * 15, 1, 99)
+  }
+  return {
+    composite: normField(pool.map((p) => p.pff.composite), input.pffComposite),
+    grade: normField(pool.map((p) => p.pff.grade), input.pffGrade),
+    production: normField(pool.map((p) => p.pff.production), input.pffProduction),
+    efficiency: normField(pool.map((p) => p.pff.efficiency), input.pffEfficiency),
+    clean: normField(pool.map((p) => p.pff.clean), input.pffClean),
+  }
 }
 
 function avToScore(av: number) {
