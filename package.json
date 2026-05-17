@@ -5,8 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "predev": "npm run sources:prepare",
-    "prebuild": "npm run sources:prepare && npm run data:refresh",
+    "prebuild": "npm run data:refresh",
     "build": "tsc -b && vite build",
     "lint": "tsc -b",
     "preview": "vite preview",

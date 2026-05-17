@@ -722,7 +722,7 @@ function ClassExplorer({ pool, history, pffProfiles, currentName, currentYear }:
     for (const player of filtered) {
       const pffMatch = pffProfiles.find((profile) => samePlayerSeason(profile, player.name, player.year, player.pos))
       const synthesized = prospectFromHistorical(player, pffMatch)
-      const projected = project(synthesized, history, pffProfiles)
+      const projected = project(synthesized, history, pffProfiles, player.id)
       out.set(player.id, { av: projected.expectedAv, score: projected.score })
     }
     return out
@@ -1217,8 +1217,8 @@ function rowToHistorical(combineRow: Row, draftRow: Row | undefined, index: numb
   }
 }
 
-function project(input: Prospect, history: Historical[], pffProfiles: PffProfile[]) {
-  const pool = history.filter((p) => p.pos === input.pos || group[p.pos] === group[input.pos])
+function project(input: Prospect, history: Historical[], pffProfiles: PffProfile[], excludeId?: string) {
+  const pool = history.filter((p) => (p.pos === input.pos || group[p.pos] === group[input.pos]) && p.id !== excludeId)
   const stats = (k: keyof Historical) => pool.map((p) => p[k]).filter((v): v is number => typeof v === 'number' && Number.isFinite(v))
   const pct = (value: number, values: number[], low = false) => values.length ? values.filter((v) => low ? v >= value : v <= value).length / values.length * 100 : 50
   const draft = 100 * Math.pow(1 - (input.pick - 1) / 259, .58)
@@ -1230,17 +1230,17 @@ function project(input: Prospect, history: Historical[], pffProfiles: PffProfile
   const baseScore = draft * .32 + athletic * .16 + size * .09 + scout * .34 + age * .09
   const pffPool = pffProfiles.filter((p) => p.nfl && isMatureOutcome(p.draftSeason) && p.id !== input.pffProfileId && (p.position === input.pos || group[p.position] === group[input.pos]))
   const pffComps = pffPool.map((profile) => ({ profile, sim: pffSim(input, profile) })).sort((a, b) => b.sim - a.sim).slice(0, 80)
-  const pffBlend = pffComps.length >= 12 ? .28 : 0
+  const pffBlend = pffComps.length >= 12 ? .35 : 0
   const rawScore = baseScore * (1 - pffBlend) + pffSignal * pffBlend
   const calibratedAv = calibratedExpectedAv(input, { draft, athletic, size, age })
 
   const comps = pool.map((p) => ({ player: p, sim: sim(input, p) })).sort((a, b) => b.sim - a.sim).slice(0, 80)
   const histWeight = comps.reduce((sum, c) => sum + c.sim, 0) || 1
   const pffWeight = pffComps.reduce((sum, c) => sum + c.sim, 0) || 1
-  const histExpectedAv = comps.reduce((sum, c) => sum + c.player.av * c.sim, 0) / histWeight * (0.96 + (rawScore - 60) / 300)
+  const histExpectedAv = comps.reduce((sum, c) => sum + c.player.av * c.sim, 0) / histWeight
   const pffExpectedAv = pffComps.reduce((sum, c) => sum + (c.profile.nfl?.av || 0) * c.sim, 0) / pffWeight
   const compExpectedAv = blend(histExpectedAv, pffExpectedAv, pffBlend)
-  const expectedAv = blend(compExpectedAv, calibratedAv, 0.58)
+  const expectedAv = blend(compExpectedAv, calibratedAv, 0.40)
   const score = clamp(rawScore * 0.46 + avToScore(expectedAv) * 0.54, 1, 99)
   const games = blend(comps.reduce((sum, c) => sum + c.player.games * c.sim, 0) / histWeight, pffComps.reduce((sum, c) => sum + (c.profile.nfl?.games || 0) * c.sim, 0) / pffWeight, pffBlend)
   const starts = blend(comps.reduce((sum, c) => sum + c.player.starts * c.sim, 0) / histWeight, pffComps.reduce((sum, c) => sum + (c.profile.nfl?.starts || 0) * c.sim, 0) / pffWeight / 16, pffBlend)
