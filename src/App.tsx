@@ -87,6 +87,7 @@ type PffPayload = {
 }
 type ConsensusPick = { name: string; pos: string; school: string; consensus: number; lo: number; hi: number }
 type ScoutNote = { name: string; summary: string }
+type InjuryFlag = { name: string; pos: string; severity: 'major' | 'moderate' | 'minor'; note: string }
 type Projection = ReturnType<typeof project>
 type LoaderMessage = { tone: 'good' | 'warn'; text: string } | null
 type MobileTab = 'edit' | 'results' | 'board'
@@ -254,7 +255,11 @@ export default function App() {
   const [notes, setNotes] = useState('')
   const [consensus, setConsensus] = useState<ConsensusPick[]>([])
   const [scoutNotes, setScoutNotes] = useState<ScoutNote[]>([])
+  const [injuryFlags, setInjuryFlags] = useState<InjuryFlag[]>([])
   const [compareQuery, setCompareQuery] = useState('')
+  const [boardView, setBoardView] = useState<'list' | 'grid'>('list')
+  const [boardOrder, setBoardOrder] = useState<string[]>([])
+  const [dragId, setDragId] = useState('')
   const [mobileTab, setMobileTab] = useState<MobileTab>('edit')
   const [page, setPage] = useState<Page>(() => readPageFromHash())
   const projection = useMemo(() => project(input, prospects, pffProfiles), [input, prospects, pffProfiles])
@@ -265,6 +270,14 @@ export default function App() {
     [saved, prospects, pffProfiles],
   )
 
+  const orderedBoard = useMemo(() => {
+    if (!boardOrder.length) return draftBoard
+    const idxMap = new Map(boardOrder.map((id, i) => [id, i]))
+    return [...draftBoard].sort(
+      (a, b) => (idxMap.get(a.player.id) ?? 9999) - (idxMap.get(b.player.id) ?? 9999),
+    )
+  }, [draftBoard, boardOrder])
+
   const activeConsensusPick = useMemo(
     () => consensus.find((c) => clean(c.name) === clean(input.name) && c.pos === input.pos),
     [consensus, input.name, input.pos],
@@ -273,6 +286,28 @@ export default function App() {
     () => scoutNotes.find((n) => clean(n.name) === clean(input.name)),
     [scoutNotes, input.name],
   )
+  const activeInjuryFlag = useMemo(
+    () => injuryFlags.find((f) => clean(f.name) === clean(input.name)),
+    [injuryFlags, input.name],
+  )
+  const scarcityData = useMemo(() => {
+    if (!lookupPool.length || !prospects.length) return null
+    const posGroup = group[input.pos] ?? 'SKILL'
+    const currentClassPlayers = lookupPool.filter(
+      (p) => p.year === input.draftSeason && (p.pos === input.pos || group[p.pos] === posGroup)
+    )
+    const currentCount = currentClassPlayers.length
+    if (currentCount === 0) return null
+    const years = Array.from(new Set(prospects.map((p) => p.year)))
+    const historicalCounts = years.map(
+      (y) => prospects.filter((p) => p.year === y && (p.pos === input.pos || group[p.pos] === posGroup)).length
+    ).filter((c) => c > 0)
+    if (historicalCounts.length === 0) return null
+    const avgCount = historicalCounts.reduce((sum, c) => sum + c, 0) / historicalCounts.length
+    const ratio = currentCount / avgCount
+    const depth: 'deep' | 'shallow' | 'average' = ratio > 1.15 ? 'deep' : ratio < 0.85 ? 'shallow' : 'average'
+    return { currentCount, avgCount: Math.round(avgCount), depth, pos: input.pos, year: input.draftSeason }
+  }, [input.pos, input.draftSeason, lookupPool, prospects])
 
   useEffect(() => {
     if (typeof window === 'undefined') return
@@ -296,13 +331,14 @@ export default function App() {
   useEffect(() => {
     async function load() {
       try {
-        const [combineCsv, draftCsv, pffPayload, extraData, consensusData, scoutData] = await Promise.all([
+        const [combineCsv, draftCsv, pffPayload, extraData, consensusData, scoutData, injuryData] = await Promise.all([
           fetch(`${assetBase}data/combine.csv`).then((r) => r.text()),
           fetch(`${assetBase}data/draft_picks.csv`).then((r) => r.text()),
           loadPffPayload(),
           fetch(`${assetBase}data/extra_prospects.json`).then((r) => r.json()).catch(() => null),
           fetch(`${assetBase}data/consensus_2025.json`).then((r) => r.json()).catch(() => null),
           fetch(`${assetBase}data/scout_notes_2025.json`).then((r) => r.json()).catch(() => null),
+          fetch(`${assetBase}data/injury_flags_2025.json`).then((r) => r.json()).catch(() => null),
         ])
         const allProspects = buildProspectPool(parseCsv(combineCsv), parseCsv(draftCsv))
         const extraProspects = buildExtraProspects(extraData)
@@ -316,6 +352,7 @@ export default function App() {
         }
         if (consensusData?.picks?.length) setConsensus(consensusData.picks)
         if (scoutData?.notes?.length) setScoutNotes(scoutData.notes)
+        if (injuryData?.flags?.length) setInjuryFlags(injuryData.flags)
       } catch {
         setError('Data files are missing. Run npm run data:refresh, then reload.')
       } finally {
@@ -445,6 +482,27 @@ export default function App() {
     setSelectedSavedId('')
     setNotes('')
     setMessage({ tone: 'warn', text: deleted ? `Removed ${deleted.name} from My prospects.` : 'Saved prospect removed.' })
+  }
+
+  function handleDragStart(id: string) {
+    setDragId(id)
+  }
+
+  function handleDrop(targetId: string) {
+    if (!dragId || dragId === targetId) return
+    const base = boardOrder.length ? boardOrder : draftBoard.map((r) => r.player.id)
+    const from = base.indexOf(dragId)
+    const to = base.indexOf(targetId)
+    if (from === -1 || to === -1) return
+    const next = [...base]
+    next.splice(from, 1)
+    next.splice(to, 0, dragId)
+    setBoardOrder(next)
+    setDragId('')
+  }
+
+  function resetBoardOrder() {
+    setBoardOrder([])
   }
 
   function startNewProspect() {
@@ -659,6 +717,17 @@ export default function App() {
             {projection.flags.length > 0 && <div className="flagRow">
               {projection.flags.map((f) => <span key={f} className="dangerFlag">{f}</span>)}
             </div>}
+            {activeInjuryFlag && (
+              <div className={`injuryBadge injurySeverity-${activeInjuryFlag.severity}`}>
+                {activeInjuryFlag.severity === 'major' ? '🩹 Injury concern: ' : activeInjuryFlag.severity === 'moderate' ? '⚠ Injury note: ' : 'ℹ '}
+                {activeInjuryFlag.note}
+              </div>
+            )}
+            {scarcityData && (
+              <p className={`scarcityTag scarcity-${scarcityData.depth}`}>
+                {scarcityData.depth === 'deep' ? '▼ Deep class' : scarcityData.depth === 'shallow' ? '▲ Thin class' : '— Average depth'} · {scarcityData.currentCount} {scarcityData.pos} in {scarcityData.year} (avg {scarcityData.avgCount}/yr)
+              </p>
+            )}
             <div className="heroMeta">
               <span>{input.school || 'No school'}</span>
               <span>PFF {Math.round(input.pffComposite)}</span>
@@ -705,25 +774,69 @@ export default function App() {
         </section>
 
         <section className="panel tablePanel" data-pane="board">
-          <div className="panelTitle"><div><p>Saved Prospects</p><h2>My Draft Board</h2></div><strong>{draftBoard.length} players</strong></div>
-          {draftBoard.length ? <TableWrap>
-            <table className="boardTable">
-              <thead><tr><th>Rank</th><th>Prospect</th><th>Pos</th><th>Pick</th><th>Score</th><th>Median AV</th><th>Best Outcome</th><th></th></tr></thead>
-              <tbody>{draftBoard.slice(0, 40).map((row, index) => {
-                const best = outcomeOrder.slice().sort((a, b) => (row.projection.odds[b] || 0) - (row.projection.odds[a] || 0))[0]
-                return <tr key={row.player.id} className={row.player.id === selectedSavedId ? 'currentRow' : ''}>
-                  <td><b className="boardRank">{index + 1}</b></td>
-                  <td><b>{row.player.name}</b><small>{row.player.school || 'No school'}</small></td>
-                  <td>{row.player.pos}</td>
-                  <td>{row.player.pick}</td>
-                  <td>{Math.round(row.projection.score)}</td>
-                  <td>{row.projection.median.toFixed(1)}</td>
-                  <td><OutcomeTag category={best} /></td>
-                  <td><button type="button" className="smallButton" onClick={() => loadSavedProspect(row.player.id)}>Load</button></td>
-                </tr>
-              })}</tbody>
-            </table>
-          </TableWrap> : <p className="emptyLine">Save or import prospects to build a ranked board.</p>}
+          <div className="panelTitle">
+            <div><p>Saved Prospects</p><h2>My Draft Board</h2></div>
+            <div className="boardControls">
+              {boardOrder.length > 0 && <button type="button" className="secondary smallButton" onClick={resetBoardOrder}>Reset order</button>}
+              <strong>{draftBoard.length} players</strong>
+              <div className="viewToggle">
+                <button type="button" className={boardView === 'list' ? 'on' : ''} onClick={() => setBoardView('list')}>List</button>
+                <button type="button" className={boardView === 'grid' ? 'on' : ''} onClick={() => setBoardView('grid')}>Cards</button>
+              </div>
+            </div>
+          </div>
+          {orderedBoard.length ? (
+            boardView === 'list' ? (
+              <TableWrap>
+                <table className="boardTable">
+                  <thead><tr><th>Rank</th><th>Prospect</th><th>Pos</th><th>Pick</th><th>Score</th><th>Median AV</th><th>Best Outcome</th><th></th></tr></thead>
+                  <tbody>{orderedBoard.slice(0, 40).map((row, index) => {
+                    const best = outcomeOrder.slice().sort((a, b) => (row.projection.odds[b] || 0) - (row.projection.odds[a] || 0))[0]
+                    return <tr key={row.player.id} className={row.player.id === selectedSavedId ? 'currentRow' : ''}>
+                      <td><b className="boardRank">{index + 1}</b></td>
+                      <td><b>{row.player.name}</b><small>{row.player.school || 'No school'}</small></td>
+                      <td>{row.player.pos}</td>
+                      <td>{row.player.pick}</td>
+                      <td>{Math.round(row.projection.score)}</td>
+                      <td>{row.projection.median.toFixed(1)}</td>
+                      <td><OutcomeTag category={best} /></td>
+                      <td><button type="button" className="smallButton" onClick={() => loadSavedProspect(row.player.id)}>Load</button></td>
+                    </tr>
+                  })}</tbody>
+                </table>
+              </TableWrap>
+            ) : (
+              <div className="boardGrid">
+                {orderedBoard.slice(0, 40).map((row, index) => {
+                  const best = outcomeOrder.slice().sort((a, b) => (row.projection.odds[b] || 0) - (row.projection.odds[a] || 0))[0]
+                  const isActive = row.player.id === selectedSavedId
+                  const isDragging = row.player.id === dragId
+                  return (
+                    <div
+                      key={row.player.id}
+                      className={`boardCard ${isActive ? 'boardCardActive' : ''} ${isDragging ? 'boardCardDragging' : ''}`}
+                      draggable
+                      onDragStart={() => handleDragStart(row.player.id)}
+                      onDragOver={(e) => e.preventDefault()}
+                      onDrop={() => handleDrop(row.player.id)}
+                    >
+                      <div className="cardHeader">
+                        <span className="cardRank">#{index + 1}</span>
+                        <span className="cardPos">{row.player.pos}</span>
+                      </div>
+                      <div className="cardName">{row.player.name}</div>
+                      <div className="cardMeta">{row.player.school || 'No school'} · Pk {row.player.pick}</div>
+                      <div className="cardFooter">
+                        <span className="cardScore">{Math.round(row.projection.score)}</span>
+                        <OutcomeTag category={best} />
+                        <button type="button" className="smallButton" onClick={() => loadSavedProspect(row.player.id)}>Load</button>
+                      </div>
+                    </div>
+                  )
+                })}
+              </div>
+            )
+          ) : <p className="emptyLine">Save or import prospects to build a ranked board.</p>}
         </section>
 
         <section className="panel tablePanel" data-pane="board">

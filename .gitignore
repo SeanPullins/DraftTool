@@ -5,6 +5,7 @@ public/data/*
 !public/data/extra_prospects.json
 !public/data/consensus_2025.json
 !public/data/scout_notes_2025.json
+!public/data/injury_flags_2025.json
 artifacts
 .env
 .env.local
