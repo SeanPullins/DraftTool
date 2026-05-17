@@ -2,6 +2,7 @@ node_modules
 dist
 dist-ssr
 public/data/*
+!public/data/extra_prospects.json
 artifacts
 .env
 .env.local
