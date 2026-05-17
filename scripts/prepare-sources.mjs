@@ -5,8 +5,6 @@ import { fileURLToPath } from 'node:url'
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
 const sources = [
-  ['scripts/source/App.tsx.gz.b64.small.parts', 'src/App.tsx', 'gunzip'],
-  ['scripts/source/styles.css.gz.b64.parts', 'src/styles.css', 'gunzip'],
   ['scripts/source/build-pff-comparison-data.mjs.gz.b64.parts', 'scripts/build-pff-comparison-data.mjs', 'gunzip'],
   ['scripts/source/pff_comparison_profiles.json.gz.b64.small.parts', 'public/data/pff_comparison_profiles.json.gz.b64', 'copy'],
 ]
