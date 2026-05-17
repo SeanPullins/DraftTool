@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState, type ChangeEvent, type CSSProperties, type ReactNode } from 'react'
+import { useEffect, useMemo, useState, type ChangeEvent, type CSSProperties, type Dispatch, type ReactNode, type SetStateAction } from 'react'
 
 type Row = Record<string, string>
 type Category = 'Bust' | 'Reserve' | 'Role' | 'Starter' | 'High-end starter' | 'Star'
@@ -27,6 +27,7 @@ type Prospect = {
   pffProduction: number
   pffEfficiency: number
   pffClean: number
+  schemeTag: string
 }
 type SavedProspect = Prospect & { id: string; updatedAt: string; notes?: string }
 type Historical = {
@@ -84,10 +85,12 @@ type PffPayload = {
   summary: { profiles: number; matched: number; collegeOnly: number }
   profiles: RawPffProfile[]
 }
+type ConsensusPick = { name: string; pos: string; school: string; consensus: number; lo: number; hi: number }
+type ScoutNote = { name: string; summary: string }
 type Projection = ReturnType<typeof project>
 type LoaderMessage = { tone: 'good' | 'warn'; text: string } | null
 type MobileTab = 'edit' | 'results' | 'board'
-type Page = 'workbench' | 'class' | 'players' | 'compare'
+type Page = 'workbench' | 'class' | 'players' | 'compare' | 'trade'
 type BrowserSortKey = 'av' | 'games' | 'starts' | 'pb' | 'ap' | 'pick' | 'name' | 'outcome' | 'year' | 'forty'
 type ModelSignal = 'draftScore' | 'logPick' | 'pffComp' | 'pffGrade' | 'pffProd' | 'pffEff' | 'pffClean' | 'ageScore' | 'athletic' | 'size' | 'isQB' | 'isSkill' | 'isOL' | 'isFront' | 'isDB'
 type SortKey = 'av' | 'projAv' | 'projScore' | 'games' | 'starts' | 'pb' | 'ap' | 'pick' | 'name' | 'outcome'
@@ -147,6 +150,18 @@ const signalWeights: Record<string, { draft: number; athletic: number; size: num
   FRONT: { draft: .28, athletic: .22, size: .10, scout: .30, age: .10 },
   DB:    { draft: .30, athletic: .24, size: .04, scout: .32, age: .10 },
 }
+function PICK_VALUE(pick: number): number {
+  return Math.max(1, Math.round(3000 * Math.exp(-0.02 * (pick - 1))))
+}
+function pickBandClass(pick: number): string {
+  if (pick <= 32) return 'pick1'
+  if (pick <= 64) return 'pick2'
+  if (pick <= 100) return 'pick3'
+  if (pick <= 140) return 'pick4'
+  if (pick <= 180) return 'pick5'
+  return 'pick6'
+}
+
 const assetBase = import.meta.env.BASE_URL
 const savedKey = 'draftlens.savedProspects.v2'
 const previousSavedKey = 'draftlens.savedProspects.v1'
@@ -180,6 +195,7 @@ const start: Prospect = {
   pffProduction: 84,
   pffEfficiency: 81,
   pffClean: 76,
+  schemeTag: '',
 }
 
 const blankProspect: Prospect = {
@@ -207,6 +223,7 @@ const blankProspect: Prospect = {
   pffProduction: 70,
   pffEfficiency: 70,
   pffClean: 70,
+  schemeTag: '',
 }
 
 const positionDefaults: Record<string, Partial<Prospect>> = {
@@ -235,6 +252,9 @@ export default function App() {
   const [error, setError] = useState('')
   const [input, setInput] = useState(start)
   const [notes, setNotes] = useState('')
+  const [consensus, setConsensus] = useState<ConsensusPick[]>([])
+  const [scoutNotes, setScoutNotes] = useState<ScoutNote[]>([])
+  const [compareQuery, setCompareQuery] = useState('')
   const [mobileTab, setMobileTab] = useState<MobileTab>('edit')
   const [page, setPage] = useState<Page>(() => readPageFromHash())
   const projection = useMemo(() => project(input, prospects, pffProfiles), [input, prospects, pffProfiles])
@@ -245,9 +265,18 @@ export default function App() {
     [saved, prospects, pffProfiles],
   )
 
+  const activeConsensusPick = useMemo(
+    () => consensus.find((c) => clean(c.name) === clean(input.name) && c.pos === input.pos),
+    [consensus, input.name, input.pos],
+  )
+  const activeScoutNote = useMemo(
+    () => scoutNotes.find((n) => clean(n.name) === clean(input.name)),
+    [scoutNotes, input.name],
+  )
+
   useEffect(() => {
     if (typeof window === 'undefined') return
-    const hashMap: Partial<Record<Page, string>> = { class: '#class', players: '#players', compare: '#compare' }
+    const hashMap: Partial<Record<Page, string>> = { class: '#class', players: '#players', compare: '#compare', trade: '#trade' }
     const target = hashMap[page] ?? ''
     if (window.location.hash !== target) {
       const url = target || `${window.location.pathname}${window.location.search}`
@@ -267,11 +296,13 @@ export default function App() {
   useEffect(() => {
     async function load() {
       try {
-        const [combineCsv, draftCsv, pffPayload, extraData] = await Promise.all([
+        const [combineCsv, draftCsv, pffPayload, extraData, consensusData, scoutData] = await Promise.all([
           fetch(`${assetBase}data/combine.csv`).then((r) => r.text()),
           fetch(`${assetBase}data/draft_picks.csv`).then((r) => r.text()),
           loadPffPayload(),
           fetch(`${assetBase}data/extra_prospects.json`).then((r) => r.json()).catch(() => null),
+          fetch(`${assetBase}data/consensus_2025.json`).then((r) => r.json()).catch(() => null),
+          fetch(`${assetBase}data/scout_notes_2025.json`).then((r) => r.json()).catch(() => null),
         ])
         const allProspects = buildProspectPool(parseCsv(combineCsv), parseCsv(draftCsv))
         const extraProspects = buildExtraProspects(extraData)
@@ -283,6 +314,8 @@ export default function App() {
           setPffProfiles(normalizePffProfiles(pffPayload.profiles))
           setPffSummary(pffPayload.summary)
         }
+        if (consensusData?.picks?.length) setConsensus(consensusData.picks)
+        if (scoutData?.notes?.length) setScoutNotes(scoutData.notes)
       } catch {
         setError('Data files are missing. Run npm run data:refresh, then reload.')
       } finally {
@@ -291,6 +324,17 @@ export default function App() {
     }
     load()
   }, [])
+
+  useEffect(() => {
+    function onKey(e: KeyboardEvent) {
+      if ((e.metaKey || e.ctrlKey) && e.key === 's') {
+        e.preventDefault()
+        saveCurrentProspect()
+      }
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [input, notes, saved, selectedSavedId])
 
   useEffect(() => {
     writeSavedProspects(saved)
@@ -483,6 +527,7 @@ export default function App() {
         <button type="button" className={page === 'class' ? 'on' : ''} onClick={() => setPage('class')}>Class Rankings</button>
         <button type="button" className={page === 'players' ? 'on' : ''} onClick={() => setPage('players')}>Players</button>
         <button type="button" className={page === 'compare' ? 'on' : ''} onClick={() => setPage('compare')}>Compare</button>
+        <button type="button" className={page === 'trade' ? 'on' : ''} onClick={() => setPage('trade')}>Trade Calc</button>
       </nav>
 
       {page === 'workbench' ? <nav className="mobileTabs" role="tablist" aria-label="Workbench sections">
@@ -497,7 +542,9 @@ export default function App() {
     </div> : page === 'players' ? <div className="classPage">
       <PlayerBrowser pool={lookupPool} />
     </div> : page === 'compare' ? <div className="classPage">
-      <CompareView pool={lookupPool} history={prospects} pffProfiles={pffProfiles} />
+      <CompareView pool={lookupPool} history={prospects} pffProfiles={pffProfiles} initialQuery={compareQuery} />
+    </div> : page === 'trade' ? <div className="classPage">
+      <TradeCalculator />
     </div> : <div className="layout">
       <aside className="controlPanel" data-pane="edit">
         <section className="panel loadPanel">
@@ -711,8 +758,8 @@ function TableWrap({ children }: { children: ReactNode }) {
   return <div className="tableWrap">{children}</div>
 }
 
-function CompareView({ pool, history, pffProfiles }: { pool: Historical[]; history: Historical[]; pffProfiles: PffProfile[] }) {
-  const [q1, setQ1] = useState('')
+function CompareView({ pool, history, pffProfiles, initialQuery = '' }: { pool: Historical[]; history: Historical[]; pffProfiles: PffProfile[]; initialQuery?: string }) {
+  const [q1, setQ1] = useState(initialQuery)
   const [q2, setQ2] = useState('')
   const [p1, setP1] = useState<Historical | null>(null)
   const [p2, setP2] = useState<Historical | null>(null)
@@ -1224,7 +1271,7 @@ function compareHistorical(a: Historical, b: Historical, key: SortKey, projectio
 
 function readPageFromHash(): Page {
   if (typeof window === 'undefined') return 'workbench'
-  const map: Record<string, Page> = { '#class': 'class', '#players': 'players', '#compare': 'compare' }
+  const map: Record<string, Page> = { '#class': 'class', '#players': 'players', '#compare': 'compare', '#trade': 'trade' }
   return map[window.location.hash] ?? 'workbench'
 }
 
@@ -1818,6 +1865,128 @@ function samePlayerSeason(profile: PffProfile, name: string, year: number, pos: 
 
 function lookupLabel(player: Historical) {
   return `${player.name} | ${player.year} | ${player.pos} | ${player.school || 'No school'} | pick ${player.pick}`
+}
+
+// Jimmy Johnson trade value chart (pick → value)
+const TRADE_VALUES: Record<number, number> = {
+  1: 3000, 2: 2600, 3: 2200, 4: 1800, 5: 1700, 6: 1600, 7: 1500, 8: 1400, 9: 1350,
+  10: 1300, 11: 1250, 12: 1200, 13: 1150, 14: 1100, 15: 1050, 16: 1000, 17: 950,
+  18: 900, 19: 875, 20: 850, 21: 800, 22: 780, 23: 760, 24: 740, 25: 720, 26: 700,
+  27: 680, 28: 660, 29: 640, 30: 620, 31: 600, 32: 590, 33: 580, 34: 560, 35: 550,
+  36: 540, 37: 530, 38: 520, 39: 510, 40: 500, 41: 490, 42: 480, 43: 470, 44: 460,
+  45: 450, 46: 440, 47: 430, 48: 420, 49: 410, 50: 400, 51: 390, 52: 380, 53: 370,
+  54: 360, 55: 350, 56: 340, 57: 330, 58: 320, 59: 310, 60: 300, 61: 292, 62: 284,
+  63: 276, 64: 268, 65: 260, 66: 252, 67: 244, 68: 236, 69: 228, 70: 220, 71: 212,
+  72: 204, 73: 196, 74: 188, 75: 180, 76: 172, 77: 164, 78: 156, 79: 148, 80: 140,
+  81: 132, 82: 126, 83: 120, 84: 114, 85: 108, 86: 102, 87: 96, 88: 90, 89: 84,
+  90: 80, 91: 76, 92: 72, 93: 68, 94: 64, 95: 60, 96: 56, 97: 52, 98: 48, 99: 44,
+  100: 40, 101: 38, 102: 36, 103: 34, 104: 32, 105: 30, 106: 28, 107: 26, 108: 24,
+  109: 22, 110: 20, 111: 18, 112: 16, 113: 14, 114: 12, 115: 10, 116: 9, 117: 8,
+  118: 7, 119: 6, 120: 6, 121: 5, 122: 5, 123: 4, 124: 4, 125: 4, 126: 3, 127: 3,
+  128: 3, 129: 2, 130: 2, 131: 2, 132: 2, 133: 2, 134: 2, 135: 2, 136: 2, 137: 2,
+  138: 2, 139: 1, 140: 1, 141: 1, 142: 1, 143: 1, 144: 1, 145: 1, 146: 1, 147: 1,
+  148: 1, 149: 1, 150: 1, 151: 1, 152: 1, 153: 1, 154: 1, 155: 1, 156: 1, 157: 1,
+  158: 1, 159: 1, 160: 1, 161: 1, 162: 1, 163: 1, 164: 1, 165: 1, 166: 1, 167: 1,
+  168: 1, 169: 1, 170: 1, 171: 1, 172: 1, 173: 1, 174: 1, 175: 1, 176: 1, 177: 1,
+  178: 1, 179: 1, 180: 1, 181: 1, 182: 1, 183: 1, 184: 1, 185: 1, 186: 1, 187: 1,
+  188: 1, 189: 1, 190: 1, 191: 1, 192: 1, 193: 1, 194: 1, 195: 1, 196: 1, 197: 1,
+  198: 1, 199: 1, 200: 1, 201: 1, 202: 1, 203: 1, 204: 1, 205: 1, 206: 1, 207: 1,
+  208: 1, 209: 1, 210: 1, 211: 1, 212: 1, 213: 1, 214: 1, 215: 1, 216: 1, 217: 1,
+  218: 1, 219: 1, 220: 1, 221: 1, 222: 1, 223: 1, 224: 1, 225: 1, 226: 1, 227: 1,
+  228: 1, 229: 1, 230: 1, 231: 1, 232: 1, 233: 1, 234: 1, 235: 1, 236: 1, 237: 1,
+  238: 1, 239: 1, 240: 1, 241: 1, 242: 1, 243: 1, 244: 1, 245: 1, 246: 1, 247: 1,
+  248: 1, 249: 1, 250: 1, 251: 1, 252: 1, 253: 1, 254: 1, 255: 1, 256: 1,
+}
+
+function pickValue(pick: number): number {
+  if (pick < 1 || pick > 256) return 0
+  return TRADE_VALUES[pick] ?? 1
+}
+
+function TradeCalculator() {
+  const emptySlot = () => ({ pick: '', year: String(new Date().getFullYear()) })
+  const [teamA, setTeamA] = useState([emptySlot()])
+  const [teamB, setTeamB] = useState([emptySlot()])
+
+  function sumValue(slots: { pick: string; year: string }[]) {
+    return slots.reduce((sum, s) => {
+      const p = parseInt(s.pick, 10)
+      return sum + (Number.isFinite(p) ? pickValue(p) : 0)
+    }, 0)
+  }
+
+  function updateSlot(
+    setter: Dispatch<SetStateAction<{ pick: string; year: string }[]>>,
+    index: number,
+    field: 'pick' | 'year',
+    value: string,
+  ) {
+    setter((prev) => prev.map((s, i) => i === index ? { ...s, [field]: value } : s))
+  }
+
+  function addSlot(setter: Dispatch<SetStateAction<{ pick: string; year: string }[]>>) {
+    setter((prev) => [...prev, emptySlot()])
+  }
+
+  function removeSlot(setter: Dispatch<SetStateAction<{ pick: string; year: string }[]>>, index: number) {
+    setter((prev) => prev.filter((_, i) => i !== index))
+  }
+
+  const valA = sumValue(teamA)
+  const valB = sumValue(teamB)
+  const diff = valA - valB
+  const fair = Math.abs(diff) < 50
+
+  function renderSlots(
+    slots: { pick: string; year: string }[],
+    setter: Dispatch<SetStateAction<{ pick: string; year: string }[]>>,
+    label: string,
+  ) {
+    return <div className="tradeTeam">
+      <h3>{label}</h3>
+      {slots.map((s, i) => (
+        <div key={i} className="tradeSlot">
+          <label className="field"><span>Pick #</span>
+            <input type="number" min={1} max={256} value={s.pick}
+              onChange={(e) => updateSlot(setter, i, 'pick', e.target.value)}
+              placeholder="e.g. 15" />
+          </label>
+          <label className="field"><span>Year</span>
+            <input type="number" min={2024} max={2035} value={s.year}
+              onChange={(e) => updateSlot(setter, i, 'year', e.target.value)} />
+          </label>
+          {s.pick && Number.isFinite(parseInt(s.pick, 10)) && (
+            <span className="tradeVal">{pickValue(parseInt(s.pick, 10)).toLocaleString()} pts</span>
+          )}
+          {slots.length > 1 && (
+            <button type="button" className="danger compact" onClick={() => removeSlot(setter, i)}>-</button>
+          )}
+        </div>
+      ))}
+      <button type="button" className="secondary compact" onClick={() => addSlot(setter)}>+ Add pick</button>
+      <div className="tradeTotalRow"><strong>Total:</strong> {valA === 0 && label.includes('Team A') || valB === 0 && label.includes('Team B') ? '—' : (label.includes('Team A') ? valA : valB).toLocaleString()} pts</div>
+    </div>
+  }
+
+  return <section className="panel tablePanel classPanel">
+    <div className="panelTitle">
+      <div><p>Tool</p><h2>Trade Calculator</h2></div>
+      <p className="panelSub">Jimmy Johnson draft pick value chart</p>
+    </div>
+    <div className="tradeLayout">
+      {renderSlots(teamA, setTeamA, 'Team A gives')}
+      <div className="tradeMiddle">
+        <div className={`tradeDiff ${fair ? 'fair' : diff > 0 ? 'favorA' : 'favorB'}`}>
+          {fair
+            ? 'Fair trade'
+            : diff > 0
+              ? `Team A overpays by ${Math.abs(diff).toLocaleString()} pts`
+              : `Team B overpays by ${Math.abs(diff).toLocaleString()} pts`}
+        </div>
+      </div>
+      {renderSlots(teamB, setTeamB, 'Team B gives')}
+    </div>
+  </section>
 }
 
 function pffLabel(player: PffProfile) {
