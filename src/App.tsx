@@ -843,7 +843,7 @@ export default function App() {
           <div className="panelTitle"><div><p>nflverse Baseline</p><h2>Closest Draft/Combine Comps</h2></div></div>
           <TableWrap>
             <table>
-              <thead><tr><th>Player</th><th>Yr</th><th>Pos</th><th>Pick</th><th>40</th><th>AV</th><th>Arc</th><th>Outcome</th><th>Sim</th></tr></thead>
+              <thead><tr><th>Player</th><th>Yr</th><th>Pos</th><th>Pick</th><th>40</th><th>AV</th><th>Arc</th><th>Career</th><th>Outcome</th><th>Sim</th></tr></thead>
               <tbody>{projection.comps.map((c) => {
                 const hr = schoolHitRate(c.player.school, prospects)
                 return <tr key={c.player.id}>
@@ -854,6 +854,7 @@ export default function App() {
                   <td>{c.player.forty?.toFixed(2) || '-'}</td>
                   <td>{c.player.av}</td>
                   <td><small className="arcLabel">{careerArc(c.player)}</small></td>
+                  <td><Sparkline values={syntheticArcValues(c.player)} /></td>
                   <td><OutcomeTag category={c.player.category} /></td>
                   <td>{Math.round(c.sim * 100)}</td>
                 </tr>
@@ -2037,6 +2038,33 @@ function careerArc(player: Historical): string {
   if (games >= 48) return 'Role player'
   if (games >= 17) return 'Reserve'
   return 'Minimal impact'
+}
+
+function syntheticArcValues(player: Historical): number[] {
+  const { av, games } = player
+  if (av <= 0 || games <= 0) return []
+  const seasons = Math.max(2, Math.min(15, Math.round(games / 15)))
+  const peak = Math.max(1, Math.min(seasons - 1, Math.round(seasons * 0.38)))
+  const weights = Array.from({ length: seasons }, (_, i) => {
+    const x = (i - peak) / Math.max(seasons * 0.35, 1)
+    return Math.exp(-x * x)
+  })
+  const total = weights.reduce((s, w) => s + w, 0)
+  return weights.map((w) => Math.round((w / total) * av * 10) / 10)
+}
+
+function Sparkline({ values }: { values: number[] }) {
+  if (values.length < 2) return null
+  const w = 56, h = 20
+  const max = Math.max(...values, 0.1)
+  const pts = values
+    .map((v, i) => `${Math.round((i / (values.length - 1)) * w)},${Math.round(h - (v / max) * h * 0.85)}`)
+    .join(' ')
+  return (
+    <svg width={w} height={h} className="arcSparkline" aria-hidden="true" style={{ display: 'block' }}>
+      <polyline points={pts} fill="none" stroke="#3b82f6" strokeWidth="1.5" strokeLinejoin="round" strokeLinecap="round" />
+    </svg>
+  )
 }
 
 function avToScore(av: number) {
