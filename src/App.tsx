@@ -261,14 +261,18 @@ export default function App() {
   useEffect(() => {
     async function load() {
       try {
-        const [combineCsv, draftCsv, pffPayload] = await Promise.all([
+        const [combineCsv, draftCsv, pffPayload, extraData] = await Promise.all([
           fetch(`${assetBase}data/combine.csv`).then((r) => r.text()),
           fetch(`${assetBase}data/draft_picks.csv`).then((r) => r.text()),
           loadPffPayload(),
+          fetch(`${assetBase}data/extra_prospects.json`).then((r) => r.json()).catch(() => null),
         ])
         const allProspects = buildProspectPool(parseCsv(combineCsv), parseCsv(draftCsv))
-        setLookupPool(allProspects)
-        setProspects(allProspects.filter((p) => p.year >= 2000 && p.year <= 2021 && p.pick < 260))
+        const extraProspects = buildExtraProspects(extraData)
+        const existingKeys = new Set(allProspects.map((p) => `${p.year}-${clean(p.name)}`))
+        const uniqueExtras = extraProspects.filter((p) => !existingKeys.has(`${p.year}-${clean(p.name)}`))
+        setLookupPool([...allProspects, ...uniqueExtras])
+        setProspects(allProspects.filter((p) => p.year >= 2000 && p.year <= 2022 && p.pick < 260))
         if (pffPayload?.profiles?.length) {
           setPffProfiles(normalizePffProfiles(pffPayload.profiles))
           setPffSummary(pffPayload.summary)
@@ -305,11 +309,6 @@ export default function App() {
 
   function update<K extends keyof Prospect>(key: K, value: Prospect[K]) {
     setInput((current) => ({ ...current, [key]: value }))
-  }
-
-  function applyPositionDefaults() {
-    setInput((current) => withPositionDefaults(current, current.pos))
-    setMessage({ tone: 'good', text: `Applied ${input.pos} testing defaults.` })
   }
 
   function loadExistingProspect() {
@@ -454,28 +453,31 @@ export default function App() {
   }
 
   return <main className="shell" data-tab={mobileTab} data-page={page}>
-    <header className="top">
-      <div className="brand">
-        <p>NFL Prospect Projection Lab</p>
-        <h1>DraftLens Workbench</h1>
-      </div>
-      <div className="dataPills">
-        <span>{loading ? 'Loading nflverse' : `${prospects.length.toLocaleString()} draft/combine comps`}</span>
-        <span>{pffSummary ? `${pffSummary.matched.toLocaleString()} PFF-to-NFL matches` : 'PFF comparison pending'}</span>
-        <span>{saved.length.toLocaleString()} saved prospects</span>
-      </div>
-    </header>
+    <div className="topBar">
+      <header className="top">
+        <div className="brand">
+          <h1>DraftLens</h1>
+          <span className="brandDivider" />
+          <p>NFL Draft Intelligence</p>
+        </div>
+        <div className="dataPills">
+          <span>{loading ? 'Loading…' : `${prospects.length.toLocaleString()} comps`}</span>
+          <span>{pffSummary ? `${pffSummary.matched.toLocaleString()} PFF matches` : 'PFF pending'}</span>
+          <span>{saved.length} saved</span>
+        </div>
+      </header>
 
-    <nav className="pageNav" aria-label="Primary">
-      <button type="button" className={page === 'workbench' ? 'on' : ''} onClick={() => setPage('workbench')}>Workbench</button>
-      <button type="button" className={page === 'class' ? 'on' : ''} onClick={() => setPage('class')}>Draft class rankings</button>
-    </nav>
+      <nav className="pageNav" aria-label="Primary">
+        <button type="button" className={page === 'workbench' ? 'on' : ''} onClick={() => setPage('workbench')}>Workbench</button>
+        <button type="button" className={page === 'class' ? 'on' : ''} onClick={() => setPage('class')}>Class Rankings</button>
+      </nav>
 
-    {page === 'workbench' ? <nav className="mobileTabs" role="tablist" aria-label="Workbench sections">
-      <button type="button" role="tab" aria-selected={mobileTab === 'edit'} className={mobileTab === 'edit' ? 'on' : ''} onClick={() => setMobileTab('edit')}>Edit</button>
-      <button type="button" role="tab" aria-selected={mobileTab === 'results'} className={mobileTab === 'results' ? 'on' : ''} onClick={() => setMobileTab('results')}>Results</button>
-      <button type="button" role="tab" aria-selected={mobileTab === 'board'} className={mobileTab === 'board' ? 'on' : ''} onClick={() => setMobileTab('board')}>Board</button>
-    </nav> : null}
+      {page === 'workbench' ? <nav className="mobileTabs" role="tablist" aria-label="Workbench sections">
+        <button type="button" role="tab" aria-selected={mobileTab === 'edit'} className={mobileTab === 'edit' ? 'on' : ''} onClick={() => setMobileTab('edit')}>Edit</button>
+        <button type="button" role="tab" aria-selected={mobileTab === 'results'} className={mobileTab === 'results' ? 'on' : ''} onClick={() => setMobileTab('results')}>Results</button>
+        <button type="button" role="tab" aria-selected={mobileTab === 'board'} className={mobileTab === 'board' ? 'on' : ''} onClick={() => setMobileTab('board')}>Board</button>
+      </nav> : null}
+    </div>
 
     {error ? <section className="panel empty">{error}</section> : page === 'class' ? <div className="classPage">
       <ClassExplorer pool={lookupPool} history={prospects} pffProfiles={pffProfiles} currentName={input.name} currentYear={input.draftSeason} />
@@ -487,7 +489,6 @@ export default function App() {
               <p>Player Loader</p>
               <h2>Add or Edit Prospect</h2>
             </div>
-            <button className="ghostButton" type="button" onClick={() => setInput(start)}>Reset</button>
           </div>
 
           <label className="field wide"><span>Historical draft/combine player</span><input list="prospect-lookup" value={lookupQuery} onChange={(e) => setLookupQuery(e.target.value)} placeholder="Search name, school, year, position" /></label>
@@ -517,15 +518,15 @@ export default function App() {
           <div className="formGrid">
             <Text label="Name" value={input.name} onChange={(v) => update('name', v)} />
             <Text label="School" value={input.school} onChange={(v) => update('school', v)} />
-            <label className="field"><span>Position</span><select value={input.pos} onChange={(e) => update('pos', e.target.value)}>{positions.map((p) => <option key={p}>{p}</option>)}</select></label>
-            <Num label="Draft class" value={input.draftSeason} min={2016} max={2027} onChange={(v) => update('draftSeason', v)} />
+            <label className="field"><span>Position</span><select value={input.pos} onChange={(e) => { const pos = e.target.value; setInput((current) => withPositionDefaults({ ...current, pos }, pos)) }}>{positions.map((p) => <option key={p}>{p}</option>)}</select></label>
+            <Num label="Draft class" value={input.draftSeason} min={2016} max={2030} onChange={(v) => update('draftSeason', v)} />
             <Num label="Projected pick" value={input.pick} min={1} max={260} onChange={(v) => update('pick', v)} />
             <Num label="Age" value={input.age} step={0.1} onChange={(v) => update('age', v)} />
           </div>
         </section>
 
         <section className="panel formPanel">
-          <div className="panelTitle"><div><p>Testing</p><h2>Measurables</h2></div><button className="ghostButton" type="button" onClick={applyPositionDefaults}>Defaults</button></div>
+          <div className="panelTitle"><div><p>Testing</p><h2>Measurables</h2></div></div>
           <div className="formGrid">
             <Num label="Height in." value={input.height} onChange={(v) => update('height', v)} />
             <Num label="Weight" value={input.weight} onChange={(v) => update('weight', v)} />
@@ -1135,6 +1136,44 @@ function normalizePffProfiles(profiles: RawPffProfile[]): PffProfile[] {
       } : null,
     }
   }).filter((profile) => profile.name && positions.includes(profile.position))
+}
+
+function buildExtraProspects(data: unknown): Historical[] {
+  if (!data || typeof data !== 'object') return []
+  const payload = data as { prospects?: unknown[] }
+  if (!Array.isArray(payload.prospects)) return []
+  return payload.prospects.flatMap((entry, i) => {
+    const r = asRecord(entry)
+    if (!r) return []
+    const name = stringField(r, 'name', '')
+    if (!name) return []
+    const year = numberField(r, 'year', 0)
+    if (!year) return []
+    const pos = norm(stringField(r, 'pos', 'WR'))
+    if (!positions.includes(pos)) return []
+    return [{
+      id: `extra-${year}-${clean(name)}-${i}`,
+      name,
+      school: stringField(r, 'school', ''),
+      year,
+      pos,
+      pick: numberField(r, 'pick', 260),
+      age: n(r.age),
+      height: n(r.height),
+      weight: n(r.weight),
+      forty: n(r.forty),
+      vertical: n(r.vertical),
+      broad: n(r.broad),
+      cone: n(r.cone),
+      shuttle: n(r.shuttle),
+      games: 0,
+      av: 0,
+      starts: 0,
+      proBowls: 0,
+      allPros: 0,
+      category: 'Bust' as Category,
+    }]
+  })
 }
 
 function n(v: unknown): number | null {
