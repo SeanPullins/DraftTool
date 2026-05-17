@@ -87,7 +87,8 @@ type PffPayload = {
 type Projection = ReturnType<typeof project>
 type LoaderMessage = { tone: 'good' | 'warn'; text: string } | null
 type MobileTab = 'edit' | 'results' | 'board'
-type Page = 'workbench' | 'class'
+type Page = 'workbench' | 'class' | 'players'
+type BrowserSortKey = 'av' | 'games' | 'starts' | 'pb' | 'ap' | 'pick' | 'name' | 'outcome' | 'year' | 'forty'
 type ModelSignal = 'draftScore' | 'logPick' | 'pffComp' | 'pffGrade' | 'pffProd' | 'pffEff' | 'pffClean' | 'ageScore' | 'athletic' | 'size' | 'isQB' | 'isSkill' | 'isOL' | 'isFront' | 'isDB'
 type SortKey = 'av' | 'projAv' | 'projScore' | 'games' | 'starts' | 'pb' | 'ap' | 'pick' | 'name' | 'outcome'
 type SortDir = 'asc' | 'desc'
@@ -242,7 +243,7 @@ export default function App() {
 
   useEffect(() => {
     if (typeof window === 'undefined') return
-    const target = page === 'class' ? '#class' : ''
+    const target = page === 'class' ? '#class' : page === 'players' ? '#players' : ''
     if (window.location.hash !== target) {
       const url = target || `${window.location.pathname}${window.location.search}`
       window.history.replaceState(null, '', url)
@@ -470,6 +471,7 @@ export default function App() {
       <nav className="pageNav" aria-label="Primary">
         <button type="button" className={page === 'workbench' ? 'on' : ''} onClick={() => setPage('workbench')}>Workbench</button>
         <button type="button" className={page === 'class' ? 'on' : ''} onClick={() => setPage('class')}>Class Rankings</button>
+        <button type="button" className={page === 'players' ? 'on' : ''} onClick={() => setPage('players')}>Players</button>
       </nav>
 
       {page === 'workbench' ? <nav className="mobileTabs" role="tablist" aria-label="Workbench sections">
@@ -481,6 +483,8 @@ export default function App() {
 
     {error ? <section className="panel empty">{error}</section> : page === 'class' ? <div className="classPage">
       <ClassExplorer pool={lookupPool} history={prospects} pffProfiles={pffProfiles} currentName={input.name} currentYear={input.draftSeason} />
+    </div> : page === 'players' ? <div className="classPage">
+      <PlayerBrowser pool={lookupPool} />
     </div> : <div className="layout">
       <aside className="controlPanel" data-pane="edit">
         <section className="panel loadPanel">
@@ -691,6 +695,146 @@ function TableWrap({ children }: { children: ReactNode }) {
   return <div className="tableWrap">{children}</div>
 }
 
+function PlayerBrowser({ pool }: { pool: Historical[] }) {
+  const [query, setQuery] = useState('')
+  const [pos, setPos] = useState('All')
+  const [yearFrom, setYearFrom] = useState(2000)
+  const [yearTo, setYearTo] = useState(2030)
+  const [outcome, setOutcome] = useState('All')
+  const [sortKey, setSortKey] = useState<BrowserSortKey>('av')
+  const [sortDir, setSortDir] = useState<SortDir>('desc')
+
+  const years = useMemo(() => {
+    const set = new Set<number>()
+    for (const p of pool) set.add(p.year)
+    return Array.from(set).sort((a, b) => a - b)
+  }, [pool])
+
+  const normalizedQuery = query.trim() ? clean(query) : ''
+
+  const filtered = useMemo(() => pool.filter((p) => {
+    if (pos !== 'All' && p.pos !== pos) return false
+    if (p.year < yearFrom || p.year > yearTo) return false
+    if (outcome !== 'All' && p.category !== outcome) return false
+    if (normalizedQuery && !clean(p.name).includes(normalizedQuery) && !clean(p.school).includes(normalizedQuery)) return false
+    return true
+  }), [pool, pos, yearFrom, yearTo, outcome, normalizedQuery])
+
+  const sorted = useMemo(() => {
+    const factor = sortDir === 'asc' ? 1 : -1
+    return filtered.slice().sort((a, b) => {
+      let cmp = 0
+      switch (sortKey) {
+        case 'av': cmp = (a.av || 0) - (b.av || 0); break
+        case 'games': cmp = (a.games || 0) - (b.games || 0); break
+        case 'starts': cmp = (a.starts || 0) - (b.starts || 0); break
+        case 'pb': cmp = (a.proBowls || 0) - (b.proBowls || 0); break
+        case 'ap': cmp = (a.allPros || 0) - (b.allPros || 0); break
+        case 'pick': cmp = (a.pick || 999) - (b.pick || 999); break
+        case 'name': cmp = a.name.localeCompare(b.name); break
+        case 'outcome': cmp = outcomeOrder.indexOf(a.category) - outcomeOrder.indexOf(b.category); break
+        case 'year': cmp = a.year - b.year; break
+        case 'forty': cmp = (a.forty ?? 9.99) - (b.forty ?? 9.99); break
+      }
+      if (cmp !== 0) return cmp * factor
+      return (a.pick - b.pick) || a.name.localeCompare(b.name)
+    })
+  }, [filtered, sortKey, sortDir])
+
+  function toggleSort(key: BrowserSortKey) {
+    if (key === sortKey) {
+      setSortDir((d) => d === 'asc' ? 'desc' : 'asc')
+    } else {
+      setSortKey(key)
+      setSortDir(key === 'pick' || key === 'name' || key === 'forty' ? 'asc' : key === 'year' ? 'desc' : 'desc')
+    }
+  }
+
+  const display = sorted.slice(0, 500)
+
+  return <section className="panel tablePanel classPanel">
+    <div className="panelTitle">
+      <div><p>Database</p><h2>Player Browser</h2></div>
+      <strong>{filtered.length.toLocaleString()} players</strong>
+    </div>
+    <div className="browserControls">
+      <label className="field browserSearch"><span>Search</span><input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Name or school…" /></label>
+      <label className="field"><span>Position</span>
+        <select value={pos} onChange={(e) => setPos(e.target.value)}>
+          {positionFilters.map((p) => <option key={p} value={p}>{p === 'All' ? 'All positions' : p}</option>)}
+        </select>
+      </label>
+      <label className="field"><span>From</span>
+        <select value={yearFrom} onChange={(e) => setYearFrom(Number(e.target.value))}>
+          {years.map((y) => <option key={y} value={y}>{y}</option>)}
+        </select>
+      </label>
+      <label className="field"><span>To</span>
+        <select value={yearTo} onChange={(e) => setYearTo(Number(e.target.value))}>
+          {years.map((y) => <option key={y} value={y}>{y}</option>)}
+        </select>
+      </label>
+      <label className="field"><span>Outcome</span>
+        <select value={outcome} onChange={(e) => setOutcome(e.target.value)}>
+          <option value="All">All outcomes</option>
+          {outcomeOrder.map((cat) => <option key={cat} value={cat}>{cat}</option>)}
+        </select>
+      </label>
+    </div>
+    {display.length ? <>
+      <TableWrap>
+        <table className="classTable browserTable">
+          <thead>
+            <tr>
+              <BrowserHeader label="Player" sortKey="name" active={sortKey} dir={sortDir} onSort={toggleSort} />
+              <th>School</th>
+              <th>Pos</th>
+              <BrowserHeader label="Year" sortKey="year" active={sortKey} dir={sortDir} onSort={toggleSort} />
+              <BrowserHeader label="Pick" sortKey="pick" active={sortKey} dir={sortDir} onSort={toggleSort} />
+              <BrowserHeader label="40yd" sortKey="forty" active={sortKey} dir={sortDir} onSort={toggleSort} />
+              <BrowserHeader label="G" sortKey="games" active={sortKey} dir={sortDir} onSort={toggleSort} />
+              <BrowserHeader label="St" sortKey="starts" active={sortKey} dir={sortDir} onSort={toggleSort} />
+              <BrowserHeader label="AV" sortKey="av" active={sortKey} dir={sortDir} onSort={toggleSort} />
+              <BrowserHeader label="PB" sortKey="pb" active={sortKey} dir={sortDir} onSort={toggleSort} />
+              <BrowserHeader label="AP" sortKey="ap" active={sortKey} dir={sortDir} onSort={toggleSort} />
+              <BrowserHeader label="Outcome" sortKey="outcome" active={sortKey} dir={sortDir} onSort={toggleSort} />
+            </tr>
+          </thead>
+          <tbody>
+            {display.map((player) => {
+              const showEarlySample = player.year > matureOutcomeCutoff
+              return <tr key={player.id}>
+                <td><b>{player.name}</b></td>
+                <td><small>{player.school || '—'}</small></td>
+                <td>{player.pos}</td>
+                <td>{player.year}</td>
+                <td>{player.pick >= 260 ? 'UDFA' : player.pick}</td>
+                <td>{player.forty?.toFixed(2) ?? '—'}</td>
+                <td>{player.games || 0}</td>
+                <td>{player.starts || 0}</td>
+                <td>{player.av || 0}</td>
+                <td>{player.proBowls || 0}</td>
+                <td>{player.allPros || 0}</td>
+                <td>{showEarlySample ? <span className="sampleTag">Early</span> : <OutcomeTag category={player.category} />}</td>
+              </tr>
+            })}
+          </tbody>
+        </table>
+      </TableWrap>
+      {sorted.length > 500 ? <p className="hint">Showing 500 of {sorted.length.toLocaleString()}. Narrow filters to see more.</p> : null}
+    </> : <p className="emptyLine">No players match those filters.</p>}
+  </section>
+}
+
+function BrowserHeader({ label, sortKey, active, dir, onSort }: { label: string; sortKey: BrowserSortKey; active: BrowserSortKey; dir: SortDir; onSort: (key: BrowserSortKey) => void }) {
+  const isActive = sortKey === active
+  return <th aria-sort={isActive ? (dir === 'asc' ? 'ascending' : 'descending') : 'none'}>
+    <button type="button" className={`classSort ${isActive ? 'on' : ''}`} onClick={() => onSort(sortKey)}>
+      {label}<i className="sortMark" aria-hidden="true">{isActive ? (dir === 'asc' ? '^' : 'v') : ''}</i>
+    </button>
+  </th>
+}
+
 function ClassExplorer({ pool, history, pffProfiles, currentName, currentYear }: { pool: Historical[]; history: Historical[]; pffProfiles: PffProfile[]; currentName: string; currentYear: number }) {
   const years = useMemo(() => {
     const set = new Set<number>()
@@ -851,7 +995,9 @@ function compareHistorical(a: Historical, b: Historical, key: SortKey, projectio
 
 function readPageFromHash(): Page {
   if (typeof window === 'undefined') return 'workbench'
-  return window.location.hash === '#class' ? 'class' : 'workbench'
+  if (window.location.hash === '#class') return 'class'
+  if (window.location.hash === '#players') return 'players'
+  return 'workbench'
 }
 
 function readSavedProspects(): SavedProspect[] {

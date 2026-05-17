@@ -860,6 +860,18 @@ td small {
   margin-bottom: 14px;
 }
 
+.browserControls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: end;
+  margin-bottom: 14px;
+}
+
+.browserControls .field { flex: 1 1 130px; min-width: 0; }
+.browserSearch { flex: 2 1 220px !important; }
+.browserTable { min-width: 820px; }
+
 .directionButton { min-width: 110px; }
 
 .classTable { min-width: 900px; }
