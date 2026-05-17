@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState, type ChangeEvent, type CSSProperties, type Dispatch, type ReactNode, type SetStateAction } from 'react'
+import { useEffect, useMemo, useState, type ChangeEvent, type CSSProperties, type ReactNode } from 'react'
 
 type Row = Record<string, string>
 type Category = 'Bust' | 'Reserve' | 'Role' | 'Starter' | 'High-end starter' | 'Star'
@@ -575,6 +575,10 @@ export default function App() {
             <button type="button" className="danger" onClick={deleteSavedProspect} disabled={!selectedSavedId}>Delete</button>
           </div>
           <label className="field wide"><span>Scout notes</span><textarea className="notesArea" value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="Add scouting observations, traits, concerns…" rows={3} /></label>
+          {activeScoutNote && <div className="scoutNoteBox">
+            <p className="scoutNoteLabel">2025 Scouting Consensus</p>
+            <p className="scoutNoteText">{activeScoutNote.summary}</p>
+          </div>}
           {message ? <p className={`status ${message.tone}`}>{message.text}</p> : null}
         </section>
 
@@ -587,6 +591,21 @@ export default function App() {
             <Num label="Draft class" value={input.draftSeason} min={2016} max={2030} onChange={(v) => update('draftSeason', v)} />
             <Num label="Projected pick" value={input.pick} min={1} max={260} onChange={(v) => update('pick', v)} />
             <Num label="Age" value={input.age} step={0.1} onChange={(v) => update('age', v)} />
+            <label className="field"><span>Scheme tag</span>
+              <select value={input.schemeTag} onChange={(e) => update('schemeTag', e.target.value)}>
+                <option value="">— none —</option>
+                <option value="Spread offense">Spread offense</option>
+                <option value="Pro-style">Pro-style</option>
+                <option value="Air raid">Air raid</option>
+                <option value="Option/RPO">Option / RPO</option>
+                <option value="West Coast">West Coast</option>
+                <option value="Gap/power run">Gap / power run</option>
+                <option value="Zone blocking">Zone blocking</option>
+                <option value="4-3 defense">4-3 defense</option>
+                <option value="3-4 defense">3-4 defense</option>
+                <option value="Multiple defense">Multiple defense</option>
+              </select>
+            </label>
           </div>
         </section>
 
@@ -634,17 +653,25 @@ export default function App() {
             <h3>{projection.grade}</h3>
             {projection.percentile != null && <p className="scoreRank">Top {100 - projection.percentile}% at this pick slot</p>}
             {projection.pffBlend === 0 && <p className="slotWarn">Pick-slot projection only — no PFF comps</p>}
+            {activeConsensusPick && <p className="consensusRange">
+              Consensus #{activeConsensusPick.consensus} · range {activeConsensusPick.lo}–{activeConsensusPick.hi}
+            </p>}
+            {projection.flags.length > 0 && <div className="flagRow">
+              {projection.flags.map((f) => <span key={f} className="dangerFlag">{f}</span>)}
+            </div>}
             <div className="heroMeta">
               <span>{input.school || 'No school'}</span>
               <span>PFF {Math.round(input.pffComposite)}</span>
               <span>{projection.pffComps.length} PFF comps</span>
             </div>
+            <button type="button" className="secondary smallButton compareBtn" onClick={() => { setCompareQuery(input.name); setPage('compare') }}>Compare</button>
           </div>
           <div className="statStrip">
             <Metric label="Expected AV" value={projection.expectedAv.toFixed(1)} />
             <Metric label="NFL impact" value={projection.impactScore.toFixed(1)} />
             <Metric label="Games" value={Math.round(projection.games).toString()} />
             <Metric label="Starter yrs" value={projection.starts.toFixed(1)} />
+            <Metric label="RAS" value={projection.ras.toFixed(1)} />
           </div>
         </section>
 
@@ -703,8 +730,21 @@ export default function App() {
           <div className="panelTitle"><div><p>nflverse Baseline</p><h2>Closest Draft/Combine Comps</h2></div></div>
           <TableWrap>
             <table>
-              <thead><tr><th>Player</th><th>Yr</th><th>Pos</th><th>Pick</th><th>40</th><th>AV</th><th>Outcome</th><th>Sim</th></tr></thead>
-              <tbody>{projection.comps.map((c) => <tr key={c.player.id}><td><b>{c.player.name}</b><small>{c.player.school}</small></td><td>{c.player.year}</td><td>{c.player.pos}</td><td>{c.player.pick}</td><td>{c.player.forty?.toFixed(2) || '-'}</td><td>{c.player.av}</td><td><OutcomeTag category={c.player.category} /></td><td>{Math.round(c.sim * 100)}</td></tr>)}</tbody>
+              <thead><tr><th>Player</th><th>Yr</th><th>Pos</th><th>Pick</th><th>40</th><th>AV</th><th>Arc</th><th>Outcome</th><th>Sim</th></tr></thead>
+              <tbody>{projection.comps.map((c) => {
+                const hr = schoolHitRate(c.player.school, prospects)
+                return <tr key={c.player.id}>
+                  <td><b>{c.player.name}</b><small>{c.player.school}{hr ? <span className="schoolBadge">{Math.round(hr.rate * 100)}%</span> : null}</small></td>
+                  <td>{c.player.year}</td>
+                  <td>{c.player.pos}</td>
+                  <td>{c.player.pick}</td>
+                  <td>{c.player.forty?.toFixed(2) || '-'}</td>
+                  <td>{c.player.av}</td>
+                  <td><small className="arcLabel">{careerArc(c.player)}</small></td>
+                  <td><OutcomeTag category={c.player.category} /></td>
+                  <td>{Math.round(c.sim * 100)}</td>
+                </tr>
+              })}</tbody>
             </table>
           </TableWrap>
         </section>
@@ -1333,6 +1373,7 @@ function prospectFromHistorical(player: Historical, pff?: PffProfile): Prospect 
     pffProduction: pff?.pff.production ?? Math.max(55, baseline - 2),
     pffEfficiency: pff?.pff.efficiency ?? baseline,
     pffClean: pff?.pff.clean ?? 70,
+    schemeTag: '',
   }
 }
 
@@ -1356,6 +1397,7 @@ function prospectFromPff(profile: PffProfile, historical: Historical | undefined
     pffProduction: clamp(profile.pff.production, 1, 99),
     pffEfficiency: clamp(profile.pff.efficiency, 1, 99),
     pffClean: clamp(profile.pff.clean, 1, 99),
+    schemeTag: '',
   }
 }
 
@@ -1390,6 +1432,7 @@ function prospectFromUnknown(value: unknown): Prospect | null {
     pffProduction: clamp(numberField(record, 'pffProduction', numberField(record, 'production', template.pffProduction)), 1, 99),
     pffEfficiency: clamp(numberField(record, 'pffEfficiency', numberField(record, 'processing', template.pffEfficiency)), 1, 99),
     pffClean: clamp(numberField(record, 'pffClean', template.pffClean), 1, 99),
+    schemeTag: stringField(record, 'schemeTag', ''),
   }
 }
 
@@ -1449,6 +1492,7 @@ function prospectFromCsvRow(row: Row): Prospect | null {
     pffProduction: clamp(pffProduction, 1, 99),
     pffEfficiency: clamp(pffEfficiency, 1, 99),
     pffClean: clamp(rowNum(row, ['pffClean', 'pff_clean', 'clean', 'clean_play'], template.pffClean), 1, 99),
+    schemeTag: '',
   }
 }
 
@@ -1679,6 +1723,7 @@ function rowToHistorical(combineRow: Row, draftRow: Row | undefined, index: numb
 
 function project(input: Prospect, history: Historical[], pffProfiles: PffProfile[], excludeId?: string) {
   const pool = history.filter((p) => (p.pos === input.pos || group[p.pos] === group[input.pos]) && p.id !== excludeId)
+  const ras = rasScore(input, pool)
   const stats = (k: keyof Historical) => pool.map((p) => p[k]).filter((v): v is number => typeof v === 'number' && Number.isFinite(v))
   const pct = (value: number, values: number[], low = false) => values.length ? values.filter((v) => low ? v >= value : v <= value).length / values.length * 100 : 50
   const draft = 100 * Math.pow(1 - (input.pick - 1) / 259, .58)
@@ -1727,6 +1772,7 @@ function project(input: Prospect, history: Historical[], pffProfiles: PffProfile
   const percentile = slotComps.length >= 8
     ? Math.round(slotComps.filter((p) => p.av < expectedAv).length / slotComps.length * 100)
     : null
+  const flags = dangerFlags(input, { ceiling, floor, pffBlend })
 
   return {
     score,
@@ -1746,6 +1792,8 @@ function project(input: Prospect, history: Historical[], pffProfiles: PffProfile
     pffComps: pffComps.slice(0, 12),
     pffBlend,
     percentile,
+    ras,
+    flags,
     signals: { draft, athletic, size, scout, age, pff: pffSignal },
   }
 }
@@ -1822,6 +1870,59 @@ function normalizePffInput(input: Prospect, pffProfiles: PffProfile[]) {
   }
 }
 
+function rasScore(input: Prospect, pool: Historical[]): number {
+  if (pool.length < 20) return 5
+  function zStat(values: (number | null)[], raw: number | null, invert = false): number | null {
+    if (raw == null) return null
+    const valid = values.filter((v): v is number => v != null && Number.isFinite(v))
+    if (valid.length < 10) return null
+    const m = avg(valid)
+    const sd = Math.sqrt(avg(valid.map((v) => (v - m) ** 2)))
+    if (sd < 0.001) return null
+    const z = (raw - m) / sd
+    return clamp((invert ? -z : z) * 1.5 + 5, 0, 10)
+  }
+  const scores = [
+    zStat(pool.map((p) => p.height), input.height),
+    zStat(pool.map((p) => p.weight), input.weight),
+    zStat(pool.map((p) => p.forty), input.forty, true),
+    zStat(pool.map((p) => p.vertical), input.vertical),
+    zStat(pool.map((p) => p.broad), input.broad),
+    zStat(pool.map((p) => p.cone), input.cone, true),
+    zStat(pool.map((p) => p.shuttle), input.shuttle, true),
+  ].filter((s): s is number => s != null)
+  return scores.length ? clamp(avg(scores), 0, 10) : 5
+}
+
+function dangerFlags(input: Prospect, proj: { ceiling: number; floor: number; pffBlend: number }): string[] {
+  const flags: string[] = []
+  if (input.age > 23.5) flags.push('Late entry age')
+  if (input.pos === 'RB' && input.pick > 100) flags.push('Late-round RB')
+  else if (input.pos === 'RB' && input.pick > 50) flags.push('RB depreciation risk')
+  if (proj.ceiling - proj.floor > 35) flags.push('High outcome variance')
+  if (proj.pffBlend === 0 && input.pick > 80) flags.push('Limited comp data')
+  return flags
+}
+
+function schoolHitRate(school: string, pool: Historical[]): { rate: number; n: number } | null {
+  if (!school) return null
+  const matches = pool.filter((p) => p.school && clean(p.school) === clean(school) && p.year <= 2022)
+  if (matches.length < 6) return null
+  const starters = matches.filter((p) => ['Starter', 'High-end starter', 'Star'].includes(p.category))
+  return { rate: starters.length / matches.length, n: matches.length }
+}
+
+function careerArc(player: Historical): string {
+  const { av, games, starts, proBowls, allPros } = player
+  if (allPros >= 1 || (proBowls >= 2 && av >= 50)) return 'Elite career'
+  if (proBowls >= 1 || av >= 45) return 'Pro Bowl career'
+  if (av >= 28 || starts >= 5) return 'Solid starter'
+  if (games >= 80 && av < 20) return 'Long-term depth'
+  if (games >= 48) return 'Role player'
+  if (games >= 17) return 'Reserve'
+  return 'Minimal impact'
+}
+
 function avToScore(av: number) {
   return clamp(100 * (1 - Math.exp(-Math.max(0, av) / 34)), 0, 99)
 }
@@ -1867,125 +1968,51 @@ function lookupLabel(player: Historical) {
   return `${player.name} | ${player.year} | ${player.pos} | ${player.school || 'No school'} | pick ${player.pick}`
 }
 
-// Jimmy Johnson trade value chart (pick → value)
-const TRADE_VALUES: Record<number, number> = {
-  1: 3000, 2: 2600, 3: 2200, 4: 1800, 5: 1700, 6: 1600, 7: 1500, 8: 1400, 9: 1350,
-  10: 1300, 11: 1250, 12: 1200, 13: 1150, 14: 1100, 15: 1050, 16: 1000, 17: 950,
-  18: 900, 19: 875, 20: 850, 21: 800, 22: 780, 23: 760, 24: 740, 25: 720, 26: 700,
-  27: 680, 28: 660, 29: 640, 30: 620, 31: 600, 32: 590, 33: 580, 34: 560, 35: 550,
-  36: 540, 37: 530, 38: 520, 39: 510, 40: 500, 41: 490, 42: 480, 43: 470, 44: 460,
-  45: 450, 46: 440, 47: 430, 48: 420, 49: 410, 50: 400, 51: 390, 52: 380, 53: 370,
-  54: 360, 55: 350, 56: 340, 57: 330, 58: 320, 59: 310, 60: 300, 61: 292, 62: 284,
-  63: 276, 64: 268, 65: 260, 66: 252, 67: 244, 68: 236, 69: 228, 70: 220, 71: 212,
-  72: 204, 73: 196, 74: 188, 75: 180, 76: 172, 77: 164, 78: 156, 79: 148, 80: 140,
-  81: 132, 82: 126, 83: 120, 84: 114, 85: 108, 86: 102, 87: 96, 88: 90, 89: 84,
-  90: 80, 91: 76, 92: 72, 93: 68, 94: 64, 95: 60, 96: 56, 97: 52, 98: 48, 99: 44,
-  100: 40, 101: 38, 102: 36, 103: 34, 104: 32, 105: 30, 106: 28, 107: 26, 108: 24,
-  109: 22, 110: 20, 111: 18, 112: 16, 113: 14, 114: 12, 115: 10, 116: 9, 117: 8,
-  118: 7, 119: 6, 120: 6, 121: 5, 122: 5, 123: 4, 124: 4, 125: 4, 126: 3, 127: 3,
-  128: 3, 129: 2, 130: 2, 131: 2, 132: 2, 133: 2, 134: 2, 135: 2, 136: 2, 137: 2,
-  138: 2, 139: 1, 140: 1, 141: 1, 142: 1, 143: 1, 144: 1, 145: 1, 146: 1, 147: 1,
-  148: 1, 149: 1, 150: 1, 151: 1, 152: 1, 153: 1, 154: 1, 155: 1, 156: 1, 157: 1,
-  158: 1, 159: 1, 160: 1, 161: 1, 162: 1, 163: 1, 164: 1, 165: 1, 166: 1, 167: 1,
-  168: 1, 169: 1, 170: 1, 171: 1, 172: 1, 173: 1, 174: 1, 175: 1, 176: 1, 177: 1,
-  178: 1, 179: 1, 180: 1, 181: 1, 182: 1, 183: 1, 184: 1, 185: 1, 186: 1, 187: 1,
-  188: 1, 189: 1, 190: 1, 191: 1, 192: 1, 193: 1, 194: 1, 195: 1, 196: 1, 197: 1,
-  198: 1, 199: 1, 200: 1, 201: 1, 202: 1, 203: 1, 204: 1, 205: 1, 206: 1, 207: 1,
-  208: 1, 209: 1, 210: 1, 211: 1, 212: 1, 213: 1, 214: 1, 215: 1, 216: 1, 217: 1,
-  218: 1, 219: 1, 220: 1, 221: 1, 222: 1, 223: 1, 224: 1, 225: 1, 226: 1, 227: 1,
-  228: 1, 229: 1, 230: 1, 231: 1, 232: 1, 233: 1, 234: 1, 235: 1, 236: 1, 237: 1,
-  238: 1, 239: 1, 240: 1, 241: 1, 242: 1, 243: 1, 244: 1, 245: 1, 246: 1, 247: 1,
-  248: 1, 249: 1, 250: 1, 251: 1, 252: 1, 253: 1, 254: 1, 255: 1, 256: 1,
-}
-
-function pickValue(pick: number): number {
-  if (pick < 1 || pick > 256) return 0
-  return TRADE_VALUES[pick] ?? 1
-}
-
 function TradeCalculator() {
-  const emptySlot = () => ({ pick: '', year: String(new Date().getFullYear()) })
-  const [teamA, setTeamA] = useState([emptySlot()])
-  const [teamB, setTeamB] = useState([emptySlot()])
+  const [aStr, setAStr] = useState('')
+  const [bStr, setBStr] = useState('')
 
-  function sumValue(slots: { pick: string; year: string }[]) {
-    return slots.reduce((sum, s) => {
-      const p = parseInt(s.pick, 10)
-      return sum + (Number.isFinite(p) ? pickValue(p) : 0)
-    }, 0)
+  function parsePicks(str: string): number[] {
+    return str.split(',').map((s) => parseInt(s.trim(), 10)).filter((n) => Number.isFinite(n) && n >= 1 && n <= 260)
   }
 
-  function updateSlot(
-    setter: Dispatch<SetStateAction<{ pick: string; year: string }[]>>,
-    index: number,
-    field: 'pick' | 'year',
-    value: string,
-  ) {
-    setter((prev) => prev.map((s, i) => i === index ? { ...s, [field]: value } : s))
-  }
-
-  function addSlot(setter: Dispatch<SetStateAction<{ pick: string; year: string }[]>>) {
-    setter((prev) => [...prev, emptySlot()])
-  }
-
-  function removeSlot(setter: Dispatch<SetStateAction<{ pick: string; year: string }[]>>, index: number) {
-    setter((prev) => prev.filter((_, i) => i !== index))
-  }
-
-  const valA = sumValue(teamA)
-  const valB = sumValue(teamB)
-  const diff = valA - valB
-  const fair = Math.abs(diff) < 50
-
-  function renderSlots(
-    slots: { pick: string; year: string }[],
-    setter: Dispatch<SetStateAction<{ pick: string; year: string }[]>>,
-    label: string,
-  ) {
-    return <div className="tradeTeam">
-      <h3>{label}</h3>
-      {slots.map((s, i) => (
-        <div key={i} className="tradeSlot">
-          <label className="field"><span>Pick #</span>
-            <input type="number" min={1} max={256} value={s.pick}
-              onChange={(e) => updateSlot(setter, i, 'pick', e.target.value)}
-              placeholder="e.g. 15" />
-          </label>
-          <label className="field"><span>Year</span>
-            <input type="number" min={2024} max={2035} value={s.year}
-              onChange={(e) => updateSlot(setter, i, 'year', e.target.value)} />
-          </label>
-          {s.pick && Number.isFinite(parseInt(s.pick, 10)) && (
-            <span className="tradeVal">{pickValue(parseInt(s.pick, 10)).toLocaleString()} pts</span>
-          )}
-          {slots.length > 1 && (
-            <button type="button" className="danger compact" onClick={() => removeSlot(setter, i)}>-</button>
-          )}
-        </div>
-      ))}
-      <button type="button" className="secondary compact" onClick={() => addSlot(setter)}>+ Add pick</button>
-      <div className="tradeTotalRow"><strong>Total:</strong> {valA === 0 && label.includes('Team A') || valB === 0 && label.includes('Team B') ? '—' : (label.includes('Team A') ? valA : valB).toLocaleString()} pts</div>
-    </div>
-  }
+  const aPicks = parsePicks(aStr)
+  const bPicks = parsePicks(bStr)
+  const aValue = aPicks.reduce((sum, p) => sum + PICK_VALUE(p), 0)
+  const bValue = bPicks.reduce((sum, p) => sum + PICK_VALUE(p), 0)
+  const diff = aValue - bValue
+  const hasData = aPicks.length > 0 && bPicks.length > 0
+  const fair = hasData && Math.abs(diff) < Math.max(aValue, bValue) * 0.08
 
   return <section className="panel tablePanel classPanel">
-    <div className="panelTitle">
-      <div><p>Tool</p><h2>Trade Calculator</h2></div>
-      <p className="panelSub">Jimmy Johnson draft pick value chart</p>
-    </div>
-    <div className="tradeLayout">
-      {renderSlots(teamA, setTeamA, 'Team A gives')}
-      <div className="tradeMiddle">
-        <div className={`tradeDiff ${fair ? 'fair' : diff > 0 ? 'favorA' : 'favorB'}`}>
-          {fair
-            ? 'Fair trade'
-            : diff > 0
-              ? `Team A overpays by ${Math.abs(diff).toLocaleString()} pts`
-              : `Team B overpays by ${Math.abs(diff).toLocaleString()} pts`}
+    <div className="panelTitle"><div><p>Draft Capital</p><h2>Trade Calculator</h2></div></div>
+    <p className="hint">Enter picks for each side (comma-separated). Surplus value uses an exponential depreciation curve (pick 1 = 3000 pts).</p>
+    <div className="tradeGrid">
+      <div className="tradeSlot">
+        <label className="field wide"><span>Team A picks</span>
+          <input value={aStr} onChange={(e) => setAStr(e.target.value)} placeholder="e.g. 5, 37, 102" />
+        </label>
+        <div className="tradeValue">{aValue.toLocaleString()} pts</div>
+        <div className="tradePicks">
+          {aPicks.map((p, i) => <span key={i} className={`pickBand ${pickBandClass(p)}`}>#{p} ({PICK_VALUE(p).toLocaleString()})</span>)}
         </div>
       </div>
-      {renderSlots(teamB, setTeamB, 'Team B gives')}
+      <div className="tradeVs">vs</div>
+      <div className="tradeSlot">
+        <label className="field wide"><span>Team B picks</span>
+          <input value={bStr} onChange={(e) => setBStr(e.target.value)} placeholder="e.g. 1, 200" />
+        </label>
+        <div className="tradeValue">{bValue.toLocaleString()} pts</div>
+        <div className="tradePicks">
+          {bPicks.map((p, i) => <span key={i} className={`pickBand ${pickBandClass(p)}`}>#{p} ({PICK_VALUE(p).toLocaleString()})</span>)}
+        </div>
+      </div>
     </div>
+    {hasData && <div className={`tradeVerdict ${fair ? 'tradeFair' : diff > 0 ? 'tradeA' : 'tradeB'}`}>
+      {fair
+        ? '≈ Fair trade'
+        : `Team ${diff > 0 ? 'A' : 'B'} wins by ${Math.abs(diff).toLocaleString()} pts (${((Math.abs(diff) / Math.max(aValue, bValue)) * 100).toFixed(0)}%)`}
+    </div>}
   </section>
 }
 
