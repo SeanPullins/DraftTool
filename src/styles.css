@@ -1093,6 +1093,136 @@ td small {
   font-weight: 700;
 }
 
+/* ── Danger flags ────────────────────────────────── */
+.flagRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin: 4px 0 8px;
+}
+
+.dangerFlag {
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+  background: rgba(239,68,68,0.15);
+  color: #fca5a5;
+  border: 1px solid rgba(239,68,68,0.3);
+  border-radius: 4px;
+  padding: 2px 6px;
+}
+
+/* ── Consensus range ─────────────────────────────── */
+.consensusRange {
+  font-size: 10px;
+  font-weight: 700;
+  color: rgba(134,239,172,0.85);
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  margin: 0 0 4px;
+}
+
+/* ── Compare button in hero ──────────────────────── */
+.compareBtn { margin-top: 10px; font-size: 11px; padding: 5px 14px; }
+
+/* ── Scout note box ──────────────────────────────── */
+.scoutNoteBox {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 10px 12px;
+  margin-top: 8px;
+}
+.scoutNoteLabel {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: #64748b;
+  margin: 0 0 5px;
+}
+.scoutNoteText {
+  font-size: 12px;
+  color: #334155;
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* ── School hit-rate badge ───────────────────────── */
+.schoolBadge {
+  display: inline-block;
+  background: #dbeafe;
+  color: #1d4ed8;
+  font-size: 9px;
+  font-weight: 700;
+  border-radius: 3px;
+  padding: 1px 4px;
+  margin-left: 4px;
+  vertical-align: middle;
+}
+
+/* ── Career arc label ────────────────────────────── */
+.arcLabel {
+  font-size: 10px;
+  font-weight: 600;
+  color: #64748b;
+  white-space: nowrap;
+}
+
+/* ── Trade calculator ────────────────────────────── */
+.tradeGrid {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+.tradeSlot { flex: 1 1 260px; min-width: 0; }
+.tradeValue {
+  font-size: 28px;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 8px 0 6px;
+  font-variant-numeric: tabular-nums;
+}
+.tradeVs {
+  font-size: 16px;
+  font-weight: 800;
+  color: #94a3b8;
+  align-self: center;
+  padding-top: 24px;
+}
+.tradePicks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: 4px;
+}
+.pickBand {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  border-radius: 5px;
+  padding: 3px 8px;
+}
+.pick1 { background: #fef3c7; color: #92400e; }
+.pick2 { background: #dbeafe; color: #1e40af; }
+.pick3 { background: #dcfce7; color: #166534; }
+.pick4 { background: #f3e8ff; color: #6b21a8; }
+.pick5 { background: #fee2e2; color: #991b1b; }
+.pick6 { background: #f1f5f9; color: #475569; }
+.tradeVerdict {
+  font-size: 18px;
+  font-weight: 800;
+  padding: 14px 18px;
+  border-radius: 10px;
+  text-align: center;
+}
+.tradeFair { background: #f0fdf4; color: #166534; }
+.tradeA { background: #eff6ff; color: #1d4ed8; }
+.tradeB { background: #fff7ed; color: #c2410c; }
+
 /* ── Responsive ───────────────────────────────────── */
 @media (max-width: 1180px) {
   .layout,
