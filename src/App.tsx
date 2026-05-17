@@ -87,13 +87,13 @@ type PffPayload = {
 type Projection = ReturnType<typeof project>
 type LoaderMessage = { tone: 'good' | 'warn'; text: string } | null
 type MobileTab = 'edit' | 'results' | 'board'
-type Page = 'workbench' | 'class' | 'players'
+type Page = 'workbench' | 'class' | 'players' | 'compare'
 type BrowserSortKey = 'av' | 'games' | 'starts' | 'pb' | 'ap' | 'pick' | 'name' | 'outcome' | 'year' | 'forty'
 type ModelSignal = 'draftScore' | 'logPick' | 'pffComp' | 'pffGrade' | 'pffProd' | 'pffEff' | 'pffClean' | 'ageScore' | 'athletic' | 'size' | 'isQB' | 'isSkill' | 'isOL' | 'isFront' | 'isDB'
 type SortKey = 'av' | 'projAv' | 'projScore' | 'games' | 'starts' | 'pb' | 'ap' | 'pick' | 'name' | 'outcome'
 type SortDir = 'asc' | 'desc'
 
-const positions = ['QB', 'RB', 'WR', 'TE', 'OT', 'IOL', 'EDGE', 'IDL', 'LB', 'CB', 'S']
+const positions = ['QB', 'RB', 'WR', 'TE', 'OL', 'DL', 'LB', 'CB', 'S']
 const outcomeOrder: Category[] = ['Bust', 'Reserve', 'Role', 'Starter', 'High-end starter', 'Star']
 const matureOutcomeCutoff = 2023
 const sortLabels: Record<SortKey, string> = {
@@ -134,10 +134,8 @@ const group: Record<string, string> = {
   RB: 'SKILL',
   WR: 'SKILL',
   TE: 'SKILL',
-  OT: 'OL',
-  IOL: 'OL',
-  EDGE: 'FRONT',
-  IDL: 'FRONT',
+  OL: 'OL',
+  DL: 'FRONT',
   LB: 'FRONT',
   CB: 'DB',
   S: 'DB',
@@ -209,10 +207,8 @@ const positionDefaults: Record<string, Partial<Prospect>> = {
   RB: { height: 70, weight: 214, forty: 4.5, vertical: 35, broad: 121, cone: 7.05, shuttle: 4.25 },
   WR: { height: 73, weight: 202, forty: 4.5, vertical: 36, broad: 123, cone: 6.95, shuttle: 4.22 },
   TE: { height: 77, weight: 250, forty: 4.72, vertical: 34, broad: 119, cone: 7.15, shuttle: 4.35 },
-  OT: { height: 78, weight: 315, forty: 5.18, vertical: 29, broad: 105, cone: 7.75, shuttle: 4.72 },
-  IOL: { height: 76, weight: 310, forty: 5.22, vertical: 28, broad: 103, cone: 7.82, shuttle: 4.78 },
-  EDGE: { height: 76, weight: 260, forty: 4.74, vertical: 34, broad: 119, cone: 7.18, shuttle: 4.38 },
-  IDL: { height: 75, weight: 300, forty: 5.08, vertical: 30, broad: 106, cone: 7.65, shuttle: 4.65 },
+  OL: { height: 77, weight: 313, forty: 5.20, vertical: 29, broad: 104, cone: 7.79, shuttle: 4.75 },
+  DL: { height: 76, weight: 278, forty: 4.90, vertical: 32, broad: 112, cone: 7.40, shuttle: 4.50 },
   LB: { height: 74, weight: 235, forty: 4.65, vertical: 34, broad: 118, cone: 7.12, shuttle: 4.3 },
   CB: { height: 71, weight: 195, forty: 4.48, vertical: 36, broad: 122, cone: 6.95, shuttle: 4.18 },
   S: { height: 72, weight: 205, forty: 4.55, vertical: 35, broad: 120, cone: 7.0, shuttle: 4.22 },
@@ -243,7 +239,8 @@ export default function App() {
 
   useEffect(() => {
     if (typeof window === 'undefined') return
-    const target = page === 'class' ? '#class' : page === 'players' ? '#players' : ''
+    const hashMap: Partial<Record<Page, string>> = { class: '#class', players: '#players', compare: '#compare' }
+    const target = hashMap[page] ?? ''
     if (window.location.hash !== target) {
       const url = target || `${window.location.pathname}${window.location.search}`
       window.history.replaceState(null, '', url)
@@ -472,6 +469,7 @@ export default function App() {
         <button type="button" className={page === 'workbench' ? 'on' : ''} onClick={() => setPage('workbench')}>Workbench</button>
         <button type="button" className={page === 'class' ? 'on' : ''} onClick={() => setPage('class')}>Class Rankings</button>
         <button type="button" className={page === 'players' ? 'on' : ''} onClick={() => setPage('players')}>Players</button>
+        <button type="button" className={page === 'compare' ? 'on' : ''} onClick={() => setPage('compare')}>Compare</button>
       </nav>
 
       {page === 'workbench' ? <nav className="mobileTabs" role="tablist" aria-label="Workbench sections">
@@ -485,6 +483,8 @@ export default function App() {
       <ClassExplorer pool={lookupPool} history={prospects} pffProfiles={pffProfiles} currentName={input.name} currentYear={input.draftSeason} />
     </div> : page === 'players' ? <div className="classPage">
       <PlayerBrowser pool={lookupPool} />
+    </div> : page === 'compare' ? <div className="classPage">
+      <CompareView pool={lookupPool} history={prospects} pffProfiles={pffProfiles} />
     </div> : <div className="layout">
       <aside className="controlPanel" data-pane="edit">
         <section className="panel loadPanel">
@@ -693,6 +693,169 @@ function OutcomeTag({ category }: { category: Category }) {
 
 function TableWrap({ children }: { children: ReactNode }) {
   return <div className="tableWrap">{children}</div>
+}
+
+function CompareView({ pool, history, pffProfiles }: { pool: Historical[]; history: Historical[]; pffProfiles: PffProfile[] }) {
+  const [q1, setQ1] = useState('')
+  const [q2, setQ2] = useState('')
+  const [p1, setP1] = useState<Historical | null>(null)
+  const [p2, setP2] = useState<Historical | null>(null)
+  const [msg, setMsg] = useState('')
+
+  const opts = useMemo(() =>
+    pool.slice().sort((a, b) => b.year - a.year || a.pick - b.pick)
+      .map((p) => ({ id: p.id, label: lookupLabel(p) })),
+    [pool])
+
+  function resolve(query: string): Historical | null {
+    const normalized = clean(query)
+    if (!normalized) return null
+    const opt = opts.find((o) => o.label === query) ?? opts.find((o) => clean(o.label).includes(normalized))
+    return pool.find((p) => p.id === opt?.id) ?? null
+  }
+
+  function load() {
+    const a = resolve(q1)
+    const b = resolve(q2)
+    if (!a && !b) { setMsg('Type at least one player name.'); return }
+    if (!a) { setMsg(`No match for "${q1}".`); return }
+    if (!b) { setMsg(`No match for "${q2}".`); return }
+    if (a.id === b.id) { setMsg('Select two different players.'); return }
+    setP1(a); setP2(b); setMsg('')
+  }
+
+  const pff1 = useMemo(() => p1 ? pffProfiles.find((pf) => samePlayerSeason(pf, p1.name, p1.year, p1.pos)) : undefined, [p1, pffProfiles])
+  const pff2 = useMemo(() => p2 ? pffProfiles.find((pf) => samePlayerSeason(pf, p2.name, p2.year, p2.pos)) : undefined, [p2, pffProfiles])
+  const proj1 = useMemo(() => p1 ? project(prospectFromHistorical(p1, pff1), history, pffProfiles, p1.id) : null, [p1, pff1, history, pffProfiles])
+  const proj2 = useMemo(() => p2 ? project(prospectFromHistorical(p2, pff2), history, pffProfiles, p2.id) : null, [p2, pff2, history, pffProfiles])
+
+  return <section className="panel tablePanel classPanel">
+    <div className="panelTitle">
+      <div><p>Side-by-side</p><h2>Player Comparison</h2></div>
+    </div>
+    <div className="compareSearch">
+      <div className="compareSlot">
+        <label className="field wide"><span>Player 1</span>
+          <input list="cmp-1" value={q1} onChange={(e) => setQ1(e.target.value)} placeholder="Search name, school, year…" />
+        </label>
+        <datalist id="cmp-1">{opts.map((o) => <option key={o.id} value={o.label} />)}</datalist>
+      </div>
+      <div className="compareSlot">
+        <label className="field wide"><span>Player 2</span>
+          <input list="cmp-2" value={q2} onChange={(e) => setQ2(e.target.value)} placeholder="Search name, school, year…" />
+        </label>
+        <datalist id="cmp-2">{opts.map((o) => <option key={o.id} value={o.label} />)}</datalist>
+      </div>
+      <button type="button" onClick={load}>Compare</button>
+    </div>
+    {msg ? <p className="status warn">{msg}</p> : null}
+    {p1 && p2 && proj1 && proj2 && <CompareTable p1={p1} p2={p2} proj1={proj1} proj2={proj2} pff1={pff1} pff2={pff2} />}
+  </section>
+}
+
+function CompareTable({ p1, p2, proj1, proj2, pff1, pff2 }: {
+  p1: Historical; p2: Historical
+  proj1: ReturnType<typeof project>; proj2: ReturnType<typeof project>
+  pff1: PffProfile | undefined; pff2: PffProfile | undefined
+}) {
+  type Dir = 'h' | 'l' | 'n'
+  type CR = { label: string; v1: string; v2: string; n1: number | null; n2: number | null; dir: Dir }
+
+  function row(label: string, raw1: string | number | null, raw2: string | number | null, dir: Dir = 'h', fmt?: (v: number) => string): CR {
+    const n1 = typeof raw1 === 'number' ? raw1 : null
+    const n2 = typeof raw2 === 'number' ? raw2 : null
+    const fmt1 = raw1 == null ? '—' : typeof raw1 === 'number' ? (fmt ? fmt(raw1) : String(raw1)) : raw1
+    const fmt2 = raw2 == null ? '—' : typeof raw2 === 'number' ? (fmt ? fmt(raw2) : String(raw2)) : raw2
+    return { label, v1: fmt1, v2: fmt2, n1, n2, dir }
+  }
+
+  const sections: { title: string; rows: CR[] }[] = [
+    {
+      title: 'Profile',
+      rows: [
+        row('School', p1.school || null, p2.school || null, 'n'),
+        row('Position', p1.pos, p2.pos, 'n'),
+        row('Year', p1.year, p2.year, 'n'),
+        row('Pick', p1.pick >= 260 ? null : p1.pick, p2.pick >= 260 ? null : p2.pick, 'l'),
+        row('Age', p1.age, p2.age, 'l', (v) => v.toFixed(1)),
+      ],
+    },
+    {
+      title: 'Measurables',
+      rows: [
+        row('Height (in.)', p1.height, p2.height, 'h'),
+        row('Weight (lb)', p1.weight, p2.weight, 'n'),
+        row('40-yard dash', p1.forty, p2.forty, 'l', (v) => v.toFixed(2)),
+        row('Vertical (in.)', p1.vertical, p2.vertical, 'h', (v) => v.toFixed(1)),
+        row('Broad jump (in.)', p1.broad, p2.broad, 'h'),
+        row('3-cone drill', p1.cone, p2.cone, 'l', (v) => v.toFixed(2)),
+        row('Shuttle', p1.shuttle, p2.shuttle, 'l', (v) => v.toFixed(2)),
+      ],
+    },
+    ...((pff1 || pff2) ? [{
+      title: 'PFF College Profile',
+      rows: [
+        row('Composite', pff1?.pff.composite ?? null, pff2?.pff.composite ?? null, 'h' as Dir, (v) => v.toFixed(1)),
+        row('Grade', pff1?.pff.grade ?? null, pff2?.pff.grade ?? null, 'h' as Dir, (v) => v.toFixed(1)),
+        row('Production', pff1?.pff.production ?? null, pff2?.pff.production ?? null, 'h' as Dir, (v) => v.toFixed(1)),
+        row('Efficiency', pff1?.pff.efficiency ?? null, pff2?.pff.efficiency ?? null, 'h' as Dir, (v) => v.toFixed(1)),
+        row('Clean play', pff1?.pff.clean ?? null, pff2?.pff.clean ?? null, 'h' as Dir, (v) => v.toFixed(1)),
+      ],
+    }] : []),
+    {
+      title: 'Projection',
+      rows: [
+        row('Score', Math.round(proj1.score), Math.round(proj2.score), 'h'),
+        row('Grade', proj1.grade, proj2.grade, 'n'),
+        row('Expected AV', proj1.expectedAv, proj2.expectedAv, 'h', (v) => v.toFixed(1)),
+        row('Floor AV', proj1.floor, proj2.floor, 'h', (v) => v.toFixed(1)),
+        row('Median AV', proj1.median, proj2.median, 'h', (v) => v.toFixed(1)),
+        row('Ceiling AV', proj1.ceiling, proj2.ceiling, 'h', (v) => v.toFixed(1)),
+      ],
+    },
+    ...((p1.games > 0 || p2.games > 0) ? [{
+      title: 'Career Outcomes',
+      rows: [
+        row('Games played', p1.games, p2.games, 'h' as Dir),
+        row('Starts', p1.starts, p2.starts, 'h' as Dir),
+        row('Weighted AV', p1.av, p2.av, 'h' as Dir),
+        row('Pro Bowls', p1.proBowls, p2.proBowls, 'h' as Dir),
+        row('All-Pros', p1.allPros, p2.allPros, 'h' as Dir),
+        row('Outcome', p1.category, p2.category, 'n' as Dir),
+      ],
+    }] : []),
+  ]
+
+  const visibleSections = sections.map((s) => ({
+    ...s,
+    rows: s.rows.filter((r) => r.v1 !== '—' || r.v2 !== '—'),
+  })).filter((s) => s.rows.length > 0)
+
+  return <TableWrap>
+    <table className="compareTable">
+      <thead>
+        <tr>
+          <th className="compareMetricCol"></th>
+          <th className="comparePlayerCol"><b>{p1.name}</b><small>{p1.school || 'No school'} · {p1.year} {p1.pos}</small></th>
+          <th className="comparePlayerCol"><b>{p2.name}</b><small>{p2.school || 'No school'} · {p2.year} {p2.pos}</small></th>
+        </tr>
+      </thead>
+      <tbody>
+        {visibleSections.flatMap((section) => [
+          <tr key={section.title} className="compareSectionRow"><td colSpan={3}>{section.title}</td></tr>,
+          ...section.rows.map((r) => {
+            const win1 = r.n1 != null && r.n2 != null && r.dir !== 'n' && ((r.dir === 'h' && r.n1 > r.n2) || (r.dir === 'l' && r.n1 < r.n2))
+            const win2 = r.n1 != null && r.n2 != null && r.dir !== 'n' && ((r.dir === 'h' && r.n2 > r.n1) || (r.dir === 'l' && r.n2 < r.n1))
+            return <tr key={r.label}>
+              <td className="compareMetricCol">{r.label}</td>
+              <td className={win1 ? 'compareWin' : ''}>{r.v1}</td>
+              <td className={win2 ? 'compareWin' : ''}>{r.v2}</td>
+            </tr>
+          }),
+        ])}
+      </tbody>
+    </table>
+  </TableWrap>
 }
 
 function PlayerBrowser({ pool }: { pool: Historical[] }) {
@@ -995,9 +1158,8 @@ function compareHistorical(a: Historical, b: Historical, key: SortKey, projectio
 
 function readPageFromHash(): Page {
   if (typeof window === 'undefined') return 'workbench'
-  if (window.location.hash === '#class') return 'class'
-  if (window.location.hash === '#players') return 'players'
-  return 'workbench'
+  const map: Record<string, Page> = { '#class': 'class', '#players': 'players', '#compare': 'compare' }
+  return map[window.location.hash] ?? 'workbench'
 }
 
 function readSavedProspects(): SavedProspect[] {
@@ -1260,8 +1422,9 @@ async function loadPffPayload(): Promise<PffPayload | null> {
 
 function normalizePffProfiles(profiles: RawPffProfile[]): PffProfile[] {
   return profiles.map((profile) => {
-    if (!Array.isArray(profile)) return profile
-    const [name, college, position, draftSeason, composite, grade, production, efficiency, cleanPlay, nfl] = profile
+    if (!Array.isArray(profile)) return { ...profile, position: norm(profile.position) }
+    const [name, college, rawPos, draftSeason, composite, grade, production, efficiency, cleanPlay, nfl] = profile
+    const position = norm(rawPos)
     return {
       id: `${clean(name)}|${draftSeason}|${position}`,
       name,
@@ -1345,10 +1508,9 @@ function height(v: string): number | null {
 
 function norm(p: string): string {
   const x = p.toUpperCase()
-  if (['OT', 'T', 'LT', 'RT'].includes(x)) return 'OT'
-  if (['G', 'OG', 'C', 'OL', 'IOL'].includes(x)) return 'IOL'
-  if (['DE', 'OLB', 'EDGE', 'ED'].includes(x)) return 'EDGE'
-  if (['DT', 'NT', 'DL', 'IDL', 'DI'].includes(x)) return 'IDL'
+  if (['OT', 'T', 'LT', 'RT', 'G', 'OG', 'C', 'OL', 'IOL'].includes(x)) return 'OL'
+  if (['DE', 'OLB', 'EDGE', 'ED', 'DT', 'NT', 'DL', 'IDL', 'DI'].includes(x)) return 'DL'
+  if (['ILB', 'MLB'].includes(x)) return 'LB'
   if (['FS', 'SS', 'DB', 'S'].includes(x)) return 'S'
   return positions.includes(x) ? x : 'S'
 }

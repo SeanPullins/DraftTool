@@ -910,6 +910,72 @@ td small {
   font-size: 10px;
 }
 
+/* ── Compare view ─────────────────────────────────── */
+.compareSearch {
+  display: flex;
+  gap: 10px;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+}
+
+.compareSlot { flex: 1 1 240px; min-width: 0; }
+
+.compareTable {
+  min-width: 480px;
+  table-layout: fixed;
+}
+
+.compareMetricCol {
+  width: 28%;
+  color: #475569;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.comparePlayerCol {
+  width: 36%;
+  text-align: center !important;
+  padding: 12px !important;
+}
+
+.comparePlayerCol b {
+  display: block;
+  font-size: 14px;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.comparePlayerCol small {
+  font-size: 11px;
+  color: #64748b;
+  font-weight: 600;
+  display: block;
+  margin-top: 2px;
+}
+
+.compareSectionRow td {
+  background: #f1f5f9;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: #64748b;
+  padding: 8px 12px 5px;
+  border-bottom: none;
+}
+
+.compareTable td:not(.compareMetricCol):not(.compareSectionRow td) {
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
+.compareWin {
+  font-weight: 700;
+  color: #1d4ed8 !important;
+  background: #eff6ff;
+}
+
 /* ── Error / empty states ─────────────────────────── */
 .empty {
   width: min(900px, 100%);
