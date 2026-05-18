@@ -91,7 +91,7 @@ type InjuryFlag = { name: string; pos: string; severity: 'major' | 'moderate' | 
 type Projection = ReturnType<typeof project>
 type LoaderMessage = { tone: 'good' | 'warn'; text: string } | null
 type MobileTab = 'edit' | 'results' | 'board'
-type Page = 'workbench' | 'class' | 'players' | 'compare' | 'trade'
+type Page = 'workbench' | 'class' | 'players' | 'compare' | 'trade' | 'board'
 type BrowserSortKey = 'av' | 'games' | 'starts' | 'pb' | 'ap' | 'pick' | 'name' | 'outcome' | 'year' | 'forty'
 type ModelSignal = 'draftScore' | 'logPick' | 'pffComp' | 'pffGrade' | 'pffProd' | 'pffEff' | 'pffClean' | 'ageScore' | 'athletic' | 'size' | 'isQB' | 'isSkill' | 'isOL' | 'isFront' | 'isDB'
 type SortKey = 'av' | 'projAv' | 'projScore' | 'games' | 'starts' | 'pb' | 'ap' | 'pick' | 'name' | 'outcome'
@@ -263,7 +263,15 @@ export default function App() {
   const [mobileTab, setMobileTab] = useState<MobileTab>('edit')
   const [page, setPage] = useState<Page>(() => readPageFromHash())
   const [openPanels, setOpenPanels] = useState<Record<string, boolean>>({ loader: true, card: false, measurables: false, scouting: true, pff: false })
+  const [modalPlayer, setModalPlayer] = useState<Historical | null>(null)
   const togglePanel = (key: string) => setOpenPanels((p) => ({ ...p, [key]: !p[key] }))
+
+  function openModal(p: Historical) { setModalPlayer(p) }
+  function handleCompare(name: string) {
+    setCompareQuery(name)
+    setPage('compare')
+    setModalPlayer(null)
+  }
   const projection = useMemo(() => project(input, prospects, pffProfiles), [input, prospects, pffProfiles])
   const draftBoard = useMemo(
     () => saved
@@ -588,6 +596,7 @@ export default function App() {
         <button type="button" className={page === 'players' ? 'on' : ''} onClick={() => setPage('players')}>Players</button>
         <button type="button" className={page === 'compare' ? 'on' : ''} onClick={() => setPage('compare')}>Compare</button>
         <button type="button" className={page === 'trade' ? 'on' : ''} onClick={() => setPage('trade')}>Trade Calc</button>
+        <button type="button" className={page === 'board' ? 'on' : ''} onClick={() => setPage('board')}>Big Board</button>
       </nav>
 
       {page === 'workbench' ? <nav className="mobileTabs" role="tablist" aria-label="Workbench sections">
@@ -600,11 +609,13 @@ export default function App() {
     {error ? <section className="panel empty">{error}</section> : page === 'class' ? <div className="classPage">
       <ClassExplorer pool={lookupPool} history={prospects} pffProfiles={pffProfiles} currentName={input.name} currentYear={input.draftSeason} />
     </div> : page === 'players' ? <div className="classPage">
-      <PlayerBrowser pool={lookupPool} history={prospects} />
+      <PlayerBrowser pool={lookupPool} history={prospects} onOpenModal={openModal} onCompare={handleCompare} />
     </div> : page === 'compare' ? <div className="classPage">
       <CompareView pool={lookupPool} history={prospects} pffProfiles={pffProfiles} initialQuery={compareQuery} />
     </div> : page === 'trade' ? <div className="classPage">
       <TradeCalculator />
+    </div> : page === 'board' ? <div className="classPage">
+      <BigBoardPage pool={lookupPool} onOpenModal={openModal} />
     </div> : <div className="layout">
       <aside className="controlPanel" data-pane="edit">
         <section className="panel loadPanel">
@@ -709,6 +720,7 @@ export default function App() {
         <section className="panel formPanel pffPanel">
           <div className="panelTitle">
             <div><p>PFF College Signal</p><h2>Performance Profile</h2></div>
+            {!input.pffProfileId && <span className="pffEstBadge">⚠ No PFF match</span>}
             <strong>{input.pffComposite.toFixed(0)}</strong>
             <button type="button" className={`panelToggle ${openPanels.pff ? 'open' : 'closed'}`} onClick={() => togglePanel('pff')} aria-label="Toggle panel">▾</button>
           </div>
@@ -726,6 +738,7 @@ export default function App() {
         <section className="panel heroPanel" data-pane="results">
           <div className="scoreDial" style={{ '--angle': `${projection.score * 3.6}deg`, '--dial-color': scoreColor(Math.round(projection.score)) } as CSSProperties}>
             <b>{Math.round(projection.score)}</b>
+            <span className="dialRange">{Math.round(projection.scoreLow)}–{Math.round(projection.scoreHigh)}</span>
             <span>score</span>
           </div>
           <div className="heroCopy">
@@ -924,7 +937,20 @@ export default function App() {
       <button type="button" className={page === 'trade' ? 'on' : ''} onClick={() => setPage('trade')}>
         <span className="bottomNavIcon">⇋</span>Trade
       </button>
+      <button type="button" className={page === 'board' ? 'on' : ''} onClick={() => setPage('board')}>
+        <span className="bottomNavIcon">⊟</span>Board
+      </button>
     </nav>
+
+    {modalPlayer && (
+      <PlayerModal
+        player={modalPlayer}
+        history={prospects}
+        pffProfiles={pffProfiles}
+        onClose={() => setModalPlayer(null)}
+        onCompare={handleCompare}
+      />
+    )}
   </main>
 }
 
@@ -1180,7 +1206,7 @@ function RadarChart({ a, b, aLabel, bLabel }: {
   </div>
 }
 
-function PlayerBrowser({ pool, history }: { pool: Historical[]; history: Historical[] }) {
+function PlayerBrowser({ pool, history, onOpenModal, onCompare }: { pool: Historical[]; history: Historical[]; onOpenModal: (p: Historical) => void; onCompare: (name: string) => void }) {
   const [mode, setMode] = useState<'browse' | 'rankings'>('browse')
   const [query, setQuery] = useState('')
   const [pos, setPos] = useState('All')
@@ -1246,7 +1272,7 @@ function PlayerBrowser({ pool, history }: { pool: Historical[]; history: Histori
         <button type="button" className={mode === 'rankings' ? 'on' : ''} onClick={() => setMode('rankings')}>Rankings</button>
       </div>
     </div>
-    {mode === 'rankings' ? <RankingsView history={history} /> : <>
+    {mode === 'rankings' ? <RankingsView history={history} onOpenModal={onOpenModal} /> : <>
       <div className="browserControls">
         <label className="field browserSearch"><span>Search</span><input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Name or school…" /></label>
         <label className="field"><span>Position</span>
@@ -1293,7 +1319,7 @@ function PlayerBrowser({ pool, history }: { pool: Historical[]; history: Histori
             <tbody>
               {display.map((player) => {
                 const showEarlySample = player.year > matureOutcomeCutoff
-                return <tr key={player.id}>
+                return <tr key={player.id} className="clickableRow" onClick={() => onOpenModal(player)}>
                   <td><b>{player.name}</b></td>
                   <td><small>{player.school || '—'}</small></td>
                   <td>{player.pos}</td>
@@ -1317,7 +1343,7 @@ function PlayerBrowser({ pool, history }: { pool: Historical[]; history: Histori
   </section>
 }
 
-function RankingsView({ history }: { history: Historical[] }) {
+function RankingsView({ history, onOpenModal }: { history: Historical[]; onOpenModal: (p: Historical) => void }) {
   const [rankPos, setRankPos] = useState('QB')
   const [scopeYear, setScopeYear] = useState<number | 'all'>('all')
   const [selected, setSelected] = useState<Historical | null>(null)
@@ -1385,12 +1411,14 @@ function RankingsView({ history }: { history: Historical[] }) {
         <OutcomeTag category={selected.category} />
       </div>
       <div className="rankCardAv">AV {selected.av} · {selected.games}G · {selected.starts}St{selected.proBowls ? ` · ${selected.proBowls}×PB` : ''}{selected.allPros ? ` · ${selected.allPros}×AP` : ''}</div>
+      {syntheticArcValues(selected).length >= 2 && <div className="rankCardSparkRow"><span className="rankCardSparkLabel">Career arc</span><Sparkline values={syntheticArcValues(selected)} /></div>}
       <div className="rankStats">
         <RankStat label={`${selected.year} class rank`} rank={rankCard.classRank} total={rankCard.classTotal} />
         <RankStat label={`${selected.year} ${selected.pos} rank`} rank={rankCard.classPosRank} total={rankCard.classPosTotal} />
         <RankStat label={`All-time ${selected.pos} rank`} rank={rankCard.allTimePosRank} total={rankCard.allTimePosTotal} />
         <RankStat label="All-time overall rank" rank={rankCard.allTimeRank} total={rankCard.allTimeTotal} />
       </div>
+      <button type="button" className="secondary smallButton" style={{ alignSelf: 'flex-start' }} onClick={() => onOpenModal(selected)}>Full Profile</button>
     </div> : null}
 
     <div className="rankListHeader">
@@ -1400,6 +1428,7 @@ function RankingsView({ history }: { history: Historical[] }) {
       <span className="rankListCol pk">Pick</span>
       <span className="rankListCol av">AV</span>
       <span className="rankListCol out">Outcome</span>
+      <span className="rankListCol act"></span>
     </div>
     {display.length ? display.map((p, i) => {
       const early = isEarly(p)
@@ -1410,6 +1439,7 @@ function RankingsView({ history }: { history: Historical[] }) {
         <span className="rankListCol pk">{p.pick >= 260 ? 'UDFA' : p.pick}</span>
         <span className="rankListCol av">{p.av || 0}</span>
         <span className="rankListCol out">{early ? <span className="sampleTag">Early</span> : <OutcomeTag category={p.category} />}</span>
+        <span className="rankListCol act"><button type="button" className="smallButton" onClick={(e) => { e.stopPropagation(); onOpenModal(p) }}>Profile</button></span>
       </button>
     }) : <p className="emptyLine">No mature data for {rankPos}{scopeYear !== 'all' ? ` in ${scopeYear}` : ''}.</p>}
     {rankList.length > 100 ? <p className="hint">Showing top 100 of {rankList.length.toLocaleString()}.</p> : null}
@@ -1422,6 +1452,172 @@ function RankStat({ label, rank, total }: { label: string; rank: number; total: 
     <div className="rankStatNum">#{rank}</div>
     <div className="rankStatLabel">{label}</div>
     <div className="rankStatOf">of {total} · top {pct}%</div>
+  </div>
+}
+
+function PlayerModal({ player, history, pffProfiles, onClose, onCompare }: {
+  player: Historical
+  history: Historical[]
+  pffProfiles: PffProfile[]
+  onClose: () => void
+  onCompare: (name: string) => void
+}) {
+  const pffMatch = pffProfiles.find((pf) => samePlayerSeason(pf, player.name, player.year, player.pos))
+  const pct = posPercentile(player, history)
+  const arcValues = syntheticArcValues(player)
+  const isEarly = player.year > matureOutcomeCutoff
+  const maturePool = history.filter((p) => p.year <= matureOutcomeCutoff)
+  const classAll = maturePool.filter((p) => p.year === player.year).sort((a, b) => (b.av || 0) - (a.av || 0))
+  const classPos = maturePool.filter((p) => p.year === player.year && p.pos === player.pos).sort((a, b) => (b.av || 0) - (a.av || 0))
+  const allByPos = maturePool.filter((p) => p.pos === player.pos).sort((a, b) => (b.av || 0) - (a.av || 0))
+  const allOverall = maturePool.slice().sort((a, b) => (b.av || 0) - (a.av || 0))
+  const findRank = (list: Historical[]) => { const r = list.findIndex((p) => p.id === player.id); return r >= 0 ? r + 1 : 0 }
+  const crAll = findRank(classAll), crPos = findRank(classPos), atPos = findRank(allByPos), atAll = findRank(allOverall)
+  return (
+    <div className="modalOverlay" onClick={onClose}>
+      <div className="modalBox" onClick={(e) => e.stopPropagation()}>
+        <div className="modalHeader">
+          <div>
+            <div className="modalName">{player.name}</div>
+            <div className="modalMeta">{player.pos} · {player.school || 'Unknown'} · {player.year} · Pick {player.pick >= 260 ? 'UDFA' : player.pick}{player.age ? ` · Age ${player.age.toFixed(1)}` : ''}</div>
+          </div>
+          <div className="modalHeaderRight">
+            {isEarly ? <span className="sampleTag">Early</span> : <OutcomeTag category={player.category} />}
+            <button type="button" className="modalClose" onClick={onClose}>✕</button>
+          </div>
+        </div>
+        <div className="modalBody">
+          <div className="modalSection">
+            <div className="modalSectionTitle">Career</div>
+            <div className="modalStats">
+              <div className="modalStat"><div className="modalStatVal">{player.av || 0}</div><div className="modalStatLbl">AV</div></div>
+              <div className="modalStat"><div className="modalStatVal">{player.games || 0}</div><div className="modalStatLbl">Games</div></div>
+              <div className="modalStat"><div className="modalStatVal">{player.starts || 0}</div><div className="modalStatLbl">Starts</div></div>
+              <div className="modalStat"><div className="modalStatVal">{player.proBowls || 0}</div><div className="modalStatLbl">Pro Bowls</div></div>
+              <div className="modalStat"><div className="modalStatVal">{player.allPros || 0}</div><div className="modalStatLbl">All-Pros</div></div>
+              {pct !== null && <div className="modalStat"><div className="modalStatVal" style={{ color: 'var(--accent)' }}>Top {100 - pct}%</div><div className="modalStatLbl">{player.pos} all-time</div></div>}
+            </div>
+            {arcValues.length >= 2 && <div className="modalSparkRow"><span className="modalSparkLabel">Career arc</span><Sparkline values={arcValues} /></div>}
+          </div>
+          {!isEarly && crAll > 0 && (
+            <div className="modalSection">
+              <div className="modalSectionTitle">Historical Context</div>
+              <div className="rankStats">
+                <RankStat label={`${player.year} class rank`} rank={crAll} total={classAll.length} />
+                <RankStat label={`${player.year} ${player.pos} rank`} rank={crPos} total={classPos.length} />
+                <RankStat label={`All-time ${player.pos}`} rank={atPos} total={allByPos.length} />
+                <RankStat label="All-time overall" rank={atAll} total={allOverall.length} />
+              </div>
+            </div>
+          )}
+          {(player.height || player.forty) && (
+            <div className="modalSection">
+              <div className="modalSectionTitle">Combine / Measurables</div>
+              <div className="modalMeasures">
+                {player.height ? <span>{player.height}"<small>Ht</small></span> : null}
+                {player.weight ? <span>{player.weight}<small>Wt</small></span> : null}
+                {player.forty ? <span>{player.forty.toFixed(2)}<small>40yd</small></span> : null}
+                {player.vertical ? <span>{player.vertical.toFixed(1)}<small>Vert</small></span> : null}
+                {player.broad ? <span>{player.broad}<small>Broad</small></span> : null}
+                {player.cone ? <span>{player.cone.toFixed(2)}<small>Cone</small></span> : null}
+                {player.shuttle ? <span>{player.shuttle.toFixed(2)}<small>Shuttle</small></span> : null}
+              </div>
+            </div>
+          )}
+          {pffMatch && (
+            <div className="modalSection">
+              <div className="modalSectionTitle">PFF College Profile</div>
+              <div className="modalStats">
+                <div className="modalStat"><div className="modalStatVal">{pffMatch.pff.composite.toFixed(0)}</div><div className="modalStatLbl">Composite</div></div>
+                <div className="modalStat"><div className="modalStatVal">{pffMatch.pff.grade.toFixed(0)}</div><div className="modalStatLbl">Grade</div></div>
+                <div className="modalStat"><div className="modalStatVal">{pffMatch.pff.production.toFixed(0)}</div><div className="modalStatLbl">Production</div></div>
+                <div className="modalStat"><div className="modalStatVal">{pffMatch.pff.efficiency.toFixed(0)}</div><div className="modalStatLbl">Efficiency</div></div>
+                <div className="modalStat"><div className="modalStatVal">{pffMatch.pff.clean.toFixed(0)}</div><div className="modalStatLbl">Clean play</div></div>
+              </div>
+            </div>
+          )}
+        </div>
+        <div className="modalFooter">
+          <button type="button" className="secondary" onClick={() => onCompare(player.name)}>Compare →</button>
+          <button type="button" onClick={onClose}>Close</button>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+const bigBoardKey = 'draftlens.bigboard.v1'
+type BigTier = { name: string; playerIds: string[] }
+function readBigBoard(): BigTier[] {
+  try { const raw = localStorage.getItem(bigBoardKey); if (raw) return JSON.parse(raw) as BigTier[] } catch { /* */ }
+  return [
+    { name: 'Tier 1 · Elite', playerIds: [] },
+    { name: 'Tier 2 · Round 1', playerIds: [] },
+    { name: 'Tier 3 · Day 2', playerIds: [] },
+    { name: 'Tier 4 · Day 3', playerIds: [] },
+    { name: 'Tier 5 · Developmental', playerIds: [] },
+  ]
+}
+function writeBigBoard(tiers: BigTier[]) { try { localStorage.setItem(bigBoardKey, JSON.stringify(tiers)) } catch { /* */ } }
+
+function BigBoardPage({ pool, onOpenModal }: { pool: Historical[]; onOpenModal: (p: Historical) => void }) {
+  const [tiers, setTiers] = useState<BigTier[]>(readBigBoard)
+  const [bbYear, setBbYear] = useState(2025)
+  const [bbPos, setBbPos] = useState('All')
+  const [dragId, setDragId] = useState<string | null>(null)
+  const [editingTier, setEditingTier] = useState<number | null>(null)
+  const [editName, setEditName] = useState('')
+  useEffect(() => { writeBigBoard(tiers) }, [tiers])
+  const years = useMemo(() => { const s = new Set<number>(); for (const p of pool) s.add(p.year); return Array.from(s).sort((a, b) => b - a) }, [pool])
+  const boardedIds = useMemo(() => new Set(tiers.flatMap((t) => t.playerIds)), [tiers])
+  const available = useMemo(() => pool.filter((p) => p.year === bbYear && (bbPos === 'All' || p.pos === bbPos) && !boardedIds.has(p.id)).sort((a, b) => (a.pick || 999) - (b.pick || 999)), [pool, bbYear, bbPos, boardedIds])
+  const poolById = useMemo(() => new Map(pool.map((p) => [p.id, p])), [pool])
+  function addToTier(id: string, ti: number) { setTiers((prev) => prev.map((t, i) => ({ ...t, playerIds: i === ti ? [...t.playerIds, id] : t.playerIds.filter((x) => x !== id) }))) }
+  function removeFromTier(id: string) { setTiers((prev) => prev.map((t) => ({ ...t, playerIds: t.playerIds.filter((x) => x !== id) }))) }
+  function commitEdit() { if (editingTier === null) return; setTiers((prev) => prev.map((t, i) => i === editingTier ? { ...t, name: editName } : t)); setEditingTier(null) }
+  return <div className="bigBoardLayout">
+    <div className="bigBoardSidebar panel">
+      <div className="panelTitle"><div><p>Class</p><h2>Player Pool</h2></div><strong>{available.length}</strong></div>
+      <div className="bbFilters">
+        <label className="field"><span>Year</span><select value={bbYear} onChange={(e) => setBbYear(Number(e.target.value))}>{years.map((y) => <option key={y} value={y}>{y}</option>)}</select></label>
+        <label className="field"><span>Pos</span><select value={bbPos} onChange={(e) => setBbPos(e.target.value)}>{positionFilters.map((p) => <option key={p} value={p}>{p === 'All' ? 'All' : p}</option>)}</select></label>
+      </div>
+      <div className="bbPlayerList">
+        {available.slice(0, 150).map((p) => (
+          <div key={p.id} className="bbPlayerChit" draggable onDragStart={() => setDragId(p.id)}>
+            <span className="bbChitPos">{p.pos}</span>
+            <span className="bbChitName">{p.name}</span>
+            <span className="bbChitPick">{p.pick >= 260 ? 'UDFA' : `#${p.pick}`}</span>
+            <button type="button" className="bbChitInfo" onClick={() => onOpenModal(p)}>i</button>
+          </div>
+        ))}
+        {available.length === 0 && <p className="emptyLine">All players placed.</p>}
+      </div>
+    </div>
+    <div className="bigBoardTiers">
+      {tiers.map((tier, ti) => (
+        <div key={ti} className="bbTier" onDragOver={(e) => e.preventDefault()} onDrop={() => { if (dragId) { addToTier(dragId, ti); setDragId(null) } }}>
+          <div className="bbTierHeader">
+            {editingTier === ti
+              ? <input className="bbTierNameInput" value={editName} onChange={(e) => setEditName(e.target.value)} onBlur={commitEdit} onKeyDown={(e) => e.key === 'Enter' && commitEdit()} autoFocus />
+              : <button type="button" className="bbTierName" onClick={() => { setEditingTier(ti); setEditName(tier.name) }}>{tier.name}</button>}
+            <span className="bbTierCount">{tier.playerIds.length}</span>
+          </div>
+          <div className="bbTierBody">
+            {tier.playerIds.map((id) => { const p = poolById.get(id); if (!p) return null; return (
+              <div key={id} className="bbPlayerChit inTier" draggable onDragStart={() => setDragId(id)}>
+                <span className="bbChitPos">{p.pos}</span>
+                <span className="bbChitName">{p.name}</span>
+                <span className="bbChitPick">{p.pick >= 260 ? 'UDFA' : `#${p.pick}`}</span>
+                <button type="button" className="bbChitInfo" onClick={() => onOpenModal(p)}>i</button>
+                <button type="button" className="bbChitRemove" onClick={() => removeFromTier(id)}>✕</button>
+              </div>
+            )})}
+            {tier.playerIds.length === 0 && <div className="bbTierEmpty">Drop players here</div>}
+          </div>
+        </div>
+      ))}
+    </div>
   </div>
 }
 
@@ -2060,6 +2256,8 @@ function project(input: Prospect, history: Historical[], pffProfiles: PffProfile
   const floor = blend(q(rangeValues, .1), Math.max(0, expectedAv * .42), .25)
   const median = blend(q(rangeValues, .5), expectedAv, .35)
   const ceiling = blend(q(rangeValues, .9), Math.max(expectedAv, expectedAv * 1.85), .25)
+  const scoreLow = clamp(rawScore * 0.46 + (posAvValues.length >= 15 ? pct(floor, posAvValues) : avToScore(floor)) * 0.54, 1, 99)
+  const scoreHigh = clamp(rawScore * 0.46 + (posAvValues.length >= 15 ? pct(ceiling, posAvValues) : avToScore(ceiling)) * 0.54, 1, 99)
   const max = Math.max(90, ceiling * 1.1)
   const histOdds = Object.fromEntries(outcomeOrder.map((cat) => [cat, comps.filter((c) => c.player.category === cat).reduce((sum, c) => sum + c.sim, 0) / histWeight])) as Record<Category, number>
   const pffOdds = Object.fromEntries(outcomeOrder.map((cat) => [cat, pffComps.filter((c) => c.profile.nfl?.category === cat).reduce((sum, c) => sum + c.sim, 0) / pffWeight])) as Record<Category, number>
@@ -2073,6 +2271,8 @@ function project(input: Prospect, history: Historical[], pffProfiles: PffProfile
 
   return {
     score,
+    scoreLow,
+    scoreHigh,
     grade: gradeLabel(score),
     expectedAv,
     impactScore,
@@ -2120,7 +2320,8 @@ function pffSim(input: Prospect, profile: PffProfile) {
     z2(input.pffEfficiency, profile.pff.efficiency, 10) * .18 +
     z2(input.pffClean, profile.pff.clean, 12) * .08 +
     (input.pos === profile.position ? 0 : .16)
-  return Math.exp(-distance)
+  const recency = Math.pow(0.97, Math.max(0, 2024 - profile.draftSeason))
+  return Math.exp(-distance) * recency
 }
 
 function calibratedExpectedAv(input: Prospect, signals: { draft: number; athletic: number; size: number; age: number }) {
@@ -2231,6 +2432,13 @@ function syntheticArcValues(player: Historical): number[] {
   })
   const total = weights.reduce((s, w) => s + w, 0)
   return weights.map((w) => Math.round((w / total) * av * 10) / 10)
+}
+
+function posPercentile(player: Historical, history: Historical[]): number | null {
+  const pool = history.filter((p) => p.pos === player.pos && p.year <= matureOutcomeCutoff)
+  if (pool.length < 10) return null
+  const below = pool.filter((p) => (p.av || 0) < (player.av || 0)).length
+  return Math.round(below / pool.length * 100)
 }
 
 function Sparkline({ values }: { values: number[] }) {
@@ -2403,4 +2611,273 @@ function q(values: number[], p: number) {
 
 function round(pick: number) {
   return pick <= 32 ? '1' : pick <= 64 ? '2' : pick <= 100 ? '3' : pick <= 140 ? '4' : pick <= 180 ? '5' : pick <= 220 ? '6' : '7/UDFA'
+}
+
+function PlayerModal({ player, history, pffProfiles, onClose, onCompare }: {
+  player: Historical
+  history: Historical[]
+  pffProfiles: PffProfile[]
+  onClose: () => void
+  onCompare: (name: string) => void
+}) {
+  const pffMatch = pffProfiles.find((pf) => samePlayerSeason(pf, player.name, player.year, player.pos))
+  const pct = posPercentile(player, history)
+  const arcValues = syntheticArcValues(player)
+  const isEarly = player.year > matureOutcomeCutoff
+
+  const maturePool = history.filter((p) => p.year <= matureOutcomeCutoff)
+  const classAll = maturePool.filter((p) => p.year === player.year).sort((a, b) => (b.av || 0) - (a.av || 0))
+  const classPos = maturePool.filter((p) => p.year === player.year && p.pos === player.pos).sort((a, b) => (b.av || 0) - (a.av || 0))
+  const allByPos = maturePool.filter((p) => p.pos === player.pos).sort((a, b) => (b.av || 0) - (a.av || 0))
+  const allOverall = maturePool.slice().sort((a, b) => (b.av || 0) - (a.av || 0))
+  const findRank = (list: Historical[]) => list.findIndex((p) => p.id === player.id) + 1
+
+  return (
+    <div className="modalOverlay" onClick={onClose}>
+      <div className="modalBox" onClick={(e) => e.stopPropagation()}>
+        <div className="modalHeader">
+          <div>
+            <div className="modalName">{player.name}</div>
+            <div className="modalMeta">{player.pos} · {player.school || 'Unknown'} · {player.year} · Pick {player.pick >= 260 ? 'UDFA' : player.pick}{player.age ? ` · Age ${player.age.toFixed(1)}` : ''}</div>
+          </div>
+          <div className="modalHeaderRight">
+            {isEarly ? <span className="sampleTag">Early</span> : <OutcomeTag category={player.category} />}
+            <button type="button" className="modalClose" onClick={onClose}>✕</button>
+          </div>
+        </div>
+
+        <div className="modalBody">
+          <div className="modalSection">
+            <div className="modalSectionTitle">Career</div>
+            <div className="modalStats">
+              <div className="modalStat"><div className="modalStatVal">{player.av || 0}</div><div className="modalStatLbl">AV</div></div>
+              <div className="modalStat"><div className="modalStatVal">{player.games || 0}</div><div className="modalStatLbl">Games</div></div>
+              <div className="modalStat"><div className="modalStatVal">{player.starts || 0}</div><div className="modalStatLbl">Starts</div></div>
+              <div className="modalStat"><div className="modalStatVal">{player.proBowls || 0}</div><div className="modalStatLbl">Pro Bowls</div></div>
+              <div className="modalStat"><div className="modalStatVal">{player.allPros || 0}</div><div className="modalStatLbl">All-Pros</div></div>
+              {pct !== null && <div className="modalStat"><div className="modalStatVal" style={{ color: 'var(--accent)' }}>Top {100 - pct}%</div><div className="modalStatLbl">{player.pos} all-time</div></div>}
+            </div>
+            {arcValues.length >= 2 && (
+              <div className="modalSparkRow">
+                <span className="modalSparkLabel">Career arc</span>
+                <Sparkline values={arcValues} />
+              </div>
+            )}
+          </div>
+
+          {!isEarly && findRank(classAll) > 0 && (
+            <div className="modalSection">
+              <div className="modalSectionTitle">Historical Context</div>
+              <div className="rankStats">
+                <RankStat label={`${player.year} class rank`} rank={findRank(classAll)} total={classAll.length} />
+                <RankStat label={`${player.year} ${player.pos} rank`} rank={findRank(classPos)} total={classPos.length} />
+                <RankStat label={`All-time ${player.pos}`} rank={findRank(allByPos)} total={allByPos.length} />
+                <RankStat label="All-time overall" rank={findRank(allOverall)} total={allOverall.length} />
+              </div>
+            </div>
+          )}
+
+          {(player.height || player.forty) && (
+            <div className="modalSection">
+              <div className="modalSectionTitle">Combine / Measurables</div>
+              <div className="modalMeasures">
+                {player.height && <span>{player.height}"<small>Ht</small></span>}
+                {player.weight && <span>{player.weight}<small>Wt</small></span>}
+                {player.forty && <span>{player.forty.toFixed(2)}<small>40yd</small></span>}
+                {player.vertical && <span>{player.vertical.toFixed(1)}<small>Vert</small></span>}
+                {player.broad && <span>{player.broad}<small>Broad</small></span>}
+                {player.cone && <span>{player.cone.toFixed(2)}<small>Cone</small></span>}
+                {player.shuttle && <span>{player.shuttle.toFixed(2)}<small>Shuttle</small></span>}
+              </div>
+            </div>
+          )}
+
+          {pffMatch && (
+            <div className="modalSection">
+              <div className="modalSectionTitle">PFF College Profile</div>
+              <div className="modalStats">
+                <div className="modalStat"><div className="modalStatVal">{pffMatch.pff.composite.toFixed(0)}</div><div className="modalStatLbl">Composite</div></div>
+                <div className="modalStat"><div className="modalStatVal">{pffMatch.pff.grade.toFixed(0)}</div><div className="modalStatLbl">Grade</div></div>
+                <div className="modalStat"><div className="modalStatVal">{pffMatch.pff.production.toFixed(0)}</div><div className="modalStatLbl">Production</div></div>
+                <div className="modalStat"><div className="modalStatVal">{pffMatch.pff.efficiency.toFixed(0)}</div><div className="modalStatLbl">Efficiency</div></div>
+                <div className="modalStat"><div className="modalStatVal">{pffMatch.pff.clean.toFixed(0)}</div><div className="modalStatLbl">Clean play</div></div>
+              </div>
+            </div>
+          )}
+        </div>
+
+        <div className="modalFooter">
+          <button type="button" className="secondary" onClick={() => onCompare(player.name)}>Compare →</button>
+          <button type="button" onClick={onClose}>Close</button>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+const bigBoardKey = 'draftlens.bigboard.v1'
+
+type BigTier = { name: string; playerIds: string[] }
+
+function readBigBoard(): BigTier[] {
+  try {
+    const raw = localStorage.getItem(bigBoardKey)
+    if (raw) return JSON.parse(raw) as BigTier[]
+  } catch { /* */ }
+  return [
+    { name: 'Tier 1 · Elite', playerIds: [] },
+    { name: 'Tier 2 · Round 1', playerIds: [] },
+    { name: 'Tier 3 · Day 2', playerIds: [] },
+    { name: 'Tier 4 · Day 3', playerIds: [] },
+    { name: 'Tier 5 · Developmental', playerIds: [] },
+  ]
+}
+
+function writeBigBoard(tiers: BigTier[]) {
+  try { localStorage.setItem(bigBoardKey, JSON.stringify(tiers)) } catch { /* */ }
+}
+
+function BigBoardPage({ pool, onOpenModal }: { pool: Historical[]; onOpenModal: (p: Historical) => void }) {
+  const [tiers, setTiers] = useState<BigTier[]>(readBigBoard)
+  const [bbYear, setBbYear] = useState(2025)
+  const [bbPos, setBbPos] = useState('All')
+  const [dragSource, setDragSource] = useState<{ id: string; fromTier: number | null } | null>(null)
+  const [editingTier, setEditingTier] = useState<number | null>(null)
+  const [editName, setEditName] = useState('')
+
+  useEffect(() => { writeBigBoard(tiers) }, [tiers])
+
+  const years = useMemo(() => {
+    const set = new Set<number>()
+    for (const p of pool) set.add(p.year)
+    return Array.from(set).sort((a, b) => b - a)
+  }, [pool])
+
+  const boardedIds = useMemo(() => new Set(tiers.flatMap((t) => t.playerIds)), [tiers])
+
+  const availablePlayers = useMemo(() =>
+    pool
+      .filter((p) => p.year === bbYear && (bbPos === 'All' || p.pos === bbPos) && !boardedIds.has(p.id))
+      .sort((a, b) => (a.pick || 999) - (b.pick || 999)),
+    [pool, bbYear, bbPos, boardedIds]
+  )
+
+  function addToTier(playerId: string, tierIdx: number) {
+    setTiers((prev) => {
+      const next = prev.map((t, i) => ({
+        ...t,
+        playerIds: i === tierIdx ? [...t.playerIds, playerId] : t.playerIds.filter((id) => id !== playerId),
+      }))
+      return next
+    })
+  }
+
+  function removeFromTier(playerId: string) {
+    setTiers((prev) => prev.map((t) => ({ ...t, playerIds: t.playerIds.filter((id) => id !== playerId) })))
+  }
+
+  function handleDragStart(id: string, fromTier: number | null) {
+    setDragSource({ id, fromTier })
+  }
+
+  function handleDropOnTier(tierIdx: number) {
+    if (!dragSource) return
+    addToTier(dragSource.id, tierIdx)
+    setDragSource(null)
+  }
+
+  function startEditTier(idx: number) {
+    setEditingTier(idx)
+    setEditName(tiers[idx].name)
+  }
+
+  function commitEditTier() {
+    if (editingTier === null) return
+    setTiers((prev) => prev.map((t, i) => i === editingTier ? { ...t, name: editName } : t))
+    setEditingTier(null)
+  }
+
+  const poolById = useMemo(() => new Map(pool.map((p) => [p.id, p])), [pool])
+
+  return <div className="bigBoardLayout">
+    <div className="bigBoardSidebar">
+      <div className="panelTitle"><div><p>Class</p><h2>Player Pool</h2></div><strong>{availablePlayers.length}</strong></div>
+      <div className="bbFilters">
+        <label className="field"><span>Year</span>
+          <select value={bbYear} onChange={(e) => setBbYear(Number(e.target.value))}>
+            {years.map((y) => <option key={y} value={y}>{y}</option>)}
+          </select>
+        </label>
+        <label className="field"><span>Pos</span>
+          <select value={bbPos} onChange={(e) => setBbPos(e.target.value)}>
+            {positionFilters.map((p) => <option key={p} value={p}>{p === 'All' ? 'All' : p}</option>)}
+          </select>
+        </label>
+      </div>
+      <div className="bbPlayerList">
+        {availablePlayers.slice(0, 150).map((p) => (
+          <div
+            key={p.id}
+            className="bbPlayerChit"
+            draggable
+            onDragStart={() => handleDragStart(p.id, null)}
+          >
+            <span className="bbChitPos">{p.pos}</span>
+            <span className="bbChitName">{p.name}</span>
+            <span className="bbChitPick">{p.pick >= 260 ? 'UDFA' : `#${p.pick}`}</span>
+            <button type="button" className="bbChitInfo" onClick={() => onOpenModal(p)}>i</button>
+          </div>
+        ))}
+        {availablePlayers.length === 0 && <p className="emptyLine">All {bbPos === 'All' ? '' : bbPos + ' '}players placed.</p>}
+      </div>
+    </div>
+
+    <div className="bigBoardTiers">
+      {tiers.map((tier, ti) => (
+        <div
+          key={ti}
+          className="bbTier"
+          onDragOver={(e) => e.preventDefault()}
+          onDrop={() => handleDropOnTier(ti)}
+        >
+          <div className="bbTierHeader">
+            {editingTier === ti ? (
+              <input
+                className="bbTierNameInput"
+                value={editName}
+                onChange={(e) => setEditName(e.target.value)}
+                onBlur={commitEditTier}
+                onKeyDown={(e) => e.key === 'Enter' && commitEditTier()}
+                autoFocus
+              />
+            ) : (
+              <button type="button" className="bbTierName" onClick={() => startEditTier(ti)}>{tier.name}</button>
+            )}
+            <span className="bbTierCount">{tier.playerIds.length}</span>
+          </div>
+          <div className="bbTierBody">
+            {tier.playerIds.map((id) => {
+              const p = poolById.get(id)
+              if (!p) return null
+              return (
+                <div
+                  key={id}
+                  className="bbPlayerChit inTier"
+                  draggable
+                  onDragStart={() => handleDragStart(id, ti)}
+                >
+                  <span className="bbChitPos">{p.pos}</span>
+                  <span className="bbChitName">{p.name}</span>
+                  <span className="bbChitPick">{p.pick >= 260 ? 'UDFA' : `#${p.pick}`}</span>
+                  <button type="button" className="bbChitInfo" onClick={() => onOpenModal(p)}>i</button>
+                  <button type="button" className="bbChitRemove" onClick={() => removeFromTier(id)}>✕</button>
+                </div>
+              )
+            })}
+            {tier.playerIds.length === 0 && <div className="bbTierEmpty">Drop players here</div>}
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
 }
