@@ -600,7 +600,7 @@ export default function App() {
     {error ? <section className="panel empty">{error}</section> : page === 'class' ? <div className="classPage">
       <ClassExplorer pool={lookupPool} history={prospects} pffProfiles={pffProfiles} currentName={input.name} currentYear={input.draftSeason} />
     </div> : page === 'players' ? <div className="classPage">
-      <PlayerBrowser pool={lookupPool} />
+      <PlayerBrowser pool={lookupPool} history={prospects} />
     </div> : page === 'compare' ? <div className="classPage">
       <CompareView pool={lookupPool} history={prospects} pffProfiles={pffProfiles} initialQuery={compareQuery} />
     </div> : page === 'trade' ? <div className="classPage">
@@ -1180,7 +1180,8 @@ function RadarChart({ a, b, aLabel, bLabel }: {
   </div>
 }
 
-function PlayerBrowser({ pool }: { pool: Historical[] }) {
+function PlayerBrowser({ pool, history }: { pool: Historical[]; history: Historical[] }) {
+  const [mode, setMode] = useState<'browse' | 'rankings'>('browse')
   const [query, setQuery] = useState('')
   const [pos, setPos] = useState('All')
   const [yearFrom, setYearFrom] = useState(2000)
@@ -1240,75 +1241,188 @@ function PlayerBrowser({ pool }: { pool: Historical[] }) {
   return <section className="panel tablePanel classPanel">
     <div className="panelTitle">
       <div><p>Database</p><h2>Player Browser</h2></div>
-      <strong>{filtered.length.toLocaleString()} players</strong>
+      <div className="modeToggle">
+        <button type="button" className={mode === 'browse' ? 'on' : ''} onClick={() => setMode('browse')}>Browse</button>
+        <button type="button" className={mode === 'rankings' ? 'on' : ''} onClick={() => setMode('rankings')}>Rankings</button>
+      </div>
     </div>
-    <div className="browserControls">
-      <label className="field browserSearch"><span>Search</span><input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Name or school…" /></label>
-      <label className="field"><span>Position</span>
-        <select value={pos} onChange={(e) => setPos(e.target.value)}>
-          {positionFilters.map((p) => <option key={p} value={p}>{p === 'All' ? 'All positions' : p}</option>)}
-        </select>
-      </label>
-      <label className="field"><span>From</span>
-        <select value={yearFrom} onChange={(e) => setYearFrom(Number(e.target.value))}>
-          {years.map((y) => <option key={y} value={y}>{y}</option>)}
-        </select>
-      </label>
-      <label className="field"><span>To</span>
-        <select value={yearTo} onChange={(e) => setYearTo(Number(e.target.value))}>
-          {years.map((y) => <option key={y} value={y}>{y}</option>)}
-        </select>
-      </label>
-      <label className="field"><span>Outcome</span>
-        <select value={outcome} onChange={(e) => setOutcome(e.target.value)}>
-          <option value="All">All outcomes</option>
-          {outcomeOrder.map((cat) => <option key={cat} value={cat}>{cat}</option>)}
-        </select>
-      </label>
-    </div>
-    {display.length ? <>
-      <TableWrap>
-        <table className="classTable browserTable">
-          <thead>
-            <tr>
-              <BrowserHeader label="Player" sortKey="name" active={sortKey} dir={sortDir} onSort={toggleSort} />
-              <th>School</th>
-              <th>Pos</th>
-              <BrowserHeader label="Year" sortKey="year" active={sortKey} dir={sortDir} onSort={toggleSort} />
-              <BrowserHeader label="Pick" sortKey="pick" active={sortKey} dir={sortDir} onSort={toggleSort} />
-              <BrowserHeader label="40yd" sortKey="forty" active={sortKey} dir={sortDir} onSort={toggleSort} />
-              <BrowserHeader label="G" sortKey="games" active={sortKey} dir={sortDir} onSort={toggleSort} />
-              <BrowserHeader label="St" sortKey="starts" active={sortKey} dir={sortDir} onSort={toggleSort} />
-              <BrowserHeader label="AV" sortKey="av" active={sortKey} dir={sortDir} onSort={toggleSort} />
-              <BrowserHeader label="PB" sortKey="pb" active={sortKey} dir={sortDir} onSort={toggleSort} />
-              <BrowserHeader label="AP" sortKey="ap" active={sortKey} dir={sortDir} onSort={toggleSort} />
-              <BrowserHeader label="Outcome" sortKey="outcome" active={sortKey} dir={sortDir} onSort={toggleSort} />
-            </tr>
-          </thead>
-          <tbody>
-            {display.map((player) => {
-              const showEarlySample = player.year > matureOutcomeCutoff
-              return <tr key={player.id}>
-                <td><b>{player.name}</b></td>
-                <td><small>{player.school || '—'}</small></td>
-                <td>{player.pos}</td>
-                <td>{player.year}</td>
-                <td>{player.pick >= 260 ? 'UDFA' : player.pick}</td>
-                <td>{player.forty?.toFixed(2) ?? '—'}</td>
-                <td>{player.games || 0}</td>
-                <td>{player.starts || 0}</td>
-                <td>{player.av || 0}</td>
-                <td>{player.proBowls || 0}</td>
-                <td>{player.allPros || 0}</td>
-                <td>{showEarlySample ? <span className="sampleTag">Early</span> : <OutcomeTag category={player.category} />}</td>
+    {mode === 'rankings' ? <RankingsView history={history} /> : <>
+      <div className="browserControls">
+        <label className="field browserSearch"><span>Search</span><input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Name or school…" /></label>
+        <label className="field"><span>Position</span>
+          <select value={pos} onChange={(e) => setPos(e.target.value)}>
+            {positionFilters.map((p) => <option key={p} value={p}>{p === 'All' ? 'All positions' : p}</option>)}
+          </select>
+        </label>
+        <label className="field"><span>From</span>
+          <select value={yearFrom} onChange={(e) => setYearFrom(Number(e.target.value))}>
+            {years.map((y) => <option key={y} value={y}>{y}</option>)}
+          </select>
+        </label>
+        <label className="field"><span>To</span>
+          <select value={yearTo} onChange={(e) => setYearTo(Number(e.target.value))}>
+            {years.map((y) => <option key={y} value={y}>{y}</option>)}
+          </select>
+        </label>
+        <label className="field"><span>Outcome</span>
+          <select value={outcome} onChange={(e) => setOutcome(e.target.value)}>
+            <option value="All">All outcomes</option>
+            {outcomeOrder.map((cat) => <option key={cat} value={cat}>{cat}</option>)}
+          </select>
+        </label>
+      </div>
+      {display.length ? <>
+        <TableWrap>
+          <table className="classTable browserTable">
+            <thead>
+              <tr>
+                <BrowserHeader label="Player" sortKey="name" active={sortKey} dir={sortDir} onSort={toggleSort} />
+                <th>School</th>
+                <th>Pos</th>
+                <BrowserHeader label="Year" sortKey="year" active={sortKey} dir={sortDir} onSort={toggleSort} />
+                <BrowserHeader label="Pick" sortKey="pick" active={sortKey} dir={sortDir} onSort={toggleSort} />
+                <BrowserHeader label="40yd" sortKey="forty" active={sortKey} dir={sortDir} onSort={toggleSort} />
+                <BrowserHeader label="G" sortKey="games" active={sortKey} dir={sortDir} onSort={toggleSort} />
+                <BrowserHeader label="St" sortKey="starts" active={sortKey} dir={sortDir} onSort={toggleSort} />
+                <BrowserHeader label="AV" sortKey="av" active={sortKey} dir={sortDir} onSort={toggleSort} />
+                <BrowserHeader label="PB" sortKey="pb" active={sortKey} dir={sortDir} onSort={toggleSort} />
+                <BrowserHeader label="AP" sortKey="ap" active={sortKey} dir={sortDir} onSort={toggleSort} />
+                <BrowserHeader label="Outcome" sortKey="outcome" active={sortKey} dir={sortDir} onSort={toggleSort} />
               </tr>
-            })}
-          </tbody>
-        </table>
-      </TableWrap>
-      {sorted.length > 500 ? <p className="hint">Showing 500 of {sorted.length.toLocaleString()}. Narrow filters to see more.</p> : null}
-    </> : <p className="emptyLine">No players match those filters.</p>}
+            </thead>
+            <tbody>
+              {display.map((player) => {
+                const showEarlySample = player.year > matureOutcomeCutoff
+                return <tr key={player.id}>
+                  <td><b>{player.name}</b></td>
+                  <td><small>{player.school || '—'}</small></td>
+                  <td>{player.pos}</td>
+                  <td>{player.year}</td>
+                  <td>{player.pick >= 260 ? 'UDFA' : player.pick}</td>
+                  <td>{player.forty?.toFixed(2) ?? '—'}</td>
+                  <td>{player.games || 0}</td>
+                  <td>{player.starts || 0}</td>
+                  <td>{player.av || 0}</td>
+                  <td>{player.proBowls || 0}</td>
+                  <td>{player.allPros || 0}</td>
+                  <td>{showEarlySample ? <span className="sampleTag">Early</span> : <OutcomeTag category={player.category} />}</td>
+                </tr>
+              })}
+            </tbody>
+          </table>
+        </TableWrap>
+        {sorted.length > 500 ? <p className="hint">Showing 500 of {sorted.length.toLocaleString()}. Narrow filters to see more.</p> : null}
+      </> : <p className="emptyLine">No players match those filters.</p>}
+    </>}
   </section>
+}
+
+function RankingsView({ history }: { history: Historical[] }) {
+  const [rankPos, setRankPos] = useState('QB')
+  const [scopeYear, setScopeYear] = useState<number | 'all'>('all')
+  const [selected, setSelected] = useState<Historical | null>(null)
+
+  const maturePool = useMemo(() => history.filter((p) => p.year <= matureOutcomeCutoff), [history])
+
+  const allYears = useMemo(() => {
+    const set = new Set<number>()
+    for (const p of maturePool) set.add(p.year)
+    return Array.from(set).sort((a, b) => b - a)
+  }, [maturePool])
+
+  const rankList = useMemo(() => {
+    const base = maturePool.filter((p) => p.pos === rankPos)
+    const scoped = scopeYear === 'all' ? base : base.filter((p) => p.year === scopeYear)
+    return scoped.slice().sort((a, b) => (b.av || 0) - (a.av || 0))
+  }, [maturePool, rankPos, scopeYear])
+
+  const rankCard = useMemo(() => {
+    if (!selected) return null
+    const allByPos = maturePool.filter((p) => p.pos === selected.pos).sort((a, b) => (b.av || 0) - (a.av || 0))
+    const allOverall = maturePool.slice().sort((a, b) => (b.av || 0) - (a.av || 0))
+    const classAll = maturePool.filter((p) => p.year === selected.year).sort((a, b) => (b.av || 0) - (a.av || 0))
+    const classPos = maturePool.filter((p) => p.year === selected.year && p.pos === selected.pos).sort((a, b) => (b.av || 0) - (a.av || 0))
+
+    const rankInList = (list: Historical[], id: string) => list.findIndex((p) => p.id === id) + 1
+
+    return {
+      classRank: rankInList(classAll, selected.id),
+      classTotal: classAll.length,
+      classPosRank: rankInList(classPos, selected.id),
+      classPosTotal: classPos.length,
+      allTimePosRank: rankInList(allByPos, selected.id),
+      allTimePosTotal: allByPos.length,
+      allTimeRank: rankInList(allOverall, selected.id),
+      allTimeTotal: allOverall.length,
+    }
+  }, [selected, maturePool])
+
+  const display = rankList.slice(0, 100)
+  const isEarly = (p: Historical) => p.year > matureOutcomeCutoff
+
+  return <div className="rankingsView">
+    <div className="rankControls">
+      <div className="posChips">
+        {positions.map((p) => (
+          <button key={p} type="button" className={`posChip ${rankPos === p ? 'on' : ''}`} onClick={() => { setRankPos(p); setSelected(null) }}>{p}</button>
+        ))}
+      </div>
+      <label className="field rankYearField">
+        <span>Class</span>
+        <select value={scopeYear} onChange={(e) => { setScopeYear(e.target.value === 'all' ? 'all' : Number(e.target.value)); setSelected(null) }}>
+          <option value="all">All-time</option>
+          {allYears.map((y) => <option key={y} value={y}>{y}</option>)}
+        </select>
+      </label>
+    </div>
+
+    {selected && rankCard ? <div className="rankCard">
+      <div className="rankCardHeader">
+        <div>
+          <div className="rankCardName">{selected.name}</div>
+          <div className="rankCardMeta">{selected.pos} · {selected.school || 'Unknown'} · {selected.year} · Pick {selected.pick >= 260 ? 'UDFA' : selected.pick}</div>
+        </div>
+        <OutcomeTag category={selected.category} />
+      </div>
+      <div className="rankCardAv">AV {selected.av} · {selected.games}G · {selected.starts}St{selected.proBowls ? ` · ${selected.proBowls}×PB` : ''}{selected.allPros ? ` · ${selected.allPros}×AP` : ''}</div>
+      <div className="rankStats">
+        <RankStat label={`${selected.year} class rank`} rank={rankCard.classRank} total={rankCard.classTotal} />
+        <RankStat label={`${selected.year} ${selected.pos} rank`} rank={rankCard.classPosRank} total={rankCard.classPosTotal} />
+        <RankStat label={`All-time ${selected.pos} rank`} rank={rankCard.allTimePosRank} total={rankCard.allTimePosTotal} />
+        <RankStat label="All-time overall rank" rank={rankCard.allTimeRank} total={rankCard.allTimeTotal} />
+      </div>
+    </div> : null}
+
+    <div className="rankListHeader">
+      <span className="rankListCol rk">#</span>
+      <span className="rankListCol name">Player</span>
+      <span className="rankListCol yr">Year</span>
+      <span className="rankListCol pk">Pick</span>
+      <span className="rankListCol av">AV</span>
+      <span className="rankListCol out">Outcome</span>
+    </div>
+    {display.length ? display.map((p, i) => {
+      const early = isEarly(p)
+      return <button key={p.id} type="button" className={`rankRow${selected?.id === p.id ? ' selected' : ''}`} onClick={() => setSelected((prev) => prev?.id === p.id ? null : p)}>
+        <span className="rankListCol rk">{i + 1}</span>
+        <span className="rankListCol name"><b>{p.name}</b><small>{p.school}</small></span>
+        <span className="rankListCol yr">{p.year}</span>
+        <span className="rankListCol pk">{p.pick >= 260 ? 'UDFA' : p.pick}</span>
+        <span className="rankListCol av">{p.av || 0}</span>
+        <span className="rankListCol out">{early ? <span className="sampleTag">Early</span> : <OutcomeTag category={p.category} />}</span>
+      </button>
+    }) : <p className="emptyLine">No mature data for {rankPos}{scopeYear !== 'all' ? ` in ${scopeYear}` : ''}.</p>}
+    {rankList.length > 100 ? <p className="hint">Showing top 100 of {rankList.length.toLocaleString()}.</p> : null}
+  </div>
+}
+
+function RankStat({ label, rank, total }: { label: string; rank: number; total: number }) {
+  const pct = total > 0 ? Math.round(((total - rank) / total) * 100) : 0
+  return <div className="rankStat">
+    <div className="rankStatNum">#{rank}</div>
+    <div className="rankStatLabel">{label}</div>
+    <div className="rankStatOf">of {total} · top {pct}%</div>
+  </div>
 }
 
 function BrowserHeader({ label, sortKey, active, dir, onSort }: { label: string; sortKey: BrowserSortKey; active: BrowserSortKey; dir: SortDir; onSort: (key: BrowserSortKey) => void }) {
