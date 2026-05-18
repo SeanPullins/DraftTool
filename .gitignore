@@ -7,6 +7,7 @@ public/data/*
 !public/data/scout_notes_2025.json
 !public/data/injury_flags_2025.json
 !public/data/qb_seasons.json
+!public/data/wr_seasons.json
 artifacts
 .env
 .env.local
