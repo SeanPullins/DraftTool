@@ -88,6 +88,23 @@ type PffPayload = {
 type ConsensusPick = { name: string; pos: string; school: string; consensus: number; lo: number; hi: number }
 type ScoutNote = { name: string; summary: string }
 type InjuryFlag = { name: string; pos: string; severity: 'major' | 'moderate' | 'minor'; note: string }
+type QbSeason = {
+  key: string
+  name: string
+  season: number
+  team: string
+  games: number
+  gs: number
+  att: number
+  cmp_pct: number | null
+  rtg: number | null
+  td_pct: number | null
+  int_pct: number | null
+  sk_pct: number | null
+  any_a: number | null
+  succ: number | null
+  ypa: number | null
+}
 type Projection = ReturnType<typeof project>
 type LoaderMessage = { tone: 'good' | 'warn'; text: string } | null
 type MobileTab = 'edit' | 'results' | 'board'
@@ -257,6 +274,7 @@ export default function App() {
   const [scoutNotes, setScoutNotes] = useState<ScoutNote[]>([])
   const [injuryFlags, setInjuryFlags] = useState<InjuryFlag[]>([])
   const [compareQuery, setCompareQuery] = useState('')
+  const [qbSeasons, setQbSeasons] = useState<QbSeason[]>([])
   const [boardView, setBoardView] = useState<'list' | 'grid'>('list')
   const [boardOrder, setBoardOrder] = useState<string[]>([])
   const [dragId, setDragId] = useState('')
@@ -341,7 +359,7 @@ export default function App() {
   useEffect(() => {
     async function load() {
       try {
-        const [combineCsv, draftCsv, pffPayload, extraData, consensusData, scoutData, injuryData] = await Promise.all([
+        const [combineCsv, draftCsv, pffPayload, extraData, consensusData, scoutData, injuryData, qbSeasonData] = await Promise.all([
           fetch(`${assetBase}data/combine.csv`).then((r) => r.text()),
           fetch(`${assetBase}data/draft_picks.csv`).then((r) => r.text()),
           loadPffPayload(),
@@ -349,6 +367,7 @@ export default function App() {
           fetch(`${assetBase}data/consensus_2025.json`).then((r) => r.json()).catch(() => null),
           fetch(`${assetBase}data/scout_notes_2025.json`).then((r) => r.json()).catch(() => null),
           fetch(`${assetBase}data/injury_flags_2025.json`).then((r) => r.json()).catch(() => null),
+          fetch(`${assetBase}data/qb_seasons.json`).then((r) => r.json()).catch(() => null),
         ])
         const allProspects = buildProspectPool(parseCsv(combineCsv), parseCsv(draftCsv))
         const extraProspects = buildExtraProspects(extraData)
@@ -363,6 +382,7 @@ export default function App() {
         if (consensusData?.picks?.length) setConsensus(consensusData.picks)
         if (scoutData?.notes?.length) setScoutNotes(scoutData.notes)
         if (injuryData?.flags?.length) setInjuryFlags(injuryData.flags)
+        if (qbSeasonData?.records?.length) setQbSeasons(qbSeasonData.records)
       } catch {
         setError('Data files are missing. Run npm run data:refresh, then reload.')
       } finally {
@@ -889,9 +909,13 @@ export default function App() {
           <div className="panelTitle"><div><p>nflverse Baseline</p><h2>Closest Draft/Combine Comps</h2></div></div>
           <TableWrap>
             <table>
-              <thead><tr><th>Player</th><th>Yr</th><th>Pos</th><th>Pick</th><th>40</th><th>AV</th><th>Arc</th><th>Career</th><th>Outcome</th><th>Sim</th></tr></thead>
+              <thead><tr>
+                <th>Player</th><th>Yr</th><th>Pos</th><th>Pick</th><th>40</th><th>AV</th><th>Arc</th><th>Career</th><th>Outcome</th><th>Sim</th>
+                {input.pos === 'QB' && <><th className="qbStatCol" title="Year 1 passer rating">Y1 Rtg</th><th className="qbStatCol" title="Year 1 adjusted net yards per attempt">Y1 ANY/A</th></>}
+              </tr></thead>
               <tbody>{projection.comps.map((c) => {
                 const hr = schoolHitRate(c.player.school, prospects)
+                const qbY1 = input.pos === 'QB' ? qbSeasons.find((s) => s.key === clean(c.player.name) && s.season === c.player.year) : undefined
                 return <tr key={c.player.id}>
                   <td><b>{c.player.name}</b><small>{c.player.school}{hr ? <span className="schoolBadge">{Math.round(hr.rate * 100)}%</span> : null}</small></td>
                   <td>{c.player.year}</td>
@@ -903,6 +927,10 @@ export default function App() {
                   <td><Sparkline values={syntheticArcValues(c.player)} /></td>
                   <td><OutcomeTag category={c.player.category} /></td>
                   <td>{Math.round(c.sim * 100)}</td>
+                  {input.pos === 'QB' && <>
+                    <td className="qbStatCell"><span className={qbRtgClass(qbY1?.rtg ?? null)}>{qbY1 ? (qbY1.rtg?.toFixed(1) ?? '—') : '—'}</span></td>
+                    <td className="qbStatCell"><span className={qbAnyaClass(qbY1?.any_a ?? null)}>{qbY1 ? (qbY1.any_a?.toFixed(1) ?? '—') : '—'}</span></td>
+                  </>}
                 </tr>
               })}</tbody>
             </table>
@@ -913,8 +941,27 @@ export default function App() {
           <div className="panelTitle"><div><p>PFF + NFL Outcomes</p><h2>College Production Comps</h2></div></div>
           {projection.pffComps.length ? <TableWrap>
             <table>
-              <thead><tr><th>Player</th><th>Class</th><th>Pos</th><th>PFF</th><th>Pick</th><th>AV</th><th>Outcome</th><th>Sim</th></tr></thead>
-              <tbody>{projection.pffComps.map((c) => <tr key={c.profile.id}><td><b>{c.profile.name}</b><small>{c.profile.college}</small></td><td>{c.profile.draftSeason}</td><td>{c.profile.position}</td><td>{c.profile.pff.composite.toFixed(1)}</td><td>{c.profile.nfl?.draftPick ?? '-'}</td><td>{c.profile.nfl?.av.toFixed(1) ?? '-'}</td><td>{c.profile.nfl ? <OutcomeTag category={c.profile.nfl.category} /> : '-'}</td><td>{Math.round(c.sim * 100)}</td></tr>)}</tbody>
+              <thead><tr>
+                <th>Player</th><th>Class</th><th>Pos</th><th>PFF</th><th>Pick</th><th>AV</th><th>Outcome</th><th>Sim</th>
+                {input.pos === 'QB' && <><th className="qbStatCol" title="Year 1 passer rating">Y1 Rtg</th><th className="qbStatCol" title="Year 1 adjusted net yards per attempt">Y1 ANY/A</th></>}
+              </tr></thead>
+              <tbody>{projection.pffComps.map((c) => {
+                const qbY1 = input.pos === 'QB' ? qbSeasons.find((s) => s.key === clean(c.profile.name) && s.season === c.profile.draftSeason) : undefined
+                return <tr key={c.profile.id}>
+                  <td><b>{c.profile.name}</b><small>{c.profile.college}</small></td>
+                  <td>{c.profile.draftSeason}</td>
+                  <td>{c.profile.position}</td>
+                  <td>{c.profile.pff.composite.toFixed(1)}</td>
+                  <td>{c.profile.nfl?.draftPick ?? '-'}</td>
+                  <td>{c.profile.nfl?.av.toFixed(1) ?? '-'}</td>
+                  <td>{c.profile.nfl ? <OutcomeTag category={c.profile.nfl.category} /> : '-'}</td>
+                  <td>{Math.round(c.sim * 100)}</td>
+                  {input.pos === 'QB' && <>
+                    <td className="qbStatCell"><span className={qbRtgClass(qbY1?.rtg ?? null)}>{qbY1 ? (qbY1.rtg?.toFixed(1) ?? '—') : '—'}</span></td>
+                    <td className="qbStatCell"><span className={qbAnyaClass(qbY1?.any_a ?? null)}>{qbY1 ? (qbY1.any_a?.toFixed(1) ?? '—') : '—'}</span></td>
+                  </>}
+                </tr>
+              })}</tbody>
             </table>
           </TableWrap> : <p className="emptyLine">Load a PFF profile or enter college PFF scores to activate production comps.</p>}
         </section>
@@ -2558,6 +2605,22 @@ function titleSchool(value: string) {
 
 function clean(s = '') {
   return s.toLowerCase().normalize('NFKD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]/g, '')
+}
+
+function qbRtgClass(v: number | null): string {
+  if (v === null) return ''
+  if (v >= 95) return 'qbStatGood'
+  if (v >= 85) return 'qbStatOk'
+  if (v < 78) return 'qbStatBad'
+  return ''
+}
+
+function qbAnyaClass(v: number | null): string {
+  if (v === null) return ''
+  if (v >= 6.4) return 'qbStatGood'
+  if (v >= 5.5) return 'qbStatOk'
+  if (v < 4.8) return 'qbStatBad'
+  return ''
 }
 
 function slug(s = '') {
