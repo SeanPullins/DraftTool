@@ -701,7 +701,7 @@ export default function App() {
 
       <section className="dashboard">
         <section className="panel heroPanel" data-pane="results">
-          <div className="scoreDial" style={{ '--angle': `${projection.score * 3.6}deg` } as CSSProperties}>
+          <div className="scoreDial" style={{ '--angle': `${projection.score * 3.6}deg`, '--dial-color': scoreColor(Math.round(projection.score)) } as CSSProperties}>
             <b>{Math.round(projection.score)}</b>
             <span>score</span>
           </div>
@@ -792,16 +792,25 @@ export default function App() {
                   <thead><tr><th>Rank</th><th>Prospect</th><th>Pos</th><th>Pick</th><th>Score</th><th>Median AV</th><th>Best Outcome</th><th></th></tr></thead>
                   <tbody>{orderedBoard.slice(0, 40).map((row, index) => {
                     const best = outcomeOrder.slice().sort((a, b) => (row.projection.odds[b] || 0) - (row.projection.odds[a] || 0))[0]
-                    return <tr key={row.player.id} className={row.player.id === selectedSavedId ? 'currentRow' : ''}>
-                      <td><b className="boardRank">{index + 1}</b></td>
-                      <td><b>{row.player.name}</b><small>{row.player.school || 'No school'}</small></td>
-                      <td>{row.player.pos}</td>
-                      <td>{row.player.pick}</td>
-                      <td>{Math.round(row.projection.score)}</td>
-                      <td>{row.projection.median.toFixed(1)}</td>
-                      <td><OutcomeTag category={best} /></td>
-                      <td><button type="button" className="smallButton" onClick={() => loadSavedProspect(row.player.id)}>Load</button></td>
-                    </tr>
+                    const score = Math.round(row.projection.score)
+                    const prevScore = index > 0 ? Math.round(orderedBoard[index - 1].projection.score) : 999
+                    const tiers = [{ min: 82, label: 'Elite Prospect', cls: 'tierStar' }, { min: 70, label: 'Pro Bowl Upside', cls: 'tierHigh' }, { min: 58, label: 'Starter Projection', cls: 'tierSolid' }, { min: 45, label: 'Backup / Depth', cls: 'tierBackup' }, { min: 0, label: 'Developmental', cls: 'tierDepth' }]
+                    const curTier = tiers.find((t) => score >= t.min)!
+                    const prevTier = tiers.find((t) => prevScore >= t.min)!
+                    const showTier = curTier !== prevTier
+                    return <>
+                      {showTier && <tr key={`tier-${index}`} className="tierSeparator"><td colSpan={8} className={curTier.cls}>{curTier.label}</td></tr>}
+                      <tr key={row.player.id} className={`classRow-${scoreClass(score)}${row.player.id === selectedSavedId ? ' currentRow' : ''}`}>
+                        <td><b className="boardRank">{index + 1}</b></td>
+                        <td><b>{row.player.name}</b><small>{row.player.school || 'No school'}</small></td>
+                        <td>{row.player.pos}</td>
+                        <td>{row.player.pick}</td>
+                        <td style={{ color: scoreColor(score), fontWeight: 800 }}>{score}</td>
+                        <td>{row.projection.median.toFixed(1)}</td>
+                        <td><OutcomeTag category={best} /></td>
+                        <td><button type="button" className="smallButton" onClick={() => loadSavedProspect(row.player.id)}>Load</button></td>
+                      </tr>
+                    </>
                   })}</tbody>
                 </table>
               </TableWrap>
@@ -815,6 +824,7 @@ export default function App() {
                     <div
                       key={row.player.id}
                       className={`boardCard ${isActive ? 'boardCardActive' : ''} ${isDragging ? 'boardCardDragging' : ''}`}
+                      style={{ '--card-score-color': scoreColor(Math.round(row.projection.score)) } as CSSProperties}
                       draggable
                       onDragStart={() => handleDragStart(row.player.id)}
                       onDragOver={(e) => e.preventDefault()}
@@ -900,8 +910,12 @@ function Signal({ label, value }: { label: string; value: number }) {
   return <div className="signal"><span>{label}</span><b>{Math.round(value)}</b><i><em style={{ width: `${clamp(value, 0, 100)}%` }} /></i></div>
 }
 
+const barClass: Record<string, string> = {
+  'Star': 'barStar', 'High-end starter': 'barHigh', 'Solid starter': 'barSolid',
+  'Backup starter': 'barBackup', 'Role player': 'barRole', 'Reserve': 'barReserve', 'Bust': 'barBust'
+}
 function Bar({ label, value }: { label: string; value: number }) {
-  return <div className="bar"><span>{label}</span><i><b style={{ width: `${value * 100}%` }} /></i><strong>{(value * 100).toFixed(1)}%</strong></div>
+  return <div className={`bar ${barClass[label] ?? ''}`}><span>{label}</span><i><b style={{ width: `${value * 100}%` }} /></i><strong>{(value * 100).toFixed(1)}%</strong></div>
 }
 
 function OutcomeTag({ category }: { category: Category }) {
@@ -1377,20 +1391,31 @@ function ClassExplorer({ pool, history, pffProfiles, currentName, currentYear }:
             const isCurrent = currentKey && clean(player.name) === currentKey && player.year === currentYear
             const projected = projections.get(player.id)
             const showEarlySample = player.year > matureOutcomeCutoff
-            return <tr key={player.id} className={isCurrent ? 'currentRow' : ''}>
-              <td><b className="boardRank">{index + 1}</b></td>
-              <td><b>{player.name}</b><small>{player.school || 'No school'}</small></td>
-              <td>{player.pos}</td>
-              <td>{player.pick >= 260 ? 'UDFA' : player.pick}</td>
-              <td>{player.games || 0}</td>
-              <td>{player.starts || 0}</td>
-              <td>{player.av || 0}</td>
-              {useProjections ? <td>{projected ? projected.av.toFixed(1) : '-'}</td> : null}
-              {useProjections ? <td>{projected ? Math.round(projected.score) : '-'}</td> : null}
-              <td>{player.proBowls || 0}</td>
-              <td>{player.allPros || 0}</td>
-              <td>{showEarlySample ? <span className="sampleTag">Early sample</span> : <OutcomeTag category={player.category} />}</td>
-            </tr>
+            const score = projected ? Math.round(projected.score) : 0
+            const prevProjected = index > 0 ? projections.get(rows[index - 1].id) : null
+            const prevScore = index > 0 ? (prevProjected ? Math.round(prevProjected.score) : 0) : 999
+            const classTiers = [{ min: 82, label: 'Elite Prospect', cls: 'tierStar' }, { min: 70, label: 'Pro Bowl Upside', cls: 'tierHigh' }, { min: 58, label: 'Starter Projection', cls: 'tierSolid' }, { min: 45, label: 'Backup / Depth', cls: 'tierBackup' }, { min: 0, label: 'Developmental', cls: 'tierDepth' }]
+            const curTier = classTiers.find((t) => score >= t.min)!
+            const prevTier = classTiers.find((t) => prevScore >= t.min)!
+            const showTier = useProjections && curTier !== prevTier
+            const colCount = useProjections ? 13 : 11
+            return <>
+              {showTier && <tr key={`tier-${index}`} className="tierSeparator"><td colSpan={colCount} className={curTier.cls}>{curTier.label}</td></tr>}
+              <tr key={player.id} className={`${useProjections ? `classRow-${scoreClass(score)} ` : ''}${isCurrent ? 'currentRow' : ''}`}>
+                <td><b className="boardRank">{index + 1}</b></td>
+                <td><b>{player.name}</b><small>{player.school || 'No school'}</small></td>
+                <td>{player.pos}</td>
+                <td>{player.pick >= 260 ? 'UDFA' : player.pick}</td>
+                <td>{player.games || 0}</td>
+                <td>{player.starts || 0}</td>
+                <td>{player.av || 0}</td>
+                {useProjections ? <td>{projected ? projected.av.toFixed(1) : '-'}</td> : null}
+                {useProjections ? <td style={{ color: projected ? scoreColor(score) : undefined, fontWeight: projected ? 800 : undefined }}>{projected ? Math.round(projected.score) : '-'}</td> : null}
+                <td>{player.proBowls || 0}</td>
+                <td>{player.allPros || 0}</td>
+                <td>{showEarlySample ? <span className="sampleTag">Early sample</span> : <OutcomeTag category={player.category} />}</td>
+              </tr>
+            </>
           })}
         </tbody>
       </table>
@@ -2191,6 +2216,22 @@ function numberField(record: Record<string, unknown>, key: string, fallback: num
 
 function clamp(value: number, min = 0, max = 99) {
   return Math.max(min, Math.min(max, Number.isFinite(value) ? value : 50))
+}
+
+function scoreColor(s: number) {
+  if (s >= 82) return 'var(--violet)'
+  if (s >= 70) return 'var(--accent)'
+  if (s >= 58) return 'var(--green)'
+  if (s >= 45) return 'var(--amber)'
+  return 'var(--red)'
+}
+
+function scoreClass(s: number) {
+  if (s >= 82) return 'star'
+  if (s >= 70) return 'high'
+  if (s >= 58) return 'solid'
+  if (s >= 45) return 'backup'
+  return 'depth'
 }
 
 function avg(values: number[]) {
