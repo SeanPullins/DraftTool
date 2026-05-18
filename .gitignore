@@ -16,3 +16,4 @@ vite.config.js
 vite.config.d.ts
 scripts/build-pff-comparison-data.mjs
 package-lock.json
+.claude/
