@@ -262,6 +262,8 @@ export default function App() {
   const [dragId, setDragId] = useState('')
   const [mobileTab, setMobileTab] = useState<MobileTab>('edit')
   const [page, setPage] = useState<Page>(() => readPageFromHash())
+  const [openPanels, setOpenPanels] = useState<Record<string, boolean>>({ loader: true, card: false, measurables: false, scouting: true, pff: false })
+  const togglePanel = (key: string) => setOpenPanels((p) => ({ ...p, [key]: !p[key] }))
   const projection = useMemo(() => project(input, prospects, pffProfiles), [input, prospects, pffProfiles])
   const draftBoard = useMemo(
     () => saved
@@ -611,91 +613,112 @@ export default function App() {
               <p>Player Loader</p>
               <h2>Add or Edit Prospect</h2>
             </div>
+            <button type="button" className={`panelToggle ${openPanels.loader ? 'open' : 'closed'}`} onClick={() => togglePanel('loader')} aria-label="Toggle panel">▾</button>
           </div>
-
-          <label className="field wide"><span>Historical draft/combine player</span><input list="prospect-lookup" value={lookupQuery} onChange={(e) => setLookupQuery(e.target.value)} placeholder="Search name, school, year, position" /></label>
-          <datalist id="prospect-lookup">{lookupOptions.map((item) => <option key={item.id} value={item.label} />)}</datalist>
-          <label className="field wide"><span>College PFF profile</span><input list="pff-lookup" value={pffQuery} onChange={(e) => setPffQuery(e.target.value)} placeholder="Search PFF profile by player, school, class" /></label>
-          <datalist id="pff-lookup">{pffOptions.map((item) => <option key={item.id} value={item.label} />)}</datalist>
-
-          <div className="buttonRow">
-            <button type="button" onClick={loadPffProspect}>Load PFF</button>
-            <button type="button" className="secondary" onClick={loadExistingProspect}>Load historical</button>
-            <button type="button" className="secondary" onClick={startNewProspect}>New</button>
-          </div>
-
-          <label className="field wide"><span>My prospects</span><select value={selectedSavedId} onChange={(e) => loadSavedProspect(e.target.value)}><option value="">Select saved player</option>{saved.map((player) => <option key={player.id} value={player.id}>{player.name} / {player.pos} / {player.school || 'No school'}</option>)}</select></label>
-          <div className="buttonRow compact">
-            <button type="button" onClick={saveCurrentProspect}>Save</button>
-            <button type="button" className="secondary" onClick={exportSavedProspects}>Export</button>
-            <button type="button" className="secondary" onClick={downloadCsvTemplate}>Template</button>
-            <label className="fileButton">Import<input type="file" accept="application/json,.json,text/csv,.csv" onChange={importSavedProspects} /></label>
-            <button type="button" className="danger" onClick={deleteSavedProspect} disabled={!selectedSavedId}>Delete</button>
-          </div>
-          <label className="field wide"><span>Scout notes</span><textarea className="notesArea" value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="Add scouting observations, traits, concerns…" rows={3} /></label>
-          {activeScoutNote && <div className="scoutNoteBox">
-            <p className="scoutNoteLabel">2025 Scouting Consensus</p>
-            <p className="scoutNoteText">{activeScoutNote.summary}</p>
-          </div>}
-          {message ? <p className={`status ${message.tone}`}>{message.text}</p> : null}
-        </section>
-
-        <section className="panel formPanel">
-          <div className="panelTitle"><div><p>Identity</p><h2>Prospect Card</h2></div></div>
-          <div className="formGrid">
-            <Text label="Name" value={input.name} onChange={(v) => update('name', v)} />
-            <Text label="School" value={input.school} onChange={(v) => update('school', v)} />
-            <label className="field"><span>Position</span><select value={input.pos} onChange={(e) => { const pos = e.target.value; setInput((current) => withPositionDefaults({ ...current, pos }, pos)) }}>{positions.map((p) => <option key={p}>{p}</option>)}</select></label>
-            <Num label="Draft class" value={input.draftSeason} min={2016} max={2030} onChange={(v) => update('draftSeason', v)} />
-            <Num label="Projected pick" value={input.pick} min={1} max={260} onChange={(v) => update('pick', v)} />
-            <Num label="Age" value={input.age} step={0.1} onChange={(v) => update('age', v)} />
-            <label className="field"><span>Scheme tag</span>
-              <select value={input.schemeTag} onChange={(e) => update('schemeTag', e.target.value)}>
-                <option value="">— none —</option>
-                <option value="Spread offense">Spread offense</option>
-                <option value="Pro-style">Pro-style</option>
-                <option value="Air raid">Air raid</option>
-                <option value="Option/RPO">Option / RPO</option>
-                <option value="West Coast">West Coast</option>
-                <option value="Gap/power run">Gap / power run</option>
-                <option value="Zone blocking">Zone blocking</option>
-                <option value="4-3 defense">4-3 defense</option>
-                <option value="3-4 defense">3-4 defense</option>
-                <option value="Multiple defense">Multiple defense</option>
-              </select>
-            </label>
+          <div className={`panelBody${openPanels.loader ? '' : ' collapsed'}`}>
+            <label className="field wide"><span>Historical draft/combine player</span><input list="prospect-lookup" value={lookupQuery} onChange={(e) => setLookupQuery(e.target.value)} placeholder="Search name, school, year, position" /></label>
+            <datalist id="prospect-lookup">{lookupOptions.map((item) => <option key={item.id} value={item.label} />)}</datalist>
+            <label className="field wide"><span>College PFF profile</span><input list="pff-lookup" value={pffQuery} onChange={(e) => setPffQuery(e.target.value)} placeholder="Search PFF profile by player, school, class" /></label>
+            <datalist id="pff-lookup">{pffOptions.map((item) => <option key={item.id} value={item.label} />)}</datalist>
+            <div className="buttonRow">
+              <button type="button" onClick={loadPffProspect}>Load PFF</button>
+              <button type="button" className="secondary" onClick={loadExistingProspect}>Load historical</button>
+              <button type="button" className="secondary" onClick={startNewProspect}>New</button>
+            </div>
+            <label className="field wide"><span>My prospects</span><select value={selectedSavedId} onChange={(e) => loadSavedProspect(e.target.value)}><option value="">Select saved player</option>{saved.map((player) => <option key={player.id} value={player.id}>{player.name} / {player.pos} / {player.school || 'No school'}</option>)}</select></label>
+            <div className="buttonRow compact">
+              <button type="button" onClick={saveCurrentProspect}>Save</button>
+              <button type="button" className="secondary" onClick={exportSavedProspects}>Export</button>
+              <button type="button" className="secondary" onClick={downloadCsvTemplate}>Template</button>
+              <label className="fileButton">Import<input type="file" accept="application/json,.json,text/csv,.csv" onChange={importSavedProspects} /></label>
+              <button type="button" className="danger" onClick={deleteSavedProspect} disabled={!selectedSavedId}>Delete</button>
+            </div>
+            <label className="field wide"><span>Scout notes</span><textarea className="notesArea" value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="Add scouting observations, traits, concerns…" rows={3} /></label>
+            {activeScoutNote && <div className="scoutNoteBox">
+              <p className="scoutNoteLabel">2025 Scouting Consensus</p>
+              <p className="scoutNoteText">{activeScoutNote.summary}</p>
+            </div>}
+            {message ? <p className={`status ${message.tone}`}>{message.text}</p> : null}
           </div>
         </section>
 
         <section className="panel formPanel">
-          <div className="panelTitle"><div><p>Testing</p><h2>Measurables</h2></div></div>
-          <div className="formGrid">
-            <Num label="Height in." value={input.height} onChange={(v) => update('height', v)} />
-            <Num label="Weight" value={input.weight} onChange={(v) => update('weight', v)} />
-            <Num label="40-yard" value={input.forty} step={0.01} onChange={(v) => update('forty', v)} />
-            <Num label="Vertical" value={input.vertical} step={0.5} onChange={(v) => update('vertical', v)} />
-            <Num label="Broad" value={input.broad} onChange={(v) => update('broad', v)} />
-            <Num label="3-cone" value={input.cone} step={0.01} onChange={(v) => update('cone', v)} />
-            <Num label="Shuttle" value={input.shuttle} step={0.01} onChange={(v) => update('shuttle', v)} />
+          <div className="panelTitle">
+            <div><p>Identity</p><h2>Prospect Card</h2></div>
+            <button type="button" className={`panelToggle ${openPanels.card ? 'open' : 'closed'}`} onClick={() => togglePanel('card')} aria-label="Toggle panel">▾</button>
+          </div>
+          <div className={`panelBody${openPanels.card ? '' : ' collapsed'}`}>
+            <div className="formGrid">
+              <Text label="Name" value={input.name} onChange={(v) => update('name', v)} />
+              <Text label="School" value={input.school} onChange={(v) => update('school', v)} />
+              <label className="field"><span>Position</span><select value={input.pos} onChange={(e) => { const pos = e.target.value; setInput((current) => withPositionDefaults({ ...current, pos }, pos)) }}>{positions.map((p) => <option key={p}>{p}</option>)}</select></label>
+              <Num label="Draft class" value={input.draftSeason} min={2016} max={2030} onChange={(v) => update('draftSeason', v)} />
+              <Num label="Projected pick" value={input.pick} min={1} max={260} onChange={(v) => update('pick', v)} />
+              <Num label="Age" value={input.age} step={0.1} onChange={(v) => update('age', v)} />
+              <label className="field"><span>Scheme tag</span>
+                <select value={input.schemeTag} onChange={(e) => update('schemeTag', e.target.value)}>
+                  <option value="">— none —</option>
+                  <option value="Spread offense">Spread offense</option>
+                  <option value="Pro-style">Pro-style</option>
+                  <option value="Air raid">Air raid</option>
+                  <option value="Option/RPO">Option / RPO</option>
+                  <option value="West Coast">West Coast</option>
+                  <option value="Gap/power run">Gap / power run</option>
+                  <option value="Zone blocking">Zone blocking</option>
+                  <option value="4-3 defense">4-3 defense</option>
+                  <option value="3-4 defense">3-4 defense</option>
+                  <option value="Multiple defense">Multiple defense</option>
+                </select>
+              </label>
+            </div>
           </div>
         </section>
 
         <section className="panel formPanel">
-          <div className="panelTitle"><div><p>Evaluation</p><h2>Scouting Inputs</h2></div></div>
-          <Slider label="Film" value={input.film} onChange={(v) => update('film', v)} />
-          <Slider label="Production" value={input.production} onChange={(v) => update('production', v)} />
-          <Slider label="Role fit" value={input.fit} onChange={(v) => update('fit', v)} />
-          <Slider label="Availability" value={input.health} onChange={(v) => update('health', v)} />
-          <Slider label="Processing" value={input.processing} onChange={(v) => update('processing', v)} />
+          <div className="panelTitle">
+            <div><p>Testing</p><h2>Measurables</h2></div>
+            <button type="button" className={`panelToggle ${openPanels.measurables ? 'open' : 'closed'}`} onClick={() => togglePanel('measurables')} aria-label="Toggle panel">▾</button>
+          </div>
+          <div className={`panelBody${openPanels.measurables ? '' : ' collapsed'}`}>
+            <div className="formGrid">
+              <Num label="Height in." value={input.height} onChange={(v) => update('height', v)} />
+              <Num label="Weight" value={input.weight} onChange={(v) => update('weight', v)} />
+              <Num label="40-yard" value={input.forty} step={0.01} onChange={(v) => update('forty', v)} />
+              <Num label="Vertical" value={input.vertical} step={0.5} onChange={(v) => update('vertical', v)} />
+              <Num label="Broad" value={input.broad} onChange={(v) => update('broad', v)} />
+              <Num label="3-cone" value={input.cone} step={0.01} onChange={(v) => update('cone', v)} />
+              <Num label="Shuttle" value={input.shuttle} step={0.01} onChange={(v) => update('shuttle', v)} />
+            </div>
+          </div>
+        </section>
+
+        <section className="panel formPanel">
+          <div className="panelTitle">
+            <div><p>Evaluation</p><h2>Scouting Inputs</h2></div>
+            <button type="button" className={`panelToggle ${openPanels.scouting ? 'open' : 'closed'}`} onClick={() => togglePanel('scouting')} aria-label="Toggle panel">▾</button>
+          </div>
+          <div className={`panelBody${openPanels.scouting ? '' : ' collapsed'}`}>
+            <Slider label="Film" value={input.film} onChange={(v) => update('film', v)} />
+            <Slider label="Production" value={input.production} onChange={(v) => update('production', v)} />
+            <Slider label="Role fit" value={input.fit} onChange={(v) => update('fit', v)} />
+            <Slider label="Availability" value={input.health} onChange={(v) => update('health', v)} />
+            <Slider label="Processing" value={input.processing} onChange={(v) => update('processing', v)} />
+          </div>
         </section>
 
         <section className="panel formPanel pffPanel">
-          <div className="panelTitle"><div><p>PFF College Signal</p><h2>Performance Profile</h2></div><strong>{input.pffComposite.toFixed(0)}</strong></div>
-          <Slider label="Composite" value={input.pffComposite} onChange={(v) => update('pffComposite', v)} />
-          <Slider label="Grade" value={input.pffGrade} onChange={(v) => update('pffGrade', v)} />
-          <Slider label="Production" value={input.pffProduction} onChange={(v) => update('pffProduction', v)} />
-          <Slider label="Efficiency" value={input.pffEfficiency} onChange={(v) => update('pffEfficiency', v)} />
-          <Slider label="Clean play" value={input.pffClean} onChange={(v) => update('pffClean', v)} />
+          <div className="panelTitle">
+            <div><p>PFF College Signal</p><h2>Performance Profile</h2></div>
+            <strong>{input.pffComposite.toFixed(0)}</strong>
+            <button type="button" className={`panelToggle ${openPanels.pff ? 'open' : 'closed'}`} onClick={() => togglePanel('pff')} aria-label="Toggle panel">▾</button>
+          </div>
+          <div className={`panelBody${openPanels.pff ? '' : ' collapsed'}`}>
+            <Slider label="Composite" value={input.pffComposite} onChange={(v) => update('pffComposite', v)} />
+            <Slider label="Grade" value={input.pffGrade} onChange={(v) => update('pffGrade', v)} />
+            <Slider label="Production" value={input.pffProduction} onChange={(v) => update('pffProduction', v)} />
+            <Slider label="Efficiency" value={input.pffEfficiency} onChange={(v) => update('pffEfficiency', v)} />
+            <Slider label="Clean play" value={input.pffClean} onChange={(v) => update('pffClean', v)} />
+          </div>
         </section>
       </aside>
 
@@ -884,6 +907,24 @@ export default function App() {
         </section>
       </section>
     </div>}
+
+    <nav className="bottomNav" aria-label="Navigation">
+      <button type="button" className={page === 'workbench' ? 'on' : ''} onClick={() => setPage('workbench')}>
+        <span className="bottomNavIcon">✎</span>Scout
+      </button>
+      <button type="button" className={page === 'class' ? 'on' : ''} onClick={() => setPage('class')}>
+        <span className="bottomNavIcon">≡</span>Class
+      </button>
+      <button type="button" className={page === 'players' ? 'on' : ''} onClick={() => setPage('players')}>
+        <span className="bottomNavIcon">◉</span>Players
+      </button>
+      <button type="button" className={page === 'compare' ? 'on' : ''} onClick={() => setPage('compare')}>
+        <span className="bottomNavIcon">⇌</span>Compare
+      </button>
+      <button type="button" className={page === 'trade' ? 'on' : ''} onClick={() => setPage('trade')}>
+        <span className="bottomNavIcon">⇋</span>Trade
+      </button>
+    </nav>
   </main>
 }
 
