@@ -1,4 +1,4 @@
-import { mkdir, writeFile } from 'node:fs/promises'
+import { mkdir, writeFile, access } from 'node:fs/promises'
 
 const dataDir = new URL('../public/data/', import.meta.url)
 const sources = [
@@ -11,12 +11,25 @@ await mkdir(dataDir, { recursive: true })
 const manifest = { refreshedAt: new Date().toISOString(), sources: [] }
 
 for (const [filename, url] of sources) {
-  const response = await fetch(url)
-  if (!response.ok) throw new Error(`Failed to download ${filename}: ${response.status}`)
-  const text = await response.text()
-  await writeFile(new URL(filename, dataDir), text)
-  manifest.sources.push({ filename, url, rows: Math.max(0, text.trim().split('\n').length - 1) })
+  const dest = new URL(filename, dataDir)
+  try {
+    const response = await fetch(url)
+    if (!response.ok) throw new Error(`HTTP ${response.status}`)
+    const text = await response.text()
+    await writeFile(dest, text)
+    manifest.sources.push({ filename, url, rows: Math.max(0, text.trim().split('\n').length - 1) })
+    console.log(`Downloaded ${filename}`)
+  } catch (err) {
+    // Check if we have a previously committed/cached copy to fall back on
+    const exists = await access(dest).then(() => true).catch(() => false)
+    if (exists) {
+      console.warn(`Warning: could not fetch ${filename} (${err.message}) — using existing file`)
+      manifest.sources.push({ filename, url, rows: 0, warning: String(err.message) })
+    } else {
+      throw new Error(`Failed to download ${filename} and no cached copy exists: ${err.message}`)
+    }
+  }
 }
 
 await writeFile(new URL('source-manifest.json', dataDir), `${JSON.stringify(manifest, null, 2)}\n`)
-console.log(`Downloaded ${sources.length} nflverse datasets`)
+console.log(`Data refresh complete (${sources.length} sources)`)
