@@ -2190,10 +2190,11 @@ td small {
   font-size: 12.5px;
 }
 
+/* 13 columns: rank | name | school | pick range | score | grade | projAV | pffOff | trend | ypa | btt | twp | load */
 .prospectsTableHead,
 .prospectsTableRow {
   display: grid;
-  grid-template-columns: 32px 200px 120px 90px 80px 90px 60px 60px 52px 52px 52px 52px 64px;
+  grid-template-columns: 32px minmax(160px,220px) 110px 90px 80px 80px 56px 58px 68px 48px 48px 50px 58px;
   align-items: center;
   gap: 0;
 }
@@ -2209,7 +2210,7 @@ td small {
 }
 
 .prospectsTableRow {
-  padding: 8px 12px;
+  padding: 7px 12px;
   border-bottom: 1px solid var(--border);
   color: var(--text-1);
   font-variant-numeric: tabular-nums;
@@ -2221,11 +2222,13 @@ td small {
 
 .pRank { color: var(--text-2); font-size: 11px; }
 
-.pName { display: flex; flex-direction: column; gap: 1px; }
-.pNameText { font-weight: 600; color: var(--text-0); font-size: 13px; }
-.pCompHint { color: var(--text-2); font-size: 10px; }
+.pName { display: flex; flex-direction: column; gap: 1px; overflow: hidden; }
+.pNameText { font-weight: 600; color: var(--text-0); font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+/* School shown below name only on small screens */
+.pSchoolSub { display: none; color: var(--text-2); font-size: 10px; }
 
 .pSchool { color: var(--text-1); font-size: 12px; }
+.pSchoolDesk { }
 
 .pColNum { text-align: right; }
 
@@ -2240,24 +2243,40 @@ td small {
 .pPffGrade { font-weight: 600; color: var(--text-0); }
 .pPickRange { font-size: 11px; font-weight: 600; white-space: nowrap; }
 
+/* Trajectory trend column */
+.pTrend { display: flex; flex-direction: column; align-items: flex-end; gap: 0; }
+.pTrendIcon { font-size: 13px; line-height: 1; }
+.pTrendVal { font-size: 9.5px; }
+.tRising   { color: var(--green); }
+.tDeclining { color: var(--red); }
+.tStable   { color: var(--text-1); }
+.tUnknown  { color: var(--text-2); }
+
 .pActions { display: flex; justify-content: flex-end; }
 
-@media (max-width: 1100px) {
+@media (max-width: 1200px) {
   .prospectsPage { padding: 16px; }
   .prospectsTableHead,
   .prospectsTableRow {
-    grid-template-columns: 28px 160px 100px 80px 72px 80px 50px 52px 44px 44px 44px 44px 58px;
+    grid-template-columns: 28px minmax(130px,180px) 95px 82px 74px 76px 50px 54px 62px 44px 44px 46px 54px;
     font-size: 11.5px;
   }
 }
 
-@media (max-width: 800px) {
+@media (max-width: 860px) {
+  /* Collapse school into name column, hide school column */
+  .pSchoolSub { display: block; }
+  .pSchoolDesk { display: none; }
   .prospectsTableHead,
   .prospectsTableRow {
-    grid-template-columns: 24px 1fr 90px 60px 70px 78px 48px;
+    grid-template-columns: 26px 1fr 82px 74px 72px 50px 62px 50px;
   }
-  /* Hide less-critical columns on small screens */
-  .prospectsTableHead span:nth-child(n+8),
-  .prospectsTableRow span:nth-child(n+8) { display: none; }
+  /* Hide: Proj AV, PFF Off moved earlier; hide BTT%, TWP%, Grade on small */
+  .prospectsTableHead span:nth-child(7),
+  .prospectsTableRow span:nth-child(7),
+  .prospectsTableHead span:nth-child(11),
+  .prospectsTableRow span:nth-child(11),
+  .prospectsTableHead span:nth-child(12),
+  .prospectsTableRow span:nth-child(12) { display: none; }
   .prospectsTableRow span:last-child { display: flex; }
 }
