@@ -2194,7 +2194,7 @@ td small {
   font-size: 12.5px;
 }
 
-/* 12 columns: rank | name | school | pick range | score | projAV | pffOff | trend | ypa | btt | twp | load */
+/* 12 columns: rank | name | school | pick range | score | value | pffOff | trend | ypa | btt | twp | load */
 .prospectsTableHead,
 .prospectsTableRow {
   display: grid;
@@ -2258,6 +2258,104 @@ td small {
 
 .pActions { display: flex; justify-content: flex-end; }
 
+/* ── Value column ───────────────────────────── */
+.pValue { display: flex; flex-direction: column; align-items: flex-end; gap: 1px; font-weight: 700; font-size: 13px; }
+.pValueLabel { font-size: 9.5px; font-weight: 600; white-space: nowrap; opacity: .85; }
+.pValueElite { color: #10b981; }
+.pValueGood  { color: #34d399; }
+.pValueFair  { color: var(--text-1); }
+.pValueReach { color: var(--amber); }
+.pValueBig   { color: var(--red); }
+
+/* ── Expanded row state ─────────────────────── */
+.pRowExpanded { background: rgba(59,130,246,.1) !important; cursor: pointer; }
+.prospectsTableRow { cursor: pointer; }
+
+/* ── Detail panel ───────────────────────────── */
+.prospectsDetailRow {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: 1fr 220px 1fr;
+  gap: 0;
+  background: var(--bg-1);
+  border-bottom: 1px solid var(--border-hi);
+  border-left: 3px solid var(--accent);
+}
+
+.pDetailPick {
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  font-size: 12.5px;
+  color: var(--text-1);
+  border-right: 1px solid var(--border);
+}
+.pDetailPick b { color: var(--text-0); }
+
+.pDetailOdds {
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  border-right: 1px solid var(--border);
+}
+
+.pDetailSectionLabel {
+  display: block;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+  color: var(--text-2);
+  margin-bottom: 4px;
+}
+
+.pOddsRow {
+  display: grid;
+  grid-template-columns: 120px 1fr 32px;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+}
+.pOddsLabel { color: var(--text-1); white-space: nowrap; }
+.pOddsBarWrap { background: var(--bg-3); border-radius: 999px; height: 5px; overflow: hidden; }
+.pOddsBar { height: 100%; background: var(--accent); border-radius: inherit; transition: width .3s; }
+.pOddsPct { text-align: right; color: var(--text-2); font-size: 10.5px; font-variant-numeric: tabular-nums; }
+
+.pDetailRisks { padding: 14px 16px; display: flex; flex-direction: column; gap: 8px; }
+
+.pDetailNoRisk {
+  justify-content: center;
+  font-size: 12px;
+  color: var(--green);
+}
+
+.pDetailRisk {
+  border-radius: 6px;
+  padding: 8px 10px;
+  border-left: 3px solid;
+}
+.riskHigh { background: rgba(239,68,68,.08); border-color: var(--red); }
+.riskMed  { background: rgba(245,158,11,.07); border-color: var(--amber); }
+
+.pRiskHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 3px;
+}
+.pRiskLabel { font-size: 12px; font-weight: 700; color: var(--text-0); }
+.pRiskRate { font-size: 10px; font-weight: 700; color: var(--red); }
+.riskMed .pRiskRate { color: var(--amber); }
+.pRiskReason { margin: 0; font-size: 11.5px; color: var(--text-1); line-height: 1.5; }
+
+@media (max-width: 900px) {
+  .prospectsDetailRow { grid-template-columns: 1fr; }
+  .pDetailPick, .pDetailOdds { border-right: none; border-bottom: 1px solid var(--border); }
+}
+
 @media (max-width: 1200px) {
   .prospectsPage { padding: 16px; }
   .prospectsTableHead,
@@ -2273,12 +2371,12 @@ td small {
   .pSchoolDesk { display: none; }
   .prospectsTableHead,
   .prospectsTableRow {
-    /* 8 visible: rank | name | pick | score | pffOff | trend | ypa | load */
-    grid-template-columns: 26px 1fr 82px 70px 52px 58px 42px 46px;
+    /* 8 visible: rank | name | pick | score | value | pffOff | trend | load */
+    grid-template-columns: 26px 1fr 82px 68px 70px 52px 56px 46px;
   }
-  /* Hide: projAV (6), BTT% (10), TWP% (11) */
-  .prospectsTableHead span:nth-child(6),
-  .prospectsTableRow span:nth-child(6),
+  /* Hide: YPA (9), BTT% (10), TWP% (11) */
+  .prospectsTableHead span:nth-child(9),
+  .prospectsTableRow span:nth-child(9),
   .prospectsTableHead span:nth-child(10),
   .prospectsTableRow span:nth-child(10),
   .prospectsTableHead span:nth-child(11),
@@ -2291,15 +2389,15 @@ td small {
   .prospectsFilters { gap: 6px; }
   .prospectsTableHead,
   .prospectsTableRow {
-    /* 6 visible: rank | name | pick | score | trend | load */
-    grid-template-columns: 22px 1fr 78px 64px 52px 40px;
+    /* 6 visible: rank | name | pick | score | value | load */
+    grid-template-columns: 22px 1fr 78px 62px 60px 40px;
     font-size: 11px;
   }
-  /* Also hide: pffOff (7) and ypa (9) on top of 860px rules */
+  /* Also hide: pffOff (7) and trend (8) on top of 860px rules */
   .prospectsTableHead span:nth-child(7),
   .prospectsTableRow span:nth-child(7),
-  .prospectsTableHead span:nth-child(9),
-  .prospectsTableRow span:nth-child(9) { display: none; }
+  .prospectsTableHead span:nth-child(8),
+  .prospectsTableRow span:nth-child(8) { display: none; }
   .pRank { font-size: 10px; }
   .pPickRange { font-size: 10px; }
 }
