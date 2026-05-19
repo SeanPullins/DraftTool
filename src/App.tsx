@@ -180,6 +180,19 @@ type ProspectRawStats = {
 }
 type ProspectTrajectory = { gradeDelta: number | null; label: 'rising' | 'stable' | 'declining' | 'unknown' }
 type ProspectQB = Prospect & { rawStats: ProspectRawStats; priorStats: ProspectRawStats | null; trajectory: ProspectTrajectory }
+type RiskFlag = {
+  id: string
+  label: string
+  severity: 'high' | 'medium'
+  bustRate: number | null
+  sampleN: number
+  reason: string
+}
+type QbBustRates = {
+  twp: { rate: number; n: number }
+  eff: { rate: number; n: number }
+  prod: { rate: number; n: number }
+}
 type Projection = ReturnType<typeof project>
 type LoaderMessage = { tone: 'good' | 'warn'; text: string } | null
 type MobileTab = 'edit' | 'results' | 'board'
@@ -2215,6 +2228,117 @@ function prospectScoreClass(score: number): string {
   return 'pScoreLow'
 }
 
+const QB_PICK_BUCKETS: Array<[number, number]> = [
+  [1, 5], [6, 10], [11, 20], [21, 32],
+  [33, 48], [49, 64], [65, 100], [101, 150], [151, 220], [221, 999],
+]
+
+function buildQbPickBaseline(history: Historical[]): (pick: number) => number {
+  const qbs = history.filter(h => h.pos === 'QB' && h.pick < 260 && h.year <= 2021)
+  const avgs = QB_PICK_BUCKETS.map(([lo, hi]) => {
+    const bucket = qbs.filter(q => q.pick >= lo && q.pick <= hi)
+    return bucket.length >= 3 ? bucket.reduce((s, q) => s + q.av, 0) / bucket.length : null
+  })
+  return (pick: number) => {
+    for (let i = 0; i < QB_PICK_BUCKETS.length; i++) {
+      const [lo, hi] = QB_PICK_BUCKETS[i]
+      if (pick >= lo && pick <= hi) return avgs[i] ?? 4
+    }
+    return 2
+  }
+}
+
+function computeQbBustRates(profiles: PffProfile[]): QbBustRates {
+  const qbs = profiles.filter(p =>
+    p.position === 'QB' && p.nfl !== null &&
+    p.nfl.draftPick <= 100 && p.nfl.games >= 20
+  )
+  const isBust = (p: PffProfile) =>
+    (p.nfl?.av ?? 0) < 15 || p.nfl?.category === 'Bust' || p.nfl?.category === 'Reserve'
+  function rate(subset: PffProfile[]) {
+    return { rate: subset.length ? subset.filter(isBust).length / subset.length : 0.5, n: subset.length }
+  }
+  return {
+    twp:  rate(qbs.filter(p => p.pff.clean < 52)),
+    eff:  rate(qbs.filter(p => p.pff.efficiency < 52)),
+    prod: rate(qbs.filter(p => p.pff.production < 52)),
+  }
+}
+
+function prospectRiskFlags(p: ProspectQB, bustRates: QbBustRates): RiskFlag[] {
+  const rs = p.rawStats
+  const flags: RiskFlag[] = []
+  const pct = (n: number) => Math.round(n * 100) + '%'
+
+  if (rs.twp_rate != null && rs.twp_rate > 4.0) {
+    const br = bustRates.twp
+    flags.push({
+      id: 'twp', label: 'Turnover risk',
+      severity: rs.twp_rate > 5.0 ? 'high' : 'medium',
+      bustRate: br.n >= 5 ? br.rate : null, sampleN: br.n,
+      reason: `TWP rate ${rs.twp_rate.toFixed(1)}% exceeds the 4.0% threshold. QBs with low clean-pocket grades drafted in the top 3 rounds bust at ${br.n >= 5 ? pct(br.rate) : 'insufficient data'} (n=${br.n}).`,
+    })
+  }
+  if (rs.accuracy_percent != null && rs.accuracy_percent < 56) {
+    const br = bustRates.eff
+    flags.push({
+      id: 'acc', label: 'Accuracy',
+      severity: rs.accuracy_percent < 52 ? 'high' : 'medium',
+      bustRate: br.n >= 5 ? br.rate : null, sampleN: br.n,
+      reason: `Adjusted accuracy ${rs.accuracy_percent.toFixed(1)}% below the 56% floor. Low efficiency QBs drafted top 3 rounds bust at ${br.n >= 5 ? pct(br.rate) : 'insufficient data'} (n=${br.n}).`,
+    })
+  }
+  if (rs.ypa != null && rs.ypa < 6.5) {
+    const br = bustRates.prod
+    flags.push({
+      id: 'ypa', label: 'Low YPA',
+      severity: rs.ypa < 6.0 ? 'high' : 'medium',
+      bustRate: br.n >= 5 ? br.rate : null, sampleN: br.n,
+      reason: `YPA ${rs.ypa.toFixed(1)} below 6.5. QBs with low production grades drafted top 3 rounds bust at ${br.n >= 5 ? pct(br.rate) : 'insufficient data'} (n=${br.n}).`,
+    })
+  }
+  if (rs.btt_rate != null && rs.btt_rate < 7.5) {
+    flags.push({
+      id: 'btt', label: 'Low BTT%',
+      severity: 'medium', bustRate: null, sampleN: 0,
+      reason: `Big-time throw rate ${rs.btt_rate.toFixed(1)}% below 7.5% — limited downfield creation suggests a ceiling concern against NFL-caliber secondaries.`,
+    })
+  }
+  if (p.trajectory.label === 'declining') {
+    flags.push({
+      id: 'decline', label: 'Declining',
+      severity: (p.trajectory.gradeDelta ?? 0) <= -12 ? 'high' : 'medium',
+      bustRate: null, sampleN: 0,
+      reason: `PFF grade fell ${p.trajectory.gradeDelta != null ? Math.abs(p.trajectory.gradeDelta).toFixed(1) + ' pts' : ''} from 2024→2025. QBs entering the draft on a downward arc project 8–12 pts lower in model outcomes.`,
+    })
+  }
+  if (!p.priorStats) {
+    flags.push({
+      id: 'sample', label: '1-yr data',
+      severity: 'medium', bustRate: null, sampleN: 0,
+      reason: `Only 2025 college season available — no prior-year context. Single-season projections carry ±10–15 pts wider confidence range and no trajectory signal.`,
+    })
+  }
+  if (p.processing < 60) {
+    flags.push({
+      id: 'proc', label: 'Slow reads',
+      severity: p.processing < 50 ? 'high' : 'medium',
+      bustRate: null, sampleN: 0,
+      reason: `Avg time-to-throw implies extended decision cycles. NFL-speed pass rush negates long delivery windows — historically correlates with poor performance behind inferior NFL offensive lines.`,
+    })
+  }
+  return flags
+}
+
+function pickValueLabel(surplus: number): { label: string; cls: string } {
+  if (surplus >= 12)  return { label: 'Elite value',  cls: 'pValueElite' }
+  if (surplus >= 6)   return { label: 'Good value',   cls: 'pValueGood' }
+  if (surplus >= 0)   return { label: 'Fair value',   cls: 'pValueFair' }
+  if (surplus >= -6)  return { label: 'Slight reach', cls: 'pValueReach' }
+  if (surplus >= -12) return { label: 'Reach',        cls: 'pValueBig' }
+  return { label: 'Big reach', cls: 'pValueBig' }
+}
+
 function trajectoryDisplay(t: ProspectTrajectory): { icon: string; label: string; cls: string } {
   if (t.label === 'rising')   return { icon: '↑', label: t.gradeDelta != null ? `+${t.gradeDelta.toFixed(1)}` : '↑', cls: 'tRising' }
   if (t.label === 'declining') return { icon: '↓', label: t.gradeDelta != null ? `${t.gradeDelta.toFixed(1)}` : '↓', cls: 'tDeclining' }
@@ -2233,22 +2357,30 @@ function ProspectsView({
 }) {
   const [nameFilter, setNameFilter] = useState('')
   const [minGrade, setMinGrade] = useState(0)
-  const [sortBy, setSortBy] = useState<'score' | 'pff' | 'pick' | 'trend'>('score')
+  const [sortBy, setSortBy] = useState<'score' | 'pff' | 'pick' | 'trend' | 'value'>('score')
   const [trendFilter, setTrendFilter] = useState<'all' | 'rising' | 'stable' | 'declining'>('all')
+  const [expandedId, setExpandedId] = useState<string | null>(null)
+
+  const pickBaseline = useMemo(() => buildQbPickBaseline(history), [history])
+  const bustRates = useMemo(() => computeQbBustRates(pffProfiles), [pffProfiles])
 
   const ranked = useMemo(() => {
     if (!history.length) return []
-    return prospects2027.map((p) => ({
-      prospect: p,
-      proj: project(p, history, pffProfiles, undefined, undefined, careerStats),
-    }))
-  }, [prospects2027, history, pffProfiles, careerStats])
+    return prospects2027.map((p) => {
+      const proj = project(p, history, pffProfiles, undefined, undefined, careerStats)
+      const baseline = pickBaseline(p.pick)
+      const pickSurplus = proj.expectedAv - baseline
+      const riskFlags = prospectRiskFlags(p, bustRates)
+      return { prospect: p, proj, pickBaseline: baseline, pickSurplus, riskFlags }
+    })
+  }, [prospects2027, history, pffProfiles, careerStats, pickBaseline, bustRates])
 
   const sorted = useMemo(() => {
     const base = [...ranked]
     if (sortBy === 'pff')   base.sort((a, b) => b.prospect.pffComposite - a.prospect.pffComposite)
     else if (sortBy === 'pick')  base.sort((a, b) => a.prospect.pick - b.prospect.pick)
     else if (sortBy === 'trend') base.sort((a, b) => (b.prospect.trajectory.gradeDelta ?? -999) - (a.prospect.trajectory.gradeDelta ?? -999))
+    else if (sortBy === 'value') base.sort((a, b) => b.pickSurplus - a.pickSurplus)
     else base.sort((a, b) => b.proj.score - a.proj.score)
     return base
   }, [ranked, sortBy])
@@ -2298,6 +2430,7 @@ function ProspectsView({
           </select>
           <select value={sortBy} onChange={(e) => setSortBy(e.target.value as typeof sortBy)}>
             <option value="score">Sort: Proj score</option>
+            <option value="value">Sort: Pick value</option>
             <option value="pff">Sort: PFF grade</option>
             <option value="pick">Sort: Pick range</option>
             <option value="trend">Sort: '24→'25 trend</option>
@@ -2321,7 +2454,7 @@ function ProspectsView({
           <span>School</span>
           <span className="pColNum">Pick Range</span>
           <span className="pColNum">Score</span>
-          <span className="pColNum">Proj AV</span>
+          <span className="pColNum">Value</span>
           <span className="pColNum">PFF Off</span>
           <span className="pColNum">Trend</span>
           <span className="pColNum">YPA</span>
@@ -2329,16 +2462,21 @@ function ProspectsView({
           <span className="pColNum">TWP%</span>
           <span></span>
         </div>
-        {filtered.map((r, i) => {
+        {filtered.flatMap((r, i) => {
           const p = r.prospect
           const proj = r.proj
           const rs = p.rawStats
           const td = trajectoryDisplay(p.trajectory)
+          const rowId = p.name + p.school
+          const isExpanded = expandedId === rowId
+          const surplus = r.pickSurplus
+          const vl = pickValueLabel(surplus)
           const twpClass = rs.twp_rate != null
             ? rs.twp_rate <= 2.5 ? 'epaHigh' : rs.twp_rate >= 4.0 ? 'epaLow' : ''
             : ''
-          return (
-            <div key={p.name + p.school} className="prospectsTableRow">
+          const rows = [
+            <div key={rowId} className={`prospectsTableRow${isExpanded ? ' pRowExpanded' : ''}`}
+              onClick={(e) => { if ((e.target as HTMLElement).closest('.pActions')) return; setExpandedId(isExpanded ? null : rowId) }}>
               <span className="pRank">{i + 1}</span>
               <span className="pName">
                 <span className="pNameText">{p.name}</span>
@@ -2350,7 +2488,10 @@ function ProspectsView({
                 {Math.round(proj.score)}
                 <span className="pScoreRange">{Math.round(proj.scoreLow)}–{Math.round(proj.scoreHigh)}</span>
               </span>
-              <span className="pColNum">{proj.expectedAv.toFixed(1)}</span>
+              <span className={`pColNum pValue ${vl.cls}`}>
+                {surplus >= 0 ? '+' : ''}{surplus.toFixed(1)}
+                <span className="pValueLabel">{vl.label}</span>
+              </span>
               <span className="pColNum pPffGrade">{rs.grades_offense?.toFixed(1) ?? '—'}</span>
               <span className={`pColNum pTrend ${td.cls}`} title={p.trajectory.label}>
                 <span className="pTrendIcon">{td.icon}</span>
@@ -2362,8 +2503,52 @@ function ProspectsView({
               <span className="pActions">
                 <button type="button" className="secondary smallButton" onClick={() => onLoad(p)}>Load</button>
               </span>
+            </div>,
+          ]
+          if (isExpanded) rows.push(
+            <div key={`detail-${rowId}`} className="prospectsDetailRow">
+              <div className="pDetailPick">
+                <span>Est. pick <b>#{p.pick}</b> · {pickRangeLabel(p.pick)}</span>
+                <span>Historical avg AV at slot: <b>{r.pickBaseline.toFixed(1)}</b></span>
+                <span>Model projected AV: <b>{proj.expectedAv.toFixed(1)}</b></span>
+                <span className={vl.cls}>Value vs. pick: <b>{surplus >= 0 ? '+' : ''}{surplus.toFixed(1)}</b> — {vl.label}</span>
+              </div>
+              <div className="pDetailOdds">
+                <span className="pDetailSectionLabel">Outcome odds</span>
+                {([...outcomeOrder].reverse() as Category[]).map((cat) => {
+                  const oddsVal = Math.round((proj.odds[cat] ?? 0) * 100)
+                  return (
+                    <div key={cat} className="pOddsRow">
+                      <span className="pOddsLabel">{cat}</span>
+                      <div className="pOddsBarWrap"><div className="pOddsBar" style={{ width: `${oddsVal}%` }} /></div>
+                      <span className="pOddsPct">{oddsVal}%</span>
+                    </div>
+                  )
+                })}
+              </div>
+              {r.riskFlags.length > 0 ? (
+                <div className="pDetailRisks">
+                  <span className="pDetailSectionLabel">Miss risk factors</span>
+                  {r.riskFlags.map((f) => (
+                    <div key={f.id} className={`pDetailRisk ${f.severity === 'high' ? 'riskHigh' : 'riskMed'}`}>
+                      <div className="pRiskHeader">
+                        <span className="pRiskLabel">{f.label}</span>
+                        {f.bustRate != null && (
+                          <span className="pRiskRate">{Math.round(f.bustRate * 100)}% bust rate · n={f.sampleN}</span>
+                        )}
+                      </div>
+                      <p className="pRiskReason">{f.reason}</p>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="pDetailRisks pDetailNoRisk">
+                  <span>✓ No significant risk flags identified for this prospect.</span>
+                </div>
+              )}
             </div>
           )
+          return rows
         })}
       </div>
     </div>
