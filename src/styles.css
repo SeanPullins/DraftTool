@@ -2401,3 +2401,82 @@ td small {
   .pRank { font-size: 10px; }
   .pPickRange { font-size: 10px; }
 }
+
+/* ── Historical outcome flags (bust/gem badges) ── */
+.histFlag {
+  display: inline-block;
+  margin-left: 5px;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 1px 5px;
+  border-radius: 3px;
+  letter-spacing: .02em;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+.histFlag-bust {
+  background: rgba(239,68,68,.14);
+  color: #f87171;
+  border: 1px solid rgba(239,68,68,.25);
+}
+.histFlag-gem {
+  background: rgba(16,185,129,.13);
+  color: #34d399;
+  border: 1px solid rgba(16,185,129,.22);
+}
+
+/* ── Pattern alert (workbench hero panel) ── */
+.patternAlert {
+  border-radius: 6px;
+  padding: 8px 10px;
+  margin-top: 6px;
+  border-left: 3px solid;
+}
+.patternAlert-bust-risk {
+  background: rgba(239,68,68,.07);
+  border-color: #ef4444;
+}
+.patternAlert-gem-upside {
+  background: rgba(16,185,129,.07);
+  border-color: #10b981;
+}
+.patternAlertLabel {
+  display: block;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  margin-bottom: 3px;
+}
+.patternAlert-bust-risk .patternAlertLabel { color: #f87171; }
+.patternAlert-gem-upside .patternAlertLabel { color: #34d399; }
+.patternAlertDesc {
+  margin: 0 0 5px;
+  font-size: 11.5px;
+  color: var(--text-1);
+  line-height: 1.45;
+}
+.patternAlertMatches {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.patternMatchItem {
+  font-size: 10.5px;
+  color: var(--text-2);
+  padding: 1px 0;
+}
+
+/* ── Prospect detail — pattern alerts row ── */
+.pDetailPatterns {
+  grid-column: 1 / -1;
+  border-top: 1px solid var(--border);
+  padding: 12px 14px;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.pDetailPatterns .patternAlert {
+  flex: 1 1 300px;
+  margin-top: 0;
+}

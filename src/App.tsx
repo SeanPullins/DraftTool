@@ -193,6 +193,17 @@ type QbBustRates = {
   eff: { rate: number; n: number }
   prod: { rate: number; n: number }
 }
+type HistoricalOutcomeFlag = {
+  type: 'bust' | 'gem'
+  label: string
+  detail: string
+}
+type PatternAlert = {
+  type: 'bust-risk' | 'gem-upside'
+  label: string
+  matches: Array<{ name: string; year: number; pick: number; av: number; pos: string; reason: string }>
+  description: string
+}
 type Projection = ReturnType<typeof project>
 type LoaderMessage = { tone: 'good' | 'warn'; text: string } | null
 type MobileTab = 'edit' | 'results' | 'board'
@@ -401,6 +412,8 @@ export default function App() {
   }
   const y1Data = useMemo<Y1Data>(() => ({ qb: qbSeasons, wr: wrSeasons, rb: rbSeasons }), [qbSeasons, wrSeasons, rbSeasons])
   const projection = useMemo(() => project(input, prospects, pffProfiles, undefined, y1Data, careerStats), [input, prospects, pffProfiles, y1Data, careerStats])
+  const histFlagMap = useMemo(() => buildHistoricalFlagMap(prospects, pffProfiles), [prospects, pffProfiles])
+  const patternAlerts = useMemo(() => extractPatternAlerts(projection.fullComps, histFlagMap), [projection.fullComps, histFlagMap])
   const draftBoard = useMemo(
     () => saved
       .map((player) => ({ player, projection: project(player, prospects, pffProfiles, undefined, y1Data, careerStats) }))
@@ -794,9 +807,9 @@ export default function App() {
     </div>
 
     {error ? <section className="panel empty">{error}</section> : page === 'class' ? <div className="classPage">
-      <ClassExplorer pool={lookupPool} history={prospects} pffProfiles={pffProfiles} y1Data={y1Data} careerStats={careerStats} currentName={input.name} currentYear={input.draftSeason} />
+      <ClassExplorer pool={lookupPool} history={prospects} pffProfiles={pffProfiles} y1Data={y1Data} careerStats={careerStats} histFlagMap={histFlagMap} currentName={input.name} currentYear={input.draftSeason} />
     </div> : page === 'players' ? <div className="classPage">
-      <PlayerBrowser pool={lookupPool} history={prospects} onOpenModal={openModal} onCompare={handleCompare} />
+      <PlayerBrowser pool={lookupPool} history={prospects} histFlagMap={histFlagMap} onOpenModal={openModal} onCompare={handleCompare} />
     </div> : page === 'compare' ? <div className="classPage">
       <CompareView pool={lookupPool} history={prospects} pffProfiles={pffProfiles} y1Data={y1Data} careerStats={careerStats} initialQuery={compareQuery} />
     </div> : page === 'trade' ? <div className="classPage">
@@ -806,7 +819,7 @@ export default function App() {
     </div> : page === 'guide' ? <div className="classPage">
       <GuideView />
     </div> : page === 'prospects' ? <div className="classPage">
-      <ProspectsView prospects2027={prospectsQb2027} history={prospects} pffProfiles={pffProfiles} careerStats={careerStats} onLoad={loadProspect2027} />
+      <ProspectsView prospects2027={prospectsQb2027} history={prospects} pffProfiles={pffProfiles} careerStats={careerStats} histFlagMap={histFlagMap} onLoad={loadProspect2027} />
     </div> : <div className="layout">
       <aside className="controlPanel" data-pane="edit">
         <section className="panel loadPanel">
@@ -950,6 +963,17 @@ export default function App() {
             {projection.flags.length > 0 && <div className="flagRow">
               {projection.flags.map((f) => <span key={f} className="dangerFlag">{f}</span>)}
             </div>}
+            {patternAlerts.map((alert) => (
+              <div key={alert.type} className={`patternAlert patternAlert-${alert.type}`}>
+                <span className="patternAlertLabel">{alert.type === 'bust-risk' ? '⚠' : '↑'} {alert.label}</span>
+                <p className="patternAlertDesc">{alert.description}</p>
+                <div className="patternAlertMatches">
+                  {alert.matches.map((m) => (
+                    <span key={`${m.name}${m.year}`} className="patternMatchItem">{m.name} ({m.year}, #{m.pick >= 260 ? 'UDFA' : m.pick}) · AV {m.av} · {m.reason}</span>
+                  ))}
+                </div>
+              </div>
+            ))}
             {activeInjuryFlag && (
               <div className={`injuryBadge injurySeverity-${activeInjuryFlag.severity}`}>
                 {activeInjuryFlag.severity === 'major' ? '🩹 Injury concern: ' : activeInjuryFlag.severity === 'moderate' ? '⚠ Injury note: ' : 'ℹ '}
@@ -1461,7 +1485,7 @@ function RadarChart({ a, b, aLabel, bLabel }: {
   </div>
 }
 
-function PlayerBrowser({ pool, history, onOpenModal, onCompare }: { pool: Historical[]; history: Historical[]; onOpenModal: (p: Historical) => void; onCompare: (name: string) => void }) {
+function PlayerBrowser({ pool, history, histFlagMap, onOpenModal, onCompare }: { pool: Historical[]; history: Historical[]; histFlagMap: Map<string, HistoricalOutcomeFlag>; onOpenModal: (p: Historical) => void; onCompare: (name: string) => void }) {
   const [mode, setMode] = useState<'browse' | 'rankings'>('browse')
   const [query, setQuery] = useState('')
   const [pos, setPos] = useState('All')
@@ -1574,6 +1598,7 @@ function PlayerBrowser({ pool, history, onOpenModal, onCompare }: { pool: Histor
             <tbody>
               {display.map((player) => {
                 const showEarlySample = player.year > matureOutcomeCutoff
+                const outcomeFlag = !showEarlySample ? (histFlagMap.get(player.id) ?? null) : null
                 return <tr key={player.id} className="clickableRow" onClick={() => onOpenModal(player)}>
                   <td><b>{player.name}</b></td>
                   <td><small>{player.school || '—'}</small></td>
@@ -1586,7 +1611,10 @@ function PlayerBrowser({ pool, history, onOpenModal, onCompare }: { pool: Histor
                   <td>{player.av || 0}</td>
                   <td>{player.proBowls || 0}</td>
                   <td>{player.allPros || 0}</td>
-                  <td>{showEarlySample ? <span className="sampleTag">Early</span> : <OutcomeTag category={player.category} />}</td>
+                  <td>
+                    {showEarlySample ? <span className="sampleTag">Early</span> : <OutcomeTag category={player.category} />}
+                    {outcomeFlag && <span className={`histFlag histFlag-${outcomeFlag.type}`}>{outcomeFlag.type === 'bust' ? '⚠' : '↑'} {outcomeFlag.label}</span>}
+                  </td>
                 </tr>
               })}
             </tbody>
@@ -1722,6 +1750,7 @@ function PlayerModal({ player, history, pffProfiles, careerStats, onClose, onCom
   onCompare: (name: string) => void
 }) {
   const pffMatch = pffProfiles.find((pf) => samePlayerSeason(pf, player.name, player.year, player.pos))
+  const outcomeFlag = classifyHistoricalOutcome(player, pffMatch ?? null)
   const pct = posPercentile(player, history)
   const arcValues = syntheticArcValues(player)
   const isEarly = player.year > matureOutcomeCutoff
@@ -1746,6 +1775,7 @@ function PlayerModal({ player, history, pffProfiles, careerStats, onClose, onCom
           </div>
           <div className="modalHeaderRight">
             {isEarly ? <span className="sampleTag">Early</span> : <OutcomeTag category={player.category} />}
+            {!isEarly && outcomeFlag && <span className={`histFlag histFlag-${outcomeFlag.type}`}>{outcomeFlag.type === 'bust' ? '⚠' : '↑'} {outcomeFlag.label}</span>}
             <button type="button" className="modalClose" onClick={onClose}>✕</button>
           </div>
         </div>
@@ -2043,7 +2073,7 @@ function BrowserHeader({ label, sortKey, active, dir, onSort }: { label: string;
   </th>
 }
 
-function ClassExplorer({ pool, history, pffProfiles, y1Data, careerStats, currentName, currentYear }: { pool: Historical[]; history: Historical[]; pffProfiles: PffProfile[]; y1Data?: Y1Data; careerStats?: CareerStatMap; currentName: string; currentYear: number }) {
+function ClassExplorer({ pool, history, pffProfiles, y1Data, careerStats, histFlagMap, currentName, currentYear }: { pool: Historical[]; history: Historical[]; pffProfiles: PffProfile[]; y1Data?: Y1Data; careerStats?: CareerStatMap; histFlagMap: Map<string, HistoricalOutcomeFlag>; currentName: string; currentYear: number }) {
   const years = useMemo(() => {
     const set = new Set<number>()
     for (const player of pool) set.add(player.year)
@@ -2174,6 +2204,7 @@ function ClassExplorer({ pool, history, pffProfiles, y1Data, careerStats, curren
             const projected = projections.get(player.id)
             const showEarlySample = player.year > matureOutcomeCutoff
             const score = projected ? Math.round(projected.score) : 0
+            const outcomeFlag = !showEarlySample ? (histFlagMap.get(player.id) ?? null) : null
             return <>
               <tr key={player.id} className={`${useProjections ? `classRow-${scoreClass(score)} ` : ''}${isCurrent ? 'currentRow' : ''}`}>
                 <td><b className="boardRank">{index + 1}</b></td>
@@ -2187,7 +2218,10 @@ function ClassExplorer({ pool, history, pffProfiles, y1Data, careerStats, curren
                 {useProjections ? <td style={{ color: projected ? scoreColor(score) : undefined, fontWeight: projected ? 800 : undefined }}>{projected ? Math.round(projected.score) : '-'}</td> : null}
                 <td>{player.proBowls || 0}</td>
                 <td>{player.allPros || 0}</td>
-                <td>{showEarlySample ? <span className="sampleTag">Early sample</span> : <OutcomeTag category={player.category} />}</td>
+                <td>
+                  {showEarlySample ? <span className="sampleTag">Early sample</span> : <OutcomeTag category={player.category} />}
+                  {outcomeFlag && <span className={`histFlag histFlag-${outcomeFlag.type}`}>{outcomeFlag.type === 'bust' ? '⚠' : '↑'} {outcomeFlag.label}</span>}
+                </td>
               </tr>
             </>
           })}
@@ -2330,6 +2364,101 @@ function prospectRiskFlags(p: ProspectQB, bustRates: QbBustRates): RiskFlag[] {
   return flags
 }
 
+function bustReasonLabel(player: Historical, profile: PffProfile | null): string {
+  if (profile) {
+    if (profile.pff.clean < 52 && profile.pff.efficiency < 52) return 'Turnover-prone & inefficient'
+    if (profile.pff.clean < 52) return 'Turnover-prone'
+    if (profile.pff.efficiency < 52) return 'Low efficiency'
+    if (profile.pff.production < 52) return 'Production gap'
+    if (player.pick < 15) return 'Draft reach'
+    return "Grade didn't translate"
+  }
+  if (player.pick < 15) return 'Draft reach'
+  return 'Missed expectations'
+}
+
+function gemReasonLabel(player: Historical, profile: PffProfile | null): string {
+  if (profile) {
+    if (profile.pff.efficiency > 72) return 'Efficiency standout'
+    if (profile.pff.composite > 70 && player.pick >= 100) return 'Undervalued grade'
+    if (profile.pff.grade > 75 && player.pick >= 75) return 'Slid on board'
+  }
+  if (player.forty != null && (
+    (['WR', 'RB', 'CB', 'S'].includes(player.pos) && player.forty < 4.42) ||
+    (['LB', 'TE'].includes(player.pos) && player.forty < 4.65)
+  )) return 'Elite speed'
+  if (player.pick >= 150) return 'Late-round steal'
+  return 'Exceeded expectations'
+}
+
+function classifyHistoricalOutcome(player: Historical, profile: PffProfile | null): HistoricalOutcomeFlag | null {
+  if (player.year > compCutoffYear || player.games < 20) return null
+  const isBust = player.pick < 100 &&
+    (player.av < 12 || player.category === 'Bust' || player.category === 'Reserve')
+  const isGem =
+    (player.pick >= 33 && player.pick < 100 && (player.category === 'Star' || player.category === 'High-end starter')) ||
+    (player.pick >= 100 && (player.category === 'Star' || player.category === 'High-end starter' || player.category === 'Starter'))
+  if (isBust) {
+    const detail = bustReasonLabel(player, profile)
+    return { type: 'bust', label: detail, detail }
+  }
+  if (isGem) {
+    const detail = gemReasonLabel(player, profile)
+    return { type: 'gem', label: detail, detail }
+  }
+  return null
+}
+
+function buildHistoricalFlagMap(history: Historical[], pffProfiles: PffProfile[]): Map<string, HistoricalOutcomeFlag> {
+  const map = new Map<string, HistoricalOutcomeFlag>()
+  for (const player of history) {
+    const profile = pffProfiles.find((pf) => samePlayerSeason(pf, player.name, player.year, player.pos)) ?? null
+    const flag = classifyHistoricalOutcome(player, profile)
+    if (flag) map.set(player.id, flag)
+  }
+  return map
+}
+
+function extractPatternAlerts(
+  fullComps: Array<{ player: Historical; sim: number }>,
+  histFlagMap: Map<string, HistoricalOutcomeFlag>,
+): PatternAlert[] {
+  const alerts: PatternAlert[] = []
+  const bustMatches = fullComps
+    .filter((c) => c.sim >= 0.22 && histFlagMap.get(c.player.id)?.type === 'bust')
+    .slice(0, 5)
+    .map((c) => {
+      const flag = histFlagMap.get(c.player.id)!
+      return { name: c.player.name, year: c.player.year, pick: c.player.pick, av: c.player.av, pos: c.player.pos, reason: flag.detail }
+    })
+  const gemMatches = fullComps
+    .filter((c) => c.sim >= 0.22 && histFlagMap.get(c.player.id)?.type === 'gem')
+    .slice(0, 5)
+    .map((c) => {
+      const flag = histFlagMap.get(c.player.id)!
+      return { name: c.player.name, year: c.player.year, pick: c.player.pick, av: c.player.av, pos: c.player.pos, reason: flag.detail }
+    })
+  if (bustMatches.length >= 2) {
+    const reasons = [...new Set(bustMatches.map((m) => m.reason))]
+    alerts.push({
+      type: 'bust-risk',
+      label: 'Miss-pattern alert',
+      matches: bustMatches,
+      description: `${bustMatches.length} close comps busted despite high draft investment. Shared miss reason${reasons.length > 1 ? 's' : ''}: ${reasons.join(', ')}.`,
+    })
+  }
+  if (gemMatches.length >= 2) {
+    const reasons = [...new Set(gemMatches.map((m) => m.reason))]
+    alerts.push({
+      type: 'gem-upside',
+      label: 'Hidden-gem signal',
+      matches: gemMatches,
+      description: `${gemMatches.length} close comps outperformed their draft slot. Shared success driver${reasons.length > 1 ? 's' : ''}: ${reasons.join(', ')}.`,
+    })
+  }
+  return alerts
+}
+
 function pickValueLabel(surplus: number): { label: string; cls: string } {
   if (surplus >= 12)  return { label: 'Elite value',  cls: 'pValueElite' }
   if (surplus >= 6)   return { label: 'Good value',   cls: 'pValueGood' }
@@ -2347,12 +2476,13 @@ function trajectoryDisplay(t: ProspectTrajectory): { icon: string; label: string
 }
 
 function ProspectsView({
-  prospects2027, history, pffProfiles, careerStats, onLoad,
+  prospects2027, history, pffProfiles, careerStats, histFlagMap, onLoad,
 }: {
   prospects2027: ProspectQB[]
   history: Historical[]
   pffProfiles: PffProfile[]
   careerStats: CareerStatMap
+  histFlagMap: Map<string, HistoricalOutcomeFlag>
   onLoad: (p: ProspectQB) => void
 }) {
   const [nameFilter, setNameFilter] = useState('')
@@ -2371,9 +2501,10 @@ function ProspectsView({
       const baseline = pickBaseline(p.pick)
       const pickSurplus = proj.expectedAv - baseline
       const riskFlags = prospectRiskFlags(p, bustRates)
-      return { prospect: p, proj, pickBaseline: baseline, pickSurplus, riskFlags }
+      const patternAlerts = extractPatternAlerts(proj.fullComps, histFlagMap)
+      return { prospect: p, proj, pickBaseline: baseline, pickSurplus, riskFlags, patternAlerts }
     })
-  }, [prospects2027, history, pffProfiles, careerStats, pickBaseline, bustRates])
+  }, [prospects2027, history, pffProfiles, careerStats, pickBaseline, bustRates, histFlagMap])
 
   const sorted = useMemo(() => {
     const base = [...ranked]
@@ -2544,6 +2675,21 @@ function ProspectsView({
               ) : (
                 <div className="pDetailRisks pDetailNoRisk">
                   <span>✓ No significant risk flags identified for this prospect.</span>
+                </div>
+              )}
+              {r.patternAlerts.length > 0 && (
+                <div className="pDetailPatterns">
+                  {r.patternAlerts.map((alert) => (
+                    <div key={alert.type} className={`patternAlert patternAlert-${alert.type}`}>
+                      <span className="patternAlertLabel">{alert.type === 'bust-risk' ? '⚠' : '↑'} {alert.label}</span>
+                      <p className="patternAlertDesc">{alert.description}</p>
+                      <div className="patternAlertMatches">
+                        {alert.matches.map((m) => (
+                          <span key={`${m.name}${m.year}`} className="patternMatchItem">{m.name} ({m.year}, #{m.pick >= 260 ? 'UDFA' : m.pick}) · AV {m.av} · {m.reason}</span>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
                 </div>
               )}
             </div>
@@ -3078,6 +3224,7 @@ function project(input: Prospect, history: Historical[], pffProfiles: PffProfile
     ceilPct: ceiling / max * 100,
     odds,
     comps: comps.slice(0, 12),
+    fullComps: comps,
     pffComps: pffComps.slice(0, 12),
     pffBlend,
     percentile,
