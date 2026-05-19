@@ -122,7 +122,26 @@ type WrSeason = {
   succ: number | null
   pos: string
 }
-type Y1Data = { qb: QbSeason[]; wr: WrSeason[] }
+type RbSeason = {
+  key: string
+  name: string
+  season: number
+  team: string
+  games: number
+  gs: number
+  rush_att: number | null
+  rush_yds: number | null
+  rush_ypa: number | null
+  rush_td: number | null
+  rush_succ: number | null
+  tgt: number | null
+  rec: number | null
+  rec_yds: number | null
+  ctch_pct: number | null
+  rec_succ: number | null
+  pos: string
+}
+type Y1Data = { qb: QbSeason[]; wr: WrSeason[]; rb: RbSeason[] }
 type Projection = ReturnType<typeof project>
 type LoaderMessage = { tone: 'good' | 'warn'; text: string } | null
 type MobileTab = 'edit' | 'results' | 'board'
@@ -294,6 +313,7 @@ export default function App() {
   const [compareQuery, setCompareQuery] = useState('')
   const [qbSeasons, setQbSeasons] = useState<QbSeason[]>([])
   const [wrSeasons, setWrSeasons] = useState<WrSeason[]>([])
+  const [rbSeasons, setRbSeasons] = useState<RbSeason[]>([])
   const [boardView, setBoardView] = useState<'list' | 'grid'>('list')
   const [boardOrder, setBoardOrder] = useState<string[]>([])
   const [dragId, setDragId] = useState('')
@@ -309,7 +329,7 @@ export default function App() {
     setPage('compare')
     setModalPlayer(null)
   }
-  const y1Data = useMemo<Y1Data>(() => ({ qb: qbSeasons, wr: wrSeasons }), [qbSeasons, wrSeasons])
+  const y1Data = useMemo<Y1Data>(() => ({ qb: qbSeasons, wr: wrSeasons, rb: rbSeasons }), [qbSeasons, wrSeasons, rbSeasons])
   const projection = useMemo(() => project(input, prospects, pffProfiles, undefined, y1Data), [input, prospects, pffProfiles, y1Data])
   const draftBoard = useMemo(
     () => saved
@@ -379,7 +399,7 @@ export default function App() {
   useEffect(() => {
     async function load() {
       try {
-        const [combineCsv, draftCsv, pffPayload, extraData, consensusData, scoutData, injuryData, qbSeasonData, wrSeasonData] = await Promise.all([
+        const [combineCsv, draftCsv, pffPayload, extraData, consensusData, scoutData, injuryData, qbSeasonData, wrSeasonData, rbSeasonData] = await Promise.all([
           fetch(`${assetBase}data/combine.csv`).then((r) => r.text()),
           fetch(`${assetBase}data/draft_picks.csv`).then((r) => r.text()),
           loadPffPayload(),
@@ -389,6 +409,7 @@ export default function App() {
           fetch(`${assetBase}data/injury_flags_2025.json`).then((r) => r.json()).catch(() => null),
           fetch(`${assetBase}data/qb_seasons.json`).then((r) => r.json()).catch(() => null),
           fetch(`${assetBase}data/wr_seasons.json`).then((r) => r.json()).catch(() => null),
+          fetch(`${assetBase}data/rb_seasons.json`).then((r) => r.json()).catch(() => null),
         ])
         const allProspects = buildProspectPool(parseCsv(combineCsv), parseCsv(draftCsv))
         const extraProspects = buildExtraProspects(extraData)
@@ -405,6 +426,7 @@ export default function App() {
         if (injuryData?.flags?.length) setInjuryFlags(injuryData.flags)
         if (qbSeasonData?.records?.length) setQbSeasons(qbSeasonData.records)
         if (wrSeasonData?.records?.length) setWrSeasons(wrSeasonData.records)
+        if (rbSeasonData?.records?.length) setRbSeasons(rbSeasonData.records)
       } catch {
         setError('Data files are missing. Run npm run data:refresh, then reload.')
       } finally {
@@ -935,11 +957,13 @@ export default function App() {
                 <th>Player</th><th>Yr</th><th>Pos</th><th>Pick</th><th>40</th><th>AV</th><th>Arc</th><th>Career</th><th>Outcome</th><th>Sim</th>
                 {input.pos === 'QB' && <><th className="qbStatCol" title="Year 1 passer rating">Y1 Rtg</th><th className="qbStatCol" title="Year 1 adjusted net yards per attempt">Y1 ANY/A</th></>}
                 {input.pos === 'WR' && <><th className="qbStatCol" title="Year 1 receiving yards">Y1 Yds</th><th className="qbStatCol" title="Year 1 receptions">Y1 Rec</th></>}
+                {input.pos === 'RB' && <><th className="qbStatCol" title="Year 1 rushing yards">Y1 Yds</th><th className="qbStatCol" title="Year 1 yards per carry">Y1 YPC</th></>}
               </tr></thead>
               <tbody>{projection.comps.map((c) => {
                 const hr = schoolHitRate(c.player.school, prospects)
                 const qbY1 = input.pos === 'QB' ? qbSeasons.find((s) => s.key === clean(c.player.name) && s.season === c.player.year) : undefined
                 const wrY1 = input.pos === 'WR' ? wrSeasons.find((s) => s.key === clean(c.player.name) && s.season === c.player.year) : undefined
+                const rbY1 = input.pos === 'RB' ? rbSeasons.find((s) => s.key === clean(c.player.name) && s.season === c.player.year) : undefined
                 return <tr key={c.player.id}>
                   <td><b>{c.player.name}</b><small>{c.player.school}{hr ? <span className="schoolBadge">{Math.round(hr.rate * 100)}%</span> : null}</small></td>
                   <td>{c.player.year}</td>
@@ -959,6 +983,10 @@ export default function App() {
                     <td className="qbStatCell"><span className={wrYdsClass(wrY1?.yds ?? null)}>{wrY1 ? (wrY1.yds ?? '—') : '—'}</span></td>
                     <td className="qbStatCell"><span className={wrRecClass(wrY1?.rec ?? null)}>{wrY1 ? (wrY1.rec ?? '—') : '—'}</span></td>
                   </>}
+                  {input.pos === 'RB' && <>
+                    <td className="qbStatCell"><span className={rbRushYdsClass(rbY1?.rush_yds ?? null)}>{rbY1 ? (rbY1.rush_yds ?? '—') : '—'}</span></td>
+                    <td className="qbStatCell"><span className={rbYpcClass(rbY1?.rush_ypa ?? null)}>{rbY1 ? (rbY1.rush_ypa?.toFixed(1) ?? '—') : '—'}</span></td>
+                  </>}
                 </tr>
               })}</tbody>
             </table>
@@ -973,10 +1001,12 @@ export default function App() {
                 <th>Player</th><th>Class</th><th>Pos</th><th>PFF</th><th>Pick</th><th>AV</th><th>Outcome</th><th>Sim</th>
                 {input.pos === 'QB' && <><th className="qbStatCol" title="Year 1 passer rating">Y1 Rtg</th><th className="qbStatCol" title="Year 1 adjusted net yards per attempt">Y1 ANY/A</th></>}
                 {input.pos === 'WR' && <><th className="qbStatCol" title="Year 1 receiving yards">Y1 Yds</th><th className="qbStatCol" title="Year 1 receptions">Y1 Rec</th></>}
+                {input.pos === 'RB' && <><th className="qbStatCol" title="Year 1 rushing yards">Y1 Yds</th><th className="qbStatCol" title="Year 1 yards per carry">Y1 YPC</th></>}
               </tr></thead>
               <tbody>{projection.pffComps.map((c) => {
                 const qbY1 = input.pos === 'QB' ? qbSeasons.find((s) => s.key === clean(c.profile.name) && s.season === c.profile.draftSeason) : undefined
                 const wrY1 = input.pos === 'WR' ? wrSeasons.find((s) => s.key === clean(c.profile.name) && s.season === c.profile.draftSeason) : undefined
+                const rbY1 = input.pos === 'RB' ? rbSeasons.find((s) => s.key === clean(c.profile.name) && s.season === c.profile.draftSeason) : undefined
                 return <tr key={c.profile.id}>
                   <td><b>{c.profile.name}</b><small>{c.profile.college}</small></td>
                   <td>{c.profile.draftSeason}</td>
@@ -993,6 +1023,10 @@ export default function App() {
                   {input.pos === 'WR' && <>
                     <td className="qbStatCell"><span className={wrYdsClass(wrY1?.yds ?? null)}>{wrY1 ? (wrY1.yds ?? '—') : '—'}</span></td>
                     <td className="qbStatCell"><span className={wrRecClass(wrY1?.rec ?? null)}>{wrY1 ? (wrY1.rec ?? '—') : '—'}</span></td>
+                  </>}
+                  {input.pos === 'RB' && <>
+                    <td className="qbStatCell"><span className={rbRushYdsClass(rbY1?.rush_yds ?? null)}>{rbY1 ? (rbY1.rush_yds ?? '—') : '—'}</span></td>
+                    <td className="qbStatCell"><span className={rbYpcClass(rbY1?.rush_ypa ?? null)}>{rbY1 ? (rbY1.rush_ypa?.toFixed(1) ?? '—') : '—'}</span></td>
                   </>}
                 </tr>
               })}</tbody>
@@ -2354,6 +2388,7 @@ function project(input: Prospect, history: Historical[], pffProfiles: PffProfile
   const y1Coverage = y1Data ? top10.filter((c) => {
     if (c.player.pos === 'QB') return y1Data.qb.some((s) => s.key === clean(c.player.name) && s.season === c.player.year)
     if (c.player.pos === 'WR') return y1Data.wr.some((s) => s.key === clean(c.player.name) && s.season === c.player.year)
+    if (c.player.pos === 'RB') return y1Data.rb.some((s) => s.key === clean(c.player.name) && s.season === c.player.year)
     return false
   }).length : 0
 
@@ -2388,14 +2423,20 @@ function y1SimFactor(player: Historical, y1Data: Y1Data): number {
   if (player.pos === 'QB') {
     const s = y1Data.qb.find((r) => r.key === clean(player.name) && r.season === player.year)
     if (s?.rtg != null) {
-      // Smooth ramp: rtg 100 ≈ 1.0, rtg 115+ → 1.12, rtg 72 → 0.88
+      // rtg 100 ≈ 1.0, rtg 115+ → 1.12, rtg 72 → 0.88
       return clamp(0.5 + (s.rtg / 100) * 0.7, 0.88, 1.12)
     }
   } else if (player.pos === 'WR') {
     const s = y1Data.wr.find((r) => r.key === clean(player.name) && r.season === player.year)
     if (s?.yds != null) {
-      // Smooth ramp: 1000 yds ≈ 1.0, 1500+ → 1.12, 300 → 0.88
+      // 1000 rec yds ≈ 1.0, 1500+ → 1.12, 300 → 0.88
       return clamp(0.84 + (s.yds / 1000) * 0.17, 0.88, 1.12)
+    }
+  } else if (player.pos === 'RB') {
+    const s = y1Data.rb.find((r) => r.key === clean(player.name) && r.season === player.year)
+    if (s?.rush_yds != null) {
+      // 900 rush yds ≈ 1.0, 1350+ → 1.12, 400 → 0.88
+      return clamp(0.5 + (s.rush_yds / 900) * 0.5, 0.88, 1.12)
     }
   }
   return 1.0
@@ -2696,6 +2737,22 @@ function wrRecClass(v: number | null): string {
   if (v >= 80) return 'qbStatGood'
   if (v >= 55) return 'qbStatOk'
   if (v < 35) return 'qbStatBad'
+  return ''
+}
+
+function rbRushYdsClass(v: number | null): string {
+  if (v === null) return ''
+  if (v >= 1000) return 'qbStatGood'
+  if (v >= 600) return 'qbStatOk'
+  if (v < 350) return 'qbStatBad'
+  return ''
+}
+
+function rbYpcClass(v: number | null): string {
+  if (v === null) return ''
+  if (v >= 4.8) return 'qbStatGood'
+  if (v >= 4.0) return 'qbStatOk'
+  if (v < 3.5) return 'qbStatBad'
   return ''
 }
 
