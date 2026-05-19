@@ -171,10 +171,18 @@ type CareerSeasonStat = {
   rec_yds?: number
 }
 type CareerStatMap = Record<string, CareerSeasonStat[]>
+type ProspectRawStats = {
+  season: number; games: number; dropbacks: number; att: number
+  ypa: number | null; cmp_pct: number | null; btt_rate: number | null; twp_rate: number | null
+  grades_offense: number | null; grades_pass: number | null
+  accuracy_percent: number | null; positive_epa_percent: number | null
+  yards: number; tds: number; ints: number
+}
+type ProspectQB = Prospect & { rawStats: ProspectRawStats; priorStats: ProspectRawStats | null }
 type Projection = ReturnType<typeof project>
 type LoaderMessage = { tone: 'good' | 'warn'; text: string } | null
 type MobileTab = 'edit' | 'results' | 'board'
-type Page = 'workbench' | 'class' | 'players' | 'compare' | 'trade' | 'rankings' | 'guide'
+type Page = 'workbench' | 'class' | 'players' | 'compare' | 'trade' | 'rankings' | 'guide' | 'prospects'
 type BrowserSortKey = 'av' | 'games' | 'starts' | 'pb' | 'ap' | 'pick' | 'name' | 'outcome' | 'year' | 'forty'
 type ModelSignal = 'draftScore' | 'logPick' | 'pffComp' | 'pffGrade' | 'pffProd' | 'pffEff' | 'pffClean' | 'ageScore' | 'athletic' | 'size' | 'isQB' | 'isSkill' | 'isOL' | 'isFront' | 'isDB'
 type SortKey = 'av' | 'projAv' | 'projScore' | 'games' | 'starts' | 'pb' | 'ap' | 'pick' | 'name' | 'outcome'
@@ -347,6 +355,7 @@ export default function App() {
   const [wrSeasons, setWrSeasons] = useState<WrSeason[]>([])
   const [rbSeasons, setRbSeasons] = useState<RbSeason[]>([])
   const [careerStats, setCareerStats] = useState<CareerStatMap>({})
+  const [prospectsQb2027, setProspectsQb2027] = useState<ProspectQB[]>([])
   const [boardView, setBoardView] = useState<'list' | 'grid'>('list')
   const [boardOrder, setBoardOrder] = useState<string[]>([])
   const [dragId, setDragId] = useState('')
@@ -413,7 +422,7 @@ export default function App() {
 
   useEffect(() => {
     if (typeof window === 'undefined') return
-    const hashMap: Partial<Record<Page, string>> = { class: '#class', players: '#players', compare: '#compare', trade: '#trade', guide: '#guide' }
+    const hashMap: Partial<Record<Page, string>> = { class: '#class', players: '#players', compare: '#compare', trade: '#trade', guide: '#guide', prospects: '#prospects' }
     const target = hashMap[page] ?? ''
     if (window.location.hash !== target) {
       const url = target || `${window.location.pathname}${window.location.search}`
@@ -433,7 +442,7 @@ export default function App() {
   useEffect(() => {
     async function load() {
       try {
-        const [combineCsv, draftCsv, pffPayload, extraData, consensusData, scoutData, injuryData, qbSeasonData, wrSeasonData, rbSeasonData, careerStatsData] = await Promise.all([
+        const [combineCsv, draftCsv, pffPayload, extraData, consensusData, scoutData, injuryData, qbSeasonData, wrSeasonData, rbSeasonData, careerStatsData, prospectsQbData] = await Promise.all([
           fetch(`${assetBase}data/combine.csv`).then((r) => r.text()),
           fetch(`${assetBase}data/draft_picks.csv`).then((r) => r.text()),
           loadPffPayload(),
@@ -445,6 +454,7 @@ export default function App() {
           fetch(`${assetBase}data/wr_seasons.json`).then((r) => r.json()).catch(() => null),
           fetch(`${assetBase}data/rb_seasons.json`).then((r) => r.json()).catch(() => null),
           fetch(`${assetBase}data/career_stats.json`).then((r) => r.json()).catch(() => null),
+          fetch(`${assetBase}data/prospects_2027_qb.json`).then((r) => r.json()).catch(() => null),
         ])
         const allProspects = buildProspectPool(parseCsv(combineCsv), parseCsv(draftCsv))
         const extraProspects = buildExtraProspects(extraData)
@@ -463,6 +473,7 @@ export default function App() {
         if (wrSeasonData?.records?.length) setWrSeasons(wrSeasonData.records)
         if (rbSeasonData?.records?.length) setRbSeasons(rbSeasonData.records)
         if (careerStatsData && typeof careerStatsData === 'object') setCareerStats(careerStatsData as CareerStatMap)
+        if (Array.isArray(prospectsQbData) && prospectsQbData.length) setProspectsQb2027(prospectsQbData as ProspectQB[])
       } catch {
         setError('Data files are missing. Run npm run data:refresh, then reload.')
       } finally {
@@ -659,6 +670,18 @@ export default function App() {
     setMessage({ tone: 'good', text: 'New prospect is ready.' })
   }
 
+  function loadProspect2027(p: ProspectQB) {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { rawStats, priorStats, ...prospect } = p
+    setInput(prospect)
+    setSelectedSavedId('')
+    setNotes('')
+    setLookupQuery('')
+    setPffQuery('')
+    setPage('workbench')
+    setMessage({ tone: 'good', text: `Loaded ${p.name} (2027 QB prospect).` })
+  }
+
   function exportSavedProspects() {
     if (!saved.length) {
       setMessage({ tone: 'warn', text: 'There are no saved prospects to export yet.' })
@@ -732,6 +755,7 @@ export default function App() {
         <button type="button" className={page === 'rankings' ? 'on' : ''} onClick={() => setPage('rankings')}>Rankings</button>
         <button type="button" className={page === 'compare' ? 'on' : ''} onClick={() => setPage('compare')}>Compare</button>
         <button type="button" className={page === 'trade' ? 'on' : ''} onClick={() => setPage('trade')}>Trade</button>
+        <button type="button" className={`${page === 'prospects' ? 'on' : ''} prospectsNavBtn`} onClick={() => setPage('prospects')}>2027 QBs</button>
         <button type="button" className={page === 'guide' ? 'on' : ''} onClick={() => setPage('guide')}>Guide</button>
       </nav>
 
@@ -754,6 +778,8 @@ export default function App() {
       <RankingsPage history={prospects} onOpenModal={openModal} onCompare={handleCompare} />
     </div> : page === 'guide' ? <div className="classPage">
       <GuideView />
+    </div> : page === 'prospects' ? <div className="classPage">
+      <ProspectsView prospects2027={prospectsQb2027} history={prospects} pffProfiles={pffProfiles} careerStats={careerStats} onLoad={loadProspect2027} />
     </div> : <div className="layout">
       <aside className="controlPanel" data-pane="edit">
         <section className="panel loadPanel">
@@ -1137,6 +1163,9 @@ export default function App() {
       </button>
       <button type="button" className={page === 'trade' ? 'on' : ''} onClick={() => setPage('trade')}>
         <span className="bottomNavIcon">⇋</span>Trade
+      </button>
+      <button type="button" className={page === 'prospects' ? 'on' : ''} onClick={() => setPage('prospects')}>
+        <span className="bottomNavIcon">◈</span>2027 QBs
       </button>
       <button type="button" className={page === 'guide' ? 'on' : ''} onClick={() => setPage('guide')}>
         <span className="bottomNavIcon">?</span>Guide
@@ -2166,9 +2195,160 @@ function compareHistorical(a: Historical, b: Historical, key: SortKey, projectio
   }
 }
 
+function prospectScoreClass(score: number): string {
+  if (score >= 72) return 'pScoreHigh'
+  if (score >= 58) return 'pScoreMid'
+  return 'pScoreLow'
+}
+
+function ProspectsView({
+  prospects2027, history, pffProfiles, careerStats, onLoad,
+}: {
+  prospects2027: ProspectQB[]
+  history: Historical[]
+  pffProfiles: PffProfile[]
+  careerStats: CareerStatMap
+  onLoad: (p: ProspectQB) => void
+}) {
+  const [nameFilter, setNameFilter] = useState('')
+  const [minGrade, setMinGrade] = useState(0)
+  const [sortBy, setSortBy] = useState<'score' | 'pff' | 'pick'>('score')
+
+  const ranked = useMemo(() => {
+    if (!history.length) return []
+    return prospects2027.map((p) => ({
+      prospect: p,
+      proj: project(p, history, pffProfiles, undefined, undefined, careerStats),
+    }))
+  }, [prospects2027, history, pffProfiles, careerStats])
+
+  const sorted = useMemo(() => {
+    const base = [...ranked]
+    if (sortBy === 'pff') base.sort((a, b) => b.prospect.pffComposite - a.prospect.pffComposite)
+    else if (sortBy === 'pick') base.sort((a, b) => a.prospect.pick - b.prospect.pick)
+    else base.sort((a, b) => b.proj.score - a.proj.score)
+    return base
+  }, [ranked, sortBy])
+
+  const filtered = useMemo(() => {
+    const q = nameFilter.trim().toLowerCase()
+    return sorted.filter((r) => {
+      if (minGrade > 0 && r.prospect.pffComposite < minGrade) return false
+      if (q && !r.prospect.name.toLowerCase().includes(q) && !r.prospect.school.toLowerCase().includes(q)) return false
+      return true
+    })
+  }, [sorted, nameFilter, minGrade])
+
+  if (!history.length) {
+    return <div className="panel empty"><p>Loading model data…</p></div>
+  }
+
+  if (!prospects2027.length) {
+    return <div className="panel empty"><p>No 2027 QB prospect data loaded.</p></div>
+  }
+
+  return (
+    <div className="prospectsPage">
+      <div className="prospectsPageHeader">
+        <div>
+          <h2>2027 QB Prospects</h2>
+          <p className="prospectsPageSub">
+            {filtered.length} of {ranked.length} QBs · 2025 college season · PFF grades →
+            projected NFL career score via historical comp model
+          </p>
+        </div>
+        <div className="prospectsFilters">
+          <input
+            className="prospectsSearch"
+            placeholder="Filter by name or school"
+            value={nameFilter}
+            onChange={(e) => setNameFilter(e.target.value)}
+          />
+          <select value={minGrade} onChange={(e) => setMinGrade(Number(e.target.value))}>
+            <option value={0}>All grades</option>
+            <option value={80}>80+ PFF grade</option>
+            <option value={85}>85+ PFF grade</option>
+            <option value={90}>90+ PFF grade</option>
+          </select>
+          <select value={sortBy} onChange={(e) => setSortBy(e.target.value as typeof sortBy)}>
+            <option value="score">Sort: Proj score</option>
+            <option value="pff">Sort: PFF grade</option>
+            <option value="pick">Sort: Est. pick</option>
+          </select>
+        </div>
+      </div>
+
+      <div className="prospectsNote">
+        <strong>Methodology:</strong> Scores are forward projections — each QB's college PFF signals (grade,
+        BTT%, YPA, accuracy, TWP%) are mapped to the same model inputs used for NFL draft prospects and matched
+        against {history.filter((p) => p.pos === 'QB').length} historical QBs drafted 2000–2021. Athletic
+        measurables use QB positional averages (no combine data yet). Pick estimates derive from PFF offense grade.
+      </div>
+
+      <div className="prospectsTable">
+        <div className="prospectsTableHead">
+          <span>#</span>
+          <span>Name</span>
+          <span>School</span>
+          <span className="pColNum">Est Pick</span>
+          <span className="pColNum">Score</span>
+          <span>Grade</span>
+          <span className="pColNum">Proj AV</span>
+          <span className="pColNum">PFF Off</span>
+          <span className="pColNum">BTT%</span>
+          <span className="pColNum">YPA</span>
+          <span className="pColNum">Cmp%</span>
+          <span className="pColNum">TWP%</span>
+          <span></span>
+        </div>
+        {filtered.map((r, i) => {
+          const p = r.prospect
+          const proj = r.proj
+          const rs = p.rawStats
+          const twpClass = rs.twp_rate != null
+            ? rs.twp_rate <= 2.5 ? 'epaHigh' : rs.twp_rate >= 4.0 ? 'epaLow' : ''
+            : ''
+          const topComp = proj.comps[0]
+          return (
+            <div key={p.name + p.school} className="prospectsTableRow">
+              <span className="pRank">{i + 1}</span>
+              <span className="pName">
+                <span className="pNameText">{p.name}</span>
+                {topComp && (
+                  <span className="pCompHint">
+                    comp: {topComp.player.name} ({topComp.player.year})
+                  </span>
+                )}
+              </span>
+              <span className="pSchool">{p.school}</span>
+              <span className={`pColNum ${pickBandClass(p.pick)}`}>{p.pick}</span>
+              <span className={`pColNum pScore ${prospectScoreClass(proj.score)}`}>
+                {Math.round(proj.score)}
+                <span className="pScoreRange">{Math.round(proj.scoreLow)}–{Math.round(proj.scoreHigh)}</span>
+              </span>
+              <span className="pGrade">{proj.grade}</span>
+              <span className="pColNum">{proj.expectedAv.toFixed(1)}</span>
+              <span className="pColNum pPffGrade">{rs.grades_offense?.toFixed(1) ?? '—'}</span>
+              <span className="pColNum">{rs.btt_rate?.toFixed(1) ?? '—'}</span>
+              <span className="pColNum">{rs.ypa?.toFixed(1) ?? '—'}</span>
+              <span className="pColNum">{rs.cmp_pct?.toFixed(1) ?? '—'}</span>
+              <span className={`pColNum ${twpClass}`}>{rs.twp_rate?.toFixed(1) ?? '—'}</span>
+              <span className="pActions">
+                <button type="button" className="secondary smallButton" onClick={() => onLoad(p)}>
+                  Load
+                </button>
+              </span>
+            </div>
+          )
+        })}
+      </div>
+    </div>
+  )
+}
+
 function readPageFromHash(): Page {
   if (typeof window === 'undefined') return 'workbench'
-  const map: Record<string, Page> = { '#class': 'class', '#players': 'players', '#compare': 'compare', '#trade': 'trade', '#guide': 'guide' }
+  const map: Record<string, Page> = { '#class': 'class', '#players': 'players', '#compare': 'compare', '#trade': 'trade', '#guide': 'guide', '#prospects': 'prospects' }
   return map[window.location.hash] ?? 'workbench'
 }
 

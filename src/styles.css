@@ -2132,3 +2132,131 @@ td small {
 .epaHigh { color: var(--green); font-weight: 600; }
 .epaMid  { color: var(--amber); }
 .epaLow  { color: var(--red); }
+
+/* ═══════ 2027 QB PROSPECTS VIEW ═══════ */
+
+.prospectsNavBtn { color: var(--amber) !important; }
+.prospectsNavBtn.on { color: var(--amber) !important; border-bottom-color: var(--amber) !important; }
+
+.prospectsPage {
+  padding: 24px 32px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.prospectsPageHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+.prospectsPageHeader h2 { font-size: 22px; font-weight: 700; margin: 0 0 4px; }
+.prospectsPageSub { color: var(--text-1); font-size: 13px; margin: 0; }
+
+.prospectsFilters {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.prospectsSearch { width: 220px; }
+.prospectsFilters select, .prospectsSearch {
+  background: var(--bg-2);
+  border: 1px solid var(--border-hi);
+  border-radius: 6px;
+  color: var(--text-0);
+  padding: 6px 10px;
+  font-size: 13px;
+}
+
+.prospectsNote {
+  background: var(--bg-2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 12px;
+  color: var(--text-1);
+  margin-bottom: 18px;
+  line-height: 1.55;
+}
+.prospectsNote strong { color: var(--text-0); }
+
+.prospectsTable {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+  font-size: 12.5px;
+}
+
+.prospectsTableHead,
+.prospectsTableRow {
+  display: grid;
+  grid-template-columns: 32px 200px 120px 72px 80px 90px 60px 60px 52px 52px 52px 52px 64px;
+  align-items: center;
+  gap: 0;
+}
+
+.prospectsTableHead {
+  background: var(--bg-2);
+  color: var(--text-2);
+  text-transform: uppercase;
+  font-size: 10px;
+  letter-spacing: .06em;
+  padding: 7px 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+.prospectsTableRow {
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--border);
+  color: var(--text-1);
+  font-variant-numeric: tabular-nums;
+  transition: background .12s;
+}
+.prospectsTableRow:last-child { border-bottom: 0; }
+.prospectsTableRow:nth-child(even) { background: rgba(255,255,255,.015); }
+.prospectsTableRow:hover { background: rgba(59,130,246,.07); }
+
+.pRank { color: var(--text-2); font-size: 11px; }
+
+.pName { display: flex; flex-direction: column; gap: 1px; }
+.pNameText { font-weight: 600; color: var(--text-0); font-size: 13px; }
+.pCompHint { color: var(--text-2); font-size: 10px; }
+
+.pSchool { color: var(--text-1); font-size: 12px; }
+
+.pColNum { text-align: right; }
+
+.pScore { display: flex; flex-direction: column; align-items: flex-end; gap: 1px; }
+.pScoreRange { font-size: 9.5px; color: var(--text-2); }
+
+.pScoreHigh { color: var(--green); font-weight: 700; }
+.pScoreMid  { color: var(--amber); font-weight: 600; }
+.pScoreLow  { color: var(--text-1); }
+
+.pGrade { font-size: 11px; color: var(--text-1); }
+.pPffGrade { font-weight: 600; color: var(--text-0); }
+
+.pActions { display: flex; justify-content: flex-end; }
+
+@media (max-width: 1100px) {
+  .prospectsPage { padding: 16px; }
+  .prospectsTableHead,
+  .prospectsTableRow {
+    grid-template-columns: 28px 160px 100px 60px 72px 80px 50px 52px 44px 44px 44px 44px 58px;
+    font-size: 11.5px;
+  }
+}
+
+@media (max-width: 800px) {
+  .prospectsTableHead,
+  .prospectsTableRow {
+    grid-template-columns: 24px 1fr 90px 60px 70px 78px 48px;
+  }
+  /* Hide less-critical columns on small screens */
+  .prospectsTableHead span:nth-child(n+8),
+  .prospectsTableRow span:nth-child(n+8) { display: none; }
+  .prospectsTableRow span:last-child { display: flex; }
+}
