@@ -1821,7 +1821,7 @@ function PlayerModal({ player, history, pffProfiles, careerStats, onClose, onCom
           </div>
           <div className="modalHeaderRight">
             {isEarly ? <span className="sampleTag">Early</span> : <OutcomeTag category={player.category} />}
-            {!isEarly && outcomeFlag && <FlagBadge flag={outcomeFlag} />}
+            {outcomeFlag && <FlagBadge flag={outcomeFlag} />}
             <button type="button" className="modalClose" onClick={onClose}>✕</button>
           </div>
         </div>
@@ -2261,7 +2261,7 @@ function ClassExplorer({ pool, history, pffProfiles, y1Data, careerStats, histFl
             const projected = projections.get(player.id)
             const showEarlySample = player.year > matureOutcomeCutoff
             const score = projected ? Math.round(projected.score) : 0
-            const outcomeFlag = !showEarlySample ? (histFlagMap.get(player.id) ?? null) : null
+            const outcomeFlag = histFlagMap.get(player.id) ?? null
             const pffProfile = pffMap.get(player.id) ?? null
             const isExpanded = expandedId === player.id
             const canExpand = pffProfile !== null || outcomeFlag !== null
