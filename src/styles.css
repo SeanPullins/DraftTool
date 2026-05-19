@@ -1381,8 +1381,35 @@ td small {
   margin: 0 0 4px;
 }
 
-/* ── Compare button in hero ──────────────────────── */
-.compareBtn { margin-top: 10px; font-size: 11px; padding: 5px 14px; }
+/* ── Hero action buttons ─────────────────────────── */
+.heroActions { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
+.heroActions button { font-size: 11px; padding: 5px 14px; }
+
+/* ── Score delta badge ───────────────────────────── */
+.scoreDelta {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  font-size: 10px;
+  font-weight: 800;
+  padding: 2px 5px;
+  border-radius: 10px;
+  line-height: 1.2;
+  letter-spacing: .02em;
+}
+.deltaUp   { background: rgba(16,185,129,.18); color: #10b981; border: 1px solid rgba(16,185,129,.3); }
+.deltaDown { background: rgba(239,68,68,.18);  color: #ef4444; border: 1px solid rgba(239,68,68,.3); }
+
+/* ── Comp table hover + sim color ───────────────── */
+.compRow:hover td { background: rgba(255,255,255,.03); }
+.simHigh { color: #10b981; font-weight: 700; }
+.simMid  { color: var(--text-0); }
+.simLow  { color: var(--text-2); }
+.compCmpBtn { opacity: 0; transition: opacity .15s; padding: 2px 7px; font-size: 11px; }
+.compRow:hover .compCmpBtn { opacity: 1; }
+
+/* ── Rankings page card actions ─────────────────── */
+.rankCardActions { display: flex; gap: 8px; margin-top: 8px; }
 
 /* ── Scout note box ──────────────────────────────── */
 .scoutNoteBox {
