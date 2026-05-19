@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState, type ChangeEvent, type CSSProperties, type ReactNode } from 'react'
+import { useDeferredValue, useEffect, useMemo, useRef, useState, type ChangeEvent, type CSSProperties, type ReactNode } from 'react'
 
 type Row = Record<string, string>
 type Category = 'Bust' | 'Reserve' | 'Role' | 'Starter' | 'High-end starter' | 'Star'
@@ -1757,6 +1757,9 @@ function ClassExplorer({ pool, history, pffProfiles, y1Data, currentName, curren
   const [sortKey, setSortKey] = useState<SortKey>('projAv')
   const [sortDir, setSortDir] = useState<SortDir>('desc')
 
+  // Persistent cache: avoids recomputing the same player on year revisits
+  const projCache = useRef(new Map<string, { av: number; score: number }>())
+
   useEffect(() => {
     if (!years.length) return
     if (year === null || !years.includes(year)) {
@@ -1771,17 +1774,30 @@ function ClassExplorer({ pool, history, pffProfiles, y1Data, currentName, curren
   }, [pool, year, pos])
 
   const useProjections = year !== null && year >= 2018 && history.length > 0
+
+  // deferredFiltered drives the expensive computation — filtered drives the visible list.
+  // The player rows appear immediately; projections fill in after the deferred pass.
+  const deferredFiltered = useDeferredValue(filtered)
+  const isPending = useProjections && deferredFiltered !== filtered
+
   const projections = useMemo(() => {
     const out = new Map<string, { av: number; score: number }>()
     if (!useProjections) return out
-    for (const player of filtered) {
+    // Cache key encodes inputs that affect projection output
+    const inputSig = `${history.length}|${pffProfiles.length}|${y1Data?.qb.length ?? 0}|${y1Data?.wr.length ?? 0}|${y1Data?.rb.length ?? 0}`
+    for (const player of deferredFiltered) {
+      const cacheKey = `${player.id}|${inputSig}`
+      const cached = projCache.current.get(cacheKey)
+      if (cached) { out.set(player.id, cached); continue }
       const pffMatch = pffProfiles.find((profile) => samePlayerSeason(profile, player.name, player.year, player.pos))
       const synthesized = prospectFromHistorical(player, pffMatch)
       const projected = project(synthesized, history, pffProfiles, player.id, y1Data)
-      out.set(player.id, { av: projected.expectedAv, score: projected.score })
+      const result = { av: projected.expectedAv, score: projected.score }
+      projCache.current.set(cacheKey, result)
+      out.set(player.id, result)
     }
     return out
-  }, [filtered, history, pffProfiles, useProjections])
+  }, [deferredFiltered, history, pffProfiles, useProjections, y1Data])
 
   const effectiveSortKey = !useProjections && (sortKey === 'projAv' || sortKey === 'projScore') ? 'av' : sortKey
   const rows = useMemo(() => {
@@ -1811,7 +1827,7 @@ function ClassExplorer({ pool, history, pffProfiles, y1Data, currentName, curren
         <p>Draft Class</p>
         <h2>Class Rankings</h2>
       </div>
-      <strong>{rows.length} players</strong>
+      <strong style={{ opacity: isPending ? 0.5 : 1 }}>{rows.length} players{isPending ? ' …' : ''}</strong>
     </div>
     <div className="classControls">
       <label className="field"><span>Year</span>
