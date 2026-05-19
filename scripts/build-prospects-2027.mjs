@@ -74,6 +74,22 @@ function buildProspect(row2025, row2024) {
   const games = num(row, 'player_game_count') ?? 12
   const tds = num(row, 'touchdowns') ?? 0
 
+  // 2024→2025 trajectory: grade delta drives optimism/pessimism for 2026 season
+  const priorGrade = row2024 ? num(row2024, 'grades_offense') : null
+  const priorDropbacks = row2024 ? (num(row2024, 'dropbacks') ?? 0) : 0
+  // Only use trajectory when prior sample is meaningful (≥80 dropbacks in 2024)
+  const gradeDelta = (priorGrade != null && priorDropbacks >= 80)
+    ? Math.round((gradesOff - priorGrade) * 10) / 10
+    : null
+  const trajectoryLabel = gradeDelta == null ? 'unknown'
+    : gradeDelta >= 8 ? 'rising'
+    : gradeDelta <= -8 ? 'declining'
+    : 'stable'
+
+  // Trajectory boost: players on an upward arc project better into their 2026 season
+  // Rising +8 pts grade → +~5 on film/production. Declining -8 → −5. Capped at ±8.
+  const tBoost = gradeDelta != null ? clamp(gradeDelta * 0.55, -8, 8) : 0
+
   // Map PFF college grades → model PFF signals (1–99 scale)
   const pffComposite = clamp(Math.round(gradesOff), 45, 99)
   const pffGrade = clamp(Math.round(gradesPass), 45, 99)
@@ -81,10 +97,10 @@ function buildProspect(row2025, row2024) {
   const pffEfficiency = clamp(Math.round((accuracyPct - 60) * 2.8 + (posEpaPct - 35) * 1.8), 25, 97)
   const pffClean = clamp(Math.round(100 - twpRate * 12), 20, 97)
 
-  // Scouting signals
-  const film = clamp(Math.round(gradesOff * 0.9), 40, 95)
+  // Scouting signals — trajectory-adjusted for projected 2026 season arc
+  const film = clamp(Math.round(gradesOff * 0.9 + tBoost * 0.7), 40, 95)
   const tdsPer12 = games > 0 ? (tds / games) * 12 : 0
-  const production = clamp(Math.round(50 + (ypa - 7.0) * 5 + (cmpPct - 62) * 0.4 + tdsPer12 * 1.5), 40, 95)
+  const production = clamp(Math.round(50 + (ypa - 7.0) * 5 + (cmpPct - 62) * 0.4 + tdsPer12 * 1.5 + tBoost * 0.5), 40, 95)
   const processing = clamp(Math.round(90 - (attToThrow - 2.3) * 18), 40, 92)
 
   const pick = gradesToPick(gradesOff)
@@ -96,14 +112,9 @@ function buildProspect(row2025, row2024) {
     draftSeason: 2027,
     pick,
     age: 21.5,
-    height: 75,
-    weight: 220,
-    forty: 4.75,
-    vertical: 32,
-    broad: 112,
-    cone: 7.15,
-    shuttle: 4.35,
-    bench: 0,
+    // QB positional averages — no combine data until after 2026 season
+    height: 75, weight: 220, forty: 4.75, vertical: 32,
+    broad: 112, cone: 7.15, shuttle: 4.35, bench: 0,
     film,
     production,
     fit: 72,
@@ -116,8 +127,8 @@ function buildProspect(row2025, row2024) {
     pffEfficiency,
     pffClean,
     schemeTag: '',
+    trajectory: { gradeDelta, label: trajectoryLabel },
     rawStats: { season: 2025, ...extractStats(row) },
-    // Prior year context if available (same player played in 2024 too)
     priorStats: row2024 ? { season: 2024, ...extractStats(row2024) } : null,
   }
 }

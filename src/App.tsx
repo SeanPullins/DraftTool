@@ -178,7 +178,8 @@ type ProspectRawStats = {
   accuracy_percent: number | null; positive_epa_percent: number | null
   yards: number; tds: number; ints: number
 }
-type ProspectQB = Prospect & { rawStats: ProspectRawStats; priorStats: ProspectRawStats | null }
+type ProspectTrajectory = { gradeDelta: number | null; label: 'rising' | 'stable' | 'declining' | 'unknown' }
+type ProspectQB = Prospect & { rawStats: ProspectRawStats; priorStats: ProspectRawStats | null; trajectory: ProspectTrajectory }
 type Projection = ReturnType<typeof project>
 type LoaderMessage = { tone: 'good' | 'warn'; text: string } | null
 type MobileTab = 'edit' | 'results' | 'board'
@@ -685,7 +686,7 @@ export default function App() {
 
   function loadProspect2027(p: ProspectQB) {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { rawStats, priorStats, ...prospect } = p
+    const { rawStats, priorStats, trajectory, ...prospect } = p
     setInput(prospect)
     setSelectedSavedId('')
     setNotes('')
@@ -2214,6 +2215,13 @@ function prospectScoreClass(score: number): string {
   return 'pScoreLow'
 }
 
+function trajectoryDisplay(t: ProspectTrajectory): { icon: string; label: string; cls: string } {
+  if (t.label === 'rising')   return { icon: '↑', label: t.gradeDelta != null ? `+${t.gradeDelta.toFixed(1)}` : '↑', cls: 'tRising' }
+  if (t.label === 'declining') return { icon: '↓', label: t.gradeDelta != null ? `${t.gradeDelta.toFixed(1)}` : '↓', cls: 'tDeclining' }
+  if (t.label === 'stable')   return { icon: '→', label: t.gradeDelta != null ? (t.gradeDelta >= 0 ? `+${t.gradeDelta.toFixed(1)}` : `${t.gradeDelta.toFixed(1)}`) : '→', cls: 'tStable' }
+  return { icon: '–', label: '1 yr', cls: 'tUnknown' }
+}
+
 function ProspectsView({
   prospects2027, history, pffProfiles, careerStats, onLoad,
 }: {
@@ -2225,7 +2233,8 @@ function ProspectsView({
 }) {
   const [nameFilter, setNameFilter] = useState('')
   const [minGrade, setMinGrade] = useState(0)
-  const [sortBy, setSortBy] = useState<'score' | 'pff' | 'pick'>('score')
+  const [sortBy, setSortBy] = useState<'score' | 'pff' | 'pick' | 'trend'>('score')
+  const [trendFilter, setTrendFilter] = useState<'all' | 'rising' | 'stable' | 'declining'>('all')
 
   const ranked = useMemo(() => {
     if (!history.length) return []
@@ -2237,8 +2246,9 @@ function ProspectsView({
 
   const sorted = useMemo(() => {
     const base = [...ranked]
-    if (sortBy === 'pff') base.sort((a, b) => b.prospect.pffComposite - a.prospect.pffComposite)
-    else if (sortBy === 'pick') base.sort((a, b) => a.prospect.pick - b.prospect.pick)
+    if (sortBy === 'pff')   base.sort((a, b) => b.prospect.pffComposite - a.prospect.pffComposite)
+    else if (sortBy === 'pick')  base.sort((a, b) => a.prospect.pick - b.prospect.pick)
+    else if (sortBy === 'trend') base.sort((a, b) => (b.prospect.trajectory.gradeDelta ?? -999) - (a.prospect.trajectory.gradeDelta ?? -999))
     else base.sort((a, b) => b.proj.score - a.proj.score)
     return base
   }, [ranked, sortBy])
@@ -2247,18 +2257,16 @@ function ProspectsView({
     const q = nameFilter.trim().toLowerCase()
     return sorted.filter((r) => {
       if (minGrade > 0 && r.prospect.pffComposite < minGrade) return false
+      if (trendFilter !== 'all' && r.prospect.trajectory.label !== trendFilter) return false
       if (q && !r.prospect.name.toLowerCase().includes(q) && !r.prospect.school.toLowerCase().includes(q)) return false
       return true
     })
-  }, [sorted, nameFilter, minGrade])
+  }, [sorted, nameFilter, minGrade, trendFilter])
 
-  if (!history.length) {
-    return <div className="panel empty"><p>Loading model data…</p></div>
-  }
+  if (!history.length) return <div className="panel empty"><p>Loading model data…</p></div>
+  if (!prospects2027.length) return <div className="panel empty"><p>No 2027 QB prospect data loaded.</p></div>
 
-  if (!prospects2027.length) {
-    return <div className="panel empty"><p>No 2027 QB prospect data loaded.</p></div>
-  }
+  const qbHistCount = history.filter((p) => p.pos === 'QB').length
 
   return (
     <div className="prospectsPage">
@@ -2266,8 +2274,7 @@ function ProspectsView({
         <div>
           <h2>2027 QB Prospects</h2>
           <p className="prospectsPageSub">
-            {filtered.length} of {ranked.length} QBs · 2025 college season · PFF grades →
-            projected NFL career score via historical comp model
+            {filtered.length} of {ranked.length} QBs · 2025 college season PFF data
           </p>
         </div>
         <div className="prospectsFilters">
@@ -2283,19 +2290,28 @@ function ProspectsView({
             <option value={85}>85+ PFF grade</option>
             <option value={90}>90+ PFF grade</option>
           </select>
+          <select value={trendFilter} onChange={(e) => setTrendFilter(e.target.value as typeof trendFilter)}>
+            <option value="all">All trends</option>
+            <option value="rising">Rising ↑</option>
+            <option value="stable">Stable →</option>
+            <option value="declining">Declining ↓</option>
+          </select>
           <select value={sortBy} onChange={(e) => setSortBy(e.target.value as typeof sortBy)}>
             <option value="score">Sort: Proj score</option>
             <option value="pff">Sort: PFF grade</option>
-            <option value="pick">Sort: Est. pick</option>
+            <option value="pick">Sort: Pick range</option>
+            <option value="trend">Sort: '24→'25 trend</option>
           </select>
         </div>
       </div>
 
       <div className="prospectsNote">
-        <strong>Methodology:</strong> Scores are forward projections — each QB's college PFF signals (grade,
-        BTT%, YPA, accuracy, TWP%) are mapped to the same model inputs used for NFL draft prospects and matched
-        against {history.filter((p) => p.pos === 'QB').length} historical QBs drafted 2000–2021. Athletic
-        measurables use QB positional averages (no combine data yet). Pick estimates derive from PFF offense grade.
+        <strong>Scoring:</strong> PFF college signals (grade, BTT%, YPA, accuracy%, TWP%) map to the same
+        model inputs used for NFL prospects, matched against {qbHistCount} historical QBs (2000–2021).
+        Athletic/size signals use QB positional averages — no combine data until after the 2026 season.{' '}
+        <strong>Trend</strong> (↑↓→) shows the 2024→2025 PFF grade change and adjusts the projection forward
+        for each QB's expected 2026 arc: rising prospects receive a modest score boost, declining ones a penalty.
+        QBs with only one year of data show "1 yr."
       </div>
 
       <div className="prospectsTable">
@@ -2308,9 +2324,9 @@ function ProspectsView({
           <span>Grade</span>
           <span className="pColNum">Proj AV</span>
           <span className="pColNum">PFF Off</span>
-          <span className="pColNum">BTT%</span>
+          <span className="pColNum">Trend</span>
           <span className="pColNum">YPA</span>
-          <span className="pColNum">Cmp%</span>
+          <span className="pColNum">BTT%</span>
           <span className="pColNum">TWP%</span>
           <span></span>
         </div>
@@ -2318,22 +2334,18 @@ function ProspectsView({
           const p = r.prospect
           const proj = r.proj
           const rs = p.rawStats
+          const td = trajectoryDisplay(p.trajectory)
           const twpClass = rs.twp_rate != null
             ? rs.twp_rate <= 2.5 ? 'epaHigh' : rs.twp_rate >= 4.0 ? 'epaLow' : ''
             : ''
-          const topComp = proj.comps[0]
           return (
             <div key={p.name + p.school} className="prospectsTableRow">
               <span className="pRank">{i + 1}</span>
               <span className="pName">
                 <span className="pNameText">{p.name}</span>
-                {topComp && (
-                  <span className="pCompHint">
-                    comp: {topComp.player.name} ({topComp.player.year})
-                  </span>
-                )}
+                <span className="pSchoolSub">{p.school}</span>
               </span>
-              <span className="pSchool">{p.school}</span>
+              <span className="pSchool pSchoolDesk">{p.school}</span>
               <span className={`pColNum pPickRange ${pickBandClass(p.pick)}`}>{pickRangeLabel(p.pick)}</span>
               <span className={`pColNum pScore ${prospectScoreClass(proj.score)}`}>
                 {Math.round(proj.score)}
@@ -2342,14 +2354,15 @@ function ProspectsView({
               <span className="pGrade">{proj.grade}</span>
               <span className="pColNum">{proj.expectedAv.toFixed(1)}</span>
               <span className="pColNum pPffGrade">{rs.grades_offense?.toFixed(1) ?? '—'}</span>
-              <span className="pColNum">{rs.btt_rate?.toFixed(1) ?? '—'}</span>
+              <span className={`pColNum pTrend ${td.cls}`} title={p.trajectory.label}>
+                <span className="pTrendIcon">{td.icon}</span>
+                <span className="pTrendVal">{td.label}</span>
+              </span>
               <span className="pColNum">{rs.ypa?.toFixed(1) ?? '—'}</span>
-              <span className="pColNum">{rs.cmp_pct?.toFixed(1) ?? '—'}</span>
+              <span className="pColNum">{rs.btt_rate?.toFixed(1) ?? '—'}</span>
               <span className={`pColNum ${twpClass}`}>{rs.twp_rate?.toFixed(1) ?? '—'}</span>
               <span className="pActions">
-                <button type="button" className="secondary smallButton" onClick={() => onLoad(p)}>
-                  Load
-                </button>
+                <button type="button" className="secondary smallButton" onClick={() => onLoad(p)}>Load</button>
               </span>
             </div>
           )
