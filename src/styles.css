@@ -1985,3 +1985,100 @@ td small {
   .bottomNav button.on { color: var(--accent); background: rgba(59,130,246,.12); }
   .bottomNavIcon { font-size: 18px; line-height: 1; }
 }
+
+/* ═══════════════════════════════════════════════════
+   Guide / Methodology page
+   ═══════════════════════════════════════════════════ */
+
+.guidePage {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 4px 0 32px;
+}
+
+.guideSection {
+  background: var(--bg-1);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 22px 24px;
+}
+
+.guideSection h2 {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-0);
+  margin: 0 0 12px;
+  letter-spacing: .02em;
+}
+
+.guideSection p {
+  color: var(--text-1);
+  font-size: 13px;
+  line-height: 1.65;
+  margin: 0 0 10px;
+}
+
+.guideSection p:last-child { margin-bottom: 0; }
+
+.guideList {
+  margin: 0;
+  padding: 0 0 0 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.guideList li {
+  color: var(--text-1);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.guideTable {
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  overflow: hidden;
+  font-size: 12px;
+  margin-top: 12px;
+}
+
+.guideTableHead {
+  display: grid;
+  grid-template-columns: 1fr 2fr 2fr;
+  gap: 0;
+  background: var(--bg-2);
+  padding: 8px 12px;
+  font-weight: 700;
+  color: var(--text-1);
+  letter-spacing: .05em;
+  font-size: 11px;
+  text-transform: uppercase;
+  border-bottom: 1px solid var(--border);
+}
+
+.guideSignalTable .guideTableHead,
+.guideSignalTable .guideTableRow { grid-template-columns: 90px 1fr 1.4fr; }
+
+.guideTableRow {
+  display: grid;
+  grid-template-columns: 1fr 2fr 2fr;
+  gap: 0;
+  padding: 9px 12px;
+  border-bottom: 1px solid var(--border);
+  align-items: center;
+  color: var(--text-1);
+  transition: background .1s;
+}
+
+.guideTableRow:last-child { border-bottom: 0; }
+.guideTableRow:hover { background: rgba(255,255,255,.03); }
+
+.guideAvRange  { font-weight: 700; color: var(--text-0); font-size: 12px; font-variant-numeric: tabular-nums; }
+.guideEx       { color: var(--text-2); font-size: 11px; }
+.guideSigName  { font-weight: 700; color: var(--accent); }
+.guideWt       { color: var(--text-2); font-size: 11px; }
+.guideScoreRange { font-weight: 700; font-variant-numeric: tabular-nums; color: var(--text-0); }
+.guideGrade    { font-weight: 800; font-size: 14px; color: var(--accent); }
