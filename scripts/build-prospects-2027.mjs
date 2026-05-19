@@ -144,24 +144,17 @@ for (const row of csv2024) {
 // These are NOT 2027 draft prospects and must be excluded.
 // Drafted: Mendoza (#1 Raiders), Simpson (#13 Rams), Beck (#65 ARI), Allar (#76 PIT),
 //          Klubnik (#110 NYJ), Green (#182 CLE), Kaliakmanis (#223 WSH), Nussmeier (#249 KC)
-// Declared undrafted: Pavia (VAN), Aguilar (TEN), Gleason (TOL) — all signed as UDFAs
+// Declared undrafted: Pavia (VAN), Aguilar (TEN), Gleason (TOL), Robertson (BAY),
+//                     Fagnano (UConn→BAL), King (GT→CAR), Castellanos (FSU), Lewis (MEM)
 const CLASS_2026 = new Set([
-  'fernandomendoza', 'tysimpson', 'garrettnussmeier', 'drewllar', 'drewaallar',
+  'fernandomendoza', 'tysimpson', 'garrettnussmeier', 'drewallar',
   'carsonbeck', 'cadeklubnik', 'taylengreen', 'athankaliakmanis',
   'diegopavia', 'joeyaguilar', 'tuckergleason',
-  // aliases / partial matches handled below via includes check
+  'sawyerrobertson', 'joefagnano', 'haynesking', 'tommycastellanos', 'brendonlewis',
 ])
 
 function is2026Class(name) {
-  const key = cleanName(name)
-  if (CLASS_2026.has(key)) return true
-  // Catch slight spelling variations with substring checks
-  const checks = [
-    'fernandomendoza','tysimpson','garrettnussmeier','drewallar',
-    'carsonbeck','cadeklubnik','taylengreen','athankaliakmanis',
-    'diegopavia','joeyaguilar','tuckergleason',
-  ]
-  return checks.some((c) => key === c || (key.length > 6 && c.includes(key.slice(0, 8))))
+  return CLASS_2026.has(cleanName(name))
 }
 
 // Build prospects from 2025 data ONLY (these are the 2027 draft eligible players)
