@@ -122,6 +122,7 @@ type WrSeason = {
   succ: number | null
   pos: string
 }
+type Y1Data = { qb: QbSeason[]; wr: WrSeason[] }
 type Projection = ReturnType<typeof project>
 type LoaderMessage = { tone: 'good' | 'warn'; text: string } | null
 type MobileTab = 'edit' | 'results' | 'board'
@@ -308,12 +309,13 @@ export default function App() {
     setPage('compare')
     setModalPlayer(null)
   }
-  const projection = useMemo(() => project(input, prospects, pffProfiles), [input, prospects, pffProfiles])
+  const y1Data = useMemo<Y1Data>(() => ({ qb: qbSeasons, wr: wrSeasons }), [qbSeasons, wrSeasons])
+  const projection = useMemo(() => project(input, prospects, pffProfiles, undefined, y1Data), [input, prospects, pffProfiles, y1Data])
   const draftBoard = useMemo(
     () => saved
-      .map((player) => ({ player, projection: project(player, prospects, pffProfiles) }))
+      .map((player) => ({ player, projection: project(player, prospects, pffProfiles, undefined, y1Data) }))
       .sort((a, b) => b.projection.score - a.projection.score),
-    [saved, prospects, pffProfiles],
+    [saved, prospects, pffProfiles, y1Data],
   )
 
   const orderedBoard = useMemo(() => {
@@ -647,11 +649,11 @@ export default function App() {
     </div>
 
     {error ? <section className="panel empty">{error}</section> : page === 'class' ? <div className="classPage">
-      <ClassExplorer pool={lookupPool} history={prospects} pffProfiles={pffProfiles} currentName={input.name} currentYear={input.draftSeason} />
+      <ClassExplorer pool={lookupPool} history={prospects} pffProfiles={pffProfiles} y1Data={y1Data} currentName={input.name} currentYear={input.draftSeason} />
     </div> : page === 'players' ? <div className="classPage">
       <PlayerBrowser pool={lookupPool} history={prospects} onOpenModal={openModal} onCompare={handleCompare} />
     </div> : page === 'compare' ? <div className="classPage">
-      <CompareView pool={lookupPool} history={prospects} pffProfiles={pffProfiles} initialQuery={compareQuery} />
+      <CompareView pool={lookupPool} history={prospects} pffProfiles={pffProfiles} y1Data={y1Data} initialQuery={compareQuery} />
     </div> : page === 'trade' ? <div className="classPage">
       <TradeCalculator />
     </div> : page === 'board' ? <div className="classPage">
@@ -1072,7 +1074,7 @@ function TableWrap({ children }: { children: ReactNode }) {
   return <div className="tableWrap">{children}</div>
 }
 
-function CompareView({ pool, history, pffProfiles, initialQuery = '' }: { pool: Historical[]; history: Historical[]; pffProfiles: PffProfile[]; initialQuery?: string }) {
+function CompareView({ pool, history, pffProfiles, y1Data, initialQuery = '' }: { pool: Historical[]; history: Historical[]; pffProfiles: PffProfile[]; y1Data?: Y1Data; initialQuery?: string }) {
   const [q1, setQ1] = useState(initialQuery)
   const [q2, setQ2] = useState('')
   const [p1, setP1] = useState<Historical | null>(null)
@@ -1103,8 +1105,8 @@ function CompareView({ pool, history, pffProfiles, initialQuery = '' }: { pool: 
 
   const pff1 = useMemo(() => p1 ? pffProfiles.find((pf) => samePlayerSeason(pf, p1.name, p1.year, p1.pos)) : undefined, [p1, pffProfiles])
   const pff2 = useMemo(() => p2 ? pffProfiles.find((pf) => samePlayerSeason(pf, p2.name, p2.year, p2.pos)) : undefined, [p2, pffProfiles])
-  const proj1 = useMemo(() => p1 ? project(prospectFromHistorical(p1, pff1), history, pffProfiles, p1.id) : null, [p1, pff1, history, pffProfiles])
-  const proj2 = useMemo(() => p2 ? project(prospectFromHistorical(p2, pff2), history, pffProfiles, p2.id) : null, [p2, pff2, history, pffProfiles])
+  const proj1 = useMemo(() => p1 ? project(prospectFromHistorical(p1, pff1), history, pffProfiles, p1.id, y1Data) : null, [p1, pff1, history, pffProfiles, y1Data])
+  const proj2 = useMemo(() => p2 ? project(prospectFromHistorical(p2, pff2), history, pffProfiles, p2.id, y1Data) : null, [p2, pff2, history, pffProfiles, y1Data])
 
   return <section className="panel tablePanel classPanel">
     <div className="panelTitle">
@@ -1709,7 +1711,7 @@ function BrowserHeader({ label, sortKey, active, dir, onSort }: { label: string;
   </th>
 }
 
-function ClassExplorer({ pool, history, pffProfiles, currentName, currentYear }: { pool: Historical[]; history: Historical[]; pffProfiles: PffProfile[]; currentName: string; currentYear: number }) {
+function ClassExplorer({ pool, history, pffProfiles, y1Data, currentName, currentYear }: { pool: Historical[]; history: Historical[]; pffProfiles: PffProfile[]; y1Data?: Y1Data; currentName: string; currentYear: number }) {
   const years = useMemo(() => {
     const set = new Set<number>()
     for (const player of pool) set.add(player.year)
@@ -1741,7 +1743,7 @@ function ClassExplorer({ pool, history, pffProfiles, currentName, currentYear }:
     for (const player of filtered) {
       const pffMatch = pffProfiles.find((profile) => samePlayerSeason(profile, player.name, player.year, player.pos))
       const synthesized = prospectFromHistorical(player, pffMatch)
-      const projected = project(synthesized, history, pffProfiles, player.id)
+      const projected = project(synthesized, history, pffProfiles, player.id, y1Data)
       out.set(player.id, { av: projected.expectedAv, score: projected.score })
     }
     return out
@@ -2290,7 +2292,7 @@ function rowToHistorical(combineRow: Row, draftRow: Row | undefined, index: numb
   }
 }
 
-function project(input: Prospect, history: Historical[], pffProfiles: PffProfile[], excludeId?: string) {
+function project(input: Prospect, history: Historical[], pffProfiles: PffProfile[], excludeId?: string, y1Data?: Y1Data) {
   const pool = history.filter((p) => (p.pos === input.pos || group[p.pos] === group[input.pos]) && p.id !== excludeId)
   const ras = rasScore(input, pool)
   const stats = (k: keyof Historical) => pool.map((p) => p[k]).filter((v): v is number => typeof v === 'number' && Number.isFinite(v))
@@ -2311,7 +2313,7 @@ function project(input: Prospect, history: Historical[], pffProfiles: PffProfile
   const rawScore = baseScore * (1 - pffBlend) + pffSignal * pffBlend
   const calibratedAv = calibratedExpectedAv(input, { draft, athletic, size, age })
 
-  const comps = pool.map((p) => ({ player: p, sim: sim(input, p) })).sort((a, b) => b.sim - a.sim).slice(0, 80)
+  const comps = pool.map((p) => ({ player: p, sim: sim(input, p, y1Data) })).sort((a, b) => b.sim - a.sim).slice(0, 80)
   const histWeight = comps.reduce((sum, c) => sum + c.sim, 0) || 1
   const pffWeight = pffComps.reduce((sum, c) => sum + c.sim, 0) || 1
   const histExpectedAv = comps.reduce((sum, c) => sum + c.player.av * c.sim, 0) / histWeight
@@ -2348,6 +2350,13 @@ function project(input: Prospect, history: Historical[], pffProfiles: PffProfile
     : null
   const flags = dangerFlags(input, { ceiling, floor, pffBlend })
 
+  const top10 = comps.slice(0, 10)
+  const y1Coverage = y1Data ? top10.filter((c) => {
+    if (c.player.pos === 'QB') return y1Data.qb.some((s) => s.key === clean(c.player.name) && s.season === c.player.year)
+    if (c.player.pos === 'WR') return y1Data.wr.some((s) => s.key === clean(c.player.name) && s.season === c.player.year)
+    return false
+  }).length : 0
+
   return {
     score,
     scoreLow,
@@ -2370,11 +2379,29 @@ function project(input: Prospect, history: Historical[], pffProfiles: PffProfile
     percentile,
     ras,
     flags,
+    y1Coverage,
     signals: { draft, athletic, size, scout, age, pff: pffSignal },
   }
 }
 
-function sim(input: Prospect, player: Historical) {
+function y1SimFactor(player: Historical, y1Data: Y1Data): number {
+  if (player.pos === 'QB') {
+    const s = y1Data.qb.find((r) => r.key === clean(player.name) && r.season === player.year)
+    if (s?.rtg != null) {
+      // Smooth ramp: rtg 100 ≈ 1.0, rtg 115+ → 1.12, rtg 72 → 0.88
+      return clamp(0.5 + (s.rtg / 100) * 0.7, 0.88, 1.12)
+    }
+  } else if (player.pos === 'WR') {
+    const s = y1Data.wr.find((r) => r.key === clean(player.name) && r.season === player.year)
+    if (s?.yds != null) {
+      // Smooth ramp: 1000 yds ≈ 1.0, 1500+ → 1.12, 300 → 0.88
+      return clamp(0.84 + (s.yds / 1000) * 0.17, 0.88, 1.12)
+    }
+  }
+  return 1.0
+}
+
+function sim(input: Prospect, player: Historical, y1Data?: Y1Data) {
   const distance =
     Math.abs(Math.log(input.pick + 1) - Math.log(player.pick + 1)) * .45 +
     z(input.height, player.height, 3) * .08 +
@@ -2386,7 +2413,8 @@ function sim(input: Prospect, player: Historical) {
     z(input.shuttle, player.shuttle, .2) * .05 +
     (input.pos === player.pos ? 0 : .12)
   const recency = Math.pow(0.96, Math.max(0, 2022 - player.year))
-  return Math.exp(-distance) * recency
+  const y1Factor = y1Data ? y1SimFactor(player, y1Data) : 1.0
+  return Math.exp(-distance) * recency * y1Factor
 }
 
 function pffSim(input: Prospect, profile: PffProfile) {
