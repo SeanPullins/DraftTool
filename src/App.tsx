@@ -197,6 +197,7 @@ type HistoricalOutcomeFlag = {
   type: 'bust' | 'gem'
   label: string
   detail: string
+  tooltip: string
 }
 type PatternAlert = {
   type: 'bust-risk' | 'gem-upside'
@@ -416,9 +417,13 @@ export default function App() {
   const patternAlerts = useMemo(() => extractPatternAlerts(projection.fullComps, histFlagMap), [projection.fullComps, histFlagMap])
   const draftBoard = useMemo(
     () => saved
-      .map((player) => ({ player, projection: project(player, prospects, pffProfiles, undefined, y1Data, careerStats) }))
+      .map((player) => {
+        const projection = project(player, prospects, pffProfiles, undefined, y1Data, careerStats)
+        const patternAlerts = extractPatternAlerts(projection.fullComps, histFlagMap)
+        return { player, projection, patternAlerts }
+      })
       .sort((a, b) => b.projection.score - a.projection.score),
-    [saved, prospects, pffProfiles, y1Data, careerStats],
+    [saved, prospects, pffProfiles, y1Data, careerStats, histFlagMap],
   )
 
   const orderedBoard = useMemo(() => {
@@ -1062,7 +1067,10 @@ export default function App() {
                         <td>{row.player.pick}</td>
                         <td style={{ color: scoreColor(score), fontWeight: 800 }}>{score}</td>
                         <td>{row.projection.median.toFixed(1)}</td>
-                        <td><OutcomeTag category={best} /></td>
+                        <td>
+                          <OutcomeTag category={best} />
+                          {row.patternAlerts.map((a) => <PatternBadge key={a.type} alert={a} />)}
+                        </td>
                         <td><button type="button" className="smallButton" onClick={() => loadSavedProspect(row.player.id)}>Load</button></td>
                       </tr>
                     </>
@@ -1094,6 +1102,7 @@ export default function App() {
                       <div className="cardFooter">
                         <span className="cardScore">{Math.round(row.projection.score)}</span>
                         <OutcomeTag category={best} />
+                        {row.patternAlerts.map((a) => <PatternBadge key={a.type} alert={a} />)}
                         <button type="button" className="smallButton" onClick={() => loadSavedProspect(row.player.id)}>Load</button>
                       </div>
                     </div>
@@ -1266,6 +1275,33 @@ function Bar({ label, value, colorIdx }: { label: string; value: number; colorId
 
 function OutcomeTag({ category }: { category: Category }) {
   return <span className={`tag tag${outcomeOrder.indexOf(category)}`}>{outcomeAVRange[category]}</span>
+}
+
+function FlagBadge({ flag, className = '' }: { flag: HistoricalOutcomeFlag; className?: string }) {
+  const icon = flag.type === 'bust' ? '⚠' : '↑'
+  return (
+    <span className={`flagBadge flagBadge-${flag.type}${className ? ' ' + className : ''}`}>
+      {icon} {flag.label}
+      <span className="flagTip">{flag.tooltip}</span>
+    </span>
+  )
+}
+
+function PatternBadge({ alert }: { alert: PatternAlert }) {
+  const isBust = alert.type === 'bust-risk'
+  const lines = [
+    isBust ? '⚠ Miss-pattern alert' : '↑ Hidden-gem signal',
+    alert.description,
+    '',
+    'Matched comps:',
+    ...alert.matches.map((m) => `• ${m.name} (${m.year}) #${m.pick >= 260 ? 'UDFA' : m.pick} · AV ${m.av} · ${m.reason}`),
+  ]
+  return (
+    <span className={`flagBadge flagBadge-${isBust ? 'bust' : 'gem'}`}>
+      {isBust ? '⚠' : '↑'} {alert.label}
+      <span className="flagTip">{lines.join('\n')}</span>
+    </span>
+  )
 }
 
 function TableWrap({ children }: { children: ReactNode }) {
@@ -1613,7 +1649,7 @@ function PlayerBrowser({ pool, history, histFlagMap, onOpenModal, onCompare }: {
                   <td>{player.allPros || 0}</td>
                   <td>
                     {showEarlySample ? <span className="sampleTag">Early</span> : <OutcomeTag category={player.category} />}
-                    {outcomeFlag && <span className={`histFlag histFlag-${outcomeFlag.type}`}>{outcomeFlag.type === 'bust' ? '⚠' : '↑'} {outcomeFlag.label}</span>}
+                    {outcomeFlag && <FlagBadge flag={outcomeFlag} />}
                   </td>
                 </tr>
               })}
@@ -1775,7 +1811,7 @@ function PlayerModal({ player, history, pffProfiles, careerStats, onClose, onCom
           </div>
           <div className="modalHeaderRight">
             {isEarly ? <span className="sampleTag">Early</span> : <OutcomeTag category={player.category} />}
-            {!isEarly && outcomeFlag && <span className={`histFlag histFlag-${outcomeFlag.type}`}>{outcomeFlag.type === 'bust' ? '⚠' : '↑'} {outcomeFlag.label}</span>}
+            {!isEarly && outcomeFlag && <FlagBadge flag={outcomeFlag} />}
             <button type="button" className="modalClose" onClick={onClose}>✕</button>
           </div>
         </div>
@@ -2220,7 +2256,7 @@ function ClassExplorer({ pool, history, pffProfiles, y1Data, careerStats, histFl
                 <td>{player.allPros || 0}</td>
                 <td>
                   {showEarlySample ? <span className="sampleTag">Early sample</span> : <OutcomeTag category={player.category} />}
-                  {outcomeFlag && <span className={`histFlag histFlag-${outcomeFlag.type}`}>{outcomeFlag.type === 'bust' ? '⚠' : '↑'} {outcomeFlag.label}</span>}
+                  {outcomeFlag && <FlagBadge flag={outcomeFlag} />}
                 </td>
               </tr>
             </>
@@ -2391,6 +2427,34 @@ function gemReasonLabel(player: Historical, profile: PffProfile | null): string 
   return 'Exceeded expectations'
 }
 
+function buildBustTooltip(player: Historical, profile: PffProfile | null, reason: string): string {
+  const lines = [
+    `Pick #${player.pick} · ${player.year} · ${player.pos}`,
+    `AV ${player.av} · ${player.games} games · ${player.starts} starts`,
+    `Outcome: ${player.category}`,
+  ]
+  if (profile) {
+    lines.push(`PFF composite ${profile.pff.composite.toFixed(0)} · grade ${profile.pff.grade.toFixed(0)} · prod ${profile.pff.production.toFixed(0)}`)
+    lines.push(`efficiency ${profile.pff.efficiency.toFixed(0)} · clean pocket ${profile.pff.clean.toFixed(0)}`)
+  }
+  lines.push(`Miss reason: ${reason}`)
+  return lines.join('\n')
+}
+
+function buildGemTooltip(player: Historical, profile: PffProfile | null, reason: string): string {
+  const lines = [
+    `Pick #${player.pick} · ${player.year} · ${player.pos}`,
+    `AV ${player.av} · ${player.games} games${player.proBowls > 0 ? ` · ${player.proBowls}× Pro Bowl` : ''}`,
+    `Outcome: ${player.category}`,
+  ]
+  if (profile) {
+    lines.push(`PFF composite ${profile.pff.composite.toFixed(0)} · grade ${profile.pff.grade.toFixed(0)} · prod ${profile.pff.production.toFixed(0)}`)
+    lines.push(`efficiency ${profile.pff.efficiency.toFixed(0)} · clean pocket ${profile.pff.clean.toFixed(0)}`)
+  }
+  lines.push(`Success driver: ${reason}`)
+  return lines.join('\n')
+}
+
 function classifyHistoricalOutcome(player: Historical, profile: PffProfile | null): HistoricalOutcomeFlag | null {
   if (player.year > compCutoffYear || player.games < 20) return null
   const isBust = player.pick < 100 &&
@@ -2400,11 +2464,11 @@ function classifyHistoricalOutcome(player: Historical, profile: PffProfile | nul
     (player.pick >= 100 && (player.category === 'Star' || player.category === 'High-end starter' || player.category === 'Starter'))
   if (isBust) {
     const detail = bustReasonLabel(player, profile)
-    return { type: 'bust', label: detail, detail }
+    return { type: 'bust', label: detail, detail, tooltip: buildBustTooltip(player, profile, detail) }
   }
   if (isGem) {
     const detail = gemReasonLabel(player, profile)
-    return { type: 'gem', label: detail, detail }
+    return { type: 'gem', label: detail, detail, tooltip: buildGemTooltip(player, profile, detail) }
   }
   return null
 }
