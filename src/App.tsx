@@ -2459,31 +2459,63 @@ function prospectRiskFlags(p: ProspectQB, bustRates: QbBustRates): RiskFlag[] {
   return flags
 }
 
+// Per-position slow/fast 40-yd thresholds
+const slowForPos: Partial<Record<string, number>> = { QB: 4.85, WR: 4.55, RB: 4.55, TE: 4.78, OL: 5.38, DL: 4.98, LB: 4.78, CB: 4.55, S: 4.62 }
+const fastForPos: Partial<Record<string, number>> = { WR: 4.40, RB: 4.42, CB: 4.40, S: 4.45, LB: 4.56, TE: 4.62, DL: 4.72 }
+
 function bustReasonLabel(player: Historical, profile: PffProfile | null): string {
+  // PFF-grounded signals — use the weakest grade as the primary reason
   if (profile) {
-    if (profile.pff.clean < 52 && profile.pff.efficiency < 52) return `Turnover-prone & inefficient (clean ${profile.pff.clean.toFixed(0)}, eff ${profile.pff.efficiency.toFixed(0)})`
+    if (profile.pff.clean < 52 && profile.pff.efficiency < 52)
+      return `Turnover-prone & inefficient (clean ${profile.pff.clean.toFixed(0)}, eff ${profile.pff.efficiency.toFixed(0)})`
     if (profile.pff.clean < 52) return `Turnover-prone (clean ${profile.pff.clean.toFixed(0)})`
     if (profile.pff.efficiency < 52) return `Low efficiency (eff ${profile.pff.efficiency.toFixed(0)})`
     if (profile.pff.production < 52) return `Production gap (prod ${profile.pff.production.toFixed(0)})`
-    if (player.pick < 15) return `Draft reach (#${player.pick}, AV ${player.av})`
-    return `Grade didn't translate (comp ${profile.pff.composite.toFixed(0)}, AV ${player.av})`
+    // All PFF grades fine — look for a measurable red flag that scouts ignored
+    const thresh = slowForPos[player.pos]
+    if (thresh && player.forty != null && player.forty > thresh)
+      return `Slow for position (${player.forty.toFixed(2)}s) — grades didn't warn`
+    if (player.age != null && player.age >= 24)
+      return `Older prospect (age ${player.age.toFixed(1)}) — comp ${profile.pff.composite.toFixed(0)} didn't translate`
+    return `High grades, didn't translate (comp ${profile.pff.composite.toFixed(0)}, AV ${player.av})`
   }
-  if (player.pick < 15) return `Draft reach (#${player.pick}, AV ${player.av})`
-  return `Missed expectations (#${player.pick}, AV ${player.av})`
+  // No PFF profile — lean on combine/age
+  const thresh = slowForPos[player.pos]
+  if (thresh && player.forty != null && player.forty > thresh)
+    return `Slow for position (${player.forty.toFixed(2)}s)`
+  if (player.age != null && player.age >= 24)
+    return `Older prospect (age ${player.age.toFixed(1)})`
+  if (player.vertical != null && player.vertical < 28)
+    return `Poor explosion (vert ${player.vertical.toFixed(0)}")`
+  return `No standout college signal (AV ${player.av})`
 }
 
 function gemReasonLabel(player: Historical, profile: PffProfile | null): string {
+  // PFF-grounded signals — efficiency is the strongest single predictor
   if (profile) {
     if (profile.pff.efficiency > 72) return `Efficiency standout (eff ${profile.pff.efficiency.toFixed(0)})`
-    if (profile.pff.composite > 70 && player.pick >= 100) return `Undervalued grade (comp ${profile.pff.composite.toFixed(0)}, #${player.pick})`
-    if (profile.pff.grade > 75 && player.pick >= 75) return `Slid on board (grade ${profile.pff.grade.toFixed(0)}, #${player.pick})`
+    if (profile.pff.grade > 75) return `Elite college grade (grade ${profile.pff.grade.toFixed(0)})`
+    if (profile.pff.composite > 70) return `Undervalued composite (comp ${profile.pff.composite.toFixed(0)})`
+    if (profile.pff.production > 72) return `High production (prod ${profile.pff.production.toFixed(0)})`
+    // Decent grades — look for athletic differentiator
+    const thresh = fastForPos[player.pos]
+    if (thresh && player.forty != null && player.forty <= thresh)
+      return `Elite speed (${player.forty.toFixed(2)}s) with solid grades`
+    if (player.age != null && player.age <= 21.5)
+      return `Young for class (age ${player.age.toFixed(1)}) — high ceiling`
+    return `Solid profile, undervalued (comp ${profile.pff.composite.toFixed(0)}, AV ${player.av})`
   }
-  if (player.forty != null && (
-    (['WR', 'RB', 'CB', 'S'].includes(player.pos) && player.forty < 4.42) ||
-    (['LB', 'TE'].includes(player.pos) && player.forty < 4.65)
-  )) return `Elite speed (${player.forty.toFixed(2)}s, #${player.pick})`
-  if (player.pick >= 150) return `Late-round steal (#${player.pick}, AV ${player.av})`
-  return `Exceeded expectations (#${player.pick}, AV ${player.av})`
+  // No PFF profile — lean on combine/age
+  const thresh = fastForPos[player.pos]
+  if (thresh && player.forty != null && player.forty <= thresh)
+    return `Elite speed (${player.forty.toFixed(2)}s)`
+  if (player.age != null && player.age <= 21.5)
+    return `Young for class (age ${player.age.toFixed(1)})`
+  if (player.vertical != null && player.vertical >= 38)
+    return `Elite explosiveness (vert ${player.vertical.toFixed(0)}")`
+  if (player.broad != null && player.broad >= 128)
+    return `Elite burst (broad ${player.broad}")`
+  return `Outperformed profile (AV ${player.av})`
 }
 
 function buildBustTooltip(player: Historical, profile: PffProfile | null, reason: string): string {
@@ -2540,28 +2572,62 @@ function classifyHistoricalOutcome(player: Historical, profile: PffProfile | nul
     const isEarlyBust = player.pick < 64 && avRate < 3.0
     const isEarlyGem = player.pick >= 64 && avRate >= 5.0
     if (isEarlyBust) {
-      const label = `Early bust signal (#${player.pick}, AV ${player.av} in ${player.games}G)`
+      // Surface the college signal that should have warned scouts (or didn't)
+      let metric = `${avRate.toFixed(1)} AV/season`
+      if (profile) {
+        if (profile.pff.clean < 52 && profile.pff.efficiency < 52)
+          metric = `clean ${profile.pff.clean.toFixed(0)}, eff ${profile.pff.efficiency.toFixed(0)} in college`
+        else if (profile.pff.clean < 52)
+          metric = `clean pocket ${profile.pff.clean.toFixed(0)} in college`
+        else if (profile.pff.efficiency < 52)
+          metric = `efficiency ${profile.pff.efficiency.toFixed(0)} in college`
+        else if (profile.pff.production < 52)
+          metric = `production ${profile.pff.production.toFixed(0)} in college`
+      } else {
+        const thresh = slowForPos[player.pos]
+        if (thresh && player.forty != null && player.forty > thresh)
+          metric = `slow 40 (${player.forty.toFixed(2)}s)`
+        else if (player.age != null && player.age >= 24)
+          metric = `older prospect (age ${player.age.toFixed(1)})`
+      }
+      const label = `Early bust signal: ${metric}`
       const tooltip = [
         `Pick #${player.pick} · ${player.year} · ${player.pos} — Early-career signal`,
-        `AV ${player.av} · ${player.games} games (${avRate.toFixed(1)}/season pace)`,
-        `Top-${player.pick <= 32 ? '1st' : '2nd'} round pick underperforming draft slot`,
+        `AV ${player.av} in ${player.games} games (${avRate.toFixed(1)}/season pace)`,
+        `Round ${player.pick <= 32 ? '1' : '2'} pick underperforming slot`,
         ...(profile ? [
           `PFF college: composite ${profile.pff.composite.toFixed(0)} · grade ${profile.pff.grade.toFixed(0)}`,
-          `efficiency ${profile.pff.efficiency.toFixed(0)} · clean pocket ${profile.pff.clean.toFixed(0)}`,
+          `efficiency ${profile.pff.efficiency.toFixed(0)} · clean pocket ${profile.pff.clean.toFixed(0)} · prod ${profile.pff.production.toFixed(0)}`,
         ] : []),
-        `Note: early sample — outcome may improve`,
+        `Note: early sample — outcome may change`,
       ].join('\n')
       return { type: 'bust', label, detail: label, tooltip }
     }
     if (isEarlyGem) {
-      const label = `Early gem signal (#${player.pick}, AV ${player.av} in ${player.games}G)`
+      // Surface the college signal that scouts underweighted
+      let metric = `${avRate.toFixed(1)} AV/season pace`
+      if (profile) {
+        if (profile.pff.efficiency > 72)
+          metric = `efficiency ${profile.pff.efficiency.toFixed(0)} in college`
+        else if (profile.pff.grade > 75)
+          metric = `grade ${profile.pff.grade.toFixed(0)} in college`
+        else if (profile.pff.composite > 70)
+          metric = `composite ${profile.pff.composite.toFixed(0)} in college`
+      } else {
+        const thresh = fastForPos[player.pos]
+        if (thresh && player.forty != null && player.forty <= thresh)
+          metric = `elite speed (${player.forty.toFixed(2)}s)`
+        else if (player.age != null && player.age <= 21.5)
+          metric = `young for class (age ${player.age.toFixed(1)})`
+      }
+      const label = `Early gem signal: ${metric}`
       const tooltip = [
         `Pick #${player.pick} · ${player.year} · ${player.pos} — Early-career signal`,
-        `AV ${player.av} · ${player.games} games (${avRate.toFixed(1)}/season pace)`,
-        `Round 3+ pick outperforming draft slot`,
+        `AV ${player.av} in ${player.games} games (${avRate.toFixed(1)}/season pace)`,
+        `Round 3+ pick outperforming slot`,
         ...(profile ? [
           `PFF college: composite ${profile.pff.composite.toFixed(0)} · grade ${profile.pff.grade.toFixed(0)}`,
-          `efficiency ${profile.pff.efficiency.toFixed(0)} · clean pocket ${profile.pff.clean.toFixed(0)}`,
+          `efficiency ${profile.pff.efficiency.toFixed(0)} · clean pocket ${profile.pff.clean.toFixed(0)} · prod ${profile.pff.production.toFixed(0)}`,
         ] : []),
         `Note: early sample — outcome may improve further`,
       ].join('\n')
