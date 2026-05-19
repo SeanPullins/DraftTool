@@ -16,6 +16,7 @@ type Prospect = {
   broad: number
   cone: number
   shuttle: number
+  bench: number
   film: number
   production: number
   fit: number
@@ -45,6 +46,7 @@ type Historical = {
   broad: number | null
   cone: number | null
   shuttle: number | null
+  bench: number | null
   games: number
   av: number
   starts: number
@@ -198,12 +200,12 @@ const group: Record<string, string> = {
   CB: 'DB',
   S: 'DB',
 }
-const signalWeights: Record<string, { draft: number; athletic: number; size: number; scout: number; age: number }> = {
-  QB:    { draft: .36, athletic: .06, size: .06, scout: .40, age: .12 },
-  SKILL: { draft: .28, athletic: .22, size: .06, scout: .34, age: .10 },
-  OL:    { draft: .30, athletic: .10, size: .20, scout: .30, age: .10 },
-  FRONT: { draft: .28, athletic: .22, size: .10, scout: .30, age: .10 },
-  DB:    { draft: .30, athletic: .24, size: .04, scout: .32, age: .10 },
+const signalWeights: Record<string, { draft: number; athletic: number; size: number; scout: number; age: number; strength: number }> = {
+  QB:    { draft: .34, athletic: .05, size: .05, scout: .38, age: .12, strength: .06 },
+  SKILL: { draft: .27, athletic: .21, size: .06, scout: .33, age: .10, strength: .03 },
+  OL:    { draft: .28, athletic: .08, size: .18, scout: .28, age: .08, strength: .10 },
+  FRONT: { draft: .26, athletic: .20, size: .08, scout: .28, age: .08, strength: .10 },
+  DB:    { draft: .29, athletic: .22, size: .04, scout: .31, age: .10, strength: .04 },
 }
 function PICK_VALUE(pick: number): number {
   return Math.max(1, Math.round(3000 * Math.exp(-0.02 * (pick - 1))))
@@ -221,8 +223,8 @@ const assetBase = import.meta.env.BASE_URL
 const savedKey = 'draftlens.savedProspects.v2'
 const previousSavedKey = 'draftlens.savedProspects.v1'
 const csvTemplate = [
-  'name,school,pos,draftSeason,pick,age,height,weight,forty,vertical,broad,cone,shuttle,film,production,fit,health,processing,pffComposite,pffGrade,pffProduction,pffEfficiency,pffClean',
-  'Example Receiver,State,WR,2026,42,21.4,73,204,4.45,37,124,6.92,4.18,84,82,80,86,76,82,83,82,79,86',
+  'name,school,pos,draftSeason,pick,age,height,weight,forty,vertical,broad,cone,shuttle,bench,film,production,fit,health,processing,pffComposite,pffGrade,pffProduction,pffEfficiency,pffClean',
+  'Example Receiver,State,WR,2026,42,21.4,73,204,4.45,37,124,6.92,4.18,0,84,82,80,86,76,82,83,82,79,86',
 ].join('\n')
 
 const start: Prospect = {
@@ -239,6 +241,7 @@ const start: Prospect = {
   broad: 126,
   cone: 6.9,
   shuttle: 4.15,
+  bench: 0,
   film: 86,
   production: 84,
   fit: 82,
@@ -267,6 +270,7 @@ const blankProspect: Prospect = {
   broad: 120,
   cone: 7.1,
   shuttle: 4.3,
+  bench: 0,
   film: 70,
   production: 70,
   fit: 70,
@@ -799,6 +803,7 @@ export default function App() {
               <Num label="Broad" value={input.broad} onChange={(v) => update('broad', v)} />
               <Num label="3-cone" value={input.cone} step={0.01} onChange={(v) => update('cone', v)} />
               <Num label="Shuttle" value={input.shuttle} step={0.01} onChange={(v) => update('shuttle', v)} />
+              <Num label="Bench reps" value={input.bench} onChange={(v) => update('bench', v)} />
             </div>
           </div>
         </section>
@@ -1688,6 +1693,7 @@ function PlayerModal({ player, history, pffProfiles, onClose, onCompare }: {
                 {player.broad ? <span>{player.broad}<small>Broad</small></span> : null}
                 {player.cone ? <span>{player.cone.toFixed(2)}<small>Cone</small></span> : null}
                 {player.shuttle ? <span>{player.shuttle.toFixed(2)}<small>Shuttle</small></span> : null}
+                {player.bench ? <span>{player.bench}<small>Bench</small></span> : null}
               </div>
             </div>
           )}
@@ -1967,6 +1973,7 @@ function prospectFromHistorical(player: Historical, pff?: PffProfile): Prospect 
     broad: player.broad ?? template.broad,
     cone: player.cone ?? template.cone,
     shuttle: player.shuttle ?? template.shuttle,
+    bench: player.bench ?? 0,
     film: pff?.pff.grade ?? baseline,
     production: pff?.pff.production ?? Math.max(55, baseline - 2),
     fit: pff?.pff.composite ?? baseline,
@@ -2026,6 +2033,7 @@ function prospectFromUnknown(value: unknown): Prospect | null {
     broad: numberField(record, 'broad', template.broad),
     cone: numberField(record, 'cone', template.cone),
     shuttle: numberField(record, 'shuttle', template.shuttle),
+    bench: numberField(record, 'bench', 0),
     film: clamp(numberField(record, 'film', template.film), 1, 99),
     production: clamp(numberField(record, 'production', template.production), 1, 99),
     fit: clamp(numberField(record, 'fit', template.fit), 1, 99),
@@ -2086,6 +2094,7 @@ function prospectFromCsvRow(row: Row): Prospect | null {
     broad: rowNum(row, ['broad', 'broad_jump'], template.broad),
     cone: rowNum(row, ['cone', 'three_cone', '3cone', '3_cone'], template.cone),
     shuttle: rowNum(row, ['shuttle', 'short_shuttle'], template.shuttle),
+    bench: rowNum(row, ['bench', 'bench_reps', 'benchPress'], 0),
     film: clamp(film, 1, 99),
     production: clamp(production, 1, 99),
     fit: clamp(rowNum(row, ['fit', 'role_fit'], template.fit), 1, 99),
@@ -2237,6 +2246,7 @@ function buildExtraProspects(data: unknown): Historical[] {
       broad: n(r.broad),
       cone: n(r.cone),
       shuttle: n(r.shuttle),
+      bench: n(r.bench),
       games: 0,
       av: 0,
       starts: 0,
@@ -2317,6 +2327,7 @@ function rowToHistorical(combineRow: Row, draftRow: Row | undefined, index: numb
     broad: n(combineRow.broad_jump),
     cone: n(combineRow.cone),
     shuttle: n(combineRow.shuttle),
+    bench: n(combineRow.bench),
     games,
     av,
     starts,
@@ -2324,6 +2335,19 @@ function rowToHistorical(combineRow: Row, draftRow: Row | undefined, index: numb
     allPros,
     category: category(av, games, starts, proBowls, allPros),
   }
+}
+
+function ageSignal(age: number, pos: string): number {
+  if (pos === 'QB') {
+    return age <= 20.8 ? 92 : age <= 21.6 ? 82 : age <= 22.8 ? 70 : age <= 24.0 ? 54 : age <= 25.0 ? 40 : 26
+  }
+  if (pos === 'RB') {
+    return age <= 20.3 ? 96 : age <= 21.0 ? 86 : age <= 21.8 ? 74 : age <= 22.6 ? 54 : 28
+  }
+  if (group[pos] === 'OL') {
+    return age <= 21.5 ? 84 : age <= 22.5 ? 74 : age <= 24.0 ? 62 : age <= 25.5 ? 50 : 38
+  }
+  return age <= 20.8 ? 92 : age <= 21.6 ? 82 : age <= 22.5 ? 68 : age <= 23.5 ? 52 : 36
 }
 
 function project(input: Prospect, history: Historical[], pffProfiles: PffProfile[], excludeId?: string, y1Data?: Y1Data) {
@@ -2335,12 +2359,14 @@ function project(input: Prospect, history: Historical[], pffProfiles: PffProfile
   const athletic = avg([pct(input.forty, stats('forty'), true), pct(input.vertical, stats('vertical')), pct(input.broad, stats('broad')), pct(input.cone, stats('cone'), true), pct(input.shuttle, stats('shuttle'), true)])
   const size = avg([pct(input.height, stats('height')), pct(input.weight, stats('weight'))])
   const scout = input.film * .32 + input.production * .23 + input.fit * .17 + input.health * .12 + input.processing * .16
-  const age = input.age <= 20.8 ? 92 : input.age <= 21.6 ? 82 : input.age <= 22.5 ? 68 : input.age <= 23.5 ? 52 : 36
+  const age = ageSignal(input.age, input.pos)
+  const benchPool = stats('bench').filter((v) => v > 0)
+  const strength = input.bench > 0 && benchPool.length >= 10 ? pct(input.bench, benchPool) : 50
   const normPff = normalizePffInput(input, pffProfiles)
   const pffSignal = normPff.composite * .38 + normPff.grade * .18 + normPff.production * .18 + normPff.efficiency * .17 + normPff.clean * .09
   const grp = group[input.pos] ?? 'SKILL'
   const wt = signalWeights[grp] ?? signalWeights['SKILL']
-  const baseScore = draft * wt.draft + athletic * wt.athletic + size * wt.size + scout * wt.scout + age * wt.age
+  const baseScore = draft * wt.draft + athletic * wt.athletic + size * wt.size + scout * wt.scout + age * wt.age + strength * wt.strength
   const pffPool = pffProfiles.filter((p) => p.nfl && isMatureOutcome(p.draftSeason) && p.id !== input.pffProfileId && (p.position === input.pos || group[p.position] === group[input.pos]))
   const pffComps = pffPool.map((profile) => ({ profile, sim: pffSim(input, profile) })).sort((a, b) => b.sim - a.sim).slice(0, 80)
   const pffBlend = pffComps.length >= 12 ? .35 : 0
@@ -2415,7 +2441,7 @@ function project(input: Prospect, history: Historical[], pffProfiles: PffProfile
     ras,
     flags,
     y1Coverage,
-    signals: { draft, athletic, size, scout, age, pff: pffSignal },
+    signals: { draft, athletic, size, scout, age, strength, pff: pffSignal },
   }
 }
 
@@ -2452,6 +2478,7 @@ function sim(input: Prospect, player: Historical, y1Data?: Y1Data) {
     z(input.broad, player.broad, 9) * .07 +
     z(input.cone, player.cone, .28) * .05 +
     z(input.shuttle, player.shuttle, .2) * .05 +
+    (input.bench > 0 && player.bench ? z(input.bench, player.bench, 6) * .04 : 0) +
     (input.pos === player.pos ? 0 : .12)
   const recency = Math.pow(0.96, Math.max(0, 2022 - player.year))
   const y1Factor = y1Data ? y1SimFactor(player, y1Data) : 1.0
@@ -2469,7 +2496,8 @@ function pffSim(input: Prospect, profile: PffProfile) {
     z2(input.pffClean, profile.pff.clean, 12) * .08 +
     (input.pos === profile.position ? 0 : .16)
   const recency = Math.pow(0.97, Math.max(0, 2024 - profile.draftSeason))
-  return Math.exp(-distance) * recency
+  const experienceBonus = profile.games >= 36 ? 1.06 : profile.games >= 24 ? 1.03 : profile.games >= 12 ? 1.0 : 0.93
+  return Math.exp(-distance) * recency * experienceBonus
 }
 
 function calibratedExpectedAv(input: Prospect, signals: { draft: number; athletic: number; size: number; age: number }) {
@@ -2536,6 +2564,7 @@ function rasScore(input: Prospect, pool: Historical[]): number {
     zStat(pool.map((p) => p.broad), input.broad),
     zStat(pool.map((p) => p.cone), input.cone, true),
     zStat(pool.map((p) => p.shuttle), input.shuttle, true),
+    zStat(pool.map((p) => p.bench), input.bench > 0 ? input.bench : null),
   ].filter((s): s is number => s != null)
   return scores.length ? clamp(avg(scores), 0, 10) : 5
 }
