@@ -255,6 +255,19 @@ function pickBandClass(pick: number): string {
   return 'pick6'
 }
 
+function pickRangeLabel(pick: number): string {
+  if (pick <= 5)   return 'Top 5'
+  if (pick <= 10)  return 'Top 10'
+  if (pick <= 20)  return 'Mid 1st'
+  if (pick <= 32)  return 'Late 1st'
+  if (pick <= 48)  return 'Early 2nd'
+  if (pick <= 64)  return 'Late 2nd'
+  if (pick <= 100) return 'Round 3'
+  if (pick <= 150) return 'Rounds 4–5'
+  if (pick <= 220) return 'Rounds 6–7'
+  return 'UDFA range'
+}
+
 const assetBase = import.meta.env.BASE_URL
 const savedKey = 'draftlens.savedProspects.v2'
 const previousSavedKey = 'draftlens.savedProspects.v1'
@@ -2290,7 +2303,7 @@ function ProspectsView({
           <span>#</span>
           <span>Name</span>
           <span>School</span>
-          <span className="pColNum">Est Pick</span>
+          <span className="pColNum">Pick Range</span>
           <span className="pColNum">Score</span>
           <span>Grade</span>
           <span className="pColNum">Proj AV</span>
@@ -2321,7 +2334,7 @@ function ProspectsView({
                 )}
               </span>
               <span className="pSchool">{p.school}</span>
-              <span className={`pColNum ${pickBandClass(p.pick)}`}>{p.pick}</span>
+              <span className={`pColNum pPickRange ${pickBandClass(p.pick)}`}>{pickRangeLabel(p.pick)}</span>
               <span className={`pColNum pScore ${prospectScoreClass(proj.score)}`}>
                 {Math.round(proj.score)}
                 <span className="pScoreRange">{Math.round(proj.scoreLow)}–{Math.round(proj.scoreHigh)}</span>

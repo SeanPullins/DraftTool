@@ -2193,7 +2193,7 @@ td small {
 .prospectsTableHead,
 .prospectsTableRow {
   display: grid;
-  grid-template-columns: 32px 200px 120px 72px 80px 90px 60px 60px 52px 52px 52px 52px 64px;
+  grid-template-columns: 32px 200px 120px 90px 80px 90px 60px 60px 52px 52px 52px 52px 64px;
   align-items: center;
   gap: 0;
 }
@@ -2238,6 +2238,7 @@ td small {
 
 .pGrade { font-size: 11px; color: var(--text-1); }
 .pPffGrade { font-weight: 600; color: var(--text-0); }
+.pPickRange { font-size: 11px; font-weight: 600; white-space: nowrap; }
 
 .pActions { display: flex; justify-content: flex-end; }
 
@@ -2245,7 +2246,7 @@ td small {
   .prospectsPage { padding: 16px; }
   .prospectsTableHead,
   .prospectsTableRow {
-    grid-template-columns: 28px 160px 100px 60px 72px 80px 50px 52px 44px 44px 44px 44px 58px;
+    grid-template-columns: 28px 160px 100px 80px 72px 80px 50px 52px 44px 44px 44px 44px 58px;
     font-size: 11.5px;
   }
 }
