@@ -578,7 +578,7 @@ button:disabled {
   left: 50%;
   transform: translateX(-50%);
   color: rgba(255,255,255,.4);
-  font-size: 9px;
+  font-size: 10px;
   font-weight: 800;
   letter-spacing: .1em;
   text-transform: uppercase;
@@ -816,7 +816,7 @@ button:disabled {
 .signal span {
   display: block;
   color: var(--text-1);
-  font-size: 9px;
+  font-size: 10px;
   font-weight: 800;
   letter-spacing: .07em;
   text-transform: uppercase;
@@ -1360,7 +1360,7 @@ td small {
 }
 
 .dangerFlag {
-  font-size: 9px;
+  font-size: 10px;
   font-weight: 800;
   letter-spacing: .05em;
   text-transform: uppercase;
@@ -1868,6 +1868,10 @@ td small {
 .bottomNav { display: none; }
 
 /* ── Responsive ───────────────────────────────────── */
+@media (max-width: 960px) {
+  .pageNav button { padding: 9px 10px; font-size: 12px; }
+}
+
 @media (max-width: 1180px) {
   .layout,
   .classPage { padding: 16px; }
@@ -2161,7 +2165,7 @@ td small {
   align-items: center;
   flex-wrap: wrap;
 }
-.prospectsSearch { width: 220px; }
+.prospectsSearch { flex: 1 1 160px; max-width: 220px; }
 .prospectsFilters select, .prospectsSearch {
   background: var(--bg-2);
   border: 1px solid var(--border-hi);
@@ -2190,11 +2194,11 @@ td small {
   font-size: 12.5px;
 }
 
-/* 13 columns: rank | name | school | pick range | score | grade | projAV | pffOff | trend | ypa | btt | twp | load */
+/* 12 columns: rank | name | school | pick range | score | projAV | pffOff | trend | ypa | btt | twp | load */
 .prospectsTableHead,
 .prospectsTableRow {
   display: grid;
-  grid-template-columns: 32px minmax(160px,220px) 110px 90px 80px 80px 56px 58px 68px 48px 48px 50px 58px;
+  grid-template-columns: 32px minmax(190px,260px) 110px 90px 80px 56px 58px 68px 48px 48px 50px 58px;
   align-items: center;
   gap: 0;
 }
@@ -2233,7 +2237,7 @@ td small {
 .pColNum { text-align: right; }
 
 .pScore { display: flex; flex-direction: column; align-items: flex-end; gap: 1px; }
-.pScoreRange { font-size: 9.5px; color: var(--text-2); }
+.pScoreRange { font-size: 10px; color: var(--text-2); }
 
 .pScoreHigh { color: var(--green); font-weight: 700; }
 .pScoreMid  { color: var(--amber); font-weight: 600; }
@@ -2246,7 +2250,7 @@ td small {
 /* Trajectory trend column */
 .pTrend { display: flex; flex-direction: column; align-items: flex-end; gap: 0; }
 .pTrendIcon { font-size: 13px; line-height: 1; }
-.pTrendVal { font-size: 9.5px; }
+.pTrendVal { font-size: 10px; }
 .tRising   { color: var(--green); }
 .tDeclining { color: var(--red); }
 .tStable   { color: var(--text-1); }
@@ -2258,7 +2262,7 @@ td small {
   .prospectsPage { padding: 16px; }
   .prospectsTableHead,
   .prospectsTableRow {
-    grid-template-columns: 28px minmax(130px,180px) 95px 82px 74px 76px 50px 54px 62px 44px 44px 46px 54px;
+    grid-template-columns: 28px minmax(160px,210px) 95px 82px 74px 50px 54px 62px 44px 44px 46px 54px;
     font-size: 11.5px;
   }
 }
@@ -2269,14 +2273,33 @@ td small {
   .pSchoolDesk { display: none; }
   .prospectsTableHead,
   .prospectsTableRow {
-    grid-template-columns: 26px 1fr 82px 74px 72px 50px 62px 50px;
+    /* 8 visible: rank | name | pick | score | pffOff | trend | ypa | load */
+    grid-template-columns: 26px 1fr 82px 70px 52px 58px 42px 46px;
   }
-  /* Hide: Proj AV, PFF Off moved earlier; hide BTT%, TWP%, Grade on small */
+  /* Hide: projAV (6), BTT% (10), TWP% (11) */
+  .prospectsTableHead span:nth-child(6),
+  .prospectsTableRow span:nth-child(6),
+  .prospectsTableHead span:nth-child(10),
+  .prospectsTableRow span:nth-child(10),
+  .prospectsTableHead span:nth-child(11),
+  .prospectsTableRow span:nth-child(11) { display: none; }
+  .prospectsTableRow span:last-child { display: flex; }
+}
+
+@media (max-width: 540px) {
+  .prospectsPage { padding: 10px; }
+  .prospectsFilters { gap: 6px; }
+  .prospectsTableHead,
+  .prospectsTableRow {
+    /* 6 visible: rank | name | pick | score | trend | load */
+    grid-template-columns: 22px 1fr 78px 64px 52px 40px;
+    font-size: 11px;
+  }
+  /* Also hide: pffOff (7) and ypa (9) on top of 860px rules */
   .prospectsTableHead span:nth-child(7),
   .prospectsTableRow span:nth-child(7),
-  .prospectsTableHead span:nth-child(11),
-  .prospectsTableRow span:nth-child(11),
-  .prospectsTableHead span:nth-child(12),
-  .prospectsTableRow span:nth-child(12) { display: none; }
-  .prospectsTableRow span:last-child { display: flex; }
+  .prospectsTableHead span:nth-child(9),
+  .prospectsTableRow span:nth-child(9) { display: none; }
+  .pRank { font-size: 10px; }
+  .pPickRange { font-size: 10px; }
 }
