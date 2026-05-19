@@ -415,7 +415,7 @@ export default function App() {
   const projection = useMemo(() => project(input, prospects, pffProfiles, undefined, y1Data, careerStats), [input, prospects, pffProfiles, y1Data, careerStats])
   const histFlagMap = useMemo(
     () => buildHistoricalFlagMap(
-      lookupPool.filter((p) => p.year >= 2000 && p.year <= 2025 && p.pick < 260),
+      lookupPool.filter((p) => p.year >= 2000 && p.year <= 2026 && p.pick < 260),
       pffProfiles,
     ),
     [lookupPool, pffProfiles],
@@ -2546,6 +2546,20 @@ function buildGemTooltip(player: Historical, profile: PffProfile | null, reason:
   return lines.join('\n')
 }
 
+function collegeTooltip(player: Historical, profile: PffProfile | null, kind: 'bust' | 'gem', reason: string): string {
+  const nflLine = player.games > 0 ? `NFL so far: ${player.games} games, AV ${player.av}` : 'No NFL games yet'
+  return [
+    `Pick #${player.pick >= 260 ? 'UDFA' : player.pick} · ${player.year} · ${player.pos}`,
+    nflLine,
+    `${kind === 'bust' ? 'Risk factor' : 'Standout factor'}: ${reason}`,
+    ...(profile ? [
+      `PFF college: composite ${profile.pff.composite.toFixed(0)} · grade ${profile.pff.grade.toFixed(0)} · prod ${profile.pff.production.toFixed(0)}`,
+      `efficiency ${profile.pff.efficiency.toFixed(0)} · clean pocket ${profile.pff.clean.toFixed(0)}`,
+    ] : []),
+    'College-metric flag — no mature NFL data yet',
+  ].join('\n')
+}
+
 function classifyHistoricalOutcome(player: Historical, profile: PffProfile | null): HistoricalOutcomeFlag | null {
   // ── Mature outcomes (2021 and earlier) ───────────────────────────────────
   if (player.year <= compCutoffYear) {
@@ -2632,6 +2646,80 @@ function classifyHistoricalOutcome(player: Historical, profile: PffProfile | nul
         `Note: early sample — outcome may improve further`,
       ].join('\n')
       return { type: 'gem', label, detail: label, tooltip }
+    }
+  }
+
+  // ── College-metric signals (2022-2026, < 16 NFL games) ───────────────────
+  if (player.year >= 2022 && player.year <= 2026 && player.games < 16) {
+    if (profile) {
+      // Bust risk: top-64 pick with warning signs in college grades
+      if (player.pick <= 64) {
+        if (profile.pff.clean < 52 && profile.pff.efficiency < 52) {
+          const reason = `turnover-prone & inefficient (clean ${profile.pff.clean.toFixed(0)}, eff ${profile.pff.efficiency.toFixed(0)})`
+          const label = `College risk: ${reason}`
+          return { type: 'bust', label, detail: label, tooltip: collegeTooltip(player, profile, 'bust', reason) }
+        }
+        if (profile.pff.clean < 52) {
+          const reason = `turnover-prone in college (clean ${profile.pff.clean.toFixed(0)})`
+          const label = `College risk: ${reason}`
+          return { type: 'bust', label, detail: label, tooltip: collegeTooltip(player, profile, 'bust', reason) }
+        }
+        if (profile.pff.efficiency < 52) {
+          const reason = `low college efficiency (eff ${profile.pff.efficiency.toFixed(0)})`
+          const label = `College risk: ${reason}`
+          return { type: 'bust', label, detail: label, tooltip: collegeTooltip(player, profile, 'bust', reason) }
+        }
+        if (profile.pff.production < 52) {
+          const reason = `low college production (prod ${profile.pff.production.toFixed(0)})`
+          const label = `College risk: ${reason}`
+          return { type: 'bust', label, detail: label, tooltip: collegeTooltip(player, profile, 'bust', reason) }
+        }
+      }
+      // Gem signal: pick 33+ with standout college metrics
+      if (player.pick >= 33) {
+        if (profile.pff.efficiency > 72) {
+          const reason = `college efficiency standout (eff ${profile.pff.efficiency.toFixed(0)})`
+          const label = `College standout: ${reason}`
+          return { type: 'gem', label, detail: label, tooltip: collegeTooltip(player, profile, 'gem', reason) }
+        }
+        if (player.pick >= 65 && profile.pff.grade > 75) {
+          const reason = `high college grade (grade ${profile.pff.grade.toFixed(0)})`
+          const label = `College standout: ${reason}`
+          return { type: 'gem', label, detail: label, tooltip: collegeTooltip(player, profile, 'gem', reason) }
+        }
+        if (player.pick >= 65 && profile.pff.composite > 70) {
+          const reason = `undervalued composite (comp ${profile.pff.composite.toFixed(0)})`
+          const label = `College standout: ${reason}`
+          return { type: 'gem', label, detail: label, tooltip: collegeTooltip(player, profile, 'gem', reason) }
+        }
+      }
+    }
+    // No PFF profile: fall back to combine metrics
+    if (player.pick <= 64) {
+      const thresh = slowForPos[player.pos]
+      if (thresh && player.forty != null && player.forty > thresh) {
+        const reason = `slow for position (${player.forty.toFixed(2)}s 40)`
+        const label = `College risk: ${reason}`
+        return { type: 'bust', label, detail: label, tooltip: collegeTooltip(player, null, 'bust', reason) }
+      }
+      if (player.age != null && player.age >= 24) {
+        const reason = `older prospect (age ${player.age.toFixed(1)})`
+        const label = `College risk: ${reason}`
+        return { type: 'bust', label, detail: label, tooltip: collegeTooltip(player, null, 'bust', reason) }
+      }
+    }
+    if (player.pick >= 65) {
+      const thresh = fastForPos[player.pos]
+      if (thresh && player.forty != null && player.forty <= thresh) {
+        const reason = `elite speed (${player.forty.toFixed(2)}s 40)`
+        const label = `College standout: ${reason}`
+        return { type: 'gem', label, detail: label, tooltip: collegeTooltip(player, null, 'gem', reason) }
+      }
+      if (player.age != null && player.age <= 21.5) {
+        const reason = `young for class (age ${player.age.toFixed(1)})`
+        const label = `College standout: ${reason}`
+        return { type: 'gem', label, detail: label, tooltip: collegeTooltip(player, null, 'gem', reason) }
+      }
     }
   }
 
