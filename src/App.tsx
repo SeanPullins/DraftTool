@@ -916,6 +916,7 @@ export default function App() {
             <Signal label="Draft" value={projection.signals.draft} />
             <Signal label="Athletic" value={projection.signals.athletic} />
             <Signal label="Size" value={projection.signals.size} />
+            <Signal label="Strength" value={projection.signals.strength} />
             <Signal label="Scouting" value={projection.signals.scout} />
             <Signal label="Age" value={projection.signals.age} />
             <Signal label="PFF" value={projection.signals.pff} />
