@@ -413,17 +413,25 @@ export default function App() {
   }
   const y1Data = useMemo<Y1Data>(() => ({ qb: qbSeasons, wr: wrSeasons, rb: rbSeasons }), [qbSeasons, wrSeasons, rbSeasons])
   const projection = useMemo(() => project(input, prospects, pffProfiles, undefined, y1Data, careerStats), [input, prospects, pffProfiles, y1Data, careerStats])
-  const histFlagMap = useMemo(() => buildHistoricalFlagMap(prospects, pffProfiles), [prospects, pffProfiles])
+  const histFlagMap = useMemo(
+    () => buildHistoricalFlagMap(
+      lookupPool.filter((p) => p.year >= 2000 && p.year <= 2025 && p.pick < 260),
+      pffProfiles,
+    ),
+    [lookupPool, pffProfiles],
+  )
   const patternAlerts = useMemo(() => extractPatternAlerts(projection.fullComps, histFlagMap), [projection.fullComps, histFlagMap])
   const draftBoard = useMemo(
     () => saved
       .map((player) => {
         const projection = project(player, prospects, pffProfiles, undefined, y1Data, careerStats)
         const patternAlerts = extractPatternAlerts(projection.fullComps, histFlagMap)
-        return { player, projection, patternAlerts }
+        const historical = lookupPool.find((h) => clean(h.name) === clean(player.name) && h.year === player.draftSeason && h.pos === player.pos) ?? null
+        const earlyFlag = historical ? (histFlagMap.get(historical.id) ?? null) : null
+        return { player, projection, patternAlerts, earlyFlag }
       })
       .sort((a, b) => b.projection.score - a.projection.score),
-    [saved, prospects, pffProfiles, y1Data, careerStats, histFlagMap],
+    [saved, prospects, pffProfiles, y1Data, careerStats, histFlagMap, lookupPool],
   )
 
   const orderedBoard = useMemo(() => {
@@ -1069,6 +1077,7 @@ export default function App() {
                         <td>{row.projection.median.toFixed(1)}</td>
                         <td>
                           <OutcomeTag category={best} />
+                          {row.earlyFlag && <FlagBadge flag={row.earlyFlag} />}
                           {row.patternAlerts.map((a) => <PatternBadge key={a.type} alert={a} />)}
                         </td>
                         <td><button type="button" className="smallButton" onClick={() => loadSavedProspect(row.player.id)}>Load</button></td>
@@ -1102,6 +1111,7 @@ export default function App() {
                       <div className="cardFooter">
                         <span className="cardScore">{Math.round(row.projection.score)}</span>
                         <OutcomeTag category={best} />
+                        {row.earlyFlag && <FlagBadge flag={row.earlyFlag} />}
                         {row.patternAlerts.map((a) => <PatternBadge key={a.type} alert={a} />)}
                         <button type="button" className="smallButton" onClick={() => loadSavedProspect(row.player.id)}>Load</button>
                       </div>
@@ -1634,7 +1644,7 @@ function PlayerBrowser({ pool, history, histFlagMap, onOpenModal, onCompare }: {
             <tbody>
               {display.map((player) => {
                 const showEarlySample = player.year > matureOutcomeCutoff
-                const outcomeFlag = !showEarlySample ? (histFlagMap.get(player.id) ?? null) : null
+                const outcomeFlag = histFlagMap.get(player.id) ?? null
                 return <tr key={player.id} className="clickableRow" onClick={() => onOpenModal(player)}>
                   <td><b>{player.name}</b></td>
                   <td><small>{player.school || '—'}</small></td>
@@ -2505,20 +2515,60 @@ function buildGemTooltip(player: Historical, profile: PffProfile | null, reason:
 }
 
 function classifyHistoricalOutcome(player: Historical, profile: PffProfile | null): HistoricalOutcomeFlag | null {
-  if (player.year > compCutoffYear || player.games < 20) return null
-  const isBust = player.pick < 100 &&
-    (player.av < 12 || player.category === 'Bust' || player.category === 'Reserve')
-  const isGem =
-    (player.pick >= 33 && player.pick < 100 && (player.category === 'Star' || player.category === 'High-end starter')) ||
-    (player.pick >= 100 && (player.category === 'Star' || player.category === 'High-end starter' || player.category === 'Starter'))
-  if (isBust) {
-    const detail = bustReasonLabel(player, profile)
-    return { type: 'bust', label: detail, detail, tooltip: buildBustTooltip(player, profile, detail) }
+  // ── Mature outcomes (2021 and earlier) ───────────────────────────────────
+  if (player.year <= compCutoffYear) {
+    if (player.games < 20) return null
+    const isBust = player.pick < 100 &&
+      (player.av < 12 || player.category === 'Bust' || player.category === 'Reserve')
+    const isGem =
+      (player.pick >= 33 && player.pick < 100 && (player.category === 'Star' || player.category === 'High-end starter')) ||
+      (player.pick >= 100 && (player.category === 'Star' || player.category === 'High-end starter' || player.category === 'Starter'))
+    if (isBust) {
+      const detail = bustReasonLabel(player, profile)
+      return { type: 'bust', label: detail, detail, tooltip: buildBustTooltip(player, profile, detail) }
+    }
+    if (isGem) {
+      const detail = gemReasonLabel(player, profile)
+      return { type: 'gem', label: detail, detail, tooltip: buildGemTooltip(player, profile, detail) }
+    }
+    return null
   }
-  if (isGem) {
-    const detail = gemReasonLabel(player, profile)
-    return { type: 'gem', label: detail, detail, tooltip: buildGemTooltip(player, profile, detail) }
+
+  // ── Early-career signals (2022-2025) ─────────────────────────────────────
+  if (player.year >= 2022 && player.year <= 2025 && player.games >= 16) {
+    const avRate = player.av / (player.games / 17)
+    const isEarlyBust = player.pick < 64 && avRate < 3.0
+    const isEarlyGem = player.pick >= 64 && avRate >= 5.0
+    if (isEarlyBust) {
+      const label = `Early bust signal (#${player.pick}, AV ${player.av} in ${player.games}G)`
+      const tooltip = [
+        `Pick #${player.pick} · ${player.year} · ${player.pos} — Early-career signal`,
+        `AV ${player.av} · ${player.games} games (${avRate.toFixed(1)}/season pace)`,
+        `Top-${player.pick <= 32 ? '1st' : '2nd'} round pick underperforming draft slot`,
+        ...(profile ? [
+          `PFF college: composite ${profile.pff.composite.toFixed(0)} · grade ${profile.pff.grade.toFixed(0)}`,
+          `efficiency ${profile.pff.efficiency.toFixed(0)} · clean pocket ${profile.pff.clean.toFixed(0)}`,
+        ] : []),
+        `Note: early sample — outcome may improve`,
+      ].join('\n')
+      return { type: 'bust', label, detail: label, tooltip }
+    }
+    if (isEarlyGem) {
+      const label = `Early gem signal (#${player.pick}, AV ${player.av} in ${player.games}G)`
+      const tooltip = [
+        `Pick #${player.pick} · ${player.year} · ${player.pos} — Early-career signal`,
+        `AV ${player.av} · ${player.games} games (${avRate.toFixed(1)}/season pace)`,
+        `Round 3+ pick outperforming draft slot`,
+        ...(profile ? [
+          `PFF college: composite ${profile.pff.composite.toFixed(0)} · grade ${profile.pff.grade.toFixed(0)}`,
+          `efficiency ${profile.pff.efficiency.toFixed(0)} · clean pocket ${profile.pff.clean.toFixed(0)}`,
+        ] : []),
+        `Note: early sample — outcome may improve further`,
+      ].join('\n')
+      return { type: 'gem', label, detail: label, tooltip }
+    }
   }
+
   return null
 }
 
