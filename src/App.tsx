@@ -803,6 +803,7 @@ export default function App() {
               <Num label="Broad" value={input.broad} onChange={(v) => update('broad', v)} />
               <Num label="3-cone" value={input.cone} step={0.01} onChange={(v) => update('cone', v)} />
               <Num label="Shuttle" value={input.shuttle} step={0.01} onChange={(v) => update('shuttle', v)} />
+              <Num label="Bench reps" value={input.bench} onChange={(v) => update('bench', v)} />
             </div>
           </div>
         </section>
@@ -1692,6 +1693,7 @@ function PlayerModal({ player, history, pffProfiles, onClose, onCompare }: {
                 {player.broad ? <span>{player.broad}<small>Broad</small></span> : null}
                 {player.cone ? <span>{player.cone.toFixed(2)}<small>Cone</small></span> : null}
                 {player.shuttle ? <span>{player.shuttle.toFixed(2)}<small>Shuttle</small></span> : null}
+                {player.bench ? <span>{player.bench}<small>Bench</small></span> : null}
               </div>
             </div>
           )}
