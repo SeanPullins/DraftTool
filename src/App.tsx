@@ -156,6 +156,7 @@ type SortDir = 'asc' | 'desc'
 const positions = ['QB', 'RB', 'WR', 'TE', 'OL', 'DL', 'LB', 'CB', 'S']
 const outcomeOrder: Category[] = ['Bust', 'Reserve', 'Role', 'Starter', 'High-end starter', 'Star']
 const matureOutcomeCutoff = 2023
+const compCutoffYear = 2021
 const sortLabels: Record<SortKey, string> = {
   av: 'AV',
   projAv: 'Projected AV',
@@ -579,7 +580,7 @@ export default function App() {
       `Games: ${Math.round(projection.games)} | Starter yrs: ${projection.starts.toFixed(1)} | RAS: ${projection.ras.toFixed(1)}`,
       '',
       'OUTCOME ODDS',
-      ...([...outcomeOrder].reverse().map((o) => `  ${o}: ${Math.round((projection.odds[o] || 0) * 100)}%`)),
+      ...([...outcomeOrder].reverse().map((o) => `  ${outcomeAVRange[o as Category]}: ${Math.round((projection.odds[o as Category] || 0) * 100)}%`)),
       '',
       'TOP COMPS',
       ...projection.comps.slice(0, 6).map((c, i) =>
@@ -896,7 +897,7 @@ export default function App() {
         <section className="summaryGrid" data-pane="results">
           <section className="panel">
             <div className="panelTitle"><div><p>Probability</p><h2>Outcome Odds</h2></div></div>
-            {outcomeOrder.map((name) => <Bar key={name} label={name} value={projection.odds[name] || 0} />)}
+            {outcomeOrder.map((cat, i) => <Bar key={cat} label={outcomeAVRange[cat]} value={projection.odds[cat] || 0} colorIdx={i} />)}
           </section>
 
           <section className="panel">
@@ -943,13 +944,7 @@ export default function App() {
                   <tbody>{orderedBoard.slice(0, 40).map((row, index) => {
                     const best = outcomeOrder.slice().sort((a, b) => (row.projection.odds[b] || 0) - (row.projection.odds[a] || 0))[0]
                     const score = Math.round(row.projection.score)
-                    const prevScore = index > 0 ? Math.round(orderedBoard[index - 1].projection.score) : 999
-                    const tiers = [{ min: 82, label: 'Elite Prospect', cls: 'tierStar' }, { min: 70, label: 'Pro Bowl Upside', cls: 'tierHigh' }, { min: 58, label: 'Starter Projection', cls: 'tierSolid' }, { min: 45, label: 'Backup / Depth', cls: 'tierBackup' }, { min: 0, label: 'Developmental', cls: 'tierDepth' }]
-                    const curTier = tiers.find((t) => score >= t.min)!
-                    const prevTier = tiers.find((t) => prevScore >= t.min)!
-                    const showTier = curTier !== prevTier
                     return <>
-                      {showTier && <tr key={`tier-${index}`} className="tierSeparator"><td colSpan={8} className={curTier.cls}>{curTier.label}</td></tr>}
                       <tr key={row.player.id} className={`classRow-${scoreClass(score)}${row.player.id === selectedSavedId ? ' currentRow' : ''}`}>
                         <td><b className="boardRank">{index + 1}</b></td>
                         <td><b>{row.player.name}</b><small>{row.player.school || 'No school'}</small></td>
@@ -1147,16 +1142,13 @@ function Signal({ label, value }: { label: string; value: number }) {
   return <div className="signal"><span>{label}</span><b>{Math.round(value)}</b><i><em style={{ width: `${clamp(value, 0, 100)}%` }} /></i></div>
 }
 
-const barClass: Record<string, string> = {
-  'Star': 'barStar', 'High-end starter': 'barHigh', 'Solid starter': 'barSolid',
-  'Backup starter': 'barBackup', 'Role player': 'barRole', 'Reserve': 'barReserve', 'Bust': 'barBust'
-}
-function Bar({ label, value }: { label: string; value: number }) {
-  return <div className={`bar ${barClass[label] ?? ''}`}><span>{label}</span><i><b style={{ width: `${value * 100}%` }} /></i><strong>{(value * 100).toFixed(1)}%</strong></div>
+const barColors = ['barBust', 'barReserve', 'barRole', 'barSolid', 'barHigh', 'barStar']
+function Bar({ label, value, colorIdx }: { label: string; value: number; colorIdx?: number }) {
+  return <div className={`bar ${colorIdx != null ? barColors[colorIdx] : ''}`}><span>{label}</span><i><b style={{ width: `${value * 100}%` }} /></i><strong>{(value * 100).toFixed(1)}%</strong></div>
 }
 
 function OutcomeTag({ category }: { category: Category }) {
-  return <span className={`tag tag${outcomeOrder.indexOf(category)}`}>{category}</span>
+  return <span className={`tag tag${outcomeOrder.indexOf(category)}`}>{outcomeAVRange[category]}</span>
 }
 
 function TableWrap({ children }: { children: ReactNode }) {
@@ -1865,15 +1857,7 @@ function ClassExplorer({ pool, history, pffProfiles, y1Data, currentName, curren
             const projected = projections.get(player.id)
             const showEarlySample = player.year > matureOutcomeCutoff
             const score = projected ? Math.round(projected.score) : 0
-            const prevProjected = index > 0 ? projections.get(rows[index - 1].id) : null
-            const prevScore = index > 0 ? (prevProjected ? Math.round(prevProjected.score) : 0) : 999
-            const classTiers = [{ min: 82, label: 'Elite Prospect', cls: 'tierStar' }, { min: 70, label: 'Pro Bowl Upside', cls: 'tierHigh' }, { min: 58, label: 'Starter Projection', cls: 'tierSolid' }, { min: 45, label: 'Backup / Depth', cls: 'tierBackup' }, { min: 0, label: 'Developmental', cls: 'tierDepth' }]
-            const curTier = classTiers.find((t) => score >= t.min)!
-            const prevTier = classTiers.find((t) => prevScore >= t.min)!
-            const showTier = useProjections && curTier !== prevTier
-            const colCount = useProjections ? 13 : 11
             return <>
-              {showTier && <tr key={`tier-${index}`} className="tierSeparator"><td colSpan={colCount} className={curTier.cls}>{curTier.label}</td></tr>}
               <tr key={player.id} className={`${useProjections ? `classRow-${scoreClass(score)} ` : ''}${isCurrent ? 'currentRow' : ''}`}>
                 <td><b className="boardRank">{index + 1}</b></td>
                 <td><b>{player.name}</b><small>{player.school || 'No school'}</small></td>
@@ -2280,12 +2264,14 @@ function height(v: string): number | null {
 }
 
 function norm(p: string): string {
-  const x = p.toUpperCase()
-  if (['OT', 'T', 'LT', 'RT', 'G', 'OG', 'C', 'OL', 'IOL'].includes(x)) return 'OL'
-  if (['DE', 'OLB', 'EDGE', 'ED', 'DT', 'NT', 'DL', 'IDL', 'DI'].includes(x)) return 'DL'
-  if (['ILB', 'MLB'].includes(x)) return 'LB'
-  if (['FS', 'SS', 'DB', 'S'].includes(x)) return 'S'
-  return positions.includes(x) ? x : 'S'
+  const x = p.toUpperCase().trim()
+  if (['OT', 'G', 'T', 'LT', 'RT', 'OG', 'C', 'OL', 'IOL', 'OC'].includes(x)) return 'OL'
+  if (['DE', 'DT', 'NT', 'DL', 'IDL', 'DI', 'OLB', 'EDGE', 'ED'].includes(x)) return 'DL'
+  if (['ILB', 'MLB', 'WILL', 'MIKE', 'SAM'].includes(x)) return 'LB'
+  if (['FS', 'SS', 'DB'].includes(x)) return 'S'
+  if (x === 'FB') return 'RB'
+  // Unknown positions (K, P, LS, etc.) return as-is; buildProspectPool filters non-positions
+  return x
 }
 
 function buildProspectPool(combine: Row[], draft: Row[]): Historical[] {
@@ -2352,7 +2338,13 @@ function ageSignal(age: number, pos: string): number {
 }
 
 function project(input: Prospect, history: Historical[], pffProfiles: PffProfile[], excludeId?: string, y1Data?: Y1Data) {
-  const pool = history.filter((p) => (p.pos === input.pos || group[p.pos] === group[input.pos]) && p.id !== excludeId)
+  // Only use players with ≥4 seasons of NFL data as comps — avoids underestimating projections
+  // by including recent draftees whose career AV is still accumulating
+  const pool = history.filter((p) =>
+    (p.pos === input.pos || group[p.pos] === group[input.pos]) &&
+    p.id !== excludeId &&
+    p.year <= compCutoffYear
+  )
   const ras = rasScore(input, pool)
   const stats = (k: keyof Historical) => pool.map((p) => p[k]).filter((v): v is number => typeof v === 'number' && Number.isFinite(v))
   const pct = (value: number, values: number[], low = false) => values.length ? values.filter((v) => low ? v >= value : v <= value).length / values.length * 100 : 50
@@ -2659,11 +2651,21 @@ function category(av: number, games: number, starts: number, pb: number, ap: num
 }
 
 function gradeLabel(score: number) {
-  if (score > 84) return 'Blue-chip starter profile'
-  if (score > 74) return 'Strong starter profile'
-  if (score > 63) return 'Developmental starter profile'
-  if (score > 52) return 'Role-player profile'
-  return 'Long-shot profile'
+  if (score >= 85) return 'Grade A+'
+  if (score >= 75) return 'Grade A'
+  if (score >= 65) return 'Grade B+'
+  if (score >= 55) return 'Grade B'
+  if (score >= 45) return 'Grade C+'
+  return 'Grade C'
+}
+
+const outcomeAVRange: Record<Category, string> = {
+  'Bust':             '< 4 AV',
+  'Reserve':          '4–10 AV',
+  'Role':             '10–24 AV',
+  'Starter':          '24–45 AV',
+  'High-end starter': '45–70 AV',
+  'Star':             '70+ AV',
 }
 
 function findHistoricalForPff(profile: PffProfile, history: Historical[]) {
