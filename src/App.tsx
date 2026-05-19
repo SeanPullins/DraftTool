@@ -147,7 +147,7 @@ type Y1Data = { qb: QbSeason[]; wr: WrSeason[]; rb: RbSeason[] }
 type Projection = ReturnType<typeof project>
 type LoaderMessage = { tone: 'good' | 'warn'; text: string } | null
 type MobileTab = 'edit' | 'results' | 'board'
-type Page = 'workbench' | 'class' | 'players' | 'compare' | 'trade' | 'rankings'
+type Page = 'workbench' | 'class' | 'players' | 'compare' | 'trade' | 'rankings' | 'guide'
 type BrowserSortKey = 'av' | 'games' | 'starts' | 'pb' | 'ap' | 'pick' | 'name' | 'outcome' | 'year' | 'forty'
 type ModelSignal = 'draftScore' | 'logPick' | 'pffComp' | 'pffGrade' | 'pffProd' | 'pffEff' | 'pffClean' | 'ageScore' | 'athletic' | 'size' | 'isQB' | 'isSkill' | 'isOL' | 'isFront' | 'isDB'
 type SortKey = 'av' | 'projAv' | 'projScore' | 'games' | 'starts' | 'pb' | 'ap' | 'pick' | 'name' | 'outcome'
@@ -385,7 +385,7 @@ export default function App() {
 
   useEffect(() => {
     if (typeof window === 'undefined') return
-    const hashMap: Partial<Record<Page, string>> = { class: '#class', players: '#players', compare: '#compare', trade: '#trade' }
+    const hashMap: Partial<Record<Page, string>> = { class: '#class', players: '#players', compare: '#compare', trade: '#trade', guide: '#guide' }
     const target = hashMap[page] ?? ''
     if (window.location.hash !== target) {
       const url = target || `${window.location.pathname}${window.location.search}`
@@ -702,6 +702,7 @@ export default function App() {
         <button type="button" className={page === 'rankings' ? 'on' : ''} onClick={() => setPage('rankings')}>Rankings</button>
         <button type="button" className={page === 'compare' ? 'on' : ''} onClick={() => setPage('compare')}>Compare</button>
         <button type="button" className={page === 'trade' ? 'on' : ''} onClick={() => setPage('trade')}>Trade</button>
+        <button type="button" className={page === 'guide' ? 'on' : ''} onClick={() => setPage('guide')}>Guide</button>
       </nav>
 
       {page === 'workbench' ? <nav className="mobileTabs" role="tablist" aria-label="Workbench sections">
@@ -721,6 +722,8 @@ export default function App() {
       <TradeCalculator />
     </div> : page === 'rankings' ? <div className="classPage">
       <RankingsPage history={prospects} onOpenModal={openModal} onCompare={handleCompare} />
+    </div> : page === 'guide' ? <div className="classPage">
+      <GuideView />
     </div> : <div className="layout">
       <aside className="controlPanel" data-pane="edit">
         <section className="panel loadPanel">
@@ -1104,6 +1107,9 @@ export default function App() {
       </button>
       <button type="button" className={page === 'trade' ? 'on' : ''} onClick={() => setPage('trade')}>
         <span className="bottomNavIcon">⇋</span>Trade
+      </button>
+      <button type="button" className={page === 'guide' ? 'on' : ''} onClick={() => setPage('guide')}>
+        <span className="bottomNavIcon">?</span>Guide
       </button>
     </nav>
 
@@ -1712,6 +1718,131 @@ function PlayerModal({ player, history, pffProfiles, onClose, onCompare }: {
   )
 }
 
+function GuideView() {
+  return <div className="guidePage">
+    <div className="guideSection">
+      <h2>What is AV?</h2>
+      <p>
+        <strong>Approximate Value (AV)</strong> is a career production metric from Pro-Football-Reference.
+        It is position-neutral, meaning a QB's AV is directly comparable to an OL's. One AV point is
+        roughly one solid game started; roughly 6–8 AV per year is a full-time starter's pace.
+      </p>
+      <div className="guideTable">
+        <div className="guideTableHead">
+          <span>AV range</span><span>What it means</span><span>Examples</span>
+        </div>
+        {([
+          ['70+ AV',    'Elite / Hall-of-Fame track',      'Patrick Mahomes, Aaron Donald'],
+          ['45–70 AV',  'Pro Bowl–caliber career',         'Cooper Kupp, Micah Parsons'],
+          ['24–45 AV',  'Multi-year NFL starter',          'Brian Burns, James Conner'],
+          ['10–24 AV',  'Rotational / role player',        'Typical Day 2 contributor'],
+          ['4–10 AV',   'Backup / special-teams value',    'Typical Day 3 pick'],
+          ['< 4 AV',    'Minimal NFL impact',              'Most undrafted FAs'],
+        ] as [string, string, string][]).map(([range, desc, ex]) => (
+          <div key={range} className="guideTableRow">
+            <span className="guideAvRange">{range}</span>
+            <span>{desc}</span>
+            <span className="guideEx">{ex}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+
+    <div className="guideSection">
+      <h2>What is Projected AV?</h2>
+      <p>
+        <strong>Projected AV</strong> is the model's estimate of a prospect's career Approximate Value.
+        It is computed by finding up to 80 historically similar players (drafted 2000–2021, so all comps
+        have at least 4 seasons of real NFL data) and taking a similarity-weighted average of their
+        actual career AVs.
+      </p>
+      <p>
+        Similarity is based on draft pick (log-scaled, 45% weight), combine athleticism (39%), and
+        size (16%). When a PFF college profile is loaded and at least 12 mature PFF comps exist, a
+        35% PFF blend is added — weighting players by college production, grade, and efficiency.
+      </p>
+      <p>
+        A calibrated linear model (trained on the same 2000–2021 population) contributes a 10% anchor
+        to keep the estimate stable when the comp pool is thin.
+      </p>
+    </div>
+
+    <div className="guideSection">
+      <h2>What is the Score (1–99)?</h2>
+      <p>
+        The <strong>Score</strong> is a 1–99 composite index that translates the projection into a
+        single number. It blends two components:
+      </p>
+      <ul className="guideList">
+        <li><strong>54% Expected AV percentile</strong> — where the Projected AV sits within historical players at the same position group.</li>
+        <li><strong>46% Signal composite</strong> — a weighted blend of the input signals below.</li>
+      </ul>
+      <div className="guideTable guideSignalTable">
+        <div className="guideTableHead"><span>Signal</span><span>What it captures</span><span>Weight by group</span></div>
+        {([
+          ['Draft',    'Draft capital (pick slot)',                            'QB 34% · Skill 27% · OL 28% · Front 26% · DB 29%'],
+          ['Athletic', '40-yd, vertical, broad jump, cone, shuttle vs. peers','QB 5% · Skill 21% · OL 8% · Front 20% · DB 22%'],
+          ['Strength', 'Bench press reps vs. position group peers',           'QB 6% · Skill 3% · OL 10% · Front 10% · DB 4%'],
+          ['Size',     'Height + weight vs. position group',                  'QB 5% · Skill 6% · OL 18% · Front 8% · DB 4%'],
+          ['Scouting', 'Weighted Film/Production/Fit/Health/Processing grades','QB 38% · Skill 33% · OL 28% · Front 28% · DB 31%'],
+          ['Age',      'Draft age; younger = higher upside ceiling',          'QB 12% · Skill 10% · OL 8% · Front 8% · DB 10%'],
+          ['PFF',      'College PFF composite, grade, production, efficiency','Activates at 35% blend when ≥12 PFF comps exist'],
+        ] as [string, string, string][]).map(([sig, cap, wt]) => (
+          <div key={sig} className="guideTableRow">
+            <span className="guideSigName">{sig}</span>
+            <span>{cap}</span>
+            <span className="guideWt">{wt}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+
+    <div className="guideSection">
+      <h2>Grade scale</h2>
+      <div className="guideTable">
+        <div className="guideTableHead"><span>Score</span><span>Grade</span><span>Interpretation</span></div>
+        {([
+          ['85–99', 'A+', 'Franchise-level traits and projection; comp pool dominated by Pro Bowl / elite careers'],
+          ['75–84', 'A',  'Strong starter projection; high % of comps became multi-year starters'],
+          ['65–74', 'B+', 'Starter-caliber projection with meaningful variance'],
+          ['55–64', 'B',  'Likely contributor; mix of starters and role players in comp pool'],
+          ['45–54', 'C+', 'Backup-track projection; limited ceiling from current inputs'],
+          ['< 45',  'C',  'Developmental; comp pool skewed toward minimal-impact outcomes'],
+        ] as [string, string, string][]).map(([range, grade, desc]) => (
+          <div key={grade} className="guideTableRow">
+            <span className="guideScoreRange">{range}</span>
+            <span className="guideGrade">{grade}</span>
+            <span>{desc}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+
+    <div className="guideSection">
+      <h2>Outcome odds</h2>
+      <p>
+        The <strong>Outcome Odds</strong> panel shows the probability distribution across AV tiers,
+        derived from the weighted outcomes of the comp pool. A player with 40% odds in the
+        "24–45 AV" band and 25% in "45–70 AV" has a strong starter projection with real upside.
+      </p>
+      <p>
+        The floor / median / ceiling in the Career AV Band panel are the 10th, 50th, and 90th
+        percentiles of the comp pool's actual career AVs, blended 25% toward the calibrated model estimate.
+      </p>
+    </div>
+
+    <div className="guideSection">
+      <h2>Data sources</h2>
+      <ul className="guideList">
+        <li><strong>Historical outcomes</strong> — nflverse draft picks + combine data (2000–present), updated automatically</li>
+        <li><strong>PFF college profiles</strong> — Pro Football Focus college grades matched to NFL outcomes</li>
+        <li><strong>Comp cutoff</strong> — Only players drafted through {compCutoffYear} are used as comps, ensuring all comp AV values reflect at least 4 full NFL seasons</li>
+        <li><strong>Year 1 stats</strong> — Rookie season passer rating (QB), receiving yards (WR), and rushing yards (RB) provide an early-signal adjustment to comp weights</li>
+      </ul>
+    </div>
+  </div>
+}
+
 function RankingsPage({ history, onOpenModal, onCompare }: { history: Historical[]; onOpenModal: (p: Historical) => void; onCompare: (name: string) => void }) {
   return <section className="panel tablePanel classPanel">
     <div className="panelTitle"><div><p>Historical Database</p><h2>Position Rankings</h2></div></div>
@@ -1737,8 +1868,8 @@ function ClassExplorer({ pool, history, pffProfiles, y1Data, currentName, curren
 
   const [year, setYear] = useState<number | null>(null)
   const [pos, setPos] = useState<string>('All')
-  const [sortKey, setSortKey] = useState<SortKey>('projAv')
-  const [sortDir, setSortDir] = useState<SortDir>('desc')
+  const [sortKey, setSortKey] = useState<SortKey>('pick')
+  const [sortDir, setSortDir] = useState<SortDir>('asc')
 
   // Persistent cache: avoids recomputing the same player on year revisits
   const projCache = useRef(new Map<string, { av: number; score: number }>())
@@ -1783,14 +1914,16 @@ function ClassExplorer({ pool, history, pffProfiles, y1Data, currentName, curren
   }, [deferredFiltered, history, pffProfiles, useProjections, y1Data])
 
   const effectiveSortKey = !useProjections && (sortKey === 'projAv' || sortKey === 'projScore') ? 'av' : sortKey
+  // Use deferredFiltered so rows and projections always come from the same snapshot —
+  // avoids a jumpy/wrong sort order while projections are still computing for the new year.
   const rows = useMemo(() => {
     const factor = sortDir === 'asc' ? 1 : -1
-    return filtered.slice().sort((a, b) => {
+    return deferredFiltered.slice().sort((a, b) => {
       const cmp = compareHistorical(a, b, effectiveSortKey, projections)
       if (cmp !== 0) return cmp * factor
       return (a.pick - b.pick) || a.name.localeCompare(b.name)
     })
-  }, [filtered, effectiveSortKey, sortDir, projections])
+  }, [deferredFiltered, effectiveSortKey, sortDir, projections])
 
   function toggleSort(key: SortKey) {
     if ((key === 'projAv' || key === 'projScore') && !useProjections) return
@@ -1907,7 +2040,7 @@ function compareHistorical(a: Historical, b: Historical, key: SortKey, projectio
 
 function readPageFromHash(): Page {
   if (typeof window === 'undefined') return 'workbench'
-  const map: Record<string, Page> = { '#class': 'class', '#players': 'players', '#compare': 'compare', '#trade': 'trade' }
+  const map: Record<string, Page> = { '#class': 'class', '#players': 'players', '#compare': 'compare', '#trade': 'trade', '#guide': 'guide' }
   return map[window.location.hash] ?? 'workbench'
 }
 
