@@ -2321,7 +2321,6 @@ function ProspectsView({
           <span>School</span>
           <span className="pColNum">Pick Range</span>
           <span className="pColNum">Score</span>
-          <span>Grade</span>
           <span className="pColNum">Proj AV</span>
           <span className="pColNum">PFF Off</span>
           <span className="pColNum">Trend</span>
@@ -2351,7 +2350,6 @@ function ProspectsView({
                 {Math.round(proj.score)}
                 <span className="pScoreRange">{Math.round(proj.scoreLow)}–{Math.round(proj.scoreHigh)}</span>
               </span>
-              <span className="pGrade">{proj.grade}</span>
               <span className="pColNum">{proj.expectedAv.toFixed(1)}</span>
               <span className="pColNum pPffGrade">{rs.grades_offense?.toFixed(1) ?? '—'}</span>
               <span className={`pColNum pTrend ${td.cls}`} title={p.trajectory.label}>
