@@ -140,6 +140,30 @@ for (const row of csv2024) {
   if (key) index2024.set(key, row)
 }
 
+// Players who declared for (or were drafted in) the 2026 NFL Draft after the 2025 college season.
+// These are NOT 2027 draft prospects and must be excluded.
+// Drafted: Mendoza (#1 Raiders), Simpson (#13 Rams), Beck (#65 ARI), Allar (#76 PIT),
+//          Klubnik (#110 NYJ), Green (#182 CLE), Kaliakmanis (#223 WSH), Nussmeier (#249 KC)
+// Declared undrafted: Pavia (VAN), Aguilar (TEN), Gleason (TOL) — all signed as UDFAs
+const CLASS_2026 = new Set([
+  'fernandomendoza', 'tysimpson', 'garrettnussmeier', 'drewllar', 'drewaallar',
+  'carsonbeck', 'cadeklubnik', 'taylengreen', 'athankaliakmanis',
+  'diegopavia', 'joeyaguilar', 'tuckergleason',
+  // aliases / partial matches handled below via includes check
+])
+
+function is2026Class(name) {
+  const key = cleanName(name)
+  if (CLASS_2026.has(key)) return true
+  // Catch slight spelling variations with substring checks
+  const checks = [
+    'fernandomendoza','tysimpson','garrettnussmeier','drewallar',
+    'carsonbeck','cadeklubnik','taylengreen','athankaliakmanis',
+    'diegopavia','joeyaguilar','tuckergleason',
+  ]
+  return checks.some((c) => key === c || (key.length > 6 && c.includes(key.slice(0, 8))))
+}
+
 // Build prospects from 2025 data ONLY (these are the 2027 draft eligible players)
 // 2024 data is only used for prior-year context on the same player
 const prospects = []
@@ -152,6 +176,9 @@ for (const row of csv2025) {
 
   const key = cleanName(row['player'] ?? '')
   if (!key) continue
+
+  // Skip players who entered the 2026 draft class
+  if (is2026Class(row['player'] ?? '')) continue
 
   const row2024 = index2024.get(key) ?? null
   prospects.push(buildProspect(row, row2024))
