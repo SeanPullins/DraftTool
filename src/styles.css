@@ -1688,6 +1688,43 @@ td small {
   margin-top: 2px;
 }
 
+/* ── QB Season Stat Columns ───────────────────────── */
+.qbStatCol {
+  font-size: 10px;
+  text-align: right;
+  white-space: nowrap;
+  color: var(--text-2);
+  padding-right: 8px;
+}
+
+.qbStatCell {
+  text-align: right;
+  padding-right: 8px;
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.qbStatCell span {
+  display: inline-block;
+  min-width: 32px;
+  text-align: right;
+}
+
+.qbStatGood {
+  color: var(--green);
+  font-weight: 700;
+}
+
+.qbStatOk {
+  color: var(--text-1);
+}
+
+.qbStatBad {
+  color: var(--red);
+  font-weight: 600;
+}
+
 /* ── Player Profile Modal ─────────────────────────── */
 .modalOverlay {
   position: fixed;

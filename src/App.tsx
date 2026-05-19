@@ -88,6 +88,41 @@ type PffPayload = {
 type ConsensusPick = { name: string; pos: string; school: string; consensus: number; lo: number; hi: number }
 type ScoutNote = { name: string; summary: string }
 type InjuryFlag = { name: string; pos: string; severity: 'major' | 'moderate' | 'minor'; note: string }
+type QbSeason = {
+  key: string
+  name: string
+  season: number
+  team: string
+  games: number
+  gs: number
+  att: number
+  cmp_pct: number | null
+  rtg: number | null
+  td_pct: number | null
+  int_pct: number | null
+  sk_pct: number | null
+  any_a: number | null
+  succ: number | null
+  ypa: number | null
+}
+type WrSeason = {
+  key: string
+  name: string
+  season: number
+  team: string
+  games: number
+  gs: number
+  tgt: number | null
+  rec: number | null
+  yds: number | null
+  ypr: number | null
+  td: number | null
+  ypg: number | null
+  ctch_pct: number | null
+  succ: number | null
+  pos: string
+}
+type Y1Data = { qb: QbSeason[]; wr: WrSeason[] }
 type Projection = ReturnType<typeof project>
 type LoaderMessage = { tone: 'good' | 'warn'; text: string } | null
 type MobileTab = 'edit' | 'results' | 'board'
@@ -257,6 +292,8 @@ export default function App() {
   const [scoutNotes, setScoutNotes] = useState<ScoutNote[]>([])
   const [injuryFlags, setInjuryFlags] = useState<InjuryFlag[]>([])
   const [compareQuery, setCompareQuery] = useState('')
+  const [qbSeasons, setQbSeasons] = useState<QbSeason[]>([])
+  const [wrSeasons, setWrSeasons] = useState<WrSeason[]>([])
   const [boardView, setBoardView] = useState<'list' | 'grid'>('list')
   const [boardOrder, setBoardOrder] = useState<string[]>([])
   const [dragId, setDragId] = useState('')
@@ -272,12 +309,13 @@ export default function App() {
     setPage('compare')
     setModalPlayer(null)
   }
-  const projection = useMemo(() => project(input, prospects, pffProfiles), [input, prospects, pffProfiles])
+  const y1Data = useMemo<Y1Data>(() => ({ qb: qbSeasons, wr: wrSeasons }), [qbSeasons, wrSeasons])
+  const projection = useMemo(() => project(input, prospects, pffProfiles, undefined, y1Data), [input, prospects, pffProfiles, y1Data])
   const draftBoard = useMemo(
     () => saved
-      .map((player) => ({ player, projection: project(player, prospects, pffProfiles) }))
+      .map((player) => ({ player, projection: project(player, prospects, pffProfiles, undefined, y1Data) }))
       .sort((a, b) => b.projection.score - a.projection.score),
-    [saved, prospects, pffProfiles],
+    [saved, prospects, pffProfiles, y1Data],
   )
 
   const orderedBoard = useMemo(() => {
@@ -341,7 +379,7 @@ export default function App() {
   useEffect(() => {
     async function load() {
       try {
-        const [combineCsv, draftCsv, pffPayload, extraData, consensusData, scoutData, injuryData] = await Promise.all([
+        const [combineCsv, draftCsv, pffPayload, extraData, consensusData, scoutData, injuryData, qbSeasonData, wrSeasonData] = await Promise.all([
           fetch(`${assetBase}data/combine.csv`).then((r) => r.text()),
           fetch(`${assetBase}data/draft_picks.csv`).then((r) => r.text()),
           loadPffPayload(),
@@ -349,6 +387,8 @@ export default function App() {
           fetch(`${assetBase}data/consensus_2025.json`).then((r) => r.json()).catch(() => null),
           fetch(`${assetBase}data/scout_notes_2025.json`).then((r) => r.json()).catch(() => null),
           fetch(`${assetBase}data/injury_flags_2025.json`).then((r) => r.json()).catch(() => null),
+          fetch(`${assetBase}data/qb_seasons.json`).then((r) => r.json()).catch(() => null),
+          fetch(`${assetBase}data/wr_seasons.json`).then((r) => r.json()).catch(() => null),
         ])
         const allProspects = buildProspectPool(parseCsv(combineCsv), parseCsv(draftCsv))
         const extraProspects = buildExtraProspects(extraData)
@@ -363,6 +403,8 @@ export default function App() {
         if (consensusData?.picks?.length) setConsensus(consensusData.picks)
         if (scoutData?.notes?.length) setScoutNotes(scoutData.notes)
         if (injuryData?.flags?.length) setInjuryFlags(injuryData.flags)
+        if (qbSeasonData?.records?.length) setQbSeasons(qbSeasonData.records)
+        if (wrSeasonData?.records?.length) setWrSeasons(wrSeasonData.records)
       } catch {
         setError('Data files are missing. Run npm run data:refresh, then reload.')
       } finally {
@@ -607,11 +649,11 @@ export default function App() {
     </div>
 
     {error ? <section className="panel empty">{error}</section> : page === 'class' ? <div className="classPage">
-      <ClassExplorer pool={lookupPool} history={prospects} pffProfiles={pffProfiles} currentName={input.name} currentYear={input.draftSeason} />
+      <ClassExplorer pool={lookupPool} history={prospects} pffProfiles={pffProfiles} y1Data={y1Data} currentName={input.name} currentYear={input.draftSeason} />
     </div> : page === 'players' ? <div className="classPage">
       <PlayerBrowser pool={lookupPool} history={prospects} onOpenModal={openModal} onCompare={handleCompare} />
     </div> : page === 'compare' ? <div className="classPage">
-      <CompareView pool={lookupPool} history={prospects} pffProfiles={pffProfiles} initialQuery={compareQuery} />
+      <CompareView pool={lookupPool} history={prospects} pffProfiles={pffProfiles} y1Data={y1Data} initialQuery={compareQuery} />
     </div> : page === 'trade' ? <div className="classPage">
       <TradeCalculator />
     </div> : page === 'board' ? <div className="classPage">
@@ -889,9 +931,15 @@ export default function App() {
           <div className="panelTitle"><div><p>nflverse Baseline</p><h2>Closest Draft/Combine Comps</h2></div></div>
           <TableWrap>
             <table>
-              <thead><tr><th>Player</th><th>Yr</th><th>Pos</th><th>Pick</th><th>40</th><th>AV</th><th>Arc</th><th>Career</th><th>Outcome</th><th>Sim</th></tr></thead>
+              <thead><tr>
+                <th>Player</th><th>Yr</th><th>Pos</th><th>Pick</th><th>40</th><th>AV</th><th>Arc</th><th>Career</th><th>Outcome</th><th>Sim</th>
+                {input.pos === 'QB' && <><th className="qbStatCol" title="Year 1 passer rating">Y1 Rtg</th><th className="qbStatCol" title="Year 1 adjusted net yards per attempt">Y1 ANY/A</th></>}
+                {input.pos === 'WR' && <><th className="qbStatCol" title="Year 1 receiving yards">Y1 Yds</th><th className="qbStatCol" title="Year 1 receptions">Y1 Rec</th></>}
+              </tr></thead>
               <tbody>{projection.comps.map((c) => {
                 const hr = schoolHitRate(c.player.school, prospects)
+                const qbY1 = input.pos === 'QB' ? qbSeasons.find((s) => s.key === clean(c.player.name) && s.season === c.player.year) : undefined
+                const wrY1 = input.pos === 'WR' ? wrSeasons.find((s) => s.key === clean(c.player.name) && s.season === c.player.year) : undefined
                 return <tr key={c.player.id}>
                   <td><b>{c.player.name}</b><small>{c.player.school}{hr ? <span className="schoolBadge">{Math.round(hr.rate * 100)}%</span> : null}</small></td>
                   <td>{c.player.year}</td>
@@ -903,6 +951,14 @@ export default function App() {
                   <td><Sparkline values={syntheticArcValues(c.player)} /></td>
                   <td><OutcomeTag category={c.player.category} /></td>
                   <td>{Math.round(c.sim * 100)}</td>
+                  {input.pos === 'QB' && <>
+                    <td className="qbStatCell"><span className={qbRtgClass(qbY1?.rtg ?? null)}>{qbY1 ? (qbY1.rtg?.toFixed(1) ?? '—') : '—'}</span></td>
+                    <td className="qbStatCell"><span className={qbAnyaClass(qbY1?.any_a ?? null)}>{qbY1 ? (qbY1.any_a?.toFixed(1) ?? '—') : '—'}</span></td>
+                  </>}
+                  {input.pos === 'WR' && <>
+                    <td className="qbStatCell"><span className={wrYdsClass(wrY1?.yds ?? null)}>{wrY1 ? (wrY1.yds ?? '—') : '—'}</span></td>
+                    <td className="qbStatCell"><span className={wrRecClass(wrY1?.rec ?? null)}>{wrY1 ? (wrY1.rec ?? '—') : '—'}</span></td>
+                  </>}
                 </tr>
               })}</tbody>
             </table>
@@ -913,8 +969,33 @@ export default function App() {
           <div className="panelTitle"><div><p>PFF + NFL Outcomes</p><h2>College Production Comps</h2></div></div>
           {projection.pffComps.length ? <TableWrap>
             <table>
-              <thead><tr><th>Player</th><th>Class</th><th>Pos</th><th>PFF</th><th>Pick</th><th>AV</th><th>Outcome</th><th>Sim</th></tr></thead>
-              <tbody>{projection.pffComps.map((c) => <tr key={c.profile.id}><td><b>{c.profile.name}</b><small>{c.profile.college}</small></td><td>{c.profile.draftSeason}</td><td>{c.profile.position}</td><td>{c.profile.pff.composite.toFixed(1)}</td><td>{c.profile.nfl?.draftPick ?? '-'}</td><td>{c.profile.nfl?.av.toFixed(1) ?? '-'}</td><td>{c.profile.nfl ? <OutcomeTag category={c.profile.nfl.category} /> : '-'}</td><td>{Math.round(c.sim * 100)}</td></tr>)}</tbody>
+              <thead><tr>
+                <th>Player</th><th>Class</th><th>Pos</th><th>PFF</th><th>Pick</th><th>AV</th><th>Outcome</th><th>Sim</th>
+                {input.pos === 'QB' && <><th className="qbStatCol" title="Year 1 passer rating">Y1 Rtg</th><th className="qbStatCol" title="Year 1 adjusted net yards per attempt">Y1 ANY/A</th></>}
+                {input.pos === 'WR' && <><th className="qbStatCol" title="Year 1 receiving yards">Y1 Yds</th><th className="qbStatCol" title="Year 1 receptions">Y1 Rec</th></>}
+              </tr></thead>
+              <tbody>{projection.pffComps.map((c) => {
+                const qbY1 = input.pos === 'QB' ? qbSeasons.find((s) => s.key === clean(c.profile.name) && s.season === c.profile.draftSeason) : undefined
+                const wrY1 = input.pos === 'WR' ? wrSeasons.find((s) => s.key === clean(c.profile.name) && s.season === c.profile.draftSeason) : undefined
+                return <tr key={c.profile.id}>
+                  <td><b>{c.profile.name}</b><small>{c.profile.college}</small></td>
+                  <td>{c.profile.draftSeason}</td>
+                  <td>{c.profile.position}</td>
+                  <td>{c.profile.pff.composite.toFixed(1)}</td>
+                  <td>{c.profile.nfl?.draftPick ?? '-'}</td>
+                  <td>{c.profile.nfl?.av.toFixed(1) ?? '-'}</td>
+                  <td>{c.profile.nfl ? <OutcomeTag category={c.profile.nfl.category} /> : '-'}</td>
+                  <td>{Math.round(c.sim * 100)}</td>
+                  {input.pos === 'QB' && <>
+                    <td className="qbStatCell"><span className={qbRtgClass(qbY1?.rtg ?? null)}>{qbY1 ? (qbY1.rtg?.toFixed(1) ?? '—') : '—'}</span></td>
+                    <td className="qbStatCell"><span className={qbAnyaClass(qbY1?.any_a ?? null)}>{qbY1 ? (qbY1.any_a?.toFixed(1) ?? '—') : '—'}</span></td>
+                  </>}
+                  {input.pos === 'WR' && <>
+                    <td className="qbStatCell"><span className={wrYdsClass(wrY1?.yds ?? null)}>{wrY1 ? (wrY1.yds ?? '—') : '—'}</span></td>
+                    <td className="qbStatCell"><span className={wrRecClass(wrY1?.rec ?? null)}>{wrY1 ? (wrY1.rec ?? '—') : '—'}</span></td>
+                  </>}
+                </tr>
+              })}</tbody>
             </table>
           </TableWrap> : <p className="emptyLine">Load a PFF profile or enter college PFF scores to activate production comps.</p>}
         </section>
@@ -993,7 +1074,7 @@ function TableWrap({ children }: { children: ReactNode }) {
   return <div className="tableWrap">{children}</div>
 }
 
-function CompareView({ pool, history, pffProfiles, initialQuery = '' }: { pool: Historical[]; history: Historical[]; pffProfiles: PffProfile[]; initialQuery?: string }) {
+function CompareView({ pool, history, pffProfiles, y1Data, initialQuery = '' }: { pool: Historical[]; history: Historical[]; pffProfiles: PffProfile[]; y1Data?: Y1Data; initialQuery?: string }) {
   const [q1, setQ1] = useState(initialQuery)
   const [q2, setQ2] = useState('')
   const [p1, setP1] = useState<Historical | null>(null)
@@ -1024,8 +1105,8 @@ function CompareView({ pool, history, pffProfiles, initialQuery = '' }: { pool: 
 
   const pff1 = useMemo(() => p1 ? pffProfiles.find((pf) => samePlayerSeason(pf, p1.name, p1.year, p1.pos)) : undefined, [p1, pffProfiles])
   const pff2 = useMemo(() => p2 ? pffProfiles.find((pf) => samePlayerSeason(pf, p2.name, p2.year, p2.pos)) : undefined, [p2, pffProfiles])
-  const proj1 = useMemo(() => p1 ? project(prospectFromHistorical(p1, pff1), history, pffProfiles, p1.id) : null, [p1, pff1, history, pffProfiles])
-  const proj2 = useMemo(() => p2 ? project(prospectFromHistorical(p2, pff2), history, pffProfiles, p2.id) : null, [p2, pff2, history, pffProfiles])
+  const proj1 = useMemo(() => p1 ? project(prospectFromHistorical(p1, pff1), history, pffProfiles, p1.id, y1Data) : null, [p1, pff1, history, pffProfiles, y1Data])
+  const proj2 = useMemo(() => p2 ? project(prospectFromHistorical(p2, pff2), history, pffProfiles, p2.id, y1Data) : null, [p2, pff2, history, pffProfiles, y1Data])
 
   return <section className="panel tablePanel classPanel">
     <div className="panelTitle">
@@ -1630,7 +1711,7 @@ function BrowserHeader({ label, sortKey, active, dir, onSort }: { label: string;
   </th>
 }
 
-function ClassExplorer({ pool, history, pffProfiles, currentName, currentYear }: { pool: Historical[]; history: Historical[]; pffProfiles: PffProfile[]; currentName: string; currentYear: number }) {
+function ClassExplorer({ pool, history, pffProfiles, y1Data, currentName, currentYear }: { pool: Historical[]; history: Historical[]; pffProfiles: PffProfile[]; y1Data?: Y1Data; currentName: string; currentYear: number }) {
   const years = useMemo(() => {
     const set = new Set<number>()
     for (const player of pool) set.add(player.year)
@@ -1662,7 +1743,7 @@ function ClassExplorer({ pool, history, pffProfiles, currentName, currentYear }:
     for (const player of filtered) {
       const pffMatch = pffProfiles.find((profile) => samePlayerSeason(profile, player.name, player.year, player.pos))
       const synthesized = prospectFromHistorical(player, pffMatch)
-      const projected = project(synthesized, history, pffProfiles, player.id)
+      const projected = project(synthesized, history, pffProfiles, player.id, y1Data)
       out.set(player.id, { av: projected.expectedAv, score: projected.score })
     }
     return out
@@ -2211,7 +2292,7 @@ function rowToHistorical(combineRow: Row, draftRow: Row | undefined, index: numb
   }
 }
 
-function project(input: Prospect, history: Historical[], pffProfiles: PffProfile[], excludeId?: string) {
+function project(input: Prospect, history: Historical[], pffProfiles: PffProfile[], excludeId?: string, y1Data?: Y1Data) {
   const pool = history.filter((p) => (p.pos === input.pos || group[p.pos] === group[input.pos]) && p.id !== excludeId)
   const ras = rasScore(input, pool)
   const stats = (k: keyof Historical) => pool.map((p) => p[k]).filter((v): v is number => typeof v === 'number' && Number.isFinite(v))
@@ -2232,7 +2313,7 @@ function project(input: Prospect, history: Historical[], pffProfiles: PffProfile
   const rawScore = baseScore * (1 - pffBlend) + pffSignal * pffBlend
   const calibratedAv = calibratedExpectedAv(input, { draft, athletic, size, age })
 
-  const comps = pool.map((p) => ({ player: p, sim: sim(input, p) })).sort((a, b) => b.sim - a.sim).slice(0, 80)
+  const comps = pool.map((p) => ({ player: p, sim: sim(input, p, y1Data) })).sort((a, b) => b.sim - a.sim).slice(0, 80)
   const histWeight = comps.reduce((sum, c) => sum + c.sim, 0) || 1
   const pffWeight = pffComps.reduce((sum, c) => sum + c.sim, 0) || 1
   const histExpectedAv = comps.reduce((sum, c) => sum + c.player.av * c.sim, 0) / histWeight
@@ -2269,6 +2350,13 @@ function project(input: Prospect, history: Historical[], pffProfiles: PffProfile
     : null
   const flags = dangerFlags(input, { ceiling, floor, pffBlend })
 
+  const top10 = comps.slice(0, 10)
+  const y1Coverage = y1Data ? top10.filter((c) => {
+    if (c.player.pos === 'QB') return y1Data.qb.some((s) => s.key === clean(c.player.name) && s.season === c.player.year)
+    if (c.player.pos === 'WR') return y1Data.wr.some((s) => s.key === clean(c.player.name) && s.season === c.player.year)
+    return false
+  }).length : 0
+
   return {
     score,
     scoreLow,
@@ -2291,11 +2379,29 @@ function project(input: Prospect, history: Historical[], pffProfiles: PffProfile
     percentile,
     ras,
     flags,
+    y1Coverage,
     signals: { draft, athletic, size, scout, age, pff: pffSignal },
   }
 }
 
-function sim(input: Prospect, player: Historical) {
+function y1SimFactor(player: Historical, y1Data: Y1Data): number {
+  if (player.pos === 'QB') {
+    const s = y1Data.qb.find((r) => r.key === clean(player.name) && r.season === player.year)
+    if (s?.rtg != null) {
+      // Smooth ramp: rtg 100 ≈ 1.0, rtg 115+ → 1.12, rtg 72 → 0.88
+      return clamp(0.5 + (s.rtg / 100) * 0.7, 0.88, 1.12)
+    }
+  } else if (player.pos === 'WR') {
+    const s = y1Data.wr.find((r) => r.key === clean(player.name) && r.season === player.year)
+    if (s?.yds != null) {
+      // Smooth ramp: 1000 yds ≈ 1.0, 1500+ → 1.12, 300 → 0.88
+      return clamp(0.84 + (s.yds / 1000) * 0.17, 0.88, 1.12)
+    }
+  }
+  return 1.0
+}
+
+function sim(input: Prospect, player: Historical, y1Data?: Y1Data) {
   const distance =
     Math.abs(Math.log(input.pick + 1) - Math.log(player.pick + 1)) * .45 +
     z(input.height, player.height, 3) * .08 +
@@ -2307,7 +2413,8 @@ function sim(input: Prospect, player: Historical) {
     z(input.shuttle, player.shuttle, .2) * .05 +
     (input.pos === player.pos ? 0 : .12)
   const recency = Math.pow(0.96, Math.max(0, 2022 - player.year))
-  return Math.exp(-distance) * recency
+  const y1Factor = y1Data ? y1SimFactor(player, y1Data) : 1.0
+  return Math.exp(-distance) * recency * y1Factor
 }
 
 function pffSim(input: Prospect, profile: PffProfile) {
@@ -2558,6 +2665,38 @@ function titleSchool(value: string) {
 
 function clean(s = '') {
   return s.toLowerCase().normalize('NFKD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]/g, '')
+}
+
+function qbRtgClass(v: number | null): string {
+  if (v === null) return ''
+  if (v >= 95) return 'qbStatGood'
+  if (v >= 85) return 'qbStatOk'
+  if (v < 78) return 'qbStatBad'
+  return ''
+}
+
+function qbAnyaClass(v: number | null): string {
+  if (v === null) return ''
+  if (v >= 6.4) return 'qbStatGood'
+  if (v >= 5.5) return 'qbStatOk'
+  if (v < 4.8) return 'qbStatBad'
+  return ''
+}
+
+function wrYdsClass(v: number | null): string {
+  if (v === null) return ''
+  if (v >= 1100) return 'qbStatGood'
+  if (v >= 700) return 'qbStatOk'
+  if (v < 400) return 'qbStatBad'
+  return ''
+}
+
+function wrRecClass(v: number | null): string {
+  if (v === null) return ''
+  if (v >= 80) return 'qbStatGood'
+  if (v >= 55) return 'qbStatOk'
+  if (v < 35) return 'qbStatBad'
+  return ''
 }
 
 function slug(s = '') {
