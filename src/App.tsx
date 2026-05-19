@@ -2120,6 +2120,7 @@ function ClassExplorer({ pool, history, pffProfiles, y1Data, careerStats, histFl
   const [pos, setPos] = useState<string>('All')
   const [sortKey, setSortKey] = useState<SortKey>('pick')
   const [sortDir, setSortDir] = useState<SortDir>('asc')
+  const [expandedId, setExpandedId] = useState<string | null>(null)
 
   // Persistent cache: avoids recomputing the same player on year revisits
   const projCache = useRef(new Map<string, { av: number; score: number }>())
@@ -2162,6 +2163,15 @@ function ClassExplorer({ pool, history, pffProfiles, y1Data, careerStats, histFl
     }
     return out
   }, [deferredFiltered, history, pffProfiles, useProjections, y1Data])
+
+  const pffMap = useMemo(() => {
+    const map = new Map<string, PffProfile>()
+    for (const player of filtered) {
+      const pff = pffProfiles.find((p) => samePlayerSeason(p, player.name, player.year, player.pos))
+      if (pff) map.set(player.id, pff)
+    }
+    return map
+  }, [filtered, pffProfiles])
 
   const effectiveSortKey = !useProjections && (sortKey === 'projAv' || sortKey === 'projScore') ? 'av' : sortKey
   // Use deferredFiltered so rows and projections always come from the same snapshot —
@@ -2227,6 +2237,7 @@ function ClassExplorer({ pool, history, pffProfiles, y1Data, careerStats, histFl
             <ClassHeader label="G" sortKey="games" active={effectiveSortKey} dir={sortDir} onSort={toggleSort} />
             <ClassHeader label="St" sortKey="starts" active={effectiveSortKey} dir={sortDir} onSort={toggleSort} />
             <ClassHeader label="AV" sortKey="av" active={effectiveSortKey} dir={sortDir} onSort={toggleSort} />
+            <th title="PFF college composite grade">PFF</th>
             {useProjections ? <ClassHeader label="Proj AV" sortKey="projAv" active={effectiveSortKey} dir={sortDir} onSort={toggleSort} /> : null}
             {useProjections ? <ClassHeader label="Score" sortKey="projScore" active={effectiveSortKey} dir={sortDir} onSort={toggleSort} /> : null}
             <ClassHeader label="PB" sortKey="pb" active={effectiveSortKey} dir={sortDir} onSort={toggleSort} />
@@ -2235,14 +2246,22 @@ function ClassExplorer({ pool, history, pffProfiles, y1Data, careerStats, histFl
           </tr>
         </thead>
         <tbody>
-          {rows.slice(0, 200).map((player, index) => {
+          {rows.slice(0, 200).flatMap((player, index) => {
             const isCurrent = currentKey && clean(player.name) === currentKey && player.year === currentYear
             const projected = projections.get(player.id)
             const showEarlySample = player.year > matureOutcomeCutoff
             const score = projected ? Math.round(projected.score) : 0
             const outcomeFlag = !showEarlySample ? (histFlagMap.get(player.id) ?? null) : null
-            return <>
-              <tr key={player.id} className={`${useProjections ? `classRow-${scoreClass(score)} ` : ''}${isCurrent ? 'currentRow' : ''}`}>
+            const pffProfile = pffMap.get(player.id) ?? null
+            const isExpanded = expandedId === player.id
+            const canExpand = pffProfile !== null || outcomeFlag !== null
+            const colCount = 12 + (useProjections ? 2 : 0)
+            const rowEls: React.ReactNode[] = [
+              <tr
+                key={player.id}
+                className={`${useProjections ? `classRow-${scoreClass(score)} ` : ''}${isCurrent ? 'currentRow' : ''}${canExpand ? ' classRowClickable' : ''}`}
+                onClick={canExpand ? () => setExpandedId(isExpanded ? null : player.id) : undefined}
+              >
                 <td><b className="boardRank">{index + 1}</b></td>
                 <td><b>{player.name}</b><small>{player.school || 'No school'}</small></td>
                 <td>{player.pos}</td>
@@ -2250,6 +2269,7 @@ function ClassExplorer({ pool, history, pffProfiles, y1Data, careerStats, histFl
                 <td>{player.games || 0}</td>
                 <td>{player.starts || 0}</td>
                 <td>{player.av || 0}</td>
+                <td className="pffCol">{pffProfile ? pffProfile.pff.composite.toFixed(0) : '—'}</td>
                 {useProjections ? <td>{projected ? projected.av.toFixed(1) : '-'}</td> : null}
                 {useProjections ? <td style={{ color: projected ? scoreColor(score) : undefined, fontWeight: projected ? 800 : undefined }}>{projected ? Math.round(projected.score) : '-'}</td> : null}
                 <td>{player.proBowls || 0}</td>
@@ -2258,8 +2278,37 @@ function ClassExplorer({ pool, history, pffProfiles, y1Data, careerStats, histFl
                   {showEarlySample ? <span className="sampleTag">Early sample</span> : <OutcomeTag category={player.category} />}
                   {outcomeFlag && <FlagBadge flag={outcomeFlag} />}
                 </td>
-              </tr>
-            </>
+              </tr>,
+            ]
+            if (isExpanded && canExpand) {
+              rowEls.push(
+                <tr key={`detail-${player.id}`} className="classRowDetail">
+                  <td colSpan={colCount}>
+                    <div className="classDetail">
+                      {pffProfile && (
+                        <div className="classDetailSection">
+                          <span className="classDetailLabel">PFF College Grades</span>
+                          <div className="classDetailStats">
+                            <div className="classDetailStat"><span>Composite</span><b>{pffProfile.pff.composite.toFixed(0)}</b></div>
+                            <div className="classDetailStat"><span>Grade</span><b>{pffProfile.pff.grade.toFixed(0)}</b></div>
+                            <div className="classDetailStat"><span>Production</span><b>{pffProfile.pff.production.toFixed(0)}</b></div>
+                            <div className="classDetailStat"><span>Efficiency</span><b style={{ color: pffProfile.pff.efficiency < 52 ? 'var(--red)' : pffProfile.pff.efficiency > 72 ? 'var(--green)' : undefined }}>{pffProfile.pff.efficiency.toFixed(0)}</b></div>
+                            <div className="classDetailStat"><span>Clean pocket</span><b style={{ color: pffProfile.pff.clean < 52 ? 'var(--red)' : undefined }}>{pffProfile.pff.clean.toFixed(0)}</b></div>
+                          </div>
+                        </div>
+                      )}
+                      {outcomeFlag && (
+                        <div className={`classDetailFlag classDetailFlag-${outcomeFlag.type}`}>
+                          <span className="classDetailFlagTitle">{outcomeFlag.type === 'bust' ? '⚠' : '↑'} {outcomeFlag.label}</span>
+                          <pre className="classDetailFlagText">{outcomeFlag.tooltip}</pre>
+                        </div>
+                      )}
+                    </div>
+                  </td>
+                </tr>
+              )
+            }
+            return rowEls
           })}
         </tbody>
       </table>
