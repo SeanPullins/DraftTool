@@ -2451,29 +2451,29 @@ function prospectRiskFlags(p: ProspectQB, bustRates: QbBustRates): RiskFlag[] {
 
 function bustReasonLabel(player: Historical, profile: PffProfile | null): string {
   if (profile) {
-    if (profile.pff.clean < 52 && profile.pff.efficiency < 52) return 'Turnover-prone & inefficient'
-    if (profile.pff.clean < 52) return 'Turnover-prone'
-    if (profile.pff.efficiency < 52) return 'Low efficiency'
-    if (profile.pff.production < 52) return 'Production gap'
-    if (player.pick < 15) return 'Draft reach'
-    return "Grade didn't translate"
+    if (profile.pff.clean < 52 && profile.pff.efficiency < 52) return `Turnover-prone & inefficient (clean ${profile.pff.clean.toFixed(0)}, eff ${profile.pff.efficiency.toFixed(0)})`
+    if (profile.pff.clean < 52) return `Turnover-prone (clean ${profile.pff.clean.toFixed(0)})`
+    if (profile.pff.efficiency < 52) return `Low efficiency (eff ${profile.pff.efficiency.toFixed(0)})`
+    if (profile.pff.production < 52) return `Production gap (prod ${profile.pff.production.toFixed(0)})`
+    if (player.pick < 15) return `Draft reach (#${player.pick}, AV ${player.av})`
+    return `Grade didn't translate (comp ${profile.pff.composite.toFixed(0)}, AV ${player.av})`
   }
-  if (player.pick < 15) return 'Draft reach'
-  return 'Missed expectations'
+  if (player.pick < 15) return `Draft reach (#${player.pick}, AV ${player.av})`
+  return `Missed expectations (#${player.pick}, AV ${player.av})`
 }
 
 function gemReasonLabel(player: Historical, profile: PffProfile | null): string {
   if (profile) {
-    if (profile.pff.efficiency > 72) return 'Efficiency standout'
-    if (profile.pff.composite > 70 && player.pick >= 100) return 'Undervalued grade'
-    if (profile.pff.grade > 75 && player.pick >= 75) return 'Slid on board'
+    if (profile.pff.efficiency > 72) return `Efficiency standout (eff ${profile.pff.efficiency.toFixed(0)})`
+    if (profile.pff.composite > 70 && player.pick >= 100) return `Undervalued grade (comp ${profile.pff.composite.toFixed(0)}, #${player.pick})`
+    if (profile.pff.grade > 75 && player.pick >= 75) return `Slid on board (grade ${profile.pff.grade.toFixed(0)}, #${player.pick})`
   }
   if (player.forty != null && (
     (['WR', 'RB', 'CB', 'S'].includes(player.pos) && player.forty < 4.42) ||
     (['LB', 'TE'].includes(player.pos) && player.forty < 4.65)
-  )) return 'Elite speed'
-  if (player.pick >= 150) return 'Late-round steal'
-  return 'Exceeded expectations'
+  )) return `Elite speed (${player.forty.toFixed(2)}s, #${player.pick})`
+  if (player.pick >= 150) return `Late-round steal (#${player.pick}, AV ${player.av})`
+  return `Exceeded expectations (#${player.pick}, AV ${player.av})`
 }
 
 function buildBustTooltip(player: Historical, profile: PffProfile | null, reason: string): string {
