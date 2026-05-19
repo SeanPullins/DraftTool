@@ -2082,3 +2082,53 @@ td small {
 .guideWt       { color: var(--text-2); font-size: 11px; }
 .guideScoreRange { font-weight: 700; font-variant-numeric: tabular-nums; color: var(--text-0); }
 .guideGrade    { font-weight: 800; font-size: 14px; color: var(--accent); }
+
+/* ── Career stats table (in PlayerModal) ─────────── */
+.careerTable {
+  margin-top: 8px;
+  border-radius: 6px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  font-size: 12px;
+}
+
+.careerTableHead,
+.careerTableRow {
+  display: grid;
+  gap: 0;
+}
+
+.careerTable9 .careerTableHead,
+.careerTable9 .careerTableRow { grid-template-columns: 68px repeat(8, 1fr); }
+
+.careerTable8 .careerTableHead,
+.careerTable8 .careerTableRow { grid-template-columns: 68px repeat(7, 1fr); }
+
+.careerTableHead {
+  background: var(--bg-2);
+  color: var(--text-2);
+  text-transform: uppercase;
+  font-size: 10px;
+  letter-spacing: .05em;
+  padding: 6px 10px;
+  border-bottom: 1px solid var(--border);
+}
+
+.careerTableRow {
+  padding: 6px 10px;
+  border-bottom: 1px solid var(--border);
+  color: var(--text-1);
+  font-variant-numeric: tabular-nums;
+  transition: background .1s;
+}
+
+.careerTableRow:last-child { border-bottom: 0; }
+.careerTableRow:hover { background: rgba(255,255,255,.03); }
+
+.careerSeason { font-weight: 600; color: var(--text-0); }
+.careerSeason small { color: var(--text-2); font-size: 10px; margin-left: 3px; }
+
+/* EPA coloring */
+.epaHigh { color: var(--green); font-weight: 600; }
+.epaMid  { color: var(--amber); }
+.epaLow  { color: var(--red); }

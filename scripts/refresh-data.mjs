@@ -4,6 +4,7 @@ const dataDir = new URL('../public/data/', import.meta.url)
 const sources = [
   ['combine.csv', 'https://github.com/nflverse/nflverse-data/releases/download/combine/combine.csv'],
   ['draft_picks.csv', 'https://github.com/nflverse/nflverse-data/releases/download/draft_picks/draft_picks.csv'],
+  ['player_stats_season.csv', 'https://github.com/nflverse/nflverse-data/releases/download/player_stats/player_stats_season.csv'],
 ]
 
 await mkdir(dataDir, { recursive: true })

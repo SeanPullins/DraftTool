@@ -144,6 +144,33 @@ type RbSeason = {
   pos: string
 }
 type Y1Data = { qb: QbSeason[]; wr: WrSeason[]; rb: RbSeason[] }
+type CareerSeasonStat = {
+  season: number
+  pos: string
+  games: number
+  // QB
+  att?: number
+  yds?: number
+  tds?: number
+  ints?: number
+  cmp_pct?: number
+  ypa?: number
+  epa_per_att?: number
+  // WR/TE
+  tgt?: number
+  rec?: number
+  ypr?: number
+  ctch_pct?: number
+  epa_per_tgt?: number
+  // RB
+  car?: number
+  rush_yds?: number
+  rush_tds?: number
+  ypc?: number
+  rush_epa_per_carry?: number
+  rec_yds?: number
+}
+type CareerStatMap = Record<string, CareerSeasonStat[]>
 type Projection = ReturnType<typeof project>
 type LoaderMessage = { tone: 'good' | 'warn'; text: string } | null
 type MobileTab = 'edit' | 'results' | 'board'
@@ -319,6 +346,7 @@ export default function App() {
   const [qbSeasons, setQbSeasons] = useState<QbSeason[]>([])
   const [wrSeasons, setWrSeasons] = useState<WrSeason[]>([])
   const [rbSeasons, setRbSeasons] = useState<RbSeason[]>([])
+  const [careerStats, setCareerStats] = useState<CareerStatMap>({})
   const [boardView, setBoardView] = useState<'list' | 'grid'>('list')
   const [boardOrder, setBoardOrder] = useState<string[]>([])
   const [dragId, setDragId] = useState('')
@@ -336,12 +364,12 @@ export default function App() {
     setModalPlayer(null)
   }
   const y1Data = useMemo<Y1Data>(() => ({ qb: qbSeasons, wr: wrSeasons, rb: rbSeasons }), [qbSeasons, wrSeasons, rbSeasons])
-  const projection = useMemo(() => project(input, prospects, pffProfiles, undefined, y1Data), [input, prospects, pffProfiles, y1Data])
+  const projection = useMemo(() => project(input, prospects, pffProfiles, undefined, y1Data, careerStats), [input, prospects, pffProfiles, y1Data, careerStats])
   const draftBoard = useMemo(
     () => saved
-      .map((player) => ({ player, projection: project(player, prospects, pffProfiles, undefined, y1Data) }))
+      .map((player) => ({ player, projection: project(player, prospects, pffProfiles, undefined, y1Data, careerStats) }))
       .sort((a, b) => b.projection.score - a.projection.score),
-    [saved, prospects, pffProfiles, y1Data],
+    [saved, prospects, pffProfiles, y1Data, careerStats],
   )
 
   const orderedBoard = useMemo(() => {
@@ -405,7 +433,7 @@ export default function App() {
   useEffect(() => {
     async function load() {
       try {
-        const [combineCsv, draftCsv, pffPayload, extraData, consensusData, scoutData, injuryData, qbSeasonData, wrSeasonData, rbSeasonData] = await Promise.all([
+        const [combineCsv, draftCsv, pffPayload, extraData, consensusData, scoutData, injuryData, qbSeasonData, wrSeasonData, rbSeasonData, careerStatsData] = await Promise.all([
           fetch(`${assetBase}data/combine.csv`).then((r) => r.text()),
           fetch(`${assetBase}data/draft_picks.csv`).then((r) => r.text()),
           loadPffPayload(),
@@ -416,6 +444,7 @@ export default function App() {
           fetch(`${assetBase}data/qb_seasons.json`).then((r) => r.json()).catch(() => null),
           fetch(`${assetBase}data/wr_seasons.json`).then((r) => r.json()).catch(() => null),
           fetch(`${assetBase}data/rb_seasons.json`).then((r) => r.json()).catch(() => null),
+          fetch(`${assetBase}data/career_stats.json`).then((r) => r.json()).catch(() => null),
         ])
         const allProspects = buildProspectPool(parseCsv(combineCsv), parseCsv(draftCsv))
         const extraProspects = buildExtraProspects(extraData)
@@ -433,6 +462,7 @@ export default function App() {
         if (qbSeasonData?.records?.length) setQbSeasons(qbSeasonData.records)
         if (wrSeasonData?.records?.length) setWrSeasons(wrSeasonData.records)
         if (rbSeasonData?.records?.length) setRbSeasons(rbSeasonData.records)
+        if (careerStatsData && typeof careerStatsData === 'object') setCareerStats(careerStatsData as CareerStatMap)
       } catch {
         setError('Data files are missing. Run npm run data:refresh, then reload.')
       } finally {
@@ -713,11 +743,11 @@ export default function App() {
     </div>
 
     {error ? <section className="panel empty">{error}</section> : page === 'class' ? <div className="classPage">
-      <ClassExplorer pool={lookupPool} history={prospects} pffProfiles={pffProfiles} y1Data={y1Data} currentName={input.name} currentYear={input.draftSeason} />
+      <ClassExplorer pool={lookupPool} history={prospects} pffProfiles={pffProfiles} y1Data={y1Data} careerStats={careerStats} currentName={input.name} currentYear={input.draftSeason} />
     </div> : page === 'players' ? <div className="classPage">
       <PlayerBrowser pool={lookupPool} history={prospects} onOpenModal={openModal} onCompare={handleCompare} />
     </div> : page === 'compare' ? <div className="classPage">
-      <CompareView pool={lookupPool} history={prospects} pffProfiles={pffProfiles} y1Data={y1Data} initialQuery={compareQuery} />
+      <CompareView pool={lookupPool} history={prospects} pffProfiles={pffProfiles} y1Data={y1Data} careerStats={careerStats} initialQuery={compareQuery} />
     </div> : page === 'trade' ? <div className="classPage">
       <TradeCalculator />
     </div> : page === 'rankings' ? <div className="classPage">
@@ -1118,6 +1148,7 @@ export default function App() {
         player={modalPlayer}
         history={prospects}
         pffProfiles={pffProfiles}
+        careerStats={careerStats}
         onClose={() => setModalPlayer(null)}
         onCompare={handleCompare}
       />
@@ -1161,7 +1192,7 @@ function TableWrap({ children }: { children: ReactNode }) {
   return <div className="tableWrap">{children}</div>
 }
 
-function CompareView({ pool, history, pffProfiles, y1Data, initialQuery = '' }: { pool: Historical[]; history: Historical[]; pffProfiles: PffProfile[]; y1Data?: Y1Data; initialQuery?: string }) {
+function CompareView({ pool, history, pffProfiles, y1Data, careerStats, initialQuery = '' }: { pool: Historical[]; history: Historical[]; pffProfiles: PffProfile[]; y1Data?: Y1Data; careerStats?: CareerStatMap; initialQuery?: string }) {
   const [q1, setQ1] = useState(initialQuery)
   const [q2, setQ2] = useState('')
   const [p1, setP1] = useState<Historical | null>(null)
@@ -1192,8 +1223,8 @@ function CompareView({ pool, history, pffProfiles, y1Data, initialQuery = '' }: 
 
   const pff1 = useMemo(() => p1 ? pffProfiles.find((pf) => samePlayerSeason(pf, p1.name, p1.year, p1.pos)) : undefined, [p1, pffProfiles])
   const pff2 = useMemo(() => p2 ? pffProfiles.find((pf) => samePlayerSeason(pf, p2.name, p2.year, p2.pos)) : undefined, [p2, pffProfiles])
-  const proj1 = useMemo(() => p1 ? project(prospectFromHistorical(p1, pff1), history, pffProfiles, p1.id, y1Data) : null, [p1, pff1, history, pffProfiles, y1Data])
-  const proj2 = useMemo(() => p2 ? project(prospectFromHistorical(p2, pff2), history, pffProfiles, p2.id, y1Data) : null, [p2, pff2, history, pffProfiles, y1Data])
+  const proj1 = useMemo(() => p1 ? project(prospectFromHistorical(p1, pff1), history, pffProfiles, p1.id, y1Data, careerStats) : null, [p1, pff1, history, pffProfiles, y1Data, careerStats])
+  const proj2 = useMemo(() => p2 ? project(prospectFromHistorical(p2, pff2), history, pffProfiles, p2.id, y1Data, careerStats) : null, [p2, pff2, history, pffProfiles, y1Data, careerStats])
 
   return <section className="panel tablePanel classPanel">
     <div className="panelTitle">
@@ -1626,10 +1657,11 @@ function RankStat({ label, rank, total }: { label: string; rank: number; total: 
   </div>
 }
 
-function PlayerModal({ player, history, pffProfiles, onClose, onCompare }: {
+function PlayerModal({ player, history, pffProfiles, careerStats, onClose, onCompare }: {
   player: Historical
   history: Historical[]
   pffProfiles: PffProfile[]
+  careerStats: CareerStatMap
   onClose: () => void
   onCompare: (name: string) => void
 }) {
@@ -1644,6 +1676,10 @@ function PlayerModal({ player, history, pffProfiles, onClose, onCompare }: {
   const allOverall = maturePool.slice().sort((a, b) => (b.av || 0) - (a.av || 0))
   const findRank = (list: Historical[]) => { const r = list.findIndex((p) => p.id === player.id); return r >= 0 ? r + 1 : 0 }
   const crAll = findRank(classAll), crPos = findRank(classPos), atPos = findRank(allByPos), atAll = findRank(allOverall)
+  const playerKey = clean(player.name)
+  const seasons = careerStats[playerKey] ?? []
+  const rookieSeason = player.year
+  const careerSeasons = seasons.filter((s) => s.season >= rookieSeason).slice(0, 10)
   return (
     <div className="modalOverlay" onClick={onClose}>
       <div className="modalBox" onClick={(e) => e.stopPropagation()}>
@@ -1670,6 +1706,12 @@ function PlayerModal({ player, history, pffProfiles, onClose, onCompare }: {
             </div>
             {arcValues.length >= 2 && <div className="modalSparkRow"><span className="modalSparkLabel">Career arc</span><Sparkline values={arcValues} /></div>}
           </div>
+          {careerSeasons.length > 0 && (
+            <div className="modalSection">
+              <div className="modalSectionTitle">Season-by-Season Stats</div>
+              <CareerStatsTable seasons={careerSeasons} pos={player.pos} />
+            </div>
+          )}
           {!isEarly && crAll > 0 && (
             <div className="modalSection">
               <div className="modalSectionTitle">Historical Context</div>
@@ -1716,6 +1758,77 @@ function PlayerModal({ player, history, pffProfiles, onClose, onCompare }: {
       </div>
     </div>
   )
+}
+
+function CareerStatsTable({ seasons, pos }: { seasons: CareerSeasonStat[]; pos: string }) {
+  if (pos === 'QB') return (
+    <div className="careerTable careerTable9">
+      <div className="careerTableHead">
+        <span>Season</span><span>G</span><span>Att</span><span>Yds</span><span>TD</span><span>INT</span><span>Cmp%</span><span>YPA</span><span>EPA/A</span>
+      </div>
+      {seasons.map((s) => (
+        <div key={s.season} className="careerTableRow">
+          <span className="careerSeason">Y{s.season - seasons[0].season + 1} <small>'{String(s.season).slice(2)}</small></span>
+          <span>{s.games}</span>
+          <span>{s.att ?? '—'}</span>
+          <span>{s.yds ?? '—'}</span>
+          <span>{s.tds ?? '—'}</span>
+          <span>{s.ints ?? '—'}</span>
+          <span>{s.cmp_pct != null ? `${s.cmp_pct}%` : '—'}</span>
+          <span>{s.ypa ?? '—'}</span>
+          <span className={epaClass(s.epa_per_att ?? null)}>{s.epa_per_att != null ? s.epa_per_att.toFixed(2) : '—'}</span>
+        </div>
+      ))}
+    </div>
+  )
+  if (pos === 'WR' || pos === 'TE') return (
+    <div className="careerTable careerTable9">
+      <div className="careerTableHead">
+        <span>Season</span><span>G</span><span>Tgt</span><span>Rec</span><span>Yds</span><span>TD</span><span>Ctch%</span><span>YPR</span><span>EPA/T</span>
+      </div>
+      {seasons.map((s) => (
+        <div key={s.season} className="careerTableRow">
+          <span className="careerSeason">Y{s.season - seasons[0].season + 1} <small>'{String(s.season).slice(2)}</small></span>
+          <span>{s.games}</span>
+          <span>{s.tgt ?? '—'}</span>
+          <span>{s.rec ?? '—'}</span>
+          <span>{s.yds ?? '—'}</span>
+          <span>{s.tds ?? '—'}</span>
+          <span>{s.ctch_pct != null ? `${s.ctch_pct}%` : '—'}</span>
+          <span>{s.ypr ?? '—'}</span>
+          <span className={epaClass(s.epa_per_tgt ?? null)}>{s.epa_per_tgt != null ? s.epa_per_tgt.toFixed(2) : '—'}</span>
+        </div>
+      ))}
+    </div>
+  )
+  if (pos === 'RB') return (
+    <div className="careerTable careerTable8">
+      <div className="careerTableHead">
+        <span>Season</span><span>G</span><span>Car</span><span>Rush Yds</span><span>YPC</span><span>TD</span><span>Rec</span><span>Rec Yds</span>
+      </div>
+      {seasons.map((s) => (
+        <div key={s.season} className="careerTableRow">
+          <span className="careerSeason">Y{s.season - seasons[0].season + 1} <small>'{String(s.season).slice(2)}</small></span>
+          <span>{s.games}</span>
+          <span>{s.car ?? '—'}</span>
+          <span>{s.rush_yds ?? '—'}</span>
+          <span>{s.ypc ?? '—'}</span>
+          <span>{s.rush_tds ?? '—'}</span>
+          <span>{s.rec ?? '—'}</span>
+          <span>{s.rec_yds ?? '—'}</span>
+        </div>
+      ))}
+    </div>
+  )
+  return null
+}
+
+function epaClass(epa: number | null): string {
+  if (epa == null) return ''
+  if (epa >= 0.2) return 'epaHigh'
+  if (epa >= 0.05) return 'epaMid'
+  if (epa < -0.05) return 'epaLow'
+  return ''
 }
 
 function GuideView() {
@@ -1832,12 +1945,27 @@ function GuideView() {
     </div>
 
     <div className="guideSection">
+      <h2>Career progression stats</h2>
+      <p>
+        Season-by-season NFL stats (from nflverse <code>player_stats_season</code>) are shown in every player profile
+        and also used to improve the projection model. Two career-trajectory signals adjust how heavily each comp is weighted:
+      </p>
+      <ul className="guideList">
+        <li><strong>Year 1 signal</strong> — Rookie-season passer rating (QB), receiving yards (WR/TE), or rushing yards (RB) shifts the comp's similarity weight by up to ±12%.</li>
+        <li><strong>Year 2 signal</strong> — Second-year EPA per attempt (QB), receiving yards (WR/TE), or rushing yards (RB) adds an additional ±8% adjustment, boosting comps with strong sophomore breakouts and down-weighting comps who faded.</li>
+      </ul>
+      <p>
+        Together these signals mean a comp who dominated as a rookie <em>and</em> broke out in Year 2 gets significantly more influence than an equal pre-draft profile who underperformed across both seasons. This helps the model better reflect upside trajectories for younger prospects.
+      </p>
+    </div>
+
+    <div className="guideSection">
       <h2>Data sources</h2>
       <ul className="guideList">
         <li><strong>Historical outcomes</strong> — nflverse draft picks + combine data (2000–present), updated automatically</li>
+        <li><strong>Season stats</strong> — nflverse player_stats_season (1999–present), QB / WR / TE / RB regular-season totals; shown in player profiles and used for trajectory-based comp weighting</li>
         <li><strong>PFF college profiles</strong> — Pro Football Focus college grades matched to NFL outcomes</li>
         <li><strong>Comp cutoff</strong> — Only players drafted through {compCutoffYear} are used as comps, ensuring all comp AV values reflect at least 4 full NFL seasons</li>
-        <li><strong>Year 1 stats</strong> — Rookie season passer rating (QB), receiving yards (WR), and rushing yards (RB) provide an early-signal adjustment to comp weights</li>
       </ul>
     </div>
   </div>
@@ -1859,7 +1987,7 @@ function BrowserHeader({ label, sortKey, active, dir, onSort }: { label: string;
   </th>
 }
 
-function ClassExplorer({ pool, history, pffProfiles, y1Data, currentName, currentYear }: { pool: Historical[]; history: Historical[]; pffProfiles: PffProfile[]; y1Data?: Y1Data; currentName: string; currentYear: number }) {
+function ClassExplorer({ pool, history, pffProfiles, y1Data, careerStats, currentName, currentYear }: { pool: Historical[]; history: Historical[]; pffProfiles: PffProfile[]; y1Data?: Y1Data; careerStats?: CareerStatMap; currentName: string; currentYear: number }) {
   const years = useMemo(() => {
     const set = new Set<number>()
     for (const player of pool) set.add(player.year)
@@ -1898,14 +2026,14 @@ function ClassExplorer({ pool, history, pffProfiles, y1Data, currentName, curren
     const out = new Map<string, { av: number; score: number }>()
     if (!useProjections) return out
     // Cache key encodes inputs that affect projection output
-    const inputSig = `${history.length}|${pffProfiles.length}|${y1Data?.qb.length ?? 0}|${y1Data?.wr.length ?? 0}|${y1Data?.rb.length ?? 0}`
+    const inputSig = `${history.length}|${pffProfiles.length}|${y1Data?.qb.length ?? 0}|${y1Data?.wr.length ?? 0}|${y1Data?.rb.length ?? 0}|${Object.keys(careerStats ?? {}).length}`
     for (const player of deferredFiltered) {
       const cacheKey = `${player.id}|${inputSig}`
       const cached = projCache.current.get(cacheKey)
       if (cached) { out.set(player.id, cached); continue }
       const pffMatch = pffProfiles.find((profile) => samePlayerSeason(profile, player.name, player.year, player.pos))
       const synthesized = prospectFromHistorical(player, pffMatch)
-      const projected = project(synthesized, history, pffProfiles, player.id, y1Data)
+      const projected = project(synthesized, history, pffProfiles, player.id, y1Data, careerStats)
       const result = { av: projected.expectedAv, score: projected.score }
       projCache.current.set(cacheKey, result)
       out.set(player.id, result)
@@ -2470,7 +2598,7 @@ function ageSignal(age: number, pos: string): number {
   return age <= 20.8 ? 92 : age <= 21.6 ? 82 : age <= 22.5 ? 68 : age <= 23.5 ? 52 : 36
 }
 
-function project(input: Prospect, history: Historical[], pffProfiles: PffProfile[], excludeId?: string, y1Data?: Y1Data) {
+function project(input: Prospect, history: Historical[], pffProfiles: PffProfile[], excludeId?: string, y1Data?: Y1Data, careerStats?: CareerStatMap) {
   // Only use players with ≥4 seasons of NFL data as comps — avoids underestimating projections
   // by including recent draftees whose career AV is still accumulating
   const pool = history.filter((p) =>
@@ -2499,7 +2627,7 @@ function project(input: Prospect, history: Historical[], pffProfiles: PffProfile
   const rawScore = baseScore * (1 - pffBlend) + pffSignal * pffBlend
   const calibratedAv = calibratedExpectedAv(input, { draft, athletic, size, age })
 
-  const comps = pool.map((p) => ({ player: p, sim: sim(input, p, y1Data) })).sort((a, b) => b.sim - a.sim).slice(0, 80)
+  const comps = pool.map((p) => ({ player: p, sim: sim(input, p, y1Data, careerStats) })).sort((a, b) => b.sim - a.sim).slice(0, 80)
   const histWeight = comps.reduce((sum, c) => sum + c.sim, 0) || 1
   const pffWeight = pffComps.reduce((sum, c) => sum + c.sim, 0) || 1
   const histExpectedAv = comps.reduce((sum, c) => sum + c.player.av * c.sim, 0) / histWeight
@@ -2575,26 +2703,41 @@ function y1SimFactor(player: Historical, y1Data: Y1Data): number {
   if (player.pos === 'QB') {
     const s = y1Data.qb.find((r) => r.key === clean(player.name) && r.season === player.year)
     if (s?.rtg != null) {
-      // rtg 100 ≈ 1.0, rtg 115+ → 1.12, rtg 72 → 0.88
       return clamp(0.5 + (s.rtg / 100) * 0.7, 0.88, 1.12)
     }
   } else if (player.pos === 'WR') {
     const s = y1Data.wr.find((r) => r.key === clean(player.name) && r.season === player.year)
     if (s?.yds != null) {
-      // 1000 rec yds ≈ 1.0, 1500+ → 1.12, 300 → 0.88
       return clamp(0.84 + (s.yds / 1000) * 0.17, 0.88, 1.12)
     }
   } else if (player.pos === 'RB') {
     const s = y1Data.rb.find((r) => r.key === clean(player.name) && r.season === player.year)
     if (s?.rush_yds != null) {
-      // 900 rush yds ≈ 1.0, 1350+ → 1.12, 400 → 0.88
       return clamp(0.5 + (s.rush_yds / 900) * 0.5, 0.88, 1.12)
     }
   }
   return 1.0
 }
 
-function sim(input: Prospect, player: Historical, y1Data?: Y1Data) {
+function y2SimFactor(player: Historical, careerStats: CareerStatMap): number {
+  const key = clean(player.name)
+  const seasons = careerStats[key]
+  if (!seasons?.length) return 1.0
+  const y2 = seasons.find((s) => s.season === player.year + 1)
+  if (!y2) return 1.0
+  if (player.pos === 'QB' && y2.att && y2.att >= 200 && y2.epa_per_att != null) {
+    return clamp(1.0 + y2.epa_per_att * 0.3, 0.94, 1.08)
+  }
+  if ((player.pos === 'WR' || player.pos === 'TE') && y2.tgt && y2.tgt >= 40 && y2.yds != null) {
+    return clamp(0.9 + (y2.yds / 1000) * 0.14, 0.94, 1.08)
+  }
+  if (player.pos === 'RB' && y2.car && y2.car >= 50 && y2.rush_yds != null) {
+    return clamp(0.88 + (y2.rush_yds / 1000) * 0.2, 0.94, 1.08)
+  }
+  return 1.0
+}
+
+function sim(input: Prospect, player: Historical, y1Data?: Y1Data, careerStats?: CareerStatMap) {
   const distance =
     Math.abs(Math.log(input.pick + 1) - Math.log(player.pick + 1)) * .45 +
     z(input.height, player.height, 3) * .08 +
@@ -2608,7 +2751,8 @@ function sim(input: Prospect, player: Historical, y1Data?: Y1Data) {
     (input.pos === player.pos ? 0 : .12)
   const recency = Math.pow(0.96, Math.max(0, 2022 - player.year))
   const y1Factor = y1Data ? y1SimFactor(player, y1Data) : 1.0
-  return Math.exp(-distance) * recency * y1Factor
+  const y2Factor = careerStats ? y2SimFactor(player, careerStats) : 1.0
+  return Math.exp(-distance) * recency * y1Factor * y2Factor
 }
 
 function pffSim(input: Prospect, profile: PffProfile) {
