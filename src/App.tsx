@@ -2769,22 +2769,30 @@ function classifyHistoricalOutcome(player: Historical, profile: PffProfile | nul
           return { type: 'bust', label, detail: label, tooltip: collegeTooltip(player, profile, 'bust', reason) }
         }
       }
-      // Gem signal: pick 33+ with elite college metrics (CPS > 65)
+      // Gem signal: pick 33+ with elite college metrics (CPS > 65; QBs need CPS > 70 + multi-signal)
       if (player.pick >= 33) {
-        if (profile.pff.efficiency > 72) {
-          const reason = `elite ${dim.eff} in college (${profile.pff.efficiency.toFixed(0)})`
-          const label = `College standout: ${reason}`
-          return { type: 'gem', label, detail: label, tooltip: collegeTooltip(player, profile, 'gem', reason) }
-        }
-        if (player.pick >= 65 && profile.pff.grade > 75) {
-          const reason = `elite college grade (${profile.pff.grade.toFixed(0)})`
-          const label = `College standout: ${reason}`
-          return { type: 'gem', label, detail: label, tooltip: collegeTooltip(player, profile, 'gem', reason) }
-        }
-        if (player.pick >= 65 && profile.pff.composite > 70) {
-          const reason = `top-tier composite for position (${profile.pff.composite.toFixed(0)})`
-          const label = `College standout: ${reason}`
-          return { type: 'gem', label, detail: label, tooltip: collegeTooltip(player, profile, 'gem', reason) }
+        const isQB = player.pos === 'QB'
+        const cps = collegeProjectionScore(player, profile) ?? 0
+        // QBs require a higher CPS bar and at least two PFF dimensions above threshold
+        const qbMultiSignal = isQB
+          ? (profile.pff.efficiency > 70 ? 1 : 0) + (profile.pff.grade > 72 ? 1 : 0) + (profile.pff.composite > 68 ? 1 : 0) >= 2
+          : true
+        if (!isQB || (cps > 70 && qbMultiSignal)) {
+          if (profile.pff.efficiency > 72) {
+            const reason = `elite ${dim.eff} in college (${profile.pff.efficiency.toFixed(0)})`
+            const label = `College standout: ${reason}`
+            return { type: 'gem', label, detail: label, tooltip: collegeTooltip(player, profile, 'gem', reason) }
+          }
+          if (player.pick >= 65 && profile.pff.grade > 75) {
+            const reason = `elite college grade (${profile.pff.grade.toFixed(0)})`
+            const label = `College standout: ${reason}`
+            return { type: 'gem', label, detail: label, tooltip: collegeTooltip(player, profile, 'gem', reason) }
+          }
+          if (player.pick >= 65 && profile.pff.composite > 70) {
+            const reason = `top-tier composite for position (${profile.pff.composite.toFixed(0)})`
+            const label = `College standout: ${reason}`
+            return { type: 'gem', label, detail: label, tooltip: collegeTooltip(player, profile, 'gem', reason) }
+          }
         }
       }
     }
@@ -2802,7 +2810,8 @@ function classifyHistoricalOutcome(player: Historical, profile: PffProfile | nul
         return { type: 'bust', label, detail: label, tooltip: collegeTooltip(player, null, 'bust', reason) }
       }
     }
-    if (player.pick >= 65) {
+    // QBs without PFF data can't be reliably gem-flagged on athleticism alone
+    if (player.pick >= 65 && player.pos !== 'QB') {
       const thresh = fastForPos[player.pos]
       if (thresh && player.forty != null && player.forty <= thresh) {
         const reason = `elite speed (${player.forty.toFixed(2)}s 40)`
