@@ -3829,6 +3829,17 @@ function pffSim(input: Prospect, profile: PffProfile, grp?: string) {
   return Math.exp(-distance) * recency * experienceBonus * tierWeight
 }
 
+// Empirical mean wAV by pick range (2016-2022, n=1,792 picks).
+// Used to anchor calibratedExpectedAv — prevents systematic overestimation for late picks
+// where model signal is weakest. Baseline weight increases with pick# (higher uncertainty).
+function pickRangeBaseline(pick: number): { av: number; weight: number } {
+  if (pick <= 32)  return { av: 35.0, weight: 0.15 }
+  if (pick <= 64)  return { av: 24.2, weight: 0.20 }
+  if (pick <= 100) return { av: 18.5, weight: 0.25 }
+  if (pick <= 160) return { av: 12.3, weight: 0.30 }
+  return                   { av:  7.4, weight: 0.35 }
+}
+
 function calibratedExpectedAv(input: Prospect, signals: { draft: number; athletic: number; size: number; age: number }) {
   const values: Record<ModelSignal, number> = {
     draftScore: signals.draft,
@@ -3851,7 +3862,9 @@ function calibratedExpectedAv(input: Prospect, signals: { draft: number; athleti
     (sum, feature) => sum + feature.coef * ((values[feature.name] - feature.mean) / feature.sd),
     calibratedAvModel.intercept,
   )
-  return clamp(Math.expm1(logAv), 0, 110)
+  const modelAv = clamp(Math.expm1(logAv), 0, 110)
+  const { av: baselineAv, weight } = pickRangeBaseline(input.pick)
+  return blend(modelAv, baselineAv, weight)
 }
 
 function normalizePffInput(input: Prospect, pffProfiles: PffProfile[]) {
