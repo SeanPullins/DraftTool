@@ -2293,7 +2293,7 @@ td small {
 
   /* Mobile card view: hide the wide table, show cards instead */
   .classTable { display: none; }
-  .classMobileCards { display: flex; }
+  .classMobileCards { display: flex; flex-direction: column; gap: 8px; padding-top: 4px; }
 
   /* Rankings mobile */
   .rankStats { grid-template-columns: repeat(2, 1fr); }
@@ -2355,7 +2355,10 @@ td small {
 }
 
 /* ── Mobile class cards ───────────────────────────── */
-.classMobileCards { display: none; }
+/* Hidden on desktop; shown inside @media (max-width: 720px) */
+@media (min-width: 721px) {
+  .classMobileCards { display: none; }
+}
 
 .mobileClassCard {
   display: flex;

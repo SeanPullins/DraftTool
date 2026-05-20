@@ -2256,6 +2256,8 @@ function ClassExplorer({ pool, history, pffProfiles, pffLookup, y1Data, careerSt
     }
   }, [years, year, currentYear])
 
+  useEffect(() => { setOutcomeFilter('all') }, [year, pos])
+
   const filtered = useMemo(() => {
     if (year === null) return []
     return pool.filter((player) => {
