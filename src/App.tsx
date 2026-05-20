@@ -2239,9 +2239,11 @@ function ClassExplorer({ pool, history, pffProfiles, pffLookup, y1Data, careerSt
 
   const [year, setYear] = useState<number | null>(null)
   const [pos, setPos] = useState<string>('All')
+  const [outcomeFilter, setOutcomeFilter] = useState<'all' | 'gems' | 'busts' | 'flagged'>('all')
   const [sortKey, setSortKey] = useState<SortKey>('pick')
   const [sortDir, setSortDir] = useState<SortDir>('asc')
   const [expandedId, setExpandedId] = useState<string | null>(null)
+  const [showScatter, setShowScatter] = useState(false)
 
   // Persistent cache: avoids recomputing the same player on year revisits
   const projCache = useRef(new Map<string, { av: number; score: number }>())
@@ -2256,8 +2258,18 @@ function ClassExplorer({ pool, history, pffProfiles, pffLookup, y1Data, careerSt
 
   const filtered = useMemo(() => {
     if (year === null) return []
-    return pool.filter((player) => player.year === year && (pos === 'All' || player.pos === pos))
-  }, [pool, year, pos])
+    return pool.filter((player) => {
+      if (player.year !== year) return false
+      if (pos !== 'All' && player.pos !== pos) return false
+      if (outcomeFilter !== 'all') {
+        const flag = histFlagMap.get(player.id)
+        if (outcomeFilter === 'flagged' && !flag) return false
+        if (outcomeFilter === 'gems' && flag?.type !== 'gem') return false
+        if (outcomeFilter === 'busts' && flag?.type !== 'bust') return false
+      }
+      return true
+    })
+  }, [pool, year, pos, outcomeFilter, histFlagMap])
 
   const canProject = year !== null && year >= 2018 && history.length > 0
   const useProjections = canProject
@@ -2308,6 +2320,37 @@ function ClassExplorer({ pool, history, pffProfiles, pffLookup, y1Data, careerSt
     })
   }, [deferredFiltered, effectiveSortKey, sortDir, projections])
 
+  const scoreDist = useMemo(() => {
+    if (!useProjections || !projections.size) return null
+    const scores = rows.flatMap((r) => {
+      const p = projections.get(r.id)
+      return p ? [Math.round(p.score)] : []
+    }).sort((a, b) => a - b)
+    if (scores.length < 2) return null
+    return {
+      min: scores[0],
+      p25: q(scores, 0.25),
+      p50: q(scores, 0.50),
+      p75: q(scores, 0.75),
+      max: scores[scores.length - 1],
+      avgScore: Math.round(scores.reduce((s, v) => s + v, 0) / scores.length),
+    }
+  }, [rows, projections, useProjections])
+
+  const classSummary = useMemo(() => {
+    const counted = rows.filter((r) => r.year <= matureOutcomeCutoff)
+    if (!counted.length) return null
+    const avgAv = counted.reduce((s, r) => s + (r.av || 0), 0) / counted.length
+    const avgG = counted.reduce((s, r) => s + (r.games || 0), 0) / counted.length
+    const avgSt = counted.reduce((s, r) => s + (r.starts || 0), 0) / counted.length
+    const totalPb = counted.reduce((s, r) => s + (r.proBowls || 0), 0)
+    const totalAp = counted.reduce((s, r) => s + (r.allPros || 0), 0)
+    const projScores = rows.flatMap((r) => { const p = projections.get(r.id); return p ? [p] : [] })
+    const avgProjAv = projScores.length ? projScores.reduce((s, p) => s + p.av, 0) / projScores.length : null
+    const avgProjScore = projScores.length ? Math.round(projScores.reduce((s, p) => s + p.score, 0) / projScores.length) : null
+    return { avgAv, avgG, avgSt, totalPb, totalAp, avgProjAv, avgProjScore }
+  }, [rows, projections])
+
   function toggleSort(key: SortKey) {
     if ((key === 'projAv' || key === 'projScore') && !useProjections) return
     if (key === sortKey) {
@@ -2326,8 +2369,15 @@ function ClassExplorer({ pool, history, pffProfiles, pffLookup, y1Data, careerSt
         <p>Draft Class</p>
         <h2>Class Rankings</h2>
       </div>
-      <strong style={{ opacity: isPending ? 0.5 : 1 }}>{rows.length} players{isPending ? ' …' : ''}</strong>
+      <div className="classTitleRight">
+        <strong style={{ opacity: isPending ? 0.5 : 1 }}>{rows.length} players{isPending ? ' …' : ''}</strong>
+        {scoreDist && <ScoreRangeBar dist={scoreDist} />}
+        {useProjections && <button type="button" className={`secondary scatterToggle${showScatter ? ' on' : ''}`} onClick={() => setShowScatter((v) => !v)} title="Pick vs Score scatter">scatter</button>}
+      </div>
     </div>
+    {showScatter && useProjections && rows.length > 0 && (
+      <ClassScatter rows={rows} projections={projections} currentKey={currentKey} currentYear={currentYear} />
+    )}
     <div className="classControls">
       <label className="field"><span>Year</span>
         <select value={year ?? ''} onChange={(e) => setYear(Number(e.target.value))}>
@@ -2347,6 +2397,13 @@ function ClassExplorer({ pool, history, pffProfiles, pffLookup, y1Data, careerSt
       <button type="button" className="secondary directionButton" onClick={() => setSortDir((direction) => direction === 'asc' ? 'desc' : 'asc')} aria-label="Toggle sort direction">
         {sortDir === 'desc' ? 'High to low' : 'Low to high'}
       </button>
+    </div>
+    <div className="flagFilters">
+      {(['all', 'gems', 'busts', 'flagged'] as const).map((f) => (
+        <button key={f} type="button" className={`flagFilterBtn${outcomeFilter === f ? ' on' : ''} flagFilterBtn-${f}`} onClick={() => setOutcomeFilter(f)}>
+          {f === 'all' ? 'All' : f === 'gems' ? 'Gems' : f === 'busts' ? 'Busts' : 'Flagged'}
+        </button>
+      ))}
     </div>
     {useProjections ? <p className="hint">Projected AV and Score use the calibrated 2016-2023 model plus each player's draft/combine and matched PFF profile when available.</p> : null}
     {rows.length ? <TableWrap>
@@ -2438,10 +2495,164 @@ function ClassExplorer({ pool, history, pffProfiles, pffLookup, y1Data, careerSt
             return rowEls
           })}
         </tbody>
+        {classSummary && (
+          <tfoot>
+            <tr className="classSummaryRow">
+              <td colSpan={4}><b>Class avg</b></td>
+              <td>{classSummary.avgG.toFixed(0)}</td>
+              <td>{classSummary.avgSt.toFixed(0)}</td>
+              <td>{classSummary.avgAv.toFixed(1)}</td>
+              <td>—</td>
+              {useProjections ? <td>{classSummary.avgProjAv != null ? classSummary.avgProjAv.toFixed(1) : '—'}</td> : null}
+              {useProjections ? <td style={{ color: classSummary.avgProjScore != null ? scoreColor(classSummary.avgProjScore) : undefined }}>{classSummary.avgProjScore ?? '—'}</td> : null}
+              <td>{classSummary.totalPb}</td>
+              <td>{classSummary.totalAp}</td>
+              <td></td>
+            </tr>
+          </tfoot>
+        )}
       </table>
     </TableWrap> : <p className="emptyLine">No players match those filters yet. Pick a different year or position.</p>}
+    {rows.length > 0 && (
+      <div className="classMobileCards">
+        {rows.slice(0, 100).map((player, index) => {
+          const projected = projections.get(player.id)
+          const score = projected ? Math.round(projected.score) : 0
+          const outcomeFlag = histFlagMap.get(player.id) ?? null
+          const showEarlySample = player.year > matureOutcomeCutoff
+          const isCurrent = currentKey && clean(player.name) === currentKey && player.year === currentYear
+          return (
+            <div
+              key={player.id}
+              className={`mobileClassCard${isCurrent ? ' mobileClassCard-current' : ''}${useProjections ? ` mobileClassCard-${scoreClass(score)}` : ''}`}
+            >
+              <div className="mobileClassCardRank">{index + 1}</div>
+              <div className="mobileClassCardBody">
+                <div className="mobileClassCardName">{player.name}</div>
+                <div className="mobileClassCardMeta">{player.pos} · {player.school || 'No school'} · Pk {player.pick >= 260 ? 'UDFA' : player.pick}</div>
+                <div className="mobileClassCardStats">
+                  <span>AV {player.av || 0}</span>
+                  <span>G {player.games || 0}</span>
+                  {!showEarlySample && <OutcomeTag category={player.category} />}
+                  {outcomeFlag && <FlagBadge flag={outcomeFlag} />}
+                </div>
+              </div>
+              {useProjections && projected && (
+                <div className="mobileClassCardScore" style={{ color: scoreColor(score) }}>{score}</div>
+              )}
+            </div>
+          )
+        })}
+      </div>
+    )}
     {rows.length > 200 ? <p className="hint">Showing top 200 of {rows.length}. Tighten the position filter to narrow.</p> : null}
   </section>
+}
+
+function ScoreRangeBar({ dist }: { dist: { min: number; p25: number; p50: number; p75: number; max: number; avgScore: number } }) {
+  const W = 160, H = 28
+  const pad = 6
+  const plotW = W - pad * 2
+  const x = (v: number) => pad + (v / 100) * plotW
+  const tiers = [
+    { lo: 0,  hi: 45, color: 'var(--red)',    opacity: 0.15 },
+    { lo: 45, hi: 58, color: 'var(--amber)',   opacity: 0.15 },
+    { lo: 58, hi: 70, color: 'var(--green)',   opacity: 0.15 },
+    { lo: 70, hi: 82, color: 'var(--accent)',  opacity: 0.15 },
+    { lo: 82, hi: 100, color: 'var(--violet)', opacity: 0.15 },
+  ]
+  return (
+    <div className="scoreRangeWrap" title={`Score range: ${dist.min}–${dist.max} · P25=${dist.p25} · P50=${dist.p50} · P75=${dist.p75} · Avg=${dist.avgScore}`}>
+      <svg width={W} height={H} className="scoreRangeSvg">
+        {tiers.map((t) => (
+          <rect key={t.lo} x={x(t.lo)} y={4} width={x(t.hi) - x(t.lo)} height={12} fill={t.color} opacity={t.opacity} />
+        ))}
+        <rect x={x(dist.p25)} y={4} width={x(dist.p75) - x(dist.p25)} height={12} fill="var(--text-2)" opacity={0.25} rx={2} />
+        <line x1={x(dist.min)} y1={10} x2={x(dist.max)} y2={10} stroke="var(--text-2)" strokeWidth={1.5} strokeOpacity={0.5} />
+        <line x1={x(dist.p50)} y1={2} x2={x(dist.p50)} y2={18} stroke="var(--text-1)" strokeWidth={2} strokeLinecap="round" />
+        <circle cx={x(dist.avgScore)} cy={10} r={3} fill="var(--accent)" />
+        <text x={x(dist.p50)} y={27} textAnchor="middle" fontSize={9} fill="var(--text-2)">{dist.p50}</text>
+      </svg>
+      <span className="scoreRangeLabel">median score</span>
+    </div>
+  )
+}
+
+function ClassScatter({ rows, projections, currentKey, currentYear }: {
+  rows: Historical[]
+  projections: Map<string, { av: number; score: number }>
+  currentKey: string
+  currentYear: number
+}) {
+  const [tooltip, setTooltip] = useState<{ name: string; pick: number; score: number; x: number; y: number } | null>(null)
+  const W = 700, H = 160
+  const pad = { t: 12, r: 12, b: 28, l: 36 }
+  const plotW = W - pad.l - pad.r
+  const plotH = H - pad.t - pad.b
+  const xScale = (pick: number) => pad.l + (Math.log(Math.min(pick, 260) + 1) / Math.log(261)) * plotW
+  const yScale = (score: number) => pad.t + plotH - (clamp(score, 0, 100) / 100) * plotH
+  const roundBounds = [1, 33, 65, 101, 141, 181, 221, 261]
+  const roundLabels = ['R1', 'R2', 'R3', 'R4', 'R5', 'R6', 'R7']
+  const dots = rows.flatMap((player) => {
+    const proj = projections.get(player.id)
+    if (!proj) return []
+    return [{ player, score: Math.round(proj.score) }]
+  })
+  return (
+    <div className="classScatterWrap">
+      <svg width="100%" viewBox={`0 0 ${W} ${H}`} className="classScatterSvg" onMouseLeave={() => setTooltip(null)}>
+        {[0, 25, 50, 75, 100].map((v) => (
+          <line key={v} x1={pad.l} x2={W - pad.r} y1={yScale(v)} y2={yScale(v)} stroke="var(--border)" strokeWidth={v === 50 ? 1.5 : 0.75} strokeDasharray={v === 50 ? undefined : '3 3'} />
+        ))}
+        {[0, 25, 50, 75, 100].map((v) => (
+          <text key={v} x={pad.l - 4} y={yScale(v) + 4} textAnchor="end" fontSize={9} fill="var(--text-2)">{v}</text>
+        ))}
+        {roundBounds.slice(0, -1).map((pick, i) => {
+          const midPick = (pick + roundBounds[i + 1] - 1) / 2
+          return (
+            <g key={i}>
+              <line x1={xScale(pick)} x2={xScale(pick)} y1={pad.t} y2={H - pad.b} stroke="var(--border)" strokeWidth={0.75} />
+              <text x={xScale(midPick)} y={H - 6} textAnchor="middle" fontSize={9} fill="var(--text-2)">{roundLabels[i]}</text>
+            </g>
+          )
+        })}
+        {dots.map(({ player, score }) => {
+          const cx = xScale(player.pick)
+          const cy = yScale(score)
+          const isCurrent = currentKey && clean(player.name) === currentKey && player.year === currentYear
+          return (
+            <circle
+              key={player.id}
+              cx={cx}
+              cy={cy}
+              r={isCurrent ? 5 : 3.5}
+              fill={scoreColor(score)}
+              opacity={isCurrent ? 1 : 0.75}
+              stroke={isCurrent ? 'var(--text-1)' : 'none'}
+              strokeWidth={1.5}
+              style={{ cursor: 'pointer' }}
+              onMouseEnter={() => setTooltip({ name: player.name, pick: player.pick, score, x: cx, y: cy })}
+            />
+          )
+        })}
+        {tooltip && (
+          <g>
+            <rect
+              x={clamp(tooltip.x - 52, pad.l, W - pad.r - 104)}
+              y={tooltip.y - 36}
+              width={104}
+              height={28}
+              rx={4}
+              fill="var(--bg-2)"
+              stroke="var(--border)"
+            />
+            <text x={clamp(tooltip.x, pad.l + 52, W - pad.r - 52)} y={tooltip.y - 22} textAnchor="middle" fontSize={9} fontWeight={700} fill="var(--text-1)">{tooltip.name}</text>
+            <text x={clamp(tooltip.x, pad.l + 52, W - pad.r - 52)} y={tooltip.y - 12} textAnchor="middle" fontSize={9} fill="var(--text-2)">Pk {tooltip.pick} · Score {tooltip.score}</text>
+          </g>
+        )}
+      </svg>
+    </div>
+  )
 }
 
 function ClassHeader({ label, sortKey, active, dir, onSort }: { label: string; sortKey: SortKey; active: SortKey; dir: SortDir; onSort: (key: SortKey) => void }) {
