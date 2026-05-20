@@ -316,6 +316,30 @@ button, input, select { font: inherit; }
   color: #fff;
 }
 
+/* ── Nav spacer + theme toggle in page nav ────────── */
+.navSpacer { flex: 1; }
+
+.themeNavBtn {
+  background: transparent;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  color: var(--nav-inactive);
+  padding: 9px 14px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  border-radius: 0;
+  min-height: 0;
+  letter-spacing: .04em;
+  transition: color .12s;
+}
+.themeNavBtn:hover {
+  color: var(--nav-hover);
+  transform: none;
+  background: transparent;
+}
+[data-theme="light"] .themeNavBtn { color: var(--nav-inactive); }
+
 /* ── Page content ─────────────────────────────────── */
 .layout,
 .classPage {
@@ -1111,7 +1135,7 @@ td small {
 
 .classControls {
   display: grid;
-  grid-template-columns: minmax(130px, .7fr) minmax(150px, .7fr) minmax(170px, 1fr) auto auto;
+  grid-template-columns: minmax(130px, .7fr) minmax(150px, .7fr) minmax(170px, 1fr) auto;
   gap: 8px;
   align-items: end;
   margin-bottom: 14px;

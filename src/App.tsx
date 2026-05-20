@@ -817,9 +817,6 @@ export default function App() {
           <span>{loading ? 'Loading…' : `${prospects.length.toLocaleString()} comps`}</span>
           <span>{pffSummary ? `${pffSummary.matched.toLocaleString()} PFF matches` : 'PFF pending'}</span>
           <span>{saved.length} saved</span>
-          <button type="button" className="themeBtn" onClick={toggleTheme} aria-label="Toggle light/dark mode" title={theme === 'dark' ? 'Switch to day mode' : 'Switch to night mode'}>
-            {theme === 'dark' ? '☀' : '☾'}
-          </button>
         </div>
       </header>
 
@@ -832,6 +829,10 @@ export default function App() {
         <button type="button" className={page === 'trade' ? 'on' : ''} onClick={() => setPage('trade')}>Trade</button>
         <button type="button" className={`${page === 'prospects' ? 'on' : ''} prospectsNavBtn`} onClick={() => setPage('prospects')}>2027 QBs</button>
         <button type="button" className={page === 'guide' ? 'on' : ''} onClick={() => setPage('guide')}>Guide</button>
+        <span className="navSpacer" />
+        <button type="button" className="themeNavBtn" onClick={toggleTheme} aria-label="Toggle light/dark mode">
+          {theme === 'dark' ? '☀ Day' : '☾ Night'}
+        </button>
       </nav>
 
       {page === 'workbench' ? <nav className="mobileTabs" role="tablist" aria-label="Workbench sections">
@@ -2215,7 +2216,6 @@ function ClassExplorer({ pool, history, pffProfiles, pffLookup, y1Data, careerSt
   const [sortKey, setSortKey] = useState<SortKey>('pick')
   const [sortDir, setSortDir] = useState<SortDir>('asc')
   const [expandedId, setExpandedId] = useState<string | null>(null)
-  const [showProjections, setShowProjections] = useState(false)
 
   // Persistent cache: avoids recomputing the same player on year revisits
   const projCache = useRef(new Map<string, { av: number; score: number }>())
@@ -2228,16 +2228,13 @@ function ClassExplorer({ pool, history, pffProfiles, pffLookup, y1Data, careerSt
     }
   }, [years, year, currentYear])
 
-  // Reset projections toggle when year changes to avoid stale results showing
-  useEffect(() => { setShowProjections(false) }, [year])
-
   const filtered = useMemo(() => {
     if (year === null) return []
     return pool.filter((player) => player.year === year && (pos === 'All' || player.pos === pos))
   }, [pool, year, pos])
 
   const canProject = year !== null && year >= 2018 && history.length > 0
-  const useProjections = showProjections && canProject
+  const useProjections = canProject
 
   // deferredFiltered drives the expensive computation — filtered drives the visible list.
   // The player rows appear immediately; projections fill in after the deferred pass.
@@ -2336,11 +2333,6 @@ function ClassExplorer({ pool, history, pffProfiles, pffLookup, y1Data, careerSt
       <button type="button" className="secondary directionButton" onClick={() => setSortDir((direction) => direction === 'asc' ? 'desc' : 'asc')} aria-label="Toggle sort direction">
         {sortDir === 'desc' ? 'High to low' : 'Low to high'}
       </button>
-      {canProject && (
-        <button type="button" className={`secondary${useProjections ? ' projOn' : ''}`} onClick={() => setShowProjections((p) => !p)}>
-          {useProjections ? (isPending ? 'Computing…' : 'Proj: On') : 'Load projections'}
-        </button>
-      )}
     </div>
     {useProjections ? <p className="hint">Projected AV and Score use the calibrated 2016-2023 model plus each player's draft/combine and matched PFF profile when available.</p> : null}
     {rows.length ? <TableWrap>
@@ -2619,13 +2611,20 @@ function pffDimLabel(pos: string): { clean: string; eff: string; prod: string } 
 // Gem flag fires when CPS > 65 for picks ≥65 (top-16% profile for an undervalued pick).
 function collegeProjectionScore(player: Historical, profile: PffProfile | null): number | null {
   if (!profile) return null
-  let score = profile.pff.composite
+  const isQB = player.pos === 'QB'
+  // QBs: blend composite + grade equally — grade penalises poor decisions composite can hide
+  let score = isQB
+    ? (profile.pff.composite * 0.5 + profile.pff.grade * 0.5)
+    : profile.pff.composite
   if (player.age != null) score += Math.max(-5, Math.min(5, (22.0 - player.age) * 1.5))
   const fast = fastForPos[player.pos]; const slow = slowForPos[player.pos]
   if (fast && player.forty != null && player.forty <= fast) score += 4
   if (slow && player.forty != null && player.forty > slow) score -= 4
   if (player.vertical != null && player.vertical >= 38) score += 2
   if (player.broad != null && player.broad >= 128) score += 2
+  // QB-specific floors: sub-par grade and poor efficiency are strong failure signals
+  if (isQB && profile.pff.grade < 68) score -= 5
+  if (isQB && profile.pff.efficiency < 60) score -= 3
   return Math.max(1, Math.min(99, Math.round(score)))
 }
 
