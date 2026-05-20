@@ -211,7 +211,7 @@ type MobileTab = 'edit' | 'results' | 'board'
 type Page = 'workbench' | 'class' | 'players' | 'compare' | 'trade' | 'rankings' | 'guide' | 'prospects'
 type BrowserSortKey = 'av' | 'games' | 'starts' | 'pb' | 'ap' | 'pick' | 'name' | 'outcome' | 'year' | 'forty'
 type ModelSignal = 'draftScore' | 'logPick' | 'pffComp' | 'pffGrade' | 'pffProd' | 'pffEff' | 'pffClean' | 'ageScore' | 'athletic' | 'size' | 'isQB' | 'isSkill' | 'isOL' | 'isFront' | 'isDB'
-type SortKey = 'av' | 'projAv' | 'projScore' | 'games' | 'starts' | 'pb' | 'ap' | 'pick' | 'name' | 'outcome' | 'cps'
+type SortKey = 'av' | 'projAv' | 'projScore' | 'games' | 'starts' | 'pb' | 'ap' | 'pick' | 'name' | 'outcome'
 type SortDir = 'asc' | 'desc'
 
 const positions = ['QB', 'RB', 'WR', 'TE', 'OL', 'DL', 'LB', 'CB', 'S']
@@ -229,7 +229,6 @@ const sortLabels: Record<SortKey, string> = {
   pick: 'Pick',
   name: 'Name',
   outcome: 'Outcome',
-  cps: 'College Projection Score',
 }
 const positionFilters = ['All', ...positions]
 const calibratedAvModel: { intercept: number; features: Array<{ name: ModelSignal; coef: number; mean: number; sd: number }> } = {
@@ -266,9 +265,12 @@ const group: Record<string, string> = {
 const signalWeights: Record<string, { draft: number; athletic: number; size: number; scout: number; age: number; strength: number }> = {
   QB:    { draft: .34, athletic: .05, size: .05, scout: .38, age: .12, strength: .06 },
   SKILL: { draft: .27, athletic: .21, size: .06, scout: .33, age: .10, strength: .03 },
-  OL:    { draft: .28, athletic: .08, size: .18, scout: .28, age: .08, strength: .10 },
-  FRONT: { draft: .26, athletic: .20, size: .08, scout: .28, age: .08, strength: .10 },
-  DB:    { draft: .29, athletic: .22, size: .04, scout: .31, age: .10, strength: .04 },
+  // OL: cone/shuttle/forty are strongly predictive (r=−0.25 to −0.30) → raise athletic; age matters more than size
+  OL:    { draft: .28, athletic: .16, size: .14, scout: .24, age: .10, strength: .08 },
+  // FRONT: age r=−0.327 and bench r=0.219 are the dominant signals → raise age+strength
+  FRONT: { draft: .26, athletic: .14, size: .07, scout: .22, age: .14, strength: .17 },
+  // DB: cone/shuttle r=−0.21 to −0.22, age r=−0.294 → raise athletic+age
+  DB:    { draft: .28, athletic: .25, size: .04, scout: .26, age: .14, strength: .03 },
 }
 function PICK_VALUE(pick: number): number {
   return Math.max(1, Math.round(3000 * Math.exp(-0.02 * (pick - 1))))
@@ -2027,7 +2029,8 @@ function GuideView() {
       <p>
         Similarity is based on draft pick (log-scaled, 45% weight), combine athleticism (39%), and
         size (16%). When a PFF college profile is loaded and at least 12 mature PFF comps exist, a
-        35% PFF blend is added — weighting players by college production, grade, and efficiency.
+        position-aware PFF blend is added — the blend weight and which PFF dimensions drive similarity
+        depend on the position group (e.g., 35% for SKILL, 7–14% for QBs outside round 1).
       </p>
       <p>
         A calibrated linear model (trained on the same 2000–2021 population) contributes a 10% anchor
@@ -2054,7 +2057,7 @@ function GuideView() {
           ['Size',     'Height + weight vs. position group',                  'QB 5% · Skill 6% · OL 18% · Front 8% · DB 4%'],
           ['Scouting', 'Weighted Film/Production/Fit/Health/Processing grades','QB 38% · Skill 33% · OL 28% · Front 28% · DB 31%'],
           ['Age',      'Draft age; younger = higher upside ceiling',          'QB 12% · Skill 10% · OL 8% · Front 8% · DB 10%'],
-          ['PFF',      'College PFF composite, grade, production, efficiency','Activates at 35% blend when ≥12 PFF comps exist'],
+          ['PFF',      'College PFF metrics (position-aware weights)',        'SKILL 35% · QB 7–28% by pick · OL 12% · Front 10% · DB 10%'],
         ] as [string, string, string][]).map(([sig, cap, wt]) => (
           <div key={sig} className="guideTableRow">
             <span className="guideSigName">{sig}</span>
@@ -2107,39 +2110,40 @@ function GuideView() {
           </div>
         ))}
       </div>
-      <h3 style={{ marginTop: '1.2rem', marginBottom: '.5rem', fontSize: '0.85rem', color: 'var(--fg-1)' }}>College Projection Score (CPS)</h3>
+      <h3 style={{ marginTop: '1.2rem', marginBottom: '.5rem', fontSize: '0.85rem', color: 'var(--fg-1)' }}>Position-aware PFF signal in Score</h3>
       <p>
-        For prospects with little NFL data, flags are driven by the <strong>College Projection Score</strong> —
-        a 0–99 composite empirically calibrated on 2016–2022 draft outcomes. The formula is position-aware
-        because Pearson correlations with NFL wAV (picks 33–160) vary dramatically by group.
+        The PFF college signal inside Score is calibrated on 2016–2022 outcome data. Pearson r with NFL wAV
+        varies dramatically by position, so the formula now weights metrics accordingly:
       </p>
       <div className="guideTable">
-        <div className="guideTableHead"><span>Position group</span><span>Primary CPS signal</span><span>Empirical basis</span></div>
+        <div className="guideTableHead"><span>Group</span><span>PFF dimensions used in Score</span><span>PFF blend weight</span></div>
         {([
-          ['WR / RB / TE', 'PFF composite (60%) + grade (40%) + age/speed adjustments', 'Composite r = 0.38, grade r = 0.33 vs NFL wAV'],
-          ['QB — R1 picks', 'PFF grade + composite blend (50/50) + age/speed', 'R1 QBs: 77% starter rate — PFF signal reliable'],
-          ['QB — R2 picks', 'Cautious blend: 35% PFF + base 45 + age/speed', '~60% bust or minimal-impact rate for R2+ QBs'],
-          ['QB — Day 3+', 'Pessimistic prior: 15% PFF + base 38 + age/speed', 'Picks 33–160 QBs: 44% bust rate; comp r = 0.03'],
-          ['OL', 'Combine only: cone / shuttle / 40-time + age (CPS*)', 'PFF composite r = −0.02; agility r = −0.25 to −0.30'],
-          ['DL / FRONT', 'Combine only: age + bench press + 40-time (CPS*)', 'PFF composite r = 0.005; bench r = 0.22; age r = −0.33'],
-          ['LB', 'Combine only: cone / shuttle + age (CPS*)', 'PFF composite r = −0.08; agility r = −0.20'],
-          ['CB / S', 'Combine only: cone / shuttle + age (CPS*)', 'PFF composite r = 0.05 — near zero for secondary'],
-        ] as [string, string, string][]).map(([pg, sig, basis]) => (
+          ['WR / RB / TE', 'Composite 60% + Grade 40%',                              '35% (strong signal: r = 0.38)'],
+          ['QB — R1',      'Composite 48% + Grade 36% + Efficiency 16%',             '28%'],
+          ['QB — R2',      'Same blend, gated by pick range',                         '14% (picks 33–64)'],
+          ['QB — Day 3+',  'Same blend, heavily discounted',                          '7% (picks 65+; r ≈ 0.03)'],
+          ['OL',           'Production 50% + Efficiency 32% + Clean 18%',            '12% (composite r = −0.02, excluded)'],
+          ['DL / FRONT',   'Production 58% + Grade 24% + Clean 18%',                 '10% (composite r ≈ 0.005)'],
+          ['LB',           'Grade 58% + Efficiency 30% + Clean 12%',                 '8% (composite r = −0.08, excluded)'],
+          ['CB / S',       'Production 42% + Efficiency 36% + Grade 22%',            '10% (composite r = 0.05)'],
+        ] as [string, string, string][]).map(([pg, dims, blend]) => (
           <div key={pg} className="guideTableRow">
             <span className="guideSigName">{pg}</span>
-            <span>{sig}</span>
-            <span className="guideWt">{basis}</span>
+            <span>{dims}</span>
+            <span className="guideWt">{blend}</span>
           </div>
         ))}
       </div>
       <p style={{ fontSize: '0.78rem', color: 'var(--fg-2)', marginTop: '.6rem' }}>
-        <strong>CPS*</strong> (asterisk) means no PFF college data is available, or the position group relies on
-        athleticism signals only — age, 40-time, cone, shuttle, bench, vertical, broad jump.
-        Age is the single most consistent predictor across all positions (r = −0.19 to −0.40).
+        Age at draft is the single most consistent predictor across all positions (r = −0.19 to −0.40)
+        and is already weighted at 8–14% via the signal weights above.
+        For OL/DB/FRONT, agility metrics (cone, shuttle) and strength (bench) inside the Athletic and
+        Strength signals carry more predictive weight than they do for skill positions.
       </p>
       <p style={{ fontSize: '0.78rem', color: 'var(--fg-2)', marginTop: '.4rem' }}>
-        <strong>Bust flag</strong> fires when CPS &lt; 44 for picks ≤64 — below-average college profile for an expensive investment.
-        &nbsp;<strong>Gem flag</strong> fires when CPS &gt; 65 for picks ≥65 — elite college profile for an undervalued pick.
+        <strong>Bust flag</strong> fires when college metrics are below average for a high pick (≤64).
+        &nbsp;<strong>Gem flag</strong> fires for picks ≥33 with elite college metrics — QBs require
+        strong composite+grade average (&gt; 70) AND multi-dimension alignment, AND pick ≤ 100.
         Thresholds derived from 2016–2021 draft classes where outcomes are known.
       </p>
       <h3 style={{ marginTop: '1.2rem', marginBottom: '.5rem', fontSize: '0.85rem', color: 'var(--fg-1)' }}>Position-specific PFF metrics</h3>
@@ -2288,29 +2292,17 @@ function ClassExplorer({ pool, history, pffProfiles, pffLookup, y1Data, careerSt
     return map
   }, [filtered, pffLookup])
 
-  const cpsMap = useMemo(() => {
-    const map = new Map<string, { score: number; full: boolean }>()
-    for (const player of filtered) {
-      const pff = pffMap.get(player.id) ?? null
-      const full = collegeProjectionScore(player, pff)
-      if (full != null) { map.set(player.id, { score: full, full: true }); continue }
-      const ath = combineOnlyScore(player)
-      if (ath != null) map.set(player.id, { score: ath, full: false })
-    }
-    return map
-  }, [filtered, pffMap])
-
   const effectiveSortKey = !useProjections && (sortKey === 'projAv' || sortKey === 'projScore') ? 'av' : sortKey
   // Use deferredFiltered so rows and projections always come from the same snapshot —
   // avoids a jumpy/wrong sort order while projections are still computing for the new year.
   const rows = useMemo(() => {
     const factor = sortDir === 'asc' ? 1 : -1
     return deferredFiltered.slice().sort((a, b) => {
-      const cmp = compareHistorical(a, b, effectiveSortKey, projections, cpsMap)
+      const cmp = compareHistorical(a, b, effectiveSortKey, projections)
       if (cmp !== 0) return cmp * factor
       return (a.pick - b.pick) || a.name.localeCompare(b.name)
     })
-  }, [deferredFiltered, effectiveSortKey, sortDir, projections, cpsMap])
+  }, [deferredFiltered, effectiveSortKey, sortDir, projections])
 
   function toggleSort(key: SortKey) {
     if ((key === 'projAv' || key === 'projScore') && !useProjections) return
@@ -2365,7 +2357,6 @@ function ClassExplorer({ pool, history, pffProfiles, pffLookup, y1Data, careerSt
             <ClassHeader label="St" sortKey="starts" active={effectiveSortKey} dir={sortDir} onSort={toggleSort} />
             <ClassHeader label="AV" sortKey="av" active={effectiveSortKey} dir={sortDir} onSort={toggleSort} />
             <th title="PFF college composite grade">PFF</th>
-            <ClassHeader label="CPS" sortKey="cps" active={effectiveSortKey} dir={sortDir} onSort={toggleSort} />
             {useProjections ? <ClassHeader label="Proj AV" sortKey="projAv" active={effectiveSortKey} dir={sortDir} onSort={toggleSort} /> : null}
             {useProjections ? <ClassHeader label="Score" sortKey="projScore" active={effectiveSortKey} dir={sortDir} onSort={toggleSort} /> : null}
             <ClassHeader label="PB" sortKey="pb" active={effectiveSortKey} dir={sortDir} onSort={toggleSort} />
@@ -2382,8 +2373,8 @@ function ClassExplorer({ pool, history, pffProfiles, pffLookup, y1Data, careerSt
             const outcomeFlag = histFlagMap.get(player.id) ?? null
             const pffProfile = pffMap.get(player.id) ?? null
             const isExpanded = expandedId === player.id
-            const canExpand = pffProfile !== null || outcomeFlag !== null || cpsMap.has(player.id)
-            const colCount = 13 + (useProjections ? 2 : 0)
+            const canExpand = pffProfile !== null || outcomeFlag !== null
+            const colCount = 12 + (useProjections ? 2 : 0)
             const rowEls: React.ReactNode[] = [
               <tr
                 key={player.id}
@@ -2398,7 +2389,6 @@ function ClassExplorer({ pool, history, pffProfiles, pffLookup, y1Data, careerSt
                 <td>{player.starts || 0}</td>
                 <td>{player.av || 0}</td>
                 <td className="pffCol">{pffProfile ? pffProfile.pff.composite.toFixed(0) : '—'}</td>
-                <td className="cpsCol">{(() => { const e = cpsMap.get(player.id); if (!e) return '—'; const color = e.score >= 65 ? 'var(--green)' : e.score < 44 ? 'var(--red)' : undefined; return <span style={{ color, fontWeight: 700, opacity: e.full ? 1 : 0.65 }} title={e.full ? undefined : 'Athleticism-only (no PFF college data)'}>{e.score}{e.full ? '' : '*'}</span> })()}</td>
                 {useProjections ? <td>{projected ? projected.av.toFixed(1) : '-'}</td> : null}
                 {useProjections ? <td style={{ color: projected ? scoreColor(score) : undefined, fontWeight: projected ? 800 : undefined }}>{projected ? Math.round(projected.score) : '-'}</td> : null}
                 <td>{player.proBowls || 0}</td>
@@ -2414,44 +2404,21 @@ function ClassExplorer({ pool, history, pffProfiles, pffLookup, y1Data, careerSt
                 <tr key={`detail-${player.id}`} className="classRowDetail">
                   <td colSpan={colCount}>
                     <div className="classDetail">
-                      {(() => {
-                        const cpEntry = cpsMap.get(player.id)
-                        if (pffProfile) {
-                          const dim = pffDimLabel(player.pos)
-                          const uc = (s: string) => s.charAt(0).toUpperCase() + s.slice(1)
-                          return (
-                            <div className="classDetailSection">
-                              <span className="classDetailLabel">College Projection Score &amp; PFF Grades</span>
-                              <div className="classDetailStats">
-                                {cpEntry != null && (
-                                  <div className="classDetailStat classDetailStat-cps">
-                                    <span>CPS{cpEntry.full ? '' : ' *'}</span>
-                                    <b style={{ color: cpEntry.score >= 65 ? 'var(--green)' : cpEntry.score < 44 ? 'var(--red)' : undefined, opacity: cpEntry.full ? 1 : 0.75 }} title={cpEntry.full ? undefined : 'Athleticism-only (no PFF college data)'}>{cpEntry.score}<small>/99</small></b>
-                                  </div>
-                                )}
-                                <div className="classDetailStat"><span>Composite</span><b>{pffProfile.pff.composite.toFixed(0)}</b></div>
-                                <div className="classDetailStat"><span>Grade</span><b>{pffProfile.pff.grade.toFixed(0)}</b></div>
-                                <div className="classDetailStat"><span>{uc(dim.prod)}</span><b style={{ color: pffProfile.pff.production < 52 ? 'var(--red)' : pffProfile.pff.production > 72 ? 'var(--green)' : undefined }}>{pffProfile.pff.production.toFixed(0)}</b></div>
-                                <div className="classDetailStat"><span>{uc(dim.eff)}</span><b style={{ color: pffProfile.pff.efficiency < 52 ? 'var(--red)' : pffProfile.pff.efficiency > 72 ? 'var(--green)' : undefined }}>{pffProfile.pff.efficiency.toFixed(0)}</b></div>
-                                <div className="classDetailStat"><span>{uc(dim.clean)}</span><b style={{ color: pffProfile.pff.clean < 52 ? 'var(--red)' : undefined }}>{pffProfile.pff.clean.toFixed(0)}</b></div>
-                              </div>
+                      {pffProfile && (() => {
+                        const dim = pffDimLabel(player.pos)
+                        const uc = (s: string) => s.charAt(0).toUpperCase() + s.slice(1)
+                        return (
+                          <div className="classDetailSection">
+                            <span className="classDetailLabel">PFF College Grades</span>
+                            <div className="classDetailStats">
+                              <div className="classDetailStat"><span>Composite</span><b>{pffProfile.pff.composite.toFixed(0)}</b></div>
+                              <div className="classDetailStat"><span>Grade</span><b>{pffProfile.pff.grade.toFixed(0)}</b></div>
+                              <div className="classDetailStat"><span>{uc(dim.prod)}</span><b style={{ color: pffProfile.pff.production < 52 ? 'var(--red)' : pffProfile.pff.production > 72 ? 'var(--green)' : undefined }}>{pffProfile.pff.production.toFixed(0)}</b></div>
+                              <div className="classDetailStat"><span>{uc(dim.eff)}</span><b style={{ color: pffProfile.pff.efficiency < 52 ? 'var(--red)' : pffProfile.pff.efficiency > 72 ? 'var(--green)' : undefined }}>{pffProfile.pff.efficiency.toFixed(0)}</b></div>
+                              <div className="classDetailStat"><span>{uc(dim.clean)}</span><b style={{ color: pffProfile.pff.clean < 52 ? 'var(--red)' : undefined }}>{pffProfile.pff.clean.toFixed(0)}</b></div>
                             </div>
-                          )
-                        }
-                        if (cpEntry != null && !cpEntry.full) {
-                          return (
-                            <div className="classDetailSection">
-                              <span className="classDetailLabel">Athleticism Score (no PFF data)</span>
-                              <div className="classDetailStats">
-                                <div className="classDetailStat classDetailStat-cps">
-                                  <span>CPS *</span>
-                                  <b style={{ color: cpEntry.score >= 65 ? 'var(--green)' : cpEntry.score < 44 ? 'var(--red)' : undefined, opacity: 0.75 }}>{cpEntry.score}<small>/99</small></b>
-                                </div>
-                              </div>
-                            </div>
-                          )
-                        }
-                        return null
+                          </div>
+                        )
                       })()}
                       {outcomeFlag && (
                         <div className={`classDetailFlag classDetailFlag-${outcomeFlag.type}`}>
@@ -2482,7 +2449,7 @@ function ClassHeader({ label, sortKey, active, dir, onSort }: { label: string; s
   </th>
 }
 
-function compareHistorical(a: Historical, b: Historical, key: SortKey, projections: Map<string, { av: number; score: number }>, cpsMap?: Map<string, { score: number; full: boolean }>): number {
+function compareHistorical(a: Historical, b: Historical, key: SortKey, projections: Map<string, { av: number; score: number }>): number {
   switch (key) {
     case 'av': return (a.av || 0) - (b.av || 0)
     case 'projAv': return (projections.get(a.id)?.av ?? -Infinity) - (projections.get(b.id)?.av ?? -Infinity)
@@ -2494,7 +2461,6 @@ function compareHistorical(a: Historical, b: Historical, key: SortKey, projectio
     case 'pick': return (a.pick || 999) - (b.pick || 999)
     case 'outcome': return outcomeOrder.indexOf(a.category) - outcomeOrder.indexOf(b.category)
     case 'name': return a.name.localeCompare(b.name)
-    case 'cps': return (cpsMap?.get(a.id)?.score ?? -Infinity) - (cpsMap?.get(b.id)?.score ?? -Infinity)
   }
 }
 
@@ -2609,11 +2575,6 @@ function prospectRiskFlags(p: ProspectQB, bustRates: QbBustRates): RiskFlag[] {
 // Per-position slow/fast 40-yd thresholds
 const slowForPos: Partial<Record<string, number>> = { QB: 4.85, WR: 4.55, RB: 4.55, TE: 4.78, OL: 5.38, DL: 4.98, LB: 4.78, CB: 4.55, S: 4.62 }
 const fastForPos: Partial<Record<string, number>> = { WR: 4.40, RB: 4.42, CB: 4.40, S: 4.45, LB: 4.56, TE: 4.62, DL: 4.72 }
-// Agility thresholds — cone/shuttle are the top predictors for OL/LB/DB (r ≈ -0.20 to -0.30)
-const fastConeForPos: Partial<Record<string, number>> = { OL: 7.40, LB: 7.00, CB: 6.70, S: 6.90 }
-const slowConeForPos: Partial<Record<string, number>> = { OL: 7.80, LB: 7.30, CB: 7.00, S: 7.20 }
-const fastShuttleForPos: Partial<Record<string, number>> = { OL: 4.50, LB: 4.20, CB: 4.10, S: 4.15 }
-const slowShuttleForPos: Partial<Record<string, number>> = { OL: 4.75, LB: 4.45, CB: 4.35, S: 4.40 }
 
 // Position-aware semantic labels for the 3 PFF dimensions that vary by role
 function pffDimLabel(pos: string): { clean: string; eff: string; prod: string } {
@@ -2625,115 +2586,6 @@ function pffDimLabel(pos: string): { clean: string; eff: string; prod: string } 
     case 'DB':    return { clean: 'discipline', eff: 'coverage success', prod: 'per-game impact' }
     default:      return { clean: 'clean', eff: 'efficiency', prod: 'production' }
   }
-}
-
-// College Projection Score (CPS) — empirically calibrated on 2016-2022 outcomes (picks 33-160).
-//
-// Pearson r with wAV for non-R1 picks:
-//   SKILL (WR/RB/TE): composite r=0.382, grade r=0.334  → PFF is the primary signal
-//   QB (picks 33+):   composite r=0.029, grade r=0.031  → near-zero; pick-range prior dominates
-//   OL:               composite r=−0.017                → PFF is noise; agility metrics matter
-//   FRONT/LB/DB:      composite r=−0.079 to 0.053       → near-zero; falls through to combineOnlyScore
-//   Age at draft:     r=−0.187 to −0.397 across groups  → most consistent signal everywhere
-//
-// OL/FRONT/LB/DB return null here → combineOnlyScore handles them with agility/strength signals.
-function collegeProjectionScore(player: Historical, profile: PffProfile | null): number | null {
-  if (!profile) return null
-  const posGroup = group[player.pos] ?? 'SKILL'
-
-  // For positions where PFF composite is near-zero or negative predictor, skip PFF entirely.
-  // combineOnlyScore will apply the relevant agility/strength signals for these groups.
-  if (posGroup === 'OL' || posGroup === 'FRONT' || posGroup === 'DB') return null
-
-  let score: number
-
-  if (posGroup === 'QB') {
-    // QBs: PFF is only reliable for R1 picks. Beyond R1, the prior collapses toward
-    // the base rate: 12% starter rate for picks 33-160, 44% bust rate.
-    const pffBase = profile.pff.composite * 0.5 + profile.pff.grade * 0.5
-    if (player.pick <= 32) {
-      score = pffBase                          // R1: trust PFF fully
-    } else if (player.pick <= 64) {
-      score = pffBase * 0.35 + 45             // R2: 35% PFF blended toward cautious base
-    } else {
-      score = pffBase * 0.15 + 38             // Day 3+: pessimistic prior; natural cap ~53
-    }
-    // Clear failure signals still apply regardless of pick range
-    if (profile.pff.grade < 68) score -= 5
-    if (profile.pff.efficiency < 60) score -= 3
-  } else {
-    // SKILL (WR/RB/TE): composite r=0.382 > grade r=0.334 — composite leads
-    score = profile.pff.composite * 0.60 + profile.pff.grade * 0.40
-  }
-
-  // Age: r=−0.187 to −0.397 — younger prospects outperform at every pick range
-  if (player.age != null) score += Math.max(-5, Math.min(5, (22.0 - player.age) * 1.5))
-
-  const fast = fastForPos[player.pos]; const slow = slowForPos[player.pos]
-  if (fast && player.forty != null && player.forty <= fast) score += 4
-  if (slow && player.forty != null && player.forty > slow) score -= 4
-  if (player.vertical != null && player.vertical >= 38) score += 2
-  if (player.broad != null && player.broad >= 128) score += 2
-
-  return Math.max(1, Math.min(99, Math.round(score)))
-}
-
-// Athleticism-only fallback (CPS*): used when no PFF data exists, and as the primary
-// scorer for OL/FRONT/LB/DB where PFF college metrics are not predictive.
-// Adds position-specific agility and strength signals: cone/shuttle for OL/LB/DB
-// (r=−0.20 to −0.30 with wAV), bench for FRONT (r=0.219).
-function combineOnlyScore(player: Historical): number | null {
-  const hasData = player.forty != null || player.age != null || player.vertical != null
-    || player.broad != null || player.cone != null || player.shuttle != null || player.bench != null
-  if (!hasData) return null
-
-  let score = 50
-  if (player.age != null) score += Math.max(-5, Math.min(5, (22.0 - player.age) * 1.5))
-
-  const fast = fastForPos[player.pos]; const slow = slowForPos[player.pos]
-  if (fast && player.forty != null && player.forty <= fast) score += 4
-  if (slow && player.forty != null && player.forty > slow) score -= 4
-
-  const posGroup = group[player.pos] ?? 'SKILL'
-
-  if (posGroup === 'OL') {
-    // OL: cone r=−0.297, forty r=−0.252, shuttle r=−0.243 — agility dominates
-    const fc = fastConeForPos[player.pos]; const sc = slowConeForPos[player.pos]
-    if (fc && player.cone != null && player.cone <= fc) score += 5
-    else if (sc && player.cone != null && player.cone > sc) score -= 5
-    const fs = fastShuttleForPos[player.pos]; const ss = slowShuttleForPos[player.pos]
-    if (fs && player.shuttle != null && player.shuttle <= fs) score += 3
-    else if (ss && player.shuttle != null && player.shuttle > ss) score -= 3
-  } else if (player.pos === 'LB') {
-    // LB: shuttle r=−0.206, cone r=−0.196
-    const fc = fastConeForPos[player.pos]; const sc = slowConeForPos[player.pos]
-    if (fc && player.cone != null && player.cone <= fc) score += 4
-    else if (sc && player.cone != null && player.cone > sc) score -= 4
-    const fs = fastShuttleForPos[player.pos]; const ss = slowShuttleForPos[player.pos]
-    if (fs && player.shuttle != null && player.shuttle <= fs) score += 3
-    else if (ss && player.shuttle != null && player.shuttle > ss) score -= 3
-  } else if (posGroup === 'DB') {
-    // DB: cone r=−0.223, shuttle r=−0.211
-    const fc = fastConeForPos[player.pos]; const sc = slowConeForPos[player.pos]
-    if (fc && player.cone != null && player.cone <= fc) score += 4
-    else if (sc && player.cone != null && player.cone > sc) score -= 4
-    const fs = fastShuttleForPos[player.pos]; const ss = slowShuttleForPos[player.pos]
-    if (fs && player.shuttle != null && player.shuttle <= fs) score += 3
-    else if (ss && player.shuttle != null && player.shuttle > ss) score -= 3
-  } else if (posGroup === 'FRONT') {
-    // FRONT: bench r=0.219 — strength is the best non-age predictor for DL
-    if (player.bench != null && player.bench >= 28) score += 4
-    else if (player.bench != null && player.bench <= 18) score -= 3
-  }
-
-  // Explosion metrics for skill/speed positions (not OL)
-  if (posGroup !== 'OL') {
-    if (player.vertical != null && player.vertical >= 38) score += 2
-    if (player.broad != null && player.broad >= 128) score += 2
-    if (player.vertical != null && player.vertical < 28) score -= 2
-  }
-
-  return Math.max(1, Math.min(99, Math.round(score)))
 }
 
 function bustReasonLabel(player: Historical, profile: PffProfile | null): string {
@@ -2819,13 +2671,10 @@ function buildGemTooltip(player: Historical, profile: PffProfile | null, reason:
 
 function collegeTooltip(player: Historical, profile: PffProfile | null, kind: 'bust' | 'gem', reason: string): string {
   const dim = pffDimLabel(player.pos)
-  const cps = collegeProjectionScore(player, profile)
-  const cpsLabel = cps != null ? `College Projection Score: ${cps}/99 (${cps >= 65 ? 'elite for position' : cps >= 50 ? 'above avg' : cps >= 44 ? 'below avg' : 'concern'})` : null
   const nflLine = player.games > 0 ? `NFL so far: ${player.games} games, AV ${player.av}` : 'No NFL games yet'
   return [
     `Pick #${player.pick >= 260 ? 'UDFA' : player.pick} · ${player.year} · ${player.pos}`,
     nflLine,
-    ...(cpsLabel ? [cpsLabel] : []),
     `${kind === 'bust' ? 'Risk factor' : 'Standout factor'}: ${reason}`,
     ...(profile ? [
       `PFF composite ${profile.pff.composite.toFixed(0)} · grade ${profile.pff.grade.toFixed(0)} · ${dim.prod} ${profile.pff.production.toFixed(0)}`,
@@ -2951,15 +2800,16 @@ function classifyHistoricalOutcome(player: Historical, profile: PffProfile | nul
           return { type: 'bust', label, detail: label, tooltip: collegeTooltip(player, profile, 'bust', reason) }
         }
       }
-      // Gem signal: pick 33+ with elite college metrics (CPS > 65; QBs need CPS > 70 + multi-signal)
+      // Gem signal: pick 33+ with elite college metrics
       if (player.pick >= 33) {
         const isQB = player.pos === 'QB'
-        const cps = collegeProjectionScore(player, profile) ?? 0
-        // QBs require a higher CPS bar and at least two PFF dimensions above threshold
+        // QBs: data shows PFF is near-zero predictive for picks 65+. Gate gems to picks ≤100
+        // and require both strong average metrics AND multi-dimension alignment.
         const qbMultiSignal = isQB
           ? (profile.pff.efficiency > 70 ? 1 : 0) + (profile.pff.grade > 72 ? 1 : 0) + (profile.pff.composite > 68 ? 1 : 0) >= 2
           : true
-        if (!isQB || (cps > 70 && qbMultiSignal)) {
+        const qbGate = !isQB || (player.pick <= 100 && (profile.pff.composite + profile.pff.grade) / 2 > 70 && qbMultiSignal)
+        if (qbGate) {
           if (profile.pff.efficiency > 72) {
             const reason = `elite ${dim.eff} in college (${profile.pff.efficiency.toFixed(0)})`
             const label = `College standout: ${reason}`
@@ -3754,13 +3604,42 @@ function project(input: Prospect, history: Historical[], pffProfiles: PffProfile
   const benchPool = stats('bench').filter((v) => v > 0)
   const strength = input.bench > 0 && benchPool.length >= 10 ? pct(input.bench, benchPool) : 50
   const normPff = normalizePffInput(input, pffProfiles)
-  const pffSignal = normPff.composite * .38 + normPff.grade * .18 + normPff.production * .18 + normPff.efficiency * .17 + normPff.clean * .09
   const grp = group[input.pos] ?? 'SKILL'
+  // Position-aware PFF signal — Pearson r with wAV at picks 33-160 by group:
+  //   SKILL: composite r=0.382 > grade r=0.334 → composite leads at 60%
+  //   QB:    composite ≈ grade (r≈0.24); efficiency encodes decision-making quality
+  //   OL:    composite r=−0.017 — skip; production/efficiency/clean have marginal value
+  //   FRONT: production (disruption) is the strongest PFF metric (grade r=0.029)
+  //   LB:    grade r=0.126 is best available; composite r=−0.079 excluded
+  //   DB:    composite r=0.053 — near-zero; production/efficiency marginally better
+  let pffSignal: number
+  if (grp === 'SKILL') {
+    pffSignal = normPff.composite * .60 + normPff.grade * .40
+  } else if (grp === 'QB') {
+    pffSignal = normPff.composite * .48 + normPff.grade * .36 + normPff.efficiency * .16
+  } else if (grp === 'OL') {
+    pffSignal = normPff.production * .50 + normPff.efficiency * .32 + normPff.clean * .18
+  } else if (grp === 'FRONT') {
+    pffSignal = normPff.production * .58 + normPff.grade * .24 + normPff.clean * .18
+  } else if (input.pos === 'LB') {
+    pffSignal = normPff.grade * .58 + normPff.efficiency * .30 + normPff.clean * .12
+  } else {
+    // DB
+    pffSignal = normPff.production * .42 + normPff.efficiency * .36 + normPff.grade * .22
+  }
   const wt = signalWeights[grp] ?? signalWeights['SKILL']
   const baseScore = draft * wt.draft + athletic * wt.athletic + size * wt.size + scout * wt.scout + age * wt.age + strength * wt.strength
   const pffPool = pffProfiles.filter((p) => p.nfl && isMatureOutcome(p.draftSeason) && p.id !== input.pffProfileId && (p.position === input.pos || group[p.position] === group[input.pos]))
-  const pffComps = pffPool.map((profile) => ({ profile, sim: pffSim(input, profile) })).sort((a, b) => b.sim - a.sim).slice(0, 80)
-  const pffBlend = pffComps.length >= 12 ? .35 : 0
+  const pffComps = pffPool.map((profile) => ({ profile, sim: pffSim(input, profile, grp) })).sort((a, b) => b.sim - a.sim).slice(0, 80)
+  // Position and pick-aware PFF blend: SKILL has real signal; QB gated by projected pick
+  // range (PFF near-zero for picks 33+ QBs); OL/LB/DB/FRONT get small blends only.
+  const pffBlend = pffComps.length >= 12 ? (
+    grp === 'SKILL'    ? .35 :
+    grp === 'QB'       ? (input.pick <= 32 ? .28 : input.pick <= 64 ? .14 : .07) :
+    grp === 'OL'       ? .12 :
+    input.pos === 'LB' ? .08 :
+    .10
+  ) : 0
   const rawScore = baseScore * (1 - pffBlend) + pffSignal * pffBlend
   const calibratedAv = calibratedExpectedAv(input, { draft, athletic, size, age })
 
@@ -3893,15 +3772,43 @@ function sim(input: Prospect, player: Historical, y1Data?: Y1Data, careerStats?:
   return Math.exp(-distance) * recency * y1Factor * y2Factor
 }
 
-function pffSim(input: Prospect, profile: PffProfile) {
+// Position-aware PFF similarity for comp pool construction.
+// Each group weights the PFF dimensions that actually predict outcomes (matching pffSignal weights).
+// pffDist components sum to .96 in every branch to keep the distance scale consistent.
+function pffSim(input: Prospect, profile: PffProfile, grp?: string) {
+  const g = grp ?? group[input.pos] ?? 'SKILL'
   const nflPick = profile.nfl?.draftPick ?? input.pick
+  let pffDist: number
+  if (g === 'SKILL') {
+    pffDist = z2(input.pffComposite, profile.pff.composite, 8)    * .36 +
+              z2(input.pffGrade, profile.pff.grade, 10)           * .24 +
+              z2(input.pffProduction, profile.pff.production, 12) * .18 +
+              z2(input.pffEfficiency, profile.pff.efficiency, 10) * .14 +
+              z2(input.pffClean, profile.pff.clean, 12)           * .04
+  } else if (g === 'QB') {
+    pffDist = z2(input.pffComposite, profile.pff.composite, 8)    * .24 +
+              z2(input.pffGrade, profile.pff.grade, 10)           * .24 +
+              z2(input.pffEfficiency, profile.pff.efficiency, 10) * .28 +
+              z2(input.pffProduction, profile.pff.production, 12) * .14 +
+              z2(input.pffClean, profile.pff.clean, 12)           * .06
+  } else if (g === 'OL') {
+    // composite/grade near-zero or negative; match on production, efficiency, clean
+    pffDist = z2(input.pffProduction, profile.pff.production, 12) * .44 +
+              z2(input.pffEfficiency, profile.pff.efficiency, 10) * .38 +
+              z2(input.pffClean, profile.pff.clean, 12)           * .14
+  } else if (input.pos === 'LB') {
+    pffDist = z2(input.pffGrade, profile.pff.grade, 10)           * .48 +
+              z2(input.pffEfficiency, profile.pff.efficiency, 10) * .30 +
+              z2(input.pffProduction, profile.pff.production, 12) * .18
+  } else {
+    // FRONT (DL) and DB: skip composite; production/efficiency/grade
+    pffDist = z2(input.pffProduction, profile.pff.production, 12) * .44 +
+              z2(input.pffEfficiency, profile.pff.efficiency, 10) * .32 +
+              z2(input.pffGrade, profile.pff.grade, 10)           * .20
+  }
   const distance =
     Math.abs(Math.log(input.pick + 1) - Math.log(nflPick + 1)) * .2 +
-    z2(input.pffComposite, profile.pff.composite, 8) * .34 +
-    z2(input.pffGrade, profile.pff.grade, 10) * .18 +
-    z2(input.pffProduction, profile.pff.production, 12) * .18 +
-    z2(input.pffEfficiency, profile.pff.efficiency, 10) * .18 +
-    z2(input.pffClean, profile.pff.clean, 12) * .08 +
+    pffDist +
     (input.pos === profile.position ? 0 : .16)
   const recency = Math.pow(0.97, Math.max(0, 2024 - profile.draftSeason))
   const experienceBonus = profile.games >= 36 ? 1.06 : profile.games >= 24 ? 1.03 : profile.games >= 12 ? 1.0 : 0.93
