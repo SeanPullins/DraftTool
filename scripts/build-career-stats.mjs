@@ -64,6 +64,11 @@ for (const r of relevant) {
   if (!byPlayer.has(key)) byPlayer.set(key, new Map())
   const seasons = byPlayer.get(key)
 
+  // Collision guard: same cleaned name but different position in same season = two different players
+  if (seasons.has(season) && seasons.get(season).pos !== pos) {
+    console.warn(`[WARN] Name collision: key "${key}" has pos "${seasons.get(season).pos}" and "${pos}" in ${season} — stats may be corrupt`)
+  }
+
   if (!seasons.has(season)) {
     seasons.set(season, {
       season,

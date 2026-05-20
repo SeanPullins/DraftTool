@@ -32,13 +32,40 @@ function clamp(v, lo, hi) {
   return Math.max(lo, Math.min(hi, v))
 }
 
-function gradesToPick(gradesOff) {
-  if (gradesOff >= 92) return Math.round(4 + (95 - gradesOff) * 1.0)
-  if (gradesOff >= 88) return Math.round(8 + (92 - gradesOff) * 3.5)
-  if (gradesOff >= 83) return Math.round(22 + (88 - gradesOff) * 5)
-  if (gradesOff >= 77) return Math.round(47 + (83 - gradesOff) * 8)
-  if (gradesOff >= 70) return Math.round(95 + (77 - gradesOff) * 8)
-  return Math.min(250, Math.round(151 + (70 - gradesOff) * 6))
+function gradesToPick(gradesOff, bttRate, twpRate, accuracyPct, dropbacks) {
+  // Grade-based baseline
+  let pick
+  if (gradesOff >= 92) pick = 4 + (95 - gradesOff) * 1.0
+  else if (gradesOff >= 88) pick = 8 + (92 - gradesOff) * 3.5
+  else if (gradesOff >= 83) pick = 22 + (88 - gradesOff) * 5
+  else if (gradesOff >= 77) pick = 47 + (83 - gradesOff) * 8
+  else if (gradesOff >= 70) pick = 95 + (77 - gradesOff) * 8
+  else pick = Math.min(250, 151 + (70 - gradesOff) * 6)
+
+  // BTT rate: elite throws signal real arm talent beyond what grade captures
+  // Expected BTT scales with grade; each 1% above expectation → ~6 picks earlier
+  const bttExpected = clamp((gradesOff - 70) * 0.2 + 2.0, 1.5, 8.0)
+  const bttAdj = bttRate != null ? (bttRate - bttExpected) * -6 : 0
+
+  // TWP rate: turnover-worthy plays per attempt penalizes reckless decision-making
+  // Each 1% above expectation → ~8 picks later
+  const twpExpected = clamp(6.5 - (gradesOff - 65) * 0.15, 1.5, 6.0)
+  const twpAdj = twpRate != null ? (twpRate - twpExpected) * 8 : 0
+
+  // Adjusted accuracy: complements BTT (precise vs. explosive arm)
+  // Each 1% above expectation → ~1.5 picks earlier
+  const accExpected = clamp(55 + gradesOff * 0.18, 62, 76)
+  const accAdj = accuracyPct != null ? (accuracyPct - accExpected) * -1.5 : 0
+
+  pick = pick + bttAdj + twpAdj + accAdj
+
+  // Sample confidence: small samples are noisy, regress toward undrafted territory
+  if (dropbacks != null && dropbacks < 200) {
+    const conf = clamp(dropbacks / 200, 0.35, 1.0)
+    pick = pick * conf + 140 * (1 - conf)
+  }
+
+  return clamp(Math.round(pick), 1, 250)
 }
 
 function extractStats(row) {
@@ -71,6 +98,7 @@ function buildProspect(row2025, row2024) {
   const twpRate = num(row, 'twp_rate') ?? 3.5
   const attToThrow = num(row, 'avg_time_to_throw') ?? 2.6
   const cmpPct = num(row, 'completion_percent') ?? 62
+  const dropbacks = num(row, 'dropbacks') ?? 0
   const games = num(row, 'player_game_count') ?? 12
   const tds = num(row, 'touchdowns') ?? 0
 
@@ -103,7 +131,7 @@ function buildProspect(row2025, row2024) {
   const production = clamp(Math.round(50 + (ypa - 7.0) * 5 + (cmpPct - 62) * 0.4 + tdsPer12 * 1.5 + tBoost * 0.5), 40, 95)
   const processing = clamp(Math.round(90 - (attToThrow - 2.3) * 18), 40, 92)
 
-  const pick = gradesToPick(gradesOff)
+  const pick = gradesToPick(gradesOff, bttRate, twpRate, accuracyPct, dropbacks)
 
   return {
     name: (row['player'] ?? '').trim(),
