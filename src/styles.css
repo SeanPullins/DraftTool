@@ -990,12 +990,26 @@ td small {
 
 .directionButton { min-width: 110px; }
 
-.classTable { min-width: 1020px; }
+.classTable { min-width: 1080px; }
 
 .pffCol {
   color: var(--text-1);
   font-variant-numeric: tabular-nums;
 }
+
+.cpsCol {
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.classDetailStat-cps {
+  min-width: 64px;
+  padding-right: 12px;
+  border-right: 1px solid var(--border);
+  margin-right: 4px;
+}
+.classDetailStat-cps b { font-size: 22px; }
+.classDetailStat-cps small { font-size: 11px; font-weight: 600; color: var(--text-2); margin-left: 1px; }
 
 .classRowClickable { cursor: pointer; }
 .classRowClickable:hover td { background: rgba(255,255,255,.03); }

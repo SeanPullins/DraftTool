@@ -211,7 +211,7 @@ type MobileTab = 'edit' | 'results' | 'board'
 type Page = 'workbench' | 'class' | 'players' | 'compare' | 'trade' | 'rankings' | 'guide' | 'prospects'
 type BrowserSortKey = 'av' | 'games' | 'starts' | 'pb' | 'ap' | 'pick' | 'name' | 'outcome' | 'year' | 'forty'
 type ModelSignal = 'draftScore' | 'logPick' | 'pffComp' | 'pffGrade' | 'pffProd' | 'pffEff' | 'pffClean' | 'ageScore' | 'athletic' | 'size' | 'isQB' | 'isSkill' | 'isOL' | 'isFront' | 'isDB'
-type SortKey = 'av' | 'projAv' | 'projScore' | 'games' | 'starts' | 'pb' | 'ap' | 'pick' | 'name' | 'outcome'
+type SortKey = 'av' | 'projAv' | 'projScore' | 'games' | 'starts' | 'pb' | 'ap' | 'pick' | 'name' | 'outcome' | 'cps'
 type SortDir = 'asc' | 'desc'
 
 const positions = ['QB', 'RB', 'WR', 'TE', 'OL', 'DL', 'LB', 'CB', 'S']
@@ -229,6 +229,7 @@ const sortLabels: Record<SortKey, string> = {
   pick: 'Pick',
   name: 'Name',
   outcome: 'Outcome',
+  cps: 'College Projection Score',
 }
 const positionFilters = ['All', ...positions]
 const calibratedAvModel: { intercept: number; features: Array<{ name: ModelSignal; coef: number; mean: number; sd: number }> } = {
@@ -2245,17 +2246,27 @@ function ClassExplorer({ pool, history, pffProfiles, y1Data, careerStats, histFl
     return map
   }, [filtered, pffProfiles])
 
+  const cpsMap = useMemo(() => {
+    const map = new Map<string, number>()
+    for (const player of filtered) {
+      const pff = pffMap.get(player.id) ?? null
+      const cps = collegeProjectionScore(player, pff)
+      if (cps != null) map.set(player.id, cps)
+    }
+    return map
+  }, [filtered, pffMap])
+
   const effectiveSortKey = !useProjections && (sortKey === 'projAv' || sortKey === 'projScore') ? 'av' : sortKey
   // Use deferredFiltered so rows and projections always come from the same snapshot —
   // avoids a jumpy/wrong sort order while projections are still computing for the new year.
   const rows = useMemo(() => {
     const factor = sortDir === 'asc' ? 1 : -1
     return deferredFiltered.slice().sort((a, b) => {
-      const cmp = compareHistorical(a, b, effectiveSortKey, projections)
+      const cmp = compareHistorical(a, b, effectiveSortKey, projections, cpsMap)
       if (cmp !== 0) return cmp * factor
       return (a.pick - b.pick) || a.name.localeCompare(b.name)
     })
-  }, [deferredFiltered, effectiveSortKey, sortDir, projections])
+  }, [deferredFiltered, effectiveSortKey, sortDir, projections, cpsMap])
 
   function toggleSort(key: SortKey) {
     if ((key === 'projAv' || key === 'projScore') && !useProjections) return
@@ -2310,6 +2321,7 @@ function ClassExplorer({ pool, history, pffProfiles, y1Data, careerStats, histFl
             <ClassHeader label="St" sortKey="starts" active={effectiveSortKey} dir={sortDir} onSort={toggleSort} />
             <ClassHeader label="AV" sortKey="av" active={effectiveSortKey} dir={sortDir} onSort={toggleSort} />
             <th title="PFF college composite grade">PFF</th>
+            <ClassHeader label="CPS" sortKey="cps" active={effectiveSortKey} dir={sortDir} onSort={toggleSort} />
             {useProjections ? <ClassHeader label="Proj AV" sortKey="projAv" active={effectiveSortKey} dir={sortDir} onSort={toggleSort} /> : null}
             {useProjections ? <ClassHeader label="Score" sortKey="projScore" active={effectiveSortKey} dir={sortDir} onSort={toggleSort} /> : null}
             <ClassHeader label="PB" sortKey="pb" active={effectiveSortKey} dir={sortDir} onSort={toggleSort} />
@@ -2327,7 +2339,7 @@ function ClassExplorer({ pool, history, pffProfiles, y1Data, careerStats, histFl
             const pffProfile = pffMap.get(player.id) ?? null
             const isExpanded = expandedId === player.id
             const canExpand = pffProfile !== null || outcomeFlag !== null
-            const colCount = 12 + (useProjections ? 2 : 0)
+            const colCount = 13 + (useProjections ? 2 : 0)
             const rowEls: React.ReactNode[] = [
               <tr
                 key={player.id}
@@ -2342,6 +2354,7 @@ function ClassExplorer({ pool, history, pffProfiles, y1Data, careerStats, histFl
                 <td>{player.starts || 0}</td>
                 <td>{player.av || 0}</td>
                 <td className="pffCol">{pffProfile ? pffProfile.pff.composite.toFixed(0) : '—'}</td>
+                <td className="cpsCol">{(() => { const c = cpsMap.get(player.id); return c != null ? <span style={{ color: c >= 65 ? 'var(--green)' : c < 44 ? 'var(--red)' : undefined, fontWeight: 700 }}>{c}</span> : '—' })()}</td>
                 {useProjections ? <td>{projected ? projected.av.toFixed(1) : '-'}</td> : null}
                 {useProjections ? <td style={{ color: projected ? scoreColor(score) : undefined, fontWeight: projected ? 800 : undefined }}>{projected ? Math.round(projected.score) : '-'}</td> : null}
                 <td>{player.proBowls || 0}</td>
@@ -2357,18 +2370,29 @@ function ClassExplorer({ pool, history, pffProfiles, y1Data, careerStats, histFl
                 <tr key={`detail-${player.id}`} className="classRowDetail">
                   <td colSpan={colCount}>
                     <div className="classDetail">
-                      {pffProfile && (
-                        <div className="classDetailSection">
-                          <span className="classDetailLabel">PFF College Grades</span>
-                          <div className="classDetailStats">
-                            <div className="classDetailStat"><span>Composite</span><b>{pffProfile.pff.composite.toFixed(0)}</b></div>
-                            <div className="classDetailStat"><span>Grade</span><b>{pffProfile.pff.grade.toFixed(0)}</b></div>
-                            <div className="classDetailStat"><span>Production</span><b>{pffProfile.pff.production.toFixed(0)}</b></div>
-                            <div className="classDetailStat"><span>Efficiency</span><b style={{ color: pffProfile.pff.efficiency < 52 ? 'var(--red)' : pffProfile.pff.efficiency > 72 ? 'var(--green)' : undefined }}>{pffProfile.pff.efficiency.toFixed(0)}</b></div>
-                            <div className="classDetailStat"><span>Clean pocket</span><b style={{ color: pffProfile.pff.clean < 52 ? 'var(--red)' : undefined }}>{pffProfile.pff.clean.toFixed(0)}</b></div>
+                      {pffProfile && (() => {
+                        const dim = pffDimLabel(player.pos)
+                        const uc = (s: string) => s.charAt(0).toUpperCase() + s.slice(1)
+                        const cpVal = cpsMap.get(player.id)
+                        return (
+                          <div className="classDetailSection">
+                            <span className="classDetailLabel">College Projection Score &amp; PFF Grades</span>
+                            <div className="classDetailStats">
+                              {cpVal != null && (
+                                <div className="classDetailStat classDetailStat-cps">
+                                  <span>CPS</span>
+                                  <b style={{ color: cpVal >= 65 ? 'var(--green)' : cpVal < 44 ? 'var(--red)' : undefined }}>{cpVal}<small>/99</small></b>
+                                </div>
+                              )}
+                              <div className="classDetailStat"><span>Composite</span><b>{pffProfile.pff.composite.toFixed(0)}</b></div>
+                              <div className="classDetailStat"><span>Grade</span><b>{pffProfile.pff.grade.toFixed(0)}</b></div>
+                              <div className="classDetailStat"><span>{uc(dim.prod)}</span><b style={{ color: pffProfile.pff.production < 52 ? 'var(--red)' : pffProfile.pff.production > 72 ? 'var(--green)' : undefined }}>{pffProfile.pff.production.toFixed(0)}</b></div>
+                              <div className="classDetailStat"><span>{uc(dim.eff)}</span><b style={{ color: pffProfile.pff.efficiency < 52 ? 'var(--red)' : pffProfile.pff.efficiency > 72 ? 'var(--green)' : undefined }}>{pffProfile.pff.efficiency.toFixed(0)}</b></div>
+                              <div className="classDetailStat"><span>{uc(dim.clean)}</span><b style={{ color: pffProfile.pff.clean < 52 ? 'var(--red)' : undefined }}>{pffProfile.pff.clean.toFixed(0)}</b></div>
+                            </div>
                           </div>
-                        </div>
-                      )}
+                        )
+                      })()}
                       {outcomeFlag && (
                         <div className={`classDetailFlag classDetailFlag-${outcomeFlag.type}`}>
                           <span className="classDetailFlagTitle">{outcomeFlag.type === 'bust' ? '⚠' : '↑'} {outcomeFlag.label}</span>
@@ -2398,7 +2422,7 @@ function ClassHeader({ label, sortKey, active, dir, onSort }: { label: string; s
   </th>
 }
 
-function compareHistorical(a: Historical, b: Historical, key: SortKey, projections: Map<string, { av: number; score: number }>): number {
+function compareHistorical(a: Historical, b: Historical, key: SortKey, projections: Map<string, { av: number; score: number }>, cpsMap?: Map<string, number>): number {
   switch (key) {
     case 'av': return (a.av || 0) - (b.av || 0)
     case 'projAv': return (projections.get(a.id)?.av ?? -Infinity) - (projections.get(b.id)?.av ?? -Infinity)
@@ -2410,6 +2434,7 @@ function compareHistorical(a: Historical, b: Historical, key: SortKey, projectio
     case 'pick': return (a.pick || 999) - (b.pick || 999)
     case 'outcome': return outcomeOrder.indexOf(a.category) - outcomeOrder.indexOf(b.category)
     case 'name': return a.name.localeCompare(b.name)
+    case 'cps': return (cpsMap?.get(a.id) ?? -Infinity) - (cpsMap?.get(b.id) ?? -Infinity)
   }
 }
 
