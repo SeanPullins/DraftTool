@@ -1257,11 +1257,11 @@ export default function App() {
       <button type="button" className={page === 'trade' ? 'on' : ''} onClick={() => setPage('trade')}>
         <span className="bottomNavIcon">⇋</span>Trade
       </button>
-      <button type="button" className={page === 'prospects' ? 'on' : ''} onClick={() => setPage('prospects')}>
-        <span className="bottomNavIcon">◈</span>2027 QBs
-      </button>
       <button type="button" className={page === 'guide' ? 'on' : ''} onClick={() => setPage('guide')}>
         <span className="bottomNavIcon">?</span>Guide
+      </button>
+      <button type="button" className="bottomNavTheme" onClick={toggleTheme} aria-label="Toggle light/dark mode">
+        <span className="bottomNavIcon">{theme === 'dark' ? '☀' : '☾'}</span>{theme === 'dark' ? 'Day' : 'Night'}
       </button>
     </nav>
 
@@ -2110,15 +2110,33 @@ function GuideView() {
       <h3 style={{ marginTop: '1.2rem', marginBottom: '.5rem', fontSize: '0.85rem', color: 'var(--fg-1)' }}>College Projection Score (CPS)</h3>
       <p>
         For prospects with little NFL data, flags are driven by the <strong>College Projection Score</strong> —
-        a single 0–99 composite that blends PFF college grades with combine athleticism and draft-age.
-        A score of 50 is exactly average for the position group; 65 is top-16% (one standard deviation above).
+        a 0–99 composite empirically calibrated on 2016–2022 draft outcomes. The formula is position-aware
+        because Pearson correlations with NFL wAV (picks 33–160) vary dramatically by group.
       </p>
-      <ul className="guideList">
-        <li><strong>Base (PFF composite)</strong> — z-score normalized within position group (mean 50, SD 15), derived from the position-specific PFF dimensions below.</li>
-        <li><strong>Age ±5 pts</strong> — each year younger than 22 adds ~1.5 pts; older prospects lose up to 5 pts.</li>
-        <li><strong>Speed ±4 pts</strong> — elite 40 time for position adds 4; below threshold for position subtracts 4.</li>
-        <li><strong>Explosion +2 pts</strong> — vertical ≥ 38″ or broad ≥ 128″ adds 2 each.</li>
-      </ul>
+      <div className="guideTable">
+        <div className="guideTableHead"><span>Position group</span><span>Primary CPS signal</span><span>Empirical basis</span></div>
+        {([
+          ['WR / RB / TE', 'PFF composite (60%) + grade (40%) + age/speed adjustments', 'Composite r = 0.38, grade r = 0.33 vs NFL wAV'],
+          ['QB — R1 picks', 'PFF grade + composite blend (50/50) + age/speed', 'R1 QBs: 77% starter rate — PFF signal reliable'],
+          ['QB — R2 picks', 'Cautious blend: 35% PFF + base 45 + age/speed', '~60% bust or minimal-impact rate for R2+ QBs'],
+          ['QB — Day 3+', 'Pessimistic prior: 15% PFF + base 38 + age/speed', 'Picks 33–160 QBs: 44% bust rate; comp r = 0.03'],
+          ['OL', 'Combine only: cone / shuttle / 40-time + age (CPS*)', 'PFF composite r = −0.02; agility r = −0.25 to −0.30'],
+          ['DL / FRONT', 'Combine only: age + bench press + 40-time (CPS*)', 'PFF composite r = 0.005; bench r = 0.22; age r = −0.33'],
+          ['LB', 'Combine only: cone / shuttle + age (CPS*)', 'PFF composite r = −0.08; agility r = −0.20'],
+          ['CB / S', 'Combine only: cone / shuttle + age (CPS*)', 'PFF composite r = 0.05 — near zero for secondary'],
+        ] as [string, string, string][]).map(([pg, sig, basis]) => (
+          <div key={pg} className="guideTableRow">
+            <span className="guideSigName">{pg}</span>
+            <span>{sig}</span>
+            <span className="guideWt">{basis}</span>
+          </div>
+        ))}
+      </div>
+      <p style={{ fontSize: '0.78rem', color: 'var(--fg-2)', marginTop: '.6rem' }}>
+        <strong>CPS*</strong> (asterisk) means no PFF college data is available, or the position group relies on
+        athleticism signals only — age, 40-time, cone, shuttle, bench, vertical, broad jump.
+        Age is the single most consistent predictor across all positions (r = −0.19 to −0.40).
+      </p>
       <p style={{ fontSize: '0.78rem', color: 'var(--fg-2)', marginTop: '.4rem' }}>
         <strong>Bust flag</strong> fires when CPS &lt; 44 for picks ≤64 — below-average college profile for an expensive investment.
         &nbsp;<strong>Gem flag</strong> fires when CPS &gt; 65 for picks ≥65 — elite college profile for an undervalued pick.
@@ -2591,6 +2609,11 @@ function prospectRiskFlags(p: ProspectQB, bustRates: QbBustRates): RiskFlag[] {
 // Per-position slow/fast 40-yd thresholds
 const slowForPos: Partial<Record<string, number>> = { QB: 4.85, WR: 4.55, RB: 4.55, TE: 4.78, OL: 5.38, DL: 4.98, LB: 4.78, CB: 4.55, S: 4.62 }
 const fastForPos: Partial<Record<string, number>> = { WR: 4.40, RB: 4.42, CB: 4.40, S: 4.45, LB: 4.56, TE: 4.62, DL: 4.72 }
+// Agility thresholds — cone/shuttle are the top predictors for OL/LB/DB (r ≈ -0.20 to -0.30)
+const fastConeForPos: Partial<Record<string, number>> = { OL: 7.40, LB: 7.00, CB: 6.70, S: 6.90 }
+const slowConeForPos: Partial<Record<string, number>> = { OL: 7.80, LB: 7.30, CB: 7.00, S: 7.20 }
+const fastShuttleForPos: Partial<Record<string, number>> = { OL: 4.50, LB: 4.20, CB: 4.10, S: 4.15 }
+const slowShuttleForPos: Partial<Record<string, number>> = { OL: 4.75, LB: 4.45, CB: 4.35, S: 4.40 }
 
 // Position-aware semantic labels for the 3 PFF dimensions that vary by role
 function pffDimLabel(pos: string): { clean: string; eff: string; prod: string } {
@@ -2604,42 +2627,112 @@ function pffDimLabel(pos: string): { clean: string; eff: string; prod: string } 
   }
 }
 
-// College Projection Score (CPS): single 0-99 composite calibrated on 2014-2022 outcomes.
-// Base = PFF composite (z-score normalized within position group, mean 50 SD 15).
-// Adjust ±4 for elite/slow 40 speed, ±2 for explosion (vert/broad), ±5 for age.
-// Bust flag fires when CPS < 44 for picks ≤64 (below-avg profile for a high investment).
-// Gem flag fires when CPS > 65 for picks ≥65 (top-16% profile for an undervalued pick).
+// College Projection Score (CPS) — empirically calibrated on 2016-2022 outcomes (picks 33-160).
+//
+// Pearson r with wAV for non-R1 picks:
+//   SKILL (WR/RB/TE): composite r=0.382, grade r=0.334  → PFF is the primary signal
+//   QB (picks 33+):   composite r=0.029, grade r=0.031  → near-zero; pick-range prior dominates
+//   OL:               composite r=−0.017                → PFF is noise; agility metrics matter
+//   FRONT/LB/DB:      composite r=−0.079 to 0.053       → near-zero; falls through to combineOnlyScore
+//   Age at draft:     r=−0.187 to −0.397 across groups  → most consistent signal everywhere
+//
+// OL/FRONT/LB/DB return null here → combineOnlyScore handles them with agility/strength signals.
 function collegeProjectionScore(player: Historical, profile: PffProfile | null): number | null {
   if (!profile) return null
-  const isQB = player.pos === 'QB'
-  // QBs: blend composite + grade equally — grade penalises poor decisions composite can hide
-  let score = isQB
-    ? (profile.pff.composite * 0.5 + profile.pff.grade * 0.5)
-    : profile.pff.composite
+  const posGroup = group[player.pos] ?? 'SKILL'
+
+  // For positions where PFF composite is near-zero or negative predictor, skip PFF entirely.
+  // combineOnlyScore will apply the relevant agility/strength signals for these groups.
+  if (posGroup === 'OL' || posGroup === 'FRONT' || posGroup === 'DB') return null
+
+  let score: number
+
+  if (posGroup === 'QB') {
+    // QBs: PFF is only reliable for R1 picks. Beyond R1, the prior collapses toward
+    // the base rate: 12% starter rate for picks 33-160, 44% bust rate.
+    const pffBase = profile.pff.composite * 0.5 + profile.pff.grade * 0.5
+    if (player.pick <= 32) {
+      score = pffBase                          // R1: trust PFF fully
+    } else if (player.pick <= 64) {
+      score = pffBase * 0.35 + 45             // R2: 35% PFF blended toward cautious base
+    } else {
+      score = pffBase * 0.15 + 38             // Day 3+: pessimistic prior; natural cap ~53
+    }
+    // Clear failure signals still apply regardless of pick range
+    if (profile.pff.grade < 68) score -= 5
+    if (profile.pff.efficiency < 60) score -= 3
+  } else {
+    // SKILL (WR/RB/TE): composite r=0.382 > grade r=0.334 — composite leads
+    score = profile.pff.composite * 0.60 + profile.pff.grade * 0.40
+  }
+
+  // Age: r=−0.187 to −0.397 — younger prospects outperform at every pick range
   if (player.age != null) score += Math.max(-5, Math.min(5, (22.0 - player.age) * 1.5))
+
   const fast = fastForPos[player.pos]; const slow = slowForPos[player.pos]
   if (fast && player.forty != null && player.forty <= fast) score += 4
   if (slow && player.forty != null && player.forty > slow) score -= 4
   if (player.vertical != null && player.vertical >= 38) score += 2
   if (player.broad != null && player.broad >= 128) score += 2
-  // QB-specific floors: sub-par grade and poor efficiency are strong failure signals
-  if (isQB && profile.pff.grade < 68) score -= 5
-  if (isQB && profile.pff.efficiency < 60) score -= 3
+
   return Math.max(1, Math.min(99, Math.round(score)))
 }
 
-// Athleticism-only fallback for players without PFF college data (no composite base).
-// Uses neutral base 50 + same combine adjustments. Shown as CPS* in the UI.
+// Athleticism-only fallback (CPS*): used when no PFF data exists, and as the primary
+// scorer for OL/FRONT/LB/DB where PFF college metrics are not predictive.
+// Adds position-specific agility and strength signals: cone/shuttle for OL/LB/DB
+// (r=−0.20 to −0.30 with wAV), bench for FRONT (r=0.219).
 function combineOnlyScore(player: Historical): number | null {
-  if (player.forty == null && player.age == null && player.vertical == null && player.broad == null) return null
+  const hasData = player.forty != null || player.age != null || player.vertical != null
+    || player.broad != null || player.cone != null || player.shuttle != null || player.bench != null
+  if (!hasData) return null
+
   let score = 50
   if (player.age != null) score += Math.max(-5, Math.min(5, (22.0 - player.age) * 1.5))
+
   const fast = fastForPos[player.pos]; const slow = slowForPos[player.pos]
   if (fast && player.forty != null && player.forty <= fast) score += 4
   if (slow && player.forty != null && player.forty > slow) score -= 4
-  if (player.vertical != null && player.vertical >= 38) score += 2
-  if (player.broad != null && player.broad >= 128) score += 2
-  if (player.vertical != null && player.vertical < 28 && player.pos !== 'OL') score -= 2
+
+  const posGroup = group[player.pos] ?? 'SKILL'
+
+  if (posGroup === 'OL') {
+    // OL: cone r=−0.297, forty r=−0.252, shuttle r=−0.243 — agility dominates
+    const fc = fastConeForPos[player.pos]; const sc = slowConeForPos[player.pos]
+    if (fc && player.cone != null && player.cone <= fc) score += 5
+    else if (sc && player.cone != null && player.cone > sc) score -= 5
+    const fs = fastShuttleForPos[player.pos]; const ss = slowShuttleForPos[player.pos]
+    if (fs && player.shuttle != null && player.shuttle <= fs) score += 3
+    else if (ss && player.shuttle != null && player.shuttle > ss) score -= 3
+  } else if (player.pos === 'LB') {
+    // LB: shuttle r=−0.206, cone r=−0.196
+    const fc = fastConeForPos[player.pos]; const sc = slowConeForPos[player.pos]
+    if (fc && player.cone != null && player.cone <= fc) score += 4
+    else if (sc && player.cone != null && player.cone > sc) score -= 4
+    const fs = fastShuttleForPos[player.pos]; const ss = slowShuttleForPos[player.pos]
+    if (fs && player.shuttle != null && player.shuttle <= fs) score += 3
+    else if (ss && player.shuttle != null && player.shuttle > ss) score -= 3
+  } else if (posGroup === 'DB') {
+    // DB: cone r=−0.223, shuttle r=−0.211
+    const fc = fastConeForPos[player.pos]; const sc = slowConeForPos[player.pos]
+    if (fc && player.cone != null && player.cone <= fc) score += 4
+    else if (sc && player.cone != null && player.cone > sc) score -= 4
+    const fs = fastShuttleForPos[player.pos]; const ss = slowShuttleForPos[player.pos]
+    if (fs && player.shuttle != null && player.shuttle <= fs) score += 3
+    else if (ss && player.shuttle != null && player.shuttle > ss) score -= 3
+  } else if (posGroup === 'FRONT') {
+    // FRONT: bench r=0.219 — strength is the best non-age predictor for DL
+    if (player.bench != null && player.bench >= 28) score += 4
+    else if (player.bench != null && player.bench <= 18) score -= 3
+  }
+
+  // Explosion metrics for skill/speed positions (not OL)
+  if (posGroup !== 'OL') {
+    if (player.vertical != null && player.vertical >= 38) score += 2
+    if (player.broad != null && player.broad >= 128) score += 2
+    if (player.vertical != null && player.vertical < 28) score -= 2
+  }
+
   return Math.max(1, Math.min(99, Math.round(score)))
 }
 
