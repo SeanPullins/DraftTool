@@ -2588,8 +2588,8 @@ function ClassExplorer({ pool, history, pffProfiles, pffLookup, y1Data, careerSt
                   <span>AV {player.av || 0}</span>
                   <span>G {player.games || 0}</span>
                   {!showEarlySample && <OutcomeTag category={player.category} />}
-                  {outcomeFlag && <FlagBadge flag={outcomeFlag} />}
                 </div>
+                {outcomeFlag && <div className="mobileClassCardFlag"><FlagBadge flag={outcomeFlag} /></div>}
               </div>
               {useProjections && projected && (
                 <div className="mobileClassCardScore" style={{ color: scoreColor(score) }}>{score}</div>
