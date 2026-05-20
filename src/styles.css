@@ -1331,6 +1331,82 @@ td small {
 .classRow-backup td:first-child { border-left: 3px solid var(--amber); }
 .classRow-depth  td:first-child { border-left: 3px solid var(--text-2); }
 
+/* ── Class explorer UX additions ─────────────────── */
+.classTitleRight {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.scoreRangeWrap {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  cursor: default;
+}
+.scoreRangeSvg { display: block; }
+.scoreRangeLabel {
+  font-size: 10px;
+  color: var(--text-2);
+  white-space: nowrap;
+  font-weight: 600;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+
+.scatterToggle {
+  font-size: 11px;
+  padding: 3px 10px;
+  min-width: 0;
+}
+.scatterToggle.on { background: var(--bg-3); border-color: var(--accent); color: var(--accent); }
+
+.classScatterWrap {
+  margin-bottom: 12px;
+  background: var(--bg-1);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 8px 4px 4px;
+  overflow: hidden;
+}
+.classScatterSvg { display: block; width: 100%; }
+
+.flagFilters {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+}
+.flagFilterBtn {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 20px;
+  border: 1.5px solid var(--border);
+  background: transparent;
+  color: var(--text-2);
+  cursor: pointer;
+  transition: background .12s, color .12s, border-color .12s;
+  letter-spacing: .03em;
+}
+.flagFilterBtn:hover { background: var(--bg-3); color: var(--text-1); }
+.flagFilterBtn.on { background: var(--bg-3); color: var(--text-1); border-color: var(--text-2); }
+.flagFilterBtn-gems.on   { border-color: var(--green); color: var(--green); }
+.flagFilterBtn-busts.on  { border-color: var(--red);   color: var(--red); }
+.flagFilterBtn-flagged.on { border-color: var(--amber); color: var(--amber); }
+
+.classSummaryRow td {
+  background: var(--bg-2);
+  border-top: 2px solid var(--border);
+  font-variant-numeric: tabular-nums;
+  font-size: 12px;
+  color: var(--text-2);
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+.classSummaryRow b { color: var(--text-1); font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: .04em; }
+
 /* ── Compare view ─────────────────────────────────── */
 .compareSearch {
   display: flex;
@@ -2211,6 +2287,13 @@ td small {
 
   .classControls { grid-template-columns: 1fr 1fr; }
   .directionButton { min-width: 0; grid-column: 1 / -1; }
+  .scoreRangeWrap { display: none; }
+  .classScatterWrap { display: none; }
+  .classTitleRight { gap: 6px; }
+
+  /* Mobile card view: hide the wide table, show cards instead */
+  .classTable { display: none; }
+  .classMobileCards { display: flex; }
 
   /* Rankings mobile */
   .rankStats { grid-template-columns: repeat(2, 1fr); }
@@ -2270,6 +2353,38 @@ td small {
   .bottomNavIcon { font-size: 18px; line-height: 1; }
   .bottomNavTheme { color: var(--text-1) !important; }
 }
+
+/* ── Mobile class cards ───────────────────────────── */
+.classMobileCards { display: none; }
+
+.mobileClassCard {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  background: var(--bg-1);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  border-left: 3px solid var(--border);
+}
+.mobileClassCard-current { border-left-color: var(--accent) !important; }
+.mobileClassCard-star   { border-left-color: var(--violet); }
+.mobileClassCard-high   { border-left-color: var(--accent); }
+.mobileClassCard-solid  { border-left-color: var(--green); }
+.mobileClassCard-backup { border-left-color: var(--amber); }
+.mobileClassCard-depth  { border-left-color: var(--text-2); }
+.mobileClassCardRank {
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--text-2);
+  min-width: 20px;
+  text-align: right;
+}
+.mobileClassCardBody { flex: 1; min-width: 0; }
+.mobileClassCardName { font-size: 14px; font-weight: 700; color: var(--text-0); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.mobileClassCardMeta { font-size: 11px; color: var(--text-2); margin-top: 1px; }
+.mobileClassCardStats { display: flex; align-items: center; gap: 8px; margin-top: 4px; font-size: 11px; color: var(--text-2); font-weight: 600; }
+.mobileClassCardScore { font-size: 20px; font-weight: 800; min-width: 36px; text-align: right; }
 
 /* ═══════════════════════════════════════════════════
    Guide / Methodology page
