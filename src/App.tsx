@@ -217,7 +217,11 @@ type SortDir = 'asc' | 'desc'
 const positions = ['QB', 'RB', 'WR', 'TE', 'OL', 'DL', 'LB', 'CB', 'S']
 const outcomeOrder: Category[] = ['Bust', 'Reserve', 'Role', 'Starter', 'High-end starter', 'Star']
 const matureOutcomeCutoff = 2023
-const compCutoffYear = 2021
+// OL/FRONT mature slowly — require 6 seasons (≤2020) so AV reflects sustained contribution,
+// not just early development. SKILL/DB contribute immediately — 4 seasons (≤2022) is adequate.
+// QB/LB use the middle ground at 5 seasons (≤2021).
+const compCutoffYear = 2021  // default; overridden per group in project()
+const compCutoffForGroup: Record<string, number> = { SKILL: 2022, DB: 2022, QB: 2021, OL: 2020, FRONT: 2020 }
 const sortLabels: Record<SortKey, string> = {
   av: 'AV',
   projAv: 'Projected AV',
@@ -2204,7 +2208,7 @@ function GuideView() {
         <li><strong>Historical outcomes</strong> — nflverse draft picks + combine data (2000–present), updated automatically</li>
         <li><strong>Season stats</strong> — nflverse player_stats_season (1999–present), QB / WR / TE / RB regular-season totals; shown in player profiles and used for trajectory-based comp weighting</li>
         <li><strong>PFF college profiles</strong> — Pro Football Focus college grades matched to NFL outcomes</li>
-        <li><strong>Comp cutoff</strong> — Only players drafted through {compCutoffYear} are used as comps, ensuring all comp AV values reflect at least 4 full NFL seasons</li>
+        <li><strong>Comp cutoff</strong> — Position-specific maturation thresholds: SKILL/DB use ≤2022 (4 seasons adequate), QB/LB ≤2021, OL/FRONT ≤2020 (6 seasons — these groups develop slowly and their AV accumulates over a longer arc)</li>
       </ul>
     </div>
   </div>
@@ -3586,12 +3590,14 @@ function ageSignal(age: number, pos: string): number {
 }
 
 function project(input: Prospect, history: Historical[], pffProfiles: PffProfile[], excludeId?: string, y1Data?: Y1Data, careerStats?: CareerStatMap) {
-  // Only use players with ≥4 seasons of NFL data as comps — avoids underestimating projections
-  // by including recent draftees whose career AV is still accumulating
+  // Position-specific maturation cutoffs prevent underestimating AV for slow-developing groups.
+  // OL/FRONT need 6+ seasons for AV to reflect sustained contribution (cutoff 2020).
+  // SKILL/DB contribute immediately so 4 seasons is adequate (cutoff 2022).
+  const grpCutoff = compCutoffForGroup[group[input.pos] ?? 'SKILL'] ?? compCutoffYear
   const pool = history.filter((p) =>
     (p.pos === input.pos || group[p.pos] === group[input.pos]) &&
     p.id !== excludeId &&
-    p.year <= compCutoffYear
+    p.year <= grpCutoff
   )
   const ras = rasScore(input, pool)
   const stats = (k: keyof Historical) => pool.map((p) => p[k]).filter((v): v is number => typeof v === 'number' && Number.isFinite(v))
