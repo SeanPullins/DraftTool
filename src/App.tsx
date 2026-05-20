@@ -404,6 +404,15 @@ export default function App() {
   const [page, setPage] = useState<Page>(() => readPageFromHash())
   const [openPanels, setOpenPanels] = useState<Record<string, boolean>>({ loader: true, card: false, measurables: false, scouting: true, pff: false })
   const [modalPlayer, setModalPlayer] = useState<Historical | null>(null)
+  const [theme, setTheme] = useState<'dark' | 'light'>(() => (localStorage.getItem('draftlens.theme') as 'dark' | 'light') ?? 'dark')
+
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme)
+    localStorage.setItem('draftlens.theme', theme)
+  }, [theme])
+
+  const toggleTheme = () => setTheme((t) => t === 'dark' ? 'light' : 'dark')
+
   const togglePanel = (key: string) => setOpenPanels((p) => ({ ...p, [key]: !p[key] }))
 
   function openModal(p: Historical) { setModalPlayer(p) }
@@ -421,6 +430,15 @@ export default function App() {
     ),
     [lookupPool, pffProfiles],
   )
+  // O(1) PFF profile lookup keyed by cleanName|draftSeason|posGroup
+  const pffLookup = useMemo(() => {
+    const map = new Map<string, PffProfile>()
+    for (const p of pffProfiles) {
+      const key = `${clean(p.name)}|${p.draftSeason}|${group[p.position] ?? p.position}`
+      map.set(key, p)
+    }
+    return map
+  }, [pffProfiles])
   const patternAlerts = useMemo(() => extractPatternAlerts(projection.fullComps, histFlagMap), [projection.fullComps, histFlagMap])
   const draftBoard = useMemo(
     () => saved
@@ -799,6 +817,9 @@ export default function App() {
           <span>{loading ? 'Loading…' : `${prospects.length.toLocaleString()} comps`}</span>
           <span>{pffSummary ? `${pffSummary.matched.toLocaleString()} PFF matches` : 'PFF pending'}</span>
           <span>{saved.length} saved</span>
+          <button type="button" className="themeBtn" onClick={toggleTheme} aria-label="Toggle light/dark mode" title={theme === 'dark' ? 'Switch to day mode' : 'Switch to night mode'}>
+            {theme === 'dark' ? '☀' : '☾'}
+          </button>
         </div>
       </header>
 
@@ -821,7 +842,7 @@ export default function App() {
     </div>
 
     {error ? <section className="panel empty">{error}</section> : page === 'class' ? <div className="classPage">
-      <ClassExplorer pool={lookupPool} history={prospects} pffProfiles={pffProfiles} y1Data={y1Data} careerStats={careerStats} histFlagMap={histFlagMap} currentName={input.name} currentYear={input.draftSeason} />
+      <ClassExplorer pool={lookupPool} history={prospects} pffProfiles={pffProfiles} pffLookup={pffLookup} y1Data={y1Data} careerStats={careerStats} histFlagMap={histFlagMap} currentName={input.name} currentYear={input.draftSeason} />
     </div> : page === 'players' ? <div className="classPage">
       <PlayerBrowser pool={lookupPool} history={prospects} histFlagMap={histFlagMap} onOpenModal={openModal} onCompare={handleCompare} />
     </div> : page === 'compare' ? <div className="classPage">
@@ -2182,7 +2203,7 @@ function BrowserHeader({ label, sortKey, active, dir, onSort }: { label: string;
   </th>
 }
 
-function ClassExplorer({ pool, history, pffProfiles, y1Data, careerStats, histFlagMap, currentName, currentYear }: { pool: Historical[]; history: Historical[]; pffProfiles: PffProfile[]; y1Data?: Y1Data; careerStats?: CareerStatMap; histFlagMap: Map<string, HistoricalOutcomeFlag>; currentName: string; currentYear: number }) {
+function ClassExplorer({ pool, history, pffProfiles, pffLookup, y1Data, careerStats, histFlagMap, currentName, currentYear }: { pool: Historical[]; history: Historical[]; pffProfiles: PffProfile[]; pffLookup: Map<string, PffProfile>; y1Data?: Y1Data; careerStats?: CareerStatMap; histFlagMap: Map<string, HistoricalOutcomeFlag>; currentName: string; currentYear: number }) {
   const years = useMemo(() => {
     const set = new Set<number>()
     for (const player of pool) set.add(player.year)
@@ -2194,6 +2215,7 @@ function ClassExplorer({ pool, history, pffProfiles, y1Data, careerStats, histFl
   const [sortKey, setSortKey] = useState<SortKey>('pick')
   const [sortDir, setSortDir] = useState<SortDir>('asc')
   const [expandedId, setExpandedId] = useState<string | null>(null)
+  const [showProjections, setShowProjections] = useState(false)
 
   // Persistent cache: avoids recomputing the same player on year revisits
   const projCache = useRef(new Map<string, { av: number; score: number }>())
@@ -2206,12 +2228,16 @@ function ClassExplorer({ pool, history, pffProfiles, y1Data, careerStats, histFl
     }
   }, [years, year, currentYear])
 
+  // Reset projections toggle when year changes to avoid stale results showing
+  useEffect(() => { setShowProjections(false) }, [year])
+
   const filtered = useMemo(() => {
     if (year === null) return []
     return pool.filter((player) => player.year === year && (pos === 'All' || player.pos === pos))
   }, [pool, year, pos])
 
-  const useProjections = year !== null && year >= 2018 && history.length > 0
+  const canProject = year !== null && year >= 2018 && history.length > 0
+  const useProjections = showProjections && canProject
 
   // deferredFiltered drives the expensive computation — filtered drives the visible list.
   // The player rows appear immediately; projections fill in after the deferred pass.
@@ -2227,7 +2253,7 @@ function ClassExplorer({ pool, history, pffProfiles, y1Data, careerStats, histFl
       const cacheKey = `${player.id}|${inputSig}`
       const cached = projCache.current.get(cacheKey)
       if (cached) { out.set(player.id, cached); continue }
-      const pffMatch = pffProfiles.find((profile) => samePlayerSeason(profile, player.name, player.year, player.pos))
+      const pffMatch = pffLookup.get(`${clean(player.name)}|${player.year}|${group[player.pos] ?? player.pos}`) ?? undefined
       const synthesized = prospectFromHistorical(player, pffMatch)
       const projected = project(synthesized, history, pffProfiles, player.id, y1Data, careerStats)
       const result = { av: projected.expectedAv, score: projected.score }
@@ -2235,23 +2261,26 @@ function ClassExplorer({ pool, history, pffProfiles, y1Data, careerStats, histFl
       out.set(player.id, result)
     }
     return out
-  }, [deferredFiltered, history, pffProfiles, useProjections, y1Data])
+  }, [deferredFiltered, history, pffProfiles, pffLookup, useProjections, y1Data])
 
+  // O(1) player-to-PFF lookup for this class
   const pffMap = useMemo(() => {
     const map = new Map<string, PffProfile>()
     for (const player of filtered) {
-      const pff = pffProfiles.find((p) => samePlayerSeason(p, player.name, player.year, player.pos))
+      const pff = pffLookup.get(`${clean(player.name)}|${player.year}|${group[player.pos] ?? player.pos}`)
       if (pff) map.set(player.id, pff)
     }
     return map
-  }, [filtered, pffProfiles])
+  }, [filtered, pffLookup])
 
   const cpsMap = useMemo(() => {
-    const map = new Map<string, number>()
+    const map = new Map<string, { score: number; full: boolean }>()
     for (const player of filtered) {
       const pff = pffMap.get(player.id) ?? null
-      const cps = collegeProjectionScore(player, pff)
-      if (cps != null) map.set(player.id, cps)
+      const full = collegeProjectionScore(player, pff)
+      if (full != null) { map.set(player.id, { score: full, full: true }); continue }
+      const ath = combineOnlyScore(player)
+      if (ath != null) map.set(player.id, { score: ath, full: false })
     }
     return map
   }, [filtered, pffMap])
@@ -2307,6 +2336,11 @@ function ClassExplorer({ pool, history, pffProfiles, y1Data, careerStats, histFl
       <button type="button" className="secondary directionButton" onClick={() => setSortDir((direction) => direction === 'asc' ? 'desc' : 'asc')} aria-label="Toggle sort direction">
         {sortDir === 'desc' ? 'High to low' : 'Low to high'}
       </button>
+      {canProject && (
+        <button type="button" className={`secondary${useProjections ? ' projOn' : ''}`} onClick={() => setShowProjections((p) => !p)}>
+          {useProjections ? (isPending ? 'Computing…' : 'Proj: On') : 'Load projections'}
+        </button>
+      )}
     </div>
     {useProjections ? <p className="hint">Projected AV and Score use the calibrated 2016-2023 model plus each player's draft/combine and matched PFF profile when available.</p> : null}
     {rows.length ? <TableWrap>
@@ -2338,7 +2372,7 @@ function ClassExplorer({ pool, history, pffProfiles, y1Data, careerStats, histFl
             const outcomeFlag = histFlagMap.get(player.id) ?? null
             const pffProfile = pffMap.get(player.id) ?? null
             const isExpanded = expandedId === player.id
-            const canExpand = pffProfile !== null || outcomeFlag !== null
+            const canExpand = pffProfile !== null || outcomeFlag !== null || cpsMap.has(player.id)
             const colCount = 13 + (useProjections ? 2 : 0)
             const rowEls: React.ReactNode[] = [
               <tr
@@ -2354,7 +2388,7 @@ function ClassExplorer({ pool, history, pffProfiles, y1Data, careerStats, histFl
                 <td>{player.starts || 0}</td>
                 <td>{player.av || 0}</td>
                 <td className="pffCol">{pffProfile ? pffProfile.pff.composite.toFixed(0) : '—'}</td>
-                <td className="cpsCol">{(() => { const c = cpsMap.get(player.id); return c != null ? <span style={{ color: c >= 65 ? 'var(--green)' : c < 44 ? 'var(--red)' : undefined, fontWeight: 700 }}>{c}</span> : '—' })()}</td>
+                <td className="cpsCol">{(() => { const e = cpsMap.get(player.id); if (!e) return '—'; const color = e.score >= 65 ? 'var(--green)' : e.score < 44 ? 'var(--red)' : undefined; return <span style={{ color, fontWeight: 700, opacity: e.full ? 1 : 0.65 }} title={e.full ? undefined : 'Athleticism-only (no PFF college data)'}>{e.score}{e.full ? '' : '*'}</span> })()}</td>
                 {useProjections ? <td>{projected ? projected.av.toFixed(1) : '-'}</td> : null}
                 {useProjections ? <td style={{ color: projected ? scoreColor(score) : undefined, fontWeight: projected ? 800 : undefined }}>{projected ? Math.round(projected.score) : '-'}</td> : null}
                 <td>{player.proBowls || 0}</td>
@@ -2370,28 +2404,44 @@ function ClassExplorer({ pool, history, pffProfiles, y1Data, careerStats, histFl
                 <tr key={`detail-${player.id}`} className="classRowDetail">
                   <td colSpan={colCount}>
                     <div className="classDetail">
-                      {pffProfile && (() => {
-                        const dim = pffDimLabel(player.pos)
-                        const uc = (s: string) => s.charAt(0).toUpperCase() + s.slice(1)
-                        const cpVal = cpsMap.get(player.id)
-                        return (
-                          <div className="classDetailSection">
-                            <span className="classDetailLabel">College Projection Score &amp; PFF Grades</span>
-                            <div className="classDetailStats">
-                              {cpVal != null && (
-                                <div className="classDetailStat classDetailStat-cps">
-                                  <span>CPS</span>
-                                  <b style={{ color: cpVal >= 65 ? 'var(--green)' : cpVal < 44 ? 'var(--red)' : undefined }}>{cpVal}<small>/99</small></b>
-                                </div>
-                              )}
-                              <div className="classDetailStat"><span>Composite</span><b>{pffProfile.pff.composite.toFixed(0)}</b></div>
-                              <div className="classDetailStat"><span>Grade</span><b>{pffProfile.pff.grade.toFixed(0)}</b></div>
-                              <div className="classDetailStat"><span>{uc(dim.prod)}</span><b style={{ color: pffProfile.pff.production < 52 ? 'var(--red)' : pffProfile.pff.production > 72 ? 'var(--green)' : undefined }}>{pffProfile.pff.production.toFixed(0)}</b></div>
-                              <div className="classDetailStat"><span>{uc(dim.eff)}</span><b style={{ color: pffProfile.pff.efficiency < 52 ? 'var(--red)' : pffProfile.pff.efficiency > 72 ? 'var(--green)' : undefined }}>{pffProfile.pff.efficiency.toFixed(0)}</b></div>
-                              <div className="classDetailStat"><span>{uc(dim.clean)}</span><b style={{ color: pffProfile.pff.clean < 52 ? 'var(--red)' : undefined }}>{pffProfile.pff.clean.toFixed(0)}</b></div>
+                      {(() => {
+                        const cpEntry = cpsMap.get(player.id)
+                        if (pffProfile) {
+                          const dim = pffDimLabel(player.pos)
+                          const uc = (s: string) => s.charAt(0).toUpperCase() + s.slice(1)
+                          return (
+                            <div className="classDetailSection">
+                              <span className="classDetailLabel">College Projection Score &amp; PFF Grades</span>
+                              <div className="classDetailStats">
+                                {cpEntry != null && (
+                                  <div className="classDetailStat classDetailStat-cps">
+                                    <span>CPS{cpEntry.full ? '' : ' *'}</span>
+                                    <b style={{ color: cpEntry.score >= 65 ? 'var(--green)' : cpEntry.score < 44 ? 'var(--red)' : undefined, opacity: cpEntry.full ? 1 : 0.75 }} title={cpEntry.full ? undefined : 'Athleticism-only (no PFF college data)'}>{cpEntry.score}<small>/99</small></b>
+                                  </div>
+                                )}
+                                <div className="classDetailStat"><span>Composite</span><b>{pffProfile.pff.composite.toFixed(0)}</b></div>
+                                <div className="classDetailStat"><span>Grade</span><b>{pffProfile.pff.grade.toFixed(0)}</b></div>
+                                <div className="classDetailStat"><span>{uc(dim.prod)}</span><b style={{ color: pffProfile.pff.production < 52 ? 'var(--red)' : pffProfile.pff.production > 72 ? 'var(--green)' : undefined }}>{pffProfile.pff.production.toFixed(0)}</b></div>
+                                <div className="classDetailStat"><span>{uc(dim.eff)}</span><b style={{ color: pffProfile.pff.efficiency < 52 ? 'var(--red)' : pffProfile.pff.efficiency > 72 ? 'var(--green)' : undefined }}>{pffProfile.pff.efficiency.toFixed(0)}</b></div>
+                                <div className="classDetailStat"><span>{uc(dim.clean)}</span><b style={{ color: pffProfile.pff.clean < 52 ? 'var(--red)' : undefined }}>{pffProfile.pff.clean.toFixed(0)}</b></div>
+                              </div>
                             </div>
-                          </div>
-                        )
+                          )
+                        }
+                        if (cpEntry != null && !cpEntry.full) {
+                          return (
+                            <div className="classDetailSection">
+                              <span className="classDetailLabel">Athleticism Score (no PFF data)</span>
+                              <div className="classDetailStats">
+                                <div className="classDetailStat classDetailStat-cps">
+                                  <span>CPS *</span>
+                                  <b style={{ color: cpEntry.score >= 65 ? 'var(--green)' : cpEntry.score < 44 ? 'var(--red)' : undefined, opacity: 0.75 }}>{cpEntry.score}<small>/99</small></b>
+                                </div>
+                              </div>
+                            </div>
+                          )
+                        }
+                        return null
                       })()}
                       {outcomeFlag && (
                         <div className={`classDetailFlag classDetailFlag-${outcomeFlag.type}`}>
@@ -2422,7 +2472,7 @@ function ClassHeader({ label, sortKey, active, dir, onSort }: { label: string; s
   </th>
 }
 
-function compareHistorical(a: Historical, b: Historical, key: SortKey, projections: Map<string, { av: number; score: number }>, cpsMap?: Map<string, number>): number {
+function compareHistorical(a: Historical, b: Historical, key: SortKey, projections: Map<string, { av: number; score: number }>, cpsMap?: Map<string, { score: number; full: boolean }>): number {
   switch (key) {
     case 'av': return (a.av || 0) - (b.av || 0)
     case 'projAv': return (projections.get(a.id)?.av ?? -Infinity) - (projections.get(b.id)?.av ?? -Infinity)
@@ -2434,7 +2484,7 @@ function compareHistorical(a: Historical, b: Historical, key: SortKey, projectio
     case 'pick': return (a.pick || 999) - (b.pick || 999)
     case 'outcome': return outcomeOrder.indexOf(a.category) - outcomeOrder.indexOf(b.category)
     case 'name': return a.name.localeCompare(b.name)
-    case 'cps': return (cpsMap?.get(a.id) ?? -Infinity) - (cpsMap?.get(b.id) ?? -Infinity)
+    case 'cps': return (cpsMap?.get(a.id)?.score ?? -Infinity) - (cpsMap?.get(b.id)?.score ?? -Infinity)
   }
 }
 
@@ -2576,6 +2626,21 @@ function collegeProjectionScore(player: Historical, profile: PffProfile | null):
   if (slow && player.forty != null && player.forty > slow) score -= 4
   if (player.vertical != null && player.vertical >= 38) score += 2
   if (player.broad != null && player.broad >= 128) score += 2
+  return Math.max(1, Math.min(99, Math.round(score)))
+}
+
+// Athleticism-only fallback for players without PFF college data (no composite base).
+// Uses neutral base 50 + same combine adjustments. Shown as CPS* in the UI.
+function combineOnlyScore(player: Historical): number | null {
+  if (player.forty == null && player.age == null && player.vertical == null && player.broad == null) return null
+  let score = 50
+  if (player.age != null) score += Math.max(-5, Math.min(5, (22.0 - player.age) * 1.5))
+  const fast = fastForPos[player.pos]; const slow = slowForPos[player.pos]
+  if (fast && player.forty != null && player.forty <= fast) score += 4
+  if (slow && player.forty != null && player.forty > slow) score -= 4
+  if (player.vertical != null && player.vertical >= 38) score += 2
+  if (player.broad != null && player.broad >= 128) score += 2
+  if (player.vertical != null && player.vertical < 28 && player.pos !== 'OL') score -= 2
   return Math.max(1, Math.min(99, Math.round(score)))
 }
 
