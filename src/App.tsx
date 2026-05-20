@@ -3812,7 +3812,15 @@ function pffSim(input: Prospect, profile: PffProfile, grp?: string) {
     (input.pos === profile.position ? 0 : .16)
   const recency = Math.pow(0.97, Math.max(0, 2024 - profile.draftSeason))
   const experienceBonus = profile.games >= 36 ? 1.06 : profile.games >= 24 ? 1.03 : profile.games >= 12 ? 1.0 : 0.93
-  return Math.exp(-distance) * recency * experienceBonus
+  // Tier-weight: nfl.category r=0.373 vs composite r=0.190 in R2-5.
+  // Proven comps (Star/High-end starter) are more informative than busts with similar college metrics.
+  const tierWeight =
+    profile.nfl?.category === 'Star'              ? 1.25 :
+    profile.nfl?.category === 'High-end starter'  ? 1.15 :
+    profile.nfl?.category === 'Starter'           ? 1.05 :
+    profile.nfl?.category === 'Reserve'           ? 0.75 :
+    profile.nfl?.category === 'Bust'              ? 0.65 : 1.0
+  return Math.exp(-distance) * recency * experienceBonus * tierWeight
 }
 
 function calibratedExpectedAv(input: Prospect, signals: { draft: number; athletic: number; size: number; age: number }) {
