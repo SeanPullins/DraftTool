@@ -849,7 +849,7 @@ export default function App() {
     </div>
 
     {error ? <section className="panel empty">{error}</section> : page === 'class' ? <div className="classPage">
-      <ClassExplorer pool={lookupPool} history={prospects} pffProfiles={pffProfiles} pffLookup={pffLookup} y1Data={y1Data} careerStats={careerStats} histFlagMap={histFlagMap} currentName={input.name} currentYear={input.draftSeason} />
+      <ClassExplorer pool={lookupPool} history={prospects} pffProfiles={pffProfiles} pffLookup={pffLookup} y1Data={y1Data} careerStats={careerStats} histFlagMap={histFlagMap} currentName={input.name} currentYear={input.draftSeason} saved={saved} />
     </div> : page === 'players' ? <div className="classPage">
       <PlayerBrowser pool={lookupPool} history={prospects} histFlagMap={histFlagMap} onOpenModal={openModal} onCompare={handleCompare} />
     </div> : page === 'compare' ? <div className="classPage">
@@ -2230,7 +2230,7 @@ function BrowserHeader({ label, sortKey, active, dir, onSort }: { label: string;
   </th>
 }
 
-function ClassExplorer({ pool, history, pffProfiles, pffLookup, y1Data, careerStats, histFlagMap, currentName, currentYear }: { pool: Historical[]; history: Historical[]; pffProfiles: PffProfile[]; pffLookup: Map<string, PffProfile>; y1Data?: Y1Data; careerStats?: CareerStatMap; histFlagMap: Map<string, HistoricalOutcomeFlag>; currentName: string; currentYear: number }) {
+function ClassExplorer({ pool, history, pffProfiles, pffLookup, y1Data, careerStats, histFlagMap, currentName, currentYear, saved }: { pool: Historical[]; history: Historical[]; pffProfiles: PffProfile[]; pffLookup: Map<string, PffProfile>; y1Data?: Y1Data; careerStats?: CareerStatMap; histFlagMap: Map<string, HistoricalOutcomeFlag>; currentName: string; currentYear: number; saved: SavedProspect[] }) {
   const years = useMemo(() => {
     const set = new Set<number>()
     for (const player of pool) set.add(player.year)
@@ -2239,6 +2239,7 @@ function ClassExplorer({ pool, history, pffProfiles, pffLookup, y1Data, careerSt
 
   const [year, setYear] = useState<number | null>(null)
   const [pos, setPos] = useState<string>('All')
+  const [nameQuery, setNameQuery] = useState('')
   const [outcomeFilter, setOutcomeFilter] = useState<'all' | 'gems' | 'busts' | 'flagged'>('all')
   const [sortKey, setSortKey] = useState<SortKey>('pick')
   const [sortDir, setSortDir] = useState<SortDir>('asc')
@@ -2248,6 +2249,13 @@ function ClassExplorer({ pool, history, pffProfiles, pffLookup, y1Data, careerSt
   // Persistent cache: avoids recomputing the same player on year revisits
   const projCache = useRef(new Map<string, { av: number; score: number }>())
 
+  // Set of "name|year" strings for all saved prospects — used to highlight them in the table
+  const savedSet = useMemo(() => {
+    const set = new Set<string>()
+    for (const s of saved) set.add(`${clean(s.name)}|${s.draftSeason}`)
+    return set
+  }, [saved])
+
   useEffect(() => {
     if (!years.length) return
     if (year === null || !years.includes(year)) {
@@ -2256,13 +2264,15 @@ function ClassExplorer({ pool, history, pffProfiles, pffLookup, y1Data, careerSt
     }
   }, [years, year, currentYear])
 
-  useEffect(() => { setOutcomeFilter('all') }, [year, pos])
+  useEffect(() => { setOutcomeFilter('all'); setNameQuery('') }, [year, pos])
 
   const filtered = useMemo(() => {
     if (year === null) return []
+    const q = nameQuery.trim().toLowerCase()
     return pool.filter((player) => {
       if (player.year !== year) return false
       if (pos !== 'All' && player.pos !== pos) return false
+      if (q && !player.name.toLowerCase().includes(q) && !(player.school ?? '').toLowerCase().includes(q)) return false
       if (outcomeFilter !== 'all') {
         const flag = histFlagMap.get(player.id)
         if (outcomeFilter === 'flagged' && !flag) return false
@@ -2271,7 +2281,7 @@ function ClassExplorer({ pool, history, pffProfiles, pffLookup, y1Data, careerSt
       }
       return true
     })
-  }, [pool, year, pos, outcomeFilter, histFlagMap])
+  }, [pool, year, pos, nameQuery, outcomeFilter, histFlagMap])
 
   const canProject = year !== null && year >= 2018 && history.length > 0
   const useProjections = canProject
@@ -2353,6 +2363,29 @@ function ClassExplorer({ pool, history, pffProfiles, pffLookup, y1Data, careerSt
     return { avgAv, avgG, avgSt, totalPb, totalAp, avgProjAv, avgProjScore }
   }, [rows, projections])
 
+  const posRankMap = useMemo(() => {
+    const byPos = new Map<string, Array<{ id: string; score: number; pick: number }>>()
+    for (const player of rows) {
+      const proj = projections.get(player.id)
+      const score = proj ? proj.score : -(player.pick || 999)
+      if (!byPos.has(player.pos)) byPos.set(player.pos, [])
+      byPos.get(player.pos)!.push({ id: player.id, score, pick: player.pick })
+    }
+    const map = new Map<string, number>()
+    for (const players of byPos.values()) {
+      players.sort((a, b) => b.score - a.score || a.pick - b.pick)
+      players.forEach((p, i) => map.set(p.id, i + 1))
+    }
+    return map
+  }, [rows, projections])
+
+  // Historical class avg score reference (2016-2022 full-class mean ≈ 54)
+  const classStrength = scoreDist ? (
+    scoreDist.avgScore >= 60 ? { label: 'Strong class', cls: 'csStrong' } :
+    scoreDist.avgScore >= 52 ? { label: 'Avg class', cls: 'csAvg' } :
+    { label: 'Weak class', cls: 'csWeak' }
+  ) : null
+
   function toggleSort(key: SortKey) {
     if ((key === 'projAv' || key === 'projScore') && !useProjections) return
     if (key === sortKey) {
@@ -2373,6 +2406,7 @@ function ClassExplorer({ pool, history, pffProfiles, pffLookup, y1Data, careerSt
       </div>
       <div className="classTitleRight">
         <strong style={{ opacity: isPending ? 0.5 : 1 }}>{rows.length} players{isPending ? ' …' : ''}</strong>
+        {classStrength && scoreDist && <span className={`classStrengthBadge ${classStrength.cls}`} title={`Class avg score ${scoreDist.avgScore} vs ~54 historical avg`}>{classStrength.label}</span>}
         {scoreDist && <ScoreRangeBar dist={scoreDist} />}
         {useProjections && <button type="button" className={`secondary scatterToggle${showScatter ? ' on' : ''}`} onClick={() => setShowScatter((v) => !v)} title="Pick vs Score scatter">scatter</button>}
       </div>
@@ -2391,14 +2425,19 @@ function ClassExplorer({ pool, history, pffProfiles, pffLookup, y1Data, careerSt
           {positionFilters.map((p) => <option key={p} value={p}>{p === 'All' ? 'All positions' : p}</option>)}
         </select>
       </label>
-      <label className="field"><span>Sort by</span>
-        <select value={sortKey} onChange={(e) => toggleSort(e.target.value as SortKey)}>
-          {(Object.keys(sortLabels) as SortKey[]).map((key) => <option key={key} value={key} disabled={(key === 'projAv' || key === 'projScore') && !useProjections}>{sortLabels[key]}</option>)}
-        </select>
+      <label className="field classSearch"><span>Search</span>
+        <input value={nameQuery} onChange={(e) => setNameQuery(e.target.value)} placeholder="Name or school…" />
       </label>
-      <button type="button" className="secondary directionButton" onClick={() => setSortDir((direction) => direction === 'asc' ? 'desc' : 'asc')} aria-label="Toggle sort direction">
-        {sortDir === 'desc' ? 'High to low' : 'Low to high'}
-      </button>
+      <div className="classControlsRight">
+        <label className="field"><span>Sort by</span>
+          <select value={sortKey} onChange={(e) => toggleSort(e.target.value as SortKey)}>
+            {(Object.keys(sortLabels) as SortKey[]).map((key) => <option key={key} value={key} disabled={(key === 'projAv' || key === 'projScore') && !useProjections}>{sortLabels[key]}</option>)}
+          </select>
+        </label>
+        <button type="button" className="secondary directionButton" onClick={() => setSortDir((direction) => direction === 'asc' ? 'desc' : 'asc')} aria-label="Toggle sort direction">
+          {sortDir === 'desc' ? 'High to low' : 'Low to high'}
+        </button>
+      </div>
     </div>
     <div className="flagFilters">
       {(['all', 'gems', 'busts', 'flagged'] as const).map((f) => (
@@ -2430,6 +2469,7 @@ function ClassExplorer({ pool, history, pffProfiles, pffLookup, y1Data, careerSt
         <tbody>
           {rows.slice(0, 200).flatMap((player, index) => {
             const isCurrent = currentKey && clean(player.name) === currentKey && player.year === currentYear
+            const isSaved = !isCurrent && savedSet.has(`${clean(player.name)}|${player.year}`)
             const projected = projections.get(player.id)
             const showEarlySample = player.year > matureOutcomeCutoff
             const score = projected ? Math.round(projected.score) : 0
@@ -2438,15 +2478,20 @@ function ClassExplorer({ pool, history, pffProfiles, pffLookup, y1Data, careerSt
             const isExpanded = expandedId === player.id
             const canExpand = pffProfile !== null || outcomeFlag !== null
             const colCount = 12 + (useProjections ? 2 : 0)
+            const posRank = posRankMap.get(player.id)
             const rowEls: React.ReactNode[] = [
               <tr
                 key={player.id}
-                className={`${useProjections ? `classRow-${scoreClass(score)} ` : ''}${isCurrent ? 'currentRow' : ''}${canExpand ? ' classRowClickable' : ''}`}
+                className={`${useProjections ? `classRow-${scoreClass(score)} ` : ''}${isCurrent ? 'currentRow' : isSaved ? 'savedRow' : ''}${canExpand ? ' classRowClickable' : ''}`}
                 onClick={canExpand ? () => setExpandedId(isExpanded ? null : player.id) : undefined}
               >
                 <td><b className="boardRank">{index + 1}</b></td>
-                <td><b>{player.name}</b><small>{player.school || 'No school'}</small></td>
-                <td>{player.pos}</td>
+                <td>
+                  <b>{player.name}</b>
+                  {isSaved && <span className="savedBadge" title="Saved prospect">★</span>}
+                  <small>{player.school || 'No school'}</small>
+                </td>
+                <td><span className="posCell">{player.pos}{posRank != null && <span className="posRank">#{posRank}</span>}</span></td>
                 <td>{player.pick >= 260 ? 'UDFA' : player.pick}</td>
                 <td>{player.games || 0}</td>
                 <td>{player.starts || 0}</td>
@@ -2523,15 +2568,22 @@ function ClassExplorer({ pool, history, pffProfiles, pffLookup, y1Data, careerSt
           const outcomeFlag = histFlagMap.get(player.id) ?? null
           const showEarlySample = player.year > matureOutcomeCutoff
           const isCurrent = currentKey && clean(player.name) === currentKey && player.year === currentYear
+          const isSavedCard = !isCurrent && savedSet.has(`${clean(player.name)}|${player.year}`)
+          const posRankCard = posRankMap.get(player.id)
           return (
             <div
               key={player.id}
-              className={`mobileClassCard${isCurrent ? ' mobileClassCard-current' : ''}${useProjections ? ` mobileClassCard-${scoreClass(score)}` : ''}`}
+              className={`mobileClassCard${isCurrent ? ' mobileClassCard-current' : isSavedCard ? ' mobileClassCard-saved' : ''}${useProjections ? ` mobileClassCard-${scoreClass(score)}` : ''}`}
             >
               <div className="mobileClassCardRank">{index + 1}</div>
               <div className="mobileClassCardBody">
-                <div className="mobileClassCardName">{player.name}</div>
-                <div className="mobileClassCardMeta">{player.pos} · {player.school || 'No school'} · Pk {player.pick >= 260 ? 'UDFA' : player.pick}</div>
+                <div className="mobileClassCardName">
+                  {player.name}
+                  {isSavedCard && <span className="savedBadge">★</span>}
+                </div>
+                <div className="mobileClassCardMeta">
+                  {player.pos}{posRankCard != null ? <span className="posRank"> #{posRankCard}</span> : null} · {player.school || 'No school'} · Pk {player.pick >= 260 ? 'UDFA' : player.pick}
+                </div>
                 <div className="mobileClassCardStats">
                   <span>AV {player.av || 0}</span>
                   <span>G {player.games || 0}</span>

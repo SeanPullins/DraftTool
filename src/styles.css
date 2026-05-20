@@ -1140,10 +1140,50 @@ td small {
 
 .classControls {
   display: grid;
-  grid-template-columns: minmax(130px, .7fr) minmax(150px, .7fr) minmax(170px, 1fr) auto;
+  grid-template-columns: minmax(120px, .7fr) minmax(140px, .7fr) minmax(160px, 1fr) auto;
   gap: 8px;
   align-items: end;
-  margin-bottom: 14px;
+  margin-bottom: 10px;
+}
+.classSearch { grid-column: span 1; }
+.classControlsRight {
+  display: contents;
+}
+
+/* ── ClassExplorer UX additions ──────────────────── */
+.posCell { display: inline-flex; align-items: baseline; gap: 4px; }
+.posRank {
+  font-size: 9px;
+  font-weight: 800;
+  color: var(--text-2);
+  letter-spacing: .02em;
+}
+
+.classStrengthBadge {
+  display: inline-flex;
+  align-items: center;
+  height: 22px;
+  padding: 0 8px;
+  border-radius: 11px;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  border: 1.5px solid;
+}
+.csStrong { color: var(--green);  border-color: var(--green);  background: rgba(16,185,129,.08); }
+.csAvg    { color: var(--text-2); border-color: var(--border);  background: transparent; }
+.csWeak   { color: var(--amber);  border-color: var(--amber);  background: rgba(245,158,11,.08); }
+
+.savedRow td { background: rgba(99,102,241,.06); }
+.savedRow td:first-child { border-left: 3px solid var(--violet) !important; }
+.savedBadge {
+  font-size: 9px;
+  color: var(--violet);
+  margin-left: 4px;
+  vertical-align: middle;
+  line-height: 1;
 }
 
 .browserControls {
@@ -2285,11 +2325,22 @@ td small {
 
   .bar { grid-template-columns: 100px minmax(0, 1fr) 48px; }
 
-  .classControls { grid-template-columns: 1fr 1fr; }
-  .directionButton { min-width: 0; grid-column: 1 / -1; }
+  /* ClassExplorer mobile layout */
+  .classControls {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto;
+  }
+  .classSearch { grid-column: 1 / -1; }
+  .classControlsRight { display: contents; }
+  .directionButton { min-width: 0; }
   .scoreRangeWrap { display: none; }
   .classScatterWrap { display: none; }
+  .scatterToggle { display: none; }
+  .classStrengthBadge { display: none; }
   .classTitleRight { gap: 6px; }
+
+  /* Flag filter buttons: compact touch targets */
+  .flagFilterBtn { min-height: 36px; padding: 4px 12px; font-size: 11px; }
 
   /* Mobile card view: hide the wide table, show cards instead */
   .classTable { display: none; }
@@ -2371,6 +2422,7 @@ td small {
   border-left: 3px solid var(--border);
 }
 .mobileClassCard-current { border-left-color: var(--accent) !important; }
+.mobileClassCard-saved  { background: rgba(99,102,241,.06); border-left-color: var(--violet) !important; }
 .mobileClassCard-star   { border-left-color: var(--violet); }
 .mobileClassCard-high   { border-left-color: var(--accent); }
 .mobileClassCard-solid  { border-left-color: var(--green); }
