@@ -428,7 +428,24 @@ export default function App() {
     setModalPlayer(null)
   }
   const y1Data = useMemo<Y1Data>(() => ({ qb: qbSeasons, wr: wrSeasons, rb: rbSeasons }), [qbSeasons, wrSeasons, rbSeasons])
-  const projection = useMemo(() => project(input, prospects, pffProfiles, undefined, y1Data, careerStats), [input, prospects, pffProfiles, y1Data, careerStats])
+  const activeConsensusPick = useMemo(
+    () => consensus.find((c) => clean(c.name) === clean(input.name) && c.pos === input.pos),
+    [consensus, input.name, input.pos],
+  )
+  const activeScoutNote = useMemo(
+    () => scoutNotes.find((n) => clean(n.name) === clean(input.name)),
+    [scoutNotes, input.name],
+  )
+  const activeInjuryFlag = useMemo(
+    () => injuryFlags.find((f) => clean(f.name) === clean(input.name)),
+    [injuryFlags, input.name],
+  )
+  // A3: look up QB grade trajectory for the active prospect so project() can apply it
+  const activeQbGradeDelta = useMemo(
+    () => input.pos === 'QB' ? (prospectsQb2027.find((p) => clean(p.name) === clean(input.name))?.trajectory.gradeDelta ?? null) : null,
+    [prospectsQb2027, input.pos, input.name],
+  )
+  const projection = useMemo(() => project(input, prospects, pffProfiles, undefined, y1Data, careerStats, activeInjuryFlag?.severity, activeQbGradeDelta), [input, prospects, pffProfiles, y1Data, careerStats, activeInjuryFlag, activeQbGradeDelta])
   const histFlagMap = useMemo(
     () => buildHistoricalFlagMap(
       lookupPool.filter((p) => p.year >= 2000 && p.year <= 2026 && p.pick < 260),
@@ -466,19 +483,6 @@ export default function App() {
       (a, b) => (idxMap.get(a.player.id) ?? 9999) - (idxMap.get(b.player.id) ?? 9999),
     )
   }, [draftBoard, boardOrder])
-
-  const activeConsensusPick = useMemo(
-    () => consensus.find((c) => clean(c.name) === clean(input.name) && c.pos === input.pos),
-    [consensus, input.name, input.pos],
-  )
-  const activeScoutNote = useMemo(
-    () => scoutNotes.find((n) => clean(n.name) === clean(input.name)),
-    [scoutNotes, input.name],
-  )
-  const activeInjuryFlag = useMemo(
-    () => injuryFlags.find((f) => clean(f.name) === clean(input.name)),
-    [injuryFlags, input.name],
-  )
   const scarcityData = useMemo(() => {
     if (!lookupPool.length || !prospects.length) return null
     const posGroup = group[input.pos] ?? 'SKILL'
@@ -3218,7 +3222,7 @@ function ProspectsView({
   const ranked = useMemo(() => {
     if (!history.length) return []
     return prospects2027.map((p) => {
-      const proj = project(p, history, pffProfiles, undefined, undefined, careerStats)
+      const proj = project(p, history, pffProfiles, undefined, undefined, careerStats, undefined, p.trajectory.gradeDelta)
       const baseline = pickBaseline(p.pick)
       const pickSurplus = proj.expectedAv - baseline
       const riskFlags = prospectRiskFlags(p, bustRates)
@@ -3866,7 +3870,7 @@ function ageSignal(age: number, pos: string): number {
   return age <= 20.8 ? 90 : age <= 21.6 ? 80 : age <= 22.5 ? 68 : age <= 23.5 ? 58 : age <= 24.5 ? 50 : 38
 }
 
-function project(input: Prospect, history: Historical[], pffProfiles: PffProfile[], excludeId?: string, y1Data?: Y1Data, careerStats?: CareerStatMap) {
+function project(input: Prospect, history: Historical[], pffProfiles: PffProfile[], excludeId?: string, y1Data?: Y1Data, careerStats?: CareerStatMap, injurySeverity?: 'major' | 'moderate' | 'minor', gradeDelta?: number | null) {
   // Position-specific maturation cutoffs prevent underestimating AV for slow-developing groups.
   // OL/FRONT need 6+ seasons for AV to reflect sustained contribution (cutoff 2020).
   // SKILL/DB contribute immediately so 4 seasons is adequate (cutoff 2022).
@@ -3936,7 +3940,14 @@ function project(input: Prospect, history: Historical[], pffProfiles: PffProfile
   const posAvValues = pool.filter((p) => p.av >= 0).map((p) => p.av)
   const posRelScore = posAvValues.length >= 15 ? pct(expectedAv, posAvValues) : avToScore(expectedAv)
   const avScore = posRelScore
-  const score = clamp(rawScore * 0.46 + avScore * 0.54, 1, 99)
+  // A2: injury penalty shifts the score down based on severity
+  const injuryPenalty = injurySeverity === 'major' ? 8 : injurySeverity === 'moderate' ? 4 : injurySeverity === 'minor' ? 2 : 0
+  // A3: QB grade trajectory — declining arc projects 4-7 pts lower; rising arc gets a small boost
+  const trajectoryAdj = (input.pos === 'QB' && gradeDelta != null) ? (
+    gradeDelta <= -12 ? -7 : gradeDelta <= -6 ? -4 : gradeDelta >= 10 ? 3 : gradeDelta >= 5 ? 2 : 0
+  ) : 0
+  const scoreAdj = trajectoryAdj - injuryPenalty
+  const score = clamp(rawScore * 0.46 + avScore * 0.54 + scoreAdj, 1, 99)
   const games = blend(comps.reduce((sum, c) => sum + c.player.games * c.sim, 0) / histWeight, pffComps.reduce((sum, c) => sum + (c.profile.nfl?.games || 0) * c.sim, 0) / pffWeight, pffBlend)
   const starts = blend(comps.reduce((sum, c) => sum + c.player.starts * c.sim, 0) / histWeight, pffComps.reduce((sum, c) => sum + (c.profile.nfl?.starts || 0) * c.sim, 0) / pffWeight / 16, pffBlend)
   const impactScore = blend(score, avScore, 0.35)
@@ -3950,8 +3961,8 @@ function project(input: Prospect, history: Historical[], pffProfiles: PffProfile
   const floor = blend(q(rangeValues, .1), Math.max(0, expectedAv * .42), .25)
   const median = blend(q(rangeValues, .5), expectedAv, .35)
   const ceiling = blend(q(rangeValues, .9), Math.max(expectedAv, expectedAv * 1.85), .25)
-  const scoreLow = clamp(rawScore * 0.46 + (posAvValues.length >= 15 ? pct(floor, posAvValues) : avToScore(floor)) * 0.54, 1, 99)
-  const scoreHigh = clamp(rawScore * 0.46 + (posAvValues.length >= 15 ? pct(ceiling, posAvValues) : avToScore(ceiling)) * 0.54, 1, 99)
+  const scoreLow = clamp(rawScore * 0.46 + (posAvValues.length >= 15 ? pct(floor, posAvValues) : avToScore(floor)) * 0.54 + scoreAdj, 1, 99)
+  const scoreHigh = clamp(rawScore * 0.46 + (posAvValues.length >= 15 ? pct(ceiling, posAvValues) : avToScore(ceiling)) * 0.54 + scoreAdj, 1, 99)
   const max = Math.max(90, ceiling * 1.1)
   const histOdds = Object.fromEntries(outcomeOrder.map((cat) => [cat, comps.filter((c) => c.player.category === cat).reduce((sum, c) => sum + c.sim, 0) / histWeight])) as Record<Category, number>
   const pffOdds = Object.fromEntries(outcomeOrder.map((cat) => [cat, pffComps.filter((c) => c.profile.nfl?.category === cat).reduce((sum, c) => sum + c.sim, 0) / pffWeight])) as Record<Category, number>
@@ -4127,6 +4138,10 @@ function pffSim(input: Prospect, profile: PffProfile, grp?: string) {
     (input.pos === profile.position ? 0 : .16)
   const recency = Math.pow(0.97, Math.max(0, 2024 - profile.draftSeason))
   const experienceBonus = profile.games >= 36 ? 1.06 : profile.games >= 24 ? 1.03 : profile.games >= 12 ? 1.0 : 0.93
+  // A1: NFL snap count boosts proven starters — 2000+ snaps ≈ 3-4 full seasons as a starter.
+  // Only upweights; avoids double-penalising busts already discounted via tierWeight.
+  const nflSnaps = profile.nfl?.snaps ?? 0
+  const snapBoost = nflSnaps >= 2000 ? 1.05 : nflSnaps >= 800 ? 1.02 : 1.0
   // Tier-weight: nfl.category r=0.373 vs composite r=0.190 in R2-5.
   // Proven comps (Star/High-end starter) are more informative than busts with similar college metrics.
   const tierWeight =
@@ -4135,7 +4150,7 @@ function pffSim(input: Prospect, profile: PffProfile, grp?: string) {
     profile.nfl?.category === 'Starter'           ? 1.05 :
     profile.nfl?.category === 'Reserve'           ? 0.75 :
     profile.nfl?.category === 'Bust'              ? 0.65 : 1.0
-  return Math.exp(-distance) * recency * experienceBonus * tierWeight
+  return Math.exp(-distance) * recency * experienceBonus * tierWeight * snapBoost
 }
 
 // Empirical mean wAV by pick range (2016-2022, n=1,792 picks).
