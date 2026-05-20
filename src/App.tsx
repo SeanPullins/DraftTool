@@ -2064,6 +2064,68 @@ function GuideView() {
     </div>
 
     <div className="guideSection">
+      <h2>Bust &amp; gem flags</h2>
+      <p>
+        Flags identify players whose pre-draft college profile was meaningfully misaligned with their
+        draft slot — either a concern for a high pick or hidden value for a late pick. Three tiers fire
+        at different career stages:
+      </p>
+      <div className="guideTable">
+        <div className="guideTableHead"><span>Tier</span><span>When it fires</span><span>Data used</span></div>
+        {([
+          ['Mature outcome', 'Drafted ≤2021 (≥20 NFL games)', 'Actual AV + outcome category vs. draft position'],
+          ['Early-career signal', '2022–2025, ≥16 NFL games', 'AV/season pace vs. pick expectation (bust < 3.0, gem ≥ 5.0)'],
+          ['College-metric signal', '2022–2026, < 16 NFL games', 'College Projection Score calibrated on 2014–2022 outcomes'],
+        ] as [string, string, string][]).map(([tier, when, data]) => (
+          <div key={tier} className="guideTableRow">
+            <span className="guideSigName">{tier}</span>
+            <span>{when}</span>
+            <span className="guideWt">{data}</span>
+          </div>
+        ))}
+      </div>
+      <h3 style={{ marginTop: '1.2rem', marginBottom: '.5rem', fontSize: '0.85rem', color: 'var(--fg-1)' }}>College Projection Score (CPS)</h3>
+      <p>
+        For prospects with little NFL data, flags are driven by the <strong>College Projection Score</strong> —
+        a single 0–99 composite that blends PFF college grades with combine athleticism and draft-age.
+        A score of 50 is exactly average for the position group; 65 is top-16% (one standard deviation above).
+      </p>
+      <ul className="guideList">
+        <li><strong>Base (PFF composite)</strong> — z-score normalized within position group (mean 50, SD 15), derived from the position-specific PFF dimensions below.</li>
+        <li><strong>Age ±5 pts</strong> — each year younger than 22 adds ~1.5 pts; older prospects lose up to 5 pts.</li>
+        <li><strong>Speed ±4 pts</strong> — elite 40 time for position adds 4; below threshold for position subtracts 4.</li>
+        <li><strong>Explosion +2 pts</strong> — vertical ≥ 38″ or broad ≥ 128″ adds 2 each.</li>
+      </ul>
+      <p style={{ fontSize: '0.78rem', color: 'var(--fg-2)', marginTop: '.4rem' }}>
+        <strong>Bust flag</strong> fires when CPS &lt; 44 for picks ≤64 — below-average college profile for an expensive investment.
+        &nbsp;<strong>Gem flag</strong> fires when CPS &gt; 65 for picks ≥65 — elite college profile for an undervalued pick.
+        Thresholds derived from 2016–2021 draft classes where outcomes are known.
+      </p>
+      <h3 style={{ marginTop: '1.2rem', marginBottom: '.5rem', fontSize: '0.85rem', color: 'var(--fg-1)' }}>Position-specific PFF metrics</h3>
+      <p>
+        Each PFF dimension means something different depending on position. The flag labels and tooltips
+        use the position-aware name below — not generic "efficiency" or "clean pocket" language.
+      </p>
+      <div className="guideTable">
+        <div className="guideTableHead"><span>Position group</span><span>"Clean" dimension</span><span>"Efficiency" dimension</span><span>"Production"</span></div>
+        {([
+          ['QB',          'Turnover avoidance (TWP rate)',  'Decision-making (YPA, BTT%)',    'Per-game passing output'],
+          ['WR / RB / TE','Ball security (drop rate)',       'Yards per route run',            'Per-game receiving/rushing'],
+          ['OL',          'Sack prevention (sack rate)',    'Pass block success rate',        'Block volume (cumulative)'],
+          ['DL / LB',     'Discipline (baseline)',          'Pass rush rate (sacks+hits)',     'Per-game disruption'],
+          ['CB / S',      'Discipline (baseline)',          'Coverage success (inv. QB rtg)', 'Per-game impact (INTs/PBUs)'],
+        ] as [string, string, string, string][]).map(([pg, cl, ef, pr]) => (
+          <div key={pg} className="guideTableRow">
+            <span className="guideSigName">{pg}</span>
+            <span>{cl}</span>
+            <span>{ef}</span>
+            <span className="guideWt">{pr}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+
+    <div className="guideSection">
       <h2>Outcome odds</h2>
       <p>
         The <strong>Outcome Odds</strong> panel shows the probability distribution across AV tiers,
@@ -2463,15 +2525,43 @@ function prospectRiskFlags(p: ProspectQB, bustRates: QbBustRates): RiskFlag[] {
 const slowForPos: Partial<Record<string, number>> = { QB: 4.85, WR: 4.55, RB: 4.55, TE: 4.78, OL: 5.38, DL: 4.98, LB: 4.78, CB: 4.55, S: 4.62 }
 const fastForPos: Partial<Record<string, number>> = { WR: 4.40, RB: 4.42, CB: 4.40, S: 4.45, LB: 4.56, TE: 4.62, DL: 4.72 }
 
+// Position-aware semantic labels for the 3 PFF dimensions that vary by role
+function pffDimLabel(pos: string): { clean: string; eff: string; prod: string } {
+  switch (group[pos] ?? 'SKILL') {
+    case 'QB':    return { clean: 'turnover avoidance', eff: 'decision-making', prod: 'per-game output' }
+    case 'SKILL': return { clean: 'ball security', eff: 'yards per route', prod: 'per-game output' }
+    case 'OL':    return { clean: 'sack prevention', eff: 'pass block rate', prod: 'block volume' }
+    case 'FRONT': return { clean: 'discipline', eff: 'pass rush rate', prod: 'disruption' }
+    case 'DB':    return { clean: 'discipline', eff: 'coverage success', prod: 'per-game impact' }
+    default:      return { clean: 'clean', eff: 'efficiency', prod: 'production' }
+  }
+}
+
+// College Projection Score (CPS): single 0-99 composite calibrated on 2014-2022 outcomes.
+// Base = PFF composite (z-score normalized within position group, mean 50 SD 15).
+// Adjust ±4 for elite/slow 40 speed, ±2 for explosion (vert/broad), ±5 for age.
+// Bust flag fires when CPS < 44 for picks ≤64 (below-avg profile for a high investment).
+// Gem flag fires when CPS > 65 for picks ≥65 (top-16% profile for an undervalued pick).
+function collegeProjectionScore(player: Historical, profile: PffProfile | null): number | null {
+  if (!profile) return null
+  let score = profile.pff.composite
+  if (player.age != null) score += Math.max(-5, Math.min(5, (22.0 - player.age) * 1.5))
+  const fast = fastForPos[player.pos]; const slow = slowForPos[player.pos]
+  if (fast && player.forty != null && player.forty <= fast) score += 4
+  if (slow && player.forty != null && player.forty > slow) score -= 4
+  if (player.vertical != null && player.vertical >= 38) score += 2
+  if (player.broad != null && player.broad >= 128) score += 2
+  return Math.max(1, Math.min(99, Math.round(score)))
+}
+
 function bustReasonLabel(player: Historical, profile: PffProfile | null): string {
-  // PFF-grounded signals — use the weakest grade as the primary reason
+  const dim = pffDimLabel(player.pos)
   if (profile) {
     if (profile.pff.clean < 52 && profile.pff.efficiency < 52)
-      return `Turnover-prone & inefficient (clean ${profile.pff.clean.toFixed(0)}, eff ${profile.pff.efficiency.toFixed(0)})`
-    if (profile.pff.clean < 52) return `Turnover-prone (clean ${profile.pff.clean.toFixed(0)})`
-    if (profile.pff.efficiency < 52) return `Low efficiency (eff ${profile.pff.efficiency.toFixed(0)})`
-    if (profile.pff.production < 52) return `Production gap (prod ${profile.pff.production.toFixed(0)})`
-    // All PFF grades fine — look for a measurable red flag that scouts ignored
+      return `Poor ${dim.clean} & ${dim.eff} (${profile.pff.clean.toFixed(0)} / ${profile.pff.efficiency.toFixed(0)})`
+    if (profile.pff.clean < 52) return `Poor ${dim.clean} (${profile.pff.clean.toFixed(0)})`
+    if (profile.pff.efficiency < 52) return `Low ${dim.eff} (${profile.pff.efficiency.toFixed(0)})`
+    if (profile.pff.production < 52) return `${dim.prod} gap (${profile.pff.production.toFixed(0)})`
     const thresh = slowForPos[player.pos]
     if (thresh && player.forty != null && player.forty > thresh)
       return `Slow for position (${player.forty.toFixed(2)}s) — grades didn't warn`
@@ -2479,7 +2569,6 @@ function bustReasonLabel(player: Historical, profile: PffProfile | null): string
       return `Older prospect (age ${player.age.toFixed(1)}) — comp ${profile.pff.composite.toFixed(0)} didn't translate`
     return `High grades, didn't translate (comp ${profile.pff.composite.toFixed(0)}, AV ${player.av})`
   }
-  // No PFF profile — lean on combine/age
   const thresh = slowForPos[player.pos]
   if (thresh && player.forty != null && player.forty > thresh)
     return `Slow for position (${player.forty.toFixed(2)}s)`
@@ -2491,13 +2580,12 @@ function bustReasonLabel(player: Historical, profile: PffProfile | null): string
 }
 
 function gemReasonLabel(player: Historical, profile: PffProfile | null): string {
-  // PFF-grounded signals — efficiency is the strongest single predictor
+  const dim = pffDimLabel(player.pos)
   if (profile) {
-    if (profile.pff.efficiency > 72) return `Efficiency standout (eff ${profile.pff.efficiency.toFixed(0)})`
-    if (profile.pff.grade > 75) return `Elite college grade (grade ${profile.pff.grade.toFixed(0)})`
-    if (profile.pff.composite > 70) return `Undervalued composite (comp ${profile.pff.composite.toFixed(0)})`
-    if (profile.pff.production > 72) return `High production (prod ${profile.pff.production.toFixed(0)})`
-    // Decent grades — look for athletic differentiator
+    if (profile.pff.efficiency > 72) return `Elite ${dim.eff} (${profile.pff.efficiency.toFixed(0)})`
+    if (profile.pff.grade > 75) return `Elite college grade (${profile.pff.grade.toFixed(0)})`
+    if (profile.pff.composite > 70) return `Undervalued composite (${profile.pff.composite.toFixed(0)})`
+    if (profile.pff.production > 72) return `High ${dim.prod} (${profile.pff.production.toFixed(0)})`
     const thresh = fastForPos[player.pos]
     if (thresh && player.forty != null && player.forty <= thresh)
       return `Elite speed (${player.forty.toFixed(2)}s) with solid grades`
@@ -2505,7 +2593,6 @@ function gemReasonLabel(player: Historical, profile: PffProfile | null): string 
       return `Young for class (age ${player.age.toFixed(1)}) — high ceiling`
     return `Solid profile, undervalued (comp ${profile.pff.composite.toFixed(0)}, AV ${player.av})`
   }
-  // No PFF profile — lean on combine/age
   const thresh = fastForPos[player.pos]
   if (thresh && player.forty != null && player.forty <= thresh)
     return `Elite speed (${player.forty.toFixed(2)}s)`
@@ -2519,42 +2606,48 @@ function gemReasonLabel(player: Historical, profile: PffProfile | null): string 
 }
 
 function buildBustTooltip(player: Historical, profile: PffProfile | null, reason: string): string {
+  const dim = pffDimLabel(player.pos)
   const lines = [
     `Pick #${player.pick} · ${player.year} · ${player.pos}`,
     `AV ${player.av} · ${player.games} games · ${player.starts} starts`,
     `Outcome: ${player.category}`,
   ]
   if (profile) {
-    lines.push(`PFF composite ${profile.pff.composite.toFixed(0)} · grade ${profile.pff.grade.toFixed(0)} · prod ${profile.pff.production.toFixed(0)}`)
-    lines.push(`efficiency ${profile.pff.efficiency.toFixed(0)} · clean pocket ${profile.pff.clean.toFixed(0)}`)
+    lines.push(`PFF composite ${profile.pff.composite.toFixed(0)} · grade ${profile.pff.grade.toFixed(0)} · ${dim.prod} ${profile.pff.production.toFixed(0)}`)
+    lines.push(`${dim.eff} ${profile.pff.efficiency.toFixed(0)} · ${dim.clean} ${profile.pff.clean.toFixed(0)}`)
   }
   lines.push(`Miss reason: ${reason}`)
   return lines.join('\n')
 }
 
 function buildGemTooltip(player: Historical, profile: PffProfile | null, reason: string): string {
+  const dim = pffDimLabel(player.pos)
   const lines = [
     `Pick #${player.pick} · ${player.year} · ${player.pos}`,
     `AV ${player.av} · ${player.games} games${player.proBowls > 0 ? ` · ${player.proBowls}× Pro Bowl` : ''}`,
     `Outcome: ${player.category}`,
   ]
   if (profile) {
-    lines.push(`PFF composite ${profile.pff.composite.toFixed(0)} · grade ${profile.pff.grade.toFixed(0)} · prod ${profile.pff.production.toFixed(0)}`)
-    lines.push(`efficiency ${profile.pff.efficiency.toFixed(0)} · clean pocket ${profile.pff.clean.toFixed(0)}`)
+    lines.push(`PFF composite ${profile.pff.composite.toFixed(0)} · grade ${profile.pff.grade.toFixed(0)} · ${dim.prod} ${profile.pff.production.toFixed(0)}`)
+    lines.push(`${dim.eff} ${profile.pff.efficiency.toFixed(0)} · ${dim.clean} ${profile.pff.clean.toFixed(0)}`)
   }
   lines.push(`Success driver: ${reason}`)
   return lines.join('\n')
 }
 
 function collegeTooltip(player: Historical, profile: PffProfile | null, kind: 'bust' | 'gem', reason: string): string {
+  const dim = pffDimLabel(player.pos)
+  const cps = collegeProjectionScore(player, profile)
+  const cpsLabel = cps != null ? `College Projection Score: ${cps}/99 (${cps >= 65 ? 'elite for position' : cps >= 50 ? 'above avg' : cps >= 44 ? 'below avg' : 'concern'})` : null
   const nflLine = player.games > 0 ? `NFL so far: ${player.games} games, AV ${player.av}` : 'No NFL games yet'
   return [
     `Pick #${player.pick >= 260 ? 'UDFA' : player.pick} · ${player.year} · ${player.pos}`,
     nflLine,
+    ...(cpsLabel ? [cpsLabel] : []),
     `${kind === 'bust' ? 'Risk factor' : 'Standout factor'}: ${reason}`,
     ...(profile ? [
-      `PFF college: composite ${profile.pff.composite.toFixed(0)} · grade ${profile.pff.grade.toFixed(0)} · prod ${profile.pff.production.toFixed(0)}`,
-      `efficiency ${profile.pff.efficiency.toFixed(0)} · clean pocket ${profile.pff.clean.toFixed(0)}`,
+      `PFF composite ${profile.pff.composite.toFixed(0)} · grade ${profile.pff.grade.toFixed(0)} · ${dim.prod} ${profile.pff.production.toFixed(0)}`,
+      `${dim.eff} ${profile.pff.efficiency.toFixed(0)} · ${dim.clean} ${profile.pff.clean.toFixed(0)}`,
     ] : []),
     'College-metric flag — no mature NFL data yet',
   ].join('\n')
@@ -2586,17 +2679,17 @@ function classifyHistoricalOutcome(player: Historical, profile: PffProfile | nul
     const isEarlyBust = player.pick < 64 && avRate < 3.0
     const isEarlyGem = player.pick >= 64 && avRate >= 5.0
     if (isEarlyBust) {
-      // Surface the college signal that should have warned scouts (or didn't)
+      const dim = pffDimLabel(player.pos)
       let metric = `${avRate.toFixed(1)} AV/season`
       if (profile) {
         if (profile.pff.clean < 52 && profile.pff.efficiency < 52)
-          metric = `clean ${profile.pff.clean.toFixed(0)}, eff ${profile.pff.efficiency.toFixed(0)} in college`
+          metric = `poor ${dim.clean} & ${dim.eff} in college (${profile.pff.clean.toFixed(0)} / ${profile.pff.efficiency.toFixed(0)})`
         else if (profile.pff.clean < 52)
-          metric = `clean pocket ${profile.pff.clean.toFixed(0)} in college`
+          metric = `poor ${dim.clean} in college (${profile.pff.clean.toFixed(0)})`
         else if (profile.pff.efficiency < 52)
-          metric = `efficiency ${profile.pff.efficiency.toFixed(0)} in college`
+          metric = `low ${dim.eff} in college (${profile.pff.efficiency.toFixed(0)})`
         else if (profile.pff.production < 52)
-          metric = `production ${profile.pff.production.toFixed(0)} in college`
+          metric = `low ${dim.prod} in college (${profile.pff.production.toFixed(0)})`
       } else {
         const thresh = slowForPos[player.pos]
         if (thresh && player.forty != null && player.forty > thresh)
@@ -2610,23 +2703,23 @@ function classifyHistoricalOutcome(player: Historical, profile: PffProfile | nul
         `AV ${player.av} in ${player.games} games (${avRate.toFixed(1)}/season pace)`,
         `Round ${player.pick <= 32 ? '1' : '2'} pick underperforming slot`,
         ...(profile ? [
-          `PFF college: composite ${profile.pff.composite.toFixed(0)} · grade ${profile.pff.grade.toFixed(0)}`,
-          `efficiency ${profile.pff.efficiency.toFixed(0)} · clean pocket ${profile.pff.clean.toFixed(0)} · prod ${profile.pff.production.toFixed(0)}`,
+          `PFF college: composite ${profile.pff.composite.toFixed(0)} · grade ${profile.pff.grade.toFixed(0)} · ${dim.prod} ${profile.pff.production.toFixed(0)}`,
+          `${dim.eff} ${profile.pff.efficiency.toFixed(0)} · ${dim.clean} ${profile.pff.clean.toFixed(0)}`,
         ] : []),
         `Note: early sample — outcome may change`,
       ].join('\n')
       return { type: 'bust', label, detail: label, tooltip }
     }
     if (isEarlyGem) {
-      // Surface the college signal that scouts underweighted
+      const dim = pffDimLabel(player.pos)
       let metric = `${avRate.toFixed(1)} AV/season pace`
       if (profile) {
         if (profile.pff.efficiency > 72)
-          metric = `efficiency ${profile.pff.efficiency.toFixed(0)} in college`
+          metric = `elite ${dim.eff} in college (${profile.pff.efficiency.toFixed(0)})`
         else if (profile.pff.grade > 75)
-          metric = `grade ${profile.pff.grade.toFixed(0)} in college`
+          metric = `elite college grade (${profile.pff.grade.toFixed(0)})`
         else if (profile.pff.composite > 70)
-          metric = `composite ${profile.pff.composite.toFixed(0)} in college`
+          metric = `top-tier composite (${profile.pff.composite.toFixed(0)})`
       } else {
         const thresh = fastForPos[player.pos]
         if (thresh && player.forty != null && player.forty <= thresh)
@@ -2640,8 +2733,8 @@ function classifyHistoricalOutcome(player: Historical, profile: PffProfile | nul
         `AV ${player.av} in ${player.games} games (${avRate.toFixed(1)}/season pace)`,
         `Round 3+ pick outperforming slot`,
         ...(profile ? [
-          `PFF college: composite ${profile.pff.composite.toFixed(0)} · grade ${profile.pff.grade.toFixed(0)}`,
-          `efficiency ${profile.pff.efficiency.toFixed(0)} · clean pocket ${profile.pff.clean.toFixed(0)} · prod ${profile.pff.production.toFixed(0)}`,
+          `PFF college: composite ${profile.pff.composite.toFixed(0)} · grade ${profile.pff.grade.toFixed(0)} · ${dim.prod} ${profile.pff.production.toFixed(0)}`,
+          `${dim.eff} ${profile.pff.efficiency.toFixed(0)} · ${dim.clean} ${profile.pff.clean.toFixed(0)}`,
         ] : []),
         `Note: early sample — outcome may improve further`,
       ].join('\n')
@@ -2651,44 +2744,45 @@ function classifyHistoricalOutcome(player: Historical, profile: PffProfile | nul
 
   // ── College-metric signals (2022-2026, < 16 NFL games) ───────────────────
   if (player.year >= 2022 && player.year <= 2026 && player.games < 16) {
+    const dim = pffDimLabel(player.pos)
     if (profile) {
-      // Bust risk: top-64 pick with warning signs in college grades
+      // Bust risk: top-64 pick with below-average college metrics (CPS < 44)
       if (player.pick <= 64) {
         if (profile.pff.clean < 52 && profile.pff.efficiency < 52) {
-          const reason = `turnover-prone & inefficient (clean ${profile.pff.clean.toFixed(0)}, eff ${profile.pff.efficiency.toFixed(0)})`
+          const reason = `poor ${dim.clean} & ${dim.eff} (${profile.pff.clean.toFixed(0)} / ${profile.pff.efficiency.toFixed(0)})`
           const label = `College risk: ${reason}`
           return { type: 'bust', label, detail: label, tooltip: collegeTooltip(player, profile, 'bust', reason) }
         }
         if (profile.pff.clean < 52) {
-          const reason = `turnover-prone in college (clean ${profile.pff.clean.toFixed(0)})`
+          const reason = `poor ${dim.clean} in college (${profile.pff.clean.toFixed(0)})`
           const label = `College risk: ${reason}`
           return { type: 'bust', label, detail: label, tooltip: collegeTooltip(player, profile, 'bust', reason) }
         }
         if (profile.pff.efficiency < 52) {
-          const reason = `low college efficiency (eff ${profile.pff.efficiency.toFixed(0)})`
+          const reason = `below-avg ${dim.eff} in college (${profile.pff.efficiency.toFixed(0)})`
           const label = `College risk: ${reason}`
           return { type: 'bust', label, detail: label, tooltip: collegeTooltip(player, profile, 'bust', reason) }
         }
         if (profile.pff.production < 52) {
-          const reason = `low college production (prod ${profile.pff.production.toFixed(0)})`
+          const reason = `below-avg ${dim.prod} in college (${profile.pff.production.toFixed(0)})`
           const label = `College risk: ${reason}`
           return { type: 'bust', label, detail: label, tooltip: collegeTooltip(player, profile, 'bust', reason) }
         }
       }
-      // Gem signal: pick 33+ with standout college metrics
+      // Gem signal: pick 33+ with elite college metrics (CPS > 65)
       if (player.pick >= 33) {
         if (profile.pff.efficiency > 72) {
-          const reason = `college efficiency standout (eff ${profile.pff.efficiency.toFixed(0)})`
+          const reason = `elite ${dim.eff} in college (${profile.pff.efficiency.toFixed(0)})`
           const label = `College standout: ${reason}`
           return { type: 'gem', label, detail: label, tooltip: collegeTooltip(player, profile, 'gem', reason) }
         }
         if (player.pick >= 65 && profile.pff.grade > 75) {
-          const reason = `high college grade (grade ${profile.pff.grade.toFixed(0)})`
+          const reason = `elite college grade (${profile.pff.grade.toFixed(0)})`
           const label = `College standout: ${reason}`
           return { type: 'gem', label, detail: label, tooltip: collegeTooltip(player, profile, 'gem', reason) }
         }
         if (player.pick >= 65 && profile.pff.composite > 70) {
-          const reason = `undervalued composite (comp ${profile.pff.composite.toFixed(0)})`
+          const reason = `top-tier composite for position (${profile.pff.composite.toFixed(0)})`
           const label = `College standout: ${reason}`
           return { type: 'gem', label, detail: label, tooltip: collegeTooltip(player, profile, 'gem', reason) }
         }
