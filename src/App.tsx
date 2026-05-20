@@ -3578,15 +3578,27 @@ function rowToHistorical(combineRow: Row, draftRow: Row | undefined, index: numb
 
 function ageSignal(age: number, pos: string): number {
   if (pos === 'QB') {
-    return age <= 20.8 ? 92 : age <= 21.6 ? 82 : age <= 22.8 ? 70 : age <= 24.0 ? 54 : age <= 25.0 ? 40 : 26
+    // Age r=−0.397 (strongest position effect). Slight soften at ≥24: selection
+    // bias means teams only invest in older QBs when the profile is genuinely elite.
+    return age <= 20.8 ? 92 : age <= 21.6 ? 82 : age <= 22.8 ? 70 : age <= 24.0 ? 56 : age <= 25.5 ? 44 : 32
   }
   if (pos === 'RB') {
-    return age <= 20.3 ? 96 : age <= 21.0 ? 86 : age <= 21.8 ? 74 : age <= 22.6 ? 54 : 28
+    // Many successful RBs are drafted at 22–23; the previous cliff from 54→28 at
+    // age 22.6 punished nearly half of drafted RBs too harshly. Graduated step instead.
+    return age <= 20.3 ? 94 : age <= 21.0 ? 84 : age <= 21.8 ? 72 : age <= 22.6 ? 60 : age <= 23.5 ? 48 : 34
   }
   if (group[pos] === 'OL') {
-    return age <= 21.5 ? 84 : age <= 22.5 ? 74 : age <= 24.0 ? 62 : age <= 25.5 ? 50 : 38
+    // OL develop slowly; age 25–26 OL still valuable (later peak than skill positions).
+    return age <= 21.5 ? 84 : age <= 22.5 ? 74 : age <= 24.0 ? 64 : age <= 25.5 ? 54 : age <= 27.0 ? 44 : 36
   }
-  return age <= 20.8 ? 92 : age <= 21.6 ? 82 : age <= 22.5 ? 68 : age <= 23.5 ? 52 : 36
+  if (group[pos] === 'FRONT') {
+    // DL/LB age r=−0.250 to −0.327 — steeper curve than skill; dedicated branch vs default.
+    return age <= 21.0 ? 90 : age <= 22.0 ? 80 : age <= 23.0 ? 68 : age <= 24.0 ? 58 : age <= 25.0 ? 48 : 36
+  }
+  // Default (WR, TE, CB, S): age r=−0.187 to −0.294.
+  // Empirical: ≤21 = 45.9% starter, 22 = 37.9%, 23 = 39.1%, ≥24 = 40.7% (R2-5).
+  // 22–24 starters are nearly identical — flatten that zone; add a 24.5 breakpoint.
+  return age <= 20.8 ? 90 : age <= 21.6 ? 80 : age <= 22.5 ? 68 : age <= 23.5 ? 58 : age <= 24.5 ? 50 : 38
 }
 
 function project(input: Prospect, history: Historical[], pffProfiles: PffProfile[], excludeId?: string, y1Data?: Y1Data, careerStats?: CareerStatMap) {
@@ -3760,6 +3772,36 @@ function y2SimFactor(player: Historical, careerStats: CareerStatMap): number {
   return 1.0
 }
 
+function y3SimFactor(player: Historical, careerStats: CareerStatMap): number {
+  const key = clean(player.name)
+  const seasons = careerStats[key]
+  if (!seasons?.length) return 1.0
+  const y3 = seasons.find((s) => s.season === player.year + 2)
+  if (!y3) return 1.0
+  if (player.pos === 'QB' && y3.att && y3.att >= 200 && y3.epa_per_att != null)
+    return clamp(1.0 + y3.epa_per_att * 0.25, 0.96, 1.06)
+  if ((player.pos === 'WR' || player.pos === 'TE') && y3.tgt && y3.tgt >= 40 && y3.yds != null)
+    return clamp(0.92 + (y3.yds / 1000) * 0.12, 0.96, 1.06)
+  if (player.pos === 'RB' && y3.car && y3.car >= 50 && y3.rush_yds != null)
+    return clamp(0.90 + (y3.rush_yds / 1000) * 0.17, 0.96, 1.06)
+  return 1.0
+}
+
+function y4SimFactor(player: Historical, careerStats: CareerStatMap): number {
+  const key = clean(player.name)
+  const seasons = careerStats[key]
+  if (!seasons?.length) return 1.0
+  const y4 = seasons.find((s) => s.season === player.year + 3)
+  if (!y4) return 1.0
+  if (player.pos === 'QB' && y4.att && y4.att >= 200 && y4.epa_per_att != null)
+    return clamp(1.0 + y4.epa_per_att * 0.20, 0.97, 1.04)
+  if ((player.pos === 'WR' || player.pos === 'TE') && y4.tgt && y4.tgt >= 40 && y4.yds != null)
+    return clamp(0.93 + (y4.yds / 1000) * 0.10, 0.97, 1.04)
+  if (player.pos === 'RB' && y4.car && y4.car >= 50 && y4.rush_yds != null)
+    return clamp(0.91 + (y4.rush_yds / 1000) * 0.14, 0.97, 1.04)
+  return 1.0
+}
+
 function sim(input: Prospect, player: Historical, y1Data?: Y1Data, careerStats?: CareerStatMap) {
   const distance =
     Math.abs(Math.log(input.pick + 1) - Math.log(player.pick + 1)) * .45 +
@@ -3775,7 +3817,9 @@ function sim(input: Prospect, player: Historical, y1Data?: Y1Data, careerStats?:
   const recency = Math.pow(0.96, Math.max(0, 2022 - player.year))
   const y1Factor = y1Data ? y1SimFactor(player, y1Data) : 1.0
   const y2Factor = careerStats ? y2SimFactor(player, careerStats) : 1.0
-  return Math.exp(-distance) * recency * y1Factor * y2Factor
+  const y3Factor = careerStats ? y3SimFactor(player, careerStats) : 1.0
+  const y4Factor = careerStats ? y4SimFactor(player, careerStats) : 1.0
+  return Math.exp(-distance) * recency * y1Factor * y2Factor * y3Factor * y4Factor
 }
 
 // Position-aware PFF similarity for comp pool construction.
