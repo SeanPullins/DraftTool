@@ -79,7 +79,7 @@ function norm(p: string): string {
   if (['OT', 'G', 'T', 'LT', 'RT', 'OG', 'C', 'OL', 'IOL', 'OC'].includes(x)) return 'OL'
   if (['DE', 'DT', 'NT', 'DL', 'IDL', 'DI', 'OLB', 'EDGE', 'ED'].includes(x)) return 'DL'
   if (['ILB', 'MLB', 'WILL', 'MIKE', 'SAM'].includes(x)) return 'LB'
-  if (['FS', 'SS', 'DB'].includes(x)) return 'S'
+  if (['FS', 'SS', 'DB', 'SAF'].includes(x)) return 'S'
   if (x === 'FB') return 'RB'
   return x
 }
