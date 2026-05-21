@@ -701,7 +701,7 @@ export default function App() {
     </div> : page === 'guide' ? <div className="classPage">
       <GuideView />
     </div> : page === 'prospects' ? <div className="classPage">
-      <ProspectsView prospects2027={prospectsQb2027} history={prospects} pffProfiles={pffProfiles} careerStats={careerStats} histFlagMap={histFlagMap} qbPffSeasons={qbPffSeasons} onLoad={loadProspect2027} />
+      <ProspectsView prospects2027={prospectsQb2027} history={prospects} pffProfiles={pffProfiles} careerStats={careerStats} histFlagMap={histFlagMap} qbPffSeasons={qbPffSeasons} wrPffSeasons={wrPffSeasons} onLoad={loadProspect2027} />
     </div> : <div className="layout">
       <aside className="controlPanel" data-pane="edit">
         <section className="panel loadPanel">
@@ -1176,7 +1176,7 @@ function TableWrap({ children }: { children: ReactNode }) {
   return <div className="tableWrap">{children}</div>
 }
 
-function CompareView({ pool, history, pffProfiles, y1Data, careerStats, initialQuery = '', rasLookup = null, qbPffSeasons, wrPffSeasons }: { pool: Historical[]; history: Historical[]; pffProfiles: PffProfile[]; y1Data?: Y1Data; careerStats?: CareerStatMap; initialQuery?: string; rasLookup?: AppRasLookup | null; qbPffSeasons: QbPffSeason[]; wrPffSeasons: WrPffSeason[] }) {
+function CompareView({ pool, history, pffProfiles, y1Data, careerStats, initialQuery = '', rasLookup = null, qbPffSeasons, wrPffSeasons }: { pool: Historical[]; history: Historical[]; pffProfiles: PffProfile[]; y1Data?: Y1Data; careerStats?: CareerStatMap; initialQuery?: string; rasLookup?: AppRasLookup | null; qbPffSeasons: QbPffSeason[]; wrPffSeasons: WrPffSeason[]; wrPffSeasons: WrPffSeason[]; wrPffSeasons: WrPffSeason[] }) {
   const [q1, setQ1] = useState(initialQuery)
   const [q2, setQ2] = useState('')
   const [p1, setP1] = useState<Historical | null>(null)
@@ -2129,7 +2129,7 @@ function BrowserHeader({ label, sortKey, active, dir, onSort }: { label: string;
   </th>
 }
 
-function ClassExplorer({ pool, history, pffProfiles, pffLookup, y1Data, careerStats, histFlagMap, currentName, currentYear, saved, qbPffSeasons, wrPffSeasons }: { pool: Historical[]; history: Historical[]; pffProfiles: PffProfile[]; pffLookup: Map<string, PffProfile>; y1Data?: Y1Data; careerStats?: CareerStatMap; histFlagMap: Map<string, HistoricalOutcomeFlag>; currentName: string; currentYear: number; saved: SavedProspect[]; qbPffSeasons: QbPffSeason[]; wrPffSeasons: WrPffSeason[] }) {
+function ClassExplorer({ pool, history, pffProfiles, pffLookup, y1Data, careerStats, histFlagMap, currentName, currentYear, saved, qbPffSeasons, wrPffSeasons }: { pool: Historical[]; history: Historical[]; pffProfiles: PffProfile[]; pffLookup: Map<string, PffProfile>; y1Data?: Y1Data; careerStats?: CareerStatMap; histFlagMap: Map<string, HistoricalOutcomeFlag>; currentName: string; currentYear: number; saved: SavedProspect[]; qbPffSeasons: QbPffSeason[]; wrPffSeasons: WrPffSeason[]; wrPffSeasons: WrPffSeason[]; wrPffSeasons: WrPffSeason[] }) {
   const years = useMemo(() => {
     const set = new Set<number>()
     for (const player of pool) set.add(player.year)
