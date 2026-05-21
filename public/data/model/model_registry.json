@@ -25,6 +25,16 @@
         "Adds promotion/hold logic",
         "Prepares framework for global + position blend testing"
       ]
+    },
+    "V5.2": {
+      "label": "V5.2 QB/WR blend-search framework",
+      "status": "experimental",
+      "notes": [
+        "QB best ranking blend: 55% global, 45% QB-specific",
+        "QB-only has best MAE/RMSE but blend has best Spearman",
+        "WR remains hold; global model still better on MAE/RMSE",
+        "Do not replace live V4 globally yet"
+      ]
     }
   }
 }
