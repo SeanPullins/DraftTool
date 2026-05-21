@@ -35,6 +35,16 @@
         "WR remains hold; global model still better on MAE/RMSE",
         "Do not replace live V4 globally yet"
       ]
+    },
+    "V5.3": {
+      "label": "V5.3 multi-window framework",
+      "status": "framework-hold",
+      "notes": [
+        "Modern mature model improves in-sample Spearman but does not clearly beat long-history on holdout ranking",
+        "Recent 2014-2023 model is useful for early translation only because career AV is immature",
+        "Best long-history plus modern blend is too small to promote globally",
+        "Next step is V5.4 multi-target framework"
+      ]
     }
   }
 }
