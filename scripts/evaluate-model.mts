@@ -19,17 +19,18 @@
 
 import { readFileSync } from 'node:fs'
 import { gunzipSync } from 'node:zlib'
-import { clean, project, calibratedExpectedAv, matureOutcomeCutoff, outcomeOrder, group } from '../src/model.ts'
-import type { Historical, PffProfile, Prospect, Category, ProjectOpts } from '../src/model.ts'
+import { clean, project, calibratedExpectedAv, matureOutcomeCutoff, outcomeOrder, group, computeQbTrajectory } from '../src/model.ts'
+import type { Historical, PffProfile, Prospect, Category, ProjectOpts, QbPffSeason, QbTrajectoryLabel } from '../src/model.ts'
 
 // ── CLI flags ─────────────────────────────────────────────────────────────────
 
 const args = process.argv.slice(2)
-const filterPos    = args.includes('--pos')           ? args[args.indexOf('--pos')           + 1] : null
-const yearMax      = args.includes('--year-max')      ? parseInt(args[args.indexOf('--year-max') + 1]) : matureOutcomeCutoff - 3
-const verbose      = args.includes('--verbose')
-const doAblation   = args.includes('--ablation')
-const walkForward  = args.includes('--walk-forward')
+const filterPos            = args.includes('--pos')                     ? args[args.indexOf('--pos')                     + 1] : null
+const yearMax              = args.includes('--year-max')                ? parseInt(args[args.indexOf('--year-max')         + 1]) : matureOutcomeCutoff - 3
+const verbose              = args.includes('--verbose')
+const doAblation           = args.includes('--ablation')
+const walkForward          = args.includes('--walk-forward')
+const doQbTrajectoryAblation = args.includes('--qb-trajectory-ablation')
 
 // ── Data paths ────────────────────────────────────────────────────────────────
 
@@ -190,6 +191,10 @@ function toProspect(player: Historical, pff?: PffProfile, ras?: RasRecord | null
   // Film defaults at neutral 70 regardless of pick; pick-correlated defaults
   // duplicate the draft signal and add noise (confirmed by signal ablation).
   // PFF grades replace the neutral default when a match is found.
+  // Walk-forward safe: qbTrajectory uses draftYear-1 and draftYear-2 — no future leakage.
+  const qbTrajectory = player.pos === 'QB'
+    ? computeQbTrajectory(player.year, player.name, qbPffSeasons)
+    : null
   return {
     name: player.name, school: player.school, pos: player.pos,
     draftSeason: player.year, pick: player.pick < 260 ? player.pick : 200,
@@ -211,6 +216,7 @@ function toProspect(player: Historical, pff?: PffProfile, ras?: RasRecord | null
     schemeTag: '',
     officialRas:  ras?.ras  ?? null,
     alltimeRas:   ras?.alltimeRas ?? null,
+    qbTrajectory,
   }
 }
 
@@ -371,6 +377,10 @@ for (const p of pffProfiles) pffByKey.set(`${clean(p.name)}|${p.draftSeason}`, p
 const rasRows   = parseCsv(readFileSync(DATA + 'ras_main_table.csv', 'utf-8'))
 const rasLookup = buildRasLookup(rasRows)
 
+const qbPffSeasonsRaw = JSON.parse(readFileSync(DATA + 'qb_pff_seasons.json', 'utf-8'))
+const qbPffSeasons: QbPffSeason[] = qbPffSeasonsRaw.records
+console.log(`  qb_pff=${qbPffSeasons.length} PFF season records`)
+
 console.log(`✓  pool=${pool.length} pff=${pffProfiles.length} ras=${rasRows.length}`)
 
 // Pre-compute true walk-forward slot baselines for each eval year (Phase 1).
@@ -404,6 +414,9 @@ type EvalRow = {
   hasOfficialRas:  boolean
   trueWfPickAv: number   // pick-only AV from position-group baselines trained on prior years
   slotBaseline: number   // expected AV for this pick range × position group
+  hasQbTrajectory: boolean
+  trajectoryLabel: QbTrajectoryLabel | null
+  trajectoryScoreMoved: number  // how much the trajectory adj moved the score (for miss analysis)
 }
 
 const evalSet = pool.filter((p) =>
@@ -427,7 +440,7 @@ for (const player of evalSet) {
   // selection is based purely on pre-draft signals, not known NFL outcomes.
   const evalPool       = walkForward ? pool.filter((p) => p.year < player.year) : pool
   const evalPffProfiles = walkForward ? pffProfiles.filter((p) => p.draftSeason < player.year) : pffProfiles
-  const proj           = project(prospect, evalPool, evalPffProfiles, player.id, undefined, undefined, undefined, undefined, walkForward)
+  const proj           = project(prospect, evalPool, evalPffProfiles, player.id, undefined, undefined, undefined, prospect.qbTrajectory?.gradeDelta ?? null, walkForward)
 
   // Predicted category = highest-odds outcome
   const projCategory = outcomeOrder.reduce((best, cat) =>
@@ -441,6 +454,14 @@ for (const player of evalSet) {
   // True WF pick-only AV: slot baseline computed from prior-year data only (no model signals)
   const trueWfPickAv = slotBL
 
+  const traj = prospect.qbTrajectory ?? null
+  // Compute how much the trajectory signal moved the score (for miss analysis)
+  let trajectoryScoreMoved = 0
+  if (traj != null && traj.gradeDelta != null) {
+    const projNoTraj = project(prospect, evalPool, evalPffProfiles, player.id, undefined, undefined, undefined, null, walkForward)
+    trajectoryScoreMoved = proj.score - projNoTraj.score
+  }
+
   results.push({
     player, prospect,
     projScore:    proj.score,
@@ -451,8 +472,11 @@ for (const player of evalSet) {
     projCategory,
     actualAv:     player.av,
     actualCategory: player.category,
-    hasPff:         !!pff,
-    hasOfficialRas: !!(rasRec?.ras != null),
+    hasPff:          !!pff,
+    hasOfficialRas:  !!(rasRec?.ras != null),
+    hasQbTrajectory: !!traj,
+    trajectoryLabel: traj?.trajectoryLabel ?? null,
+    trajectoryScoreMoved,
     trueWfPickAv,
     slotBaseline: slotBL,
   })
@@ -1022,6 +1046,101 @@ if (verbose) {
       `  err=${sign}${err}` +
       (tags.length ? `  [${tags.join(', ')}]` : '')
     )
+  }
+}
+
+// ── 8. QB TRAJECTORY REPORT ──────────────────────────────────────────────────
+
+const qbResults = results.filter((r) => r.player.pos === 'QB')
+const qbWithTraj = qbResults.filter((r) => r.hasQbTrajectory)
+const qbPct = qbResults.length ? ((qbWithTraj.length / qbResults.length) * 100).toFixed(1) : '0.0'
+
+console.log('\n══════════════════════════════════════════════════════════════')
+console.log(' QB TRAJECTORY COVERAGE  (PFF season lookup for historical QBs)')
+console.log('══════════════════════════════════════════════════════════════')
+console.log(`  QBs in eval set:      ${qbResults.length}`)
+console.log(`  With trajectory data: ${qbWithTraj.length} (${qbPct}%)`)
+
+const labelCounts: Partial<Record<QbTrajectoryLabel, number>> = {}
+for (const r of qbWithTraj) {
+  if (r.trajectoryLabel) labelCounts[r.trajectoryLabel] = (labelCounts[r.trajectoryLabel] ?? 0) + 1
+}
+const labelOrder: QbTrajectoryLabel[] = ['elite_breakout', 'rising', 'stable_good', 'stable_limited', 'volatile_spike', 'regressing', 'unknown']
+const labelStr = labelOrder.map((l) => `${l}=${labelCounts[l] ?? 0}`).join(', ')
+console.log(`  By label: ${labelStr}`)
+
+if (doQbTrajectoryAblation && qbResults.length >= 5) {
+  console.log('\n QB TRAJECTORY ABLATION')
+  console.log('══════════════════════════════════════════════════════════════')
+
+  // With trajectory: use existing results (gradeDelta already applied in main eval loop)
+  const qbScoresWithTraj  = qbResults.map((r) => r.projScore)
+  const qbActuals         = qbResults.map((r) => r.actualAv)
+  const qbRhoWith         = spearman(qbScoresWithTraj, qbActuals)
+  const qbMaeWith         = mae(qbResults.map((r) => r.projAv), qbActuals)
+  const qbBiasWithVal     = bias(qbResults.map((r) => r.projAv), qbActuals)
+
+  // Without trajectory: re-run project() with gradeDelta=null for QB results
+  const qbScoresNoTraj: number[] = []
+  const qbAvsNoTraj:    number[] = []
+  for (const r of qbResults) {
+    const ablPool        = walkForward ? pool.filter((p) => p.year < r.player.year) : pool
+    const ablPffProfiles = walkForward ? pffProfiles.filter((p) => p.draftSeason < r.player.year) : pffProfiles
+    const projNoTraj = project(r.prospect, ablPool, ablPffProfiles, r.player.id, undefined, undefined, undefined, null, walkForward)
+    qbScoresNoTraj.push(projNoTraj.score)
+    qbAvsNoTraj.push(projNoTraj.expectedAv)
+  }
+  const qbRhoWithout    = spearman(qbScoresNoTraj, qbActuals)
+  const qbMaeWithout    = mae(qbAvsNoTraj, qbActuals)
+  const qbBiasWithoutVal = bias(qbAvsNoTraj, qbActuals)
+
+  const dsign = (d: number) => (d >= 0 ? '+' : '') + d.toFixed(3)
+  const bsign = (d: number) => (d >= 0 ? '+' : '') + d.toFixed(1)
+  console.log(`  With trajectory:    n=${qbResults.length} ρ=${fmt(qbRhoWith)}  MAE=${qbMaeWith.toFixed(1)}  bias=${bsign(qbBiasWithVal)}`)
+  console.log(`  Without trajectory: n=${qbResults.length} ρ=${fmt(qbRhoWithout)}  MAE=${qbMaeWithout.toFixed(1)}  bias=${bsign(qbBiasWithoutVal)}`)
+  const deltaRho = qbRhoWith - qbRhoWithout
+  console.log(`  Δρ = ${dsign(deltaRho)} (positive = trajectory helps)`)
+
+  // Per-label breakdown of ρ
+  console.log('\n  By trajectory label:')
+  console.log(`  ${'Label'.padEnd(18)} ${'n'.padStart(5)} ${'ρ'.padStart(8)} ${'MAE'.padStart(8)} ${'bias'.padStart(8)}`)
+  for (const label of labelOrder) {
+    const labelRows = qbWithTraj.filter((r) => r.trajectoryLabel === label)
+    if (labelRows.length < 3) continue
+    const lScores  = labelRows.map((r) => r.projScore)
+    const lActuals = labelRows.map((r) => r.actualAv)
+    const lRho     = spearman(lScores, lActuals)
+    const lMae     = mae(labelRows.map((r) => r.projAv), lActuals)
+    const lBias    = bias(labelRows.map((r) => r.projAv), lActuals)
+    console.log(`  ${label.padEnd(18)} ${String(labelRows.length).padStart(5)} ${fmt(lRho).padStart(8)} ${lMae.toFixed(1).padStart(8)} ${bsign(lBias).padStart(8)}`)
+  }
+
+  // Trajectory miss analysis — QBs where trajectory moved score most and was wrong
+  console.log('\n TRAJECTORY MISS ANALYSIS  (worst trajectory-driven misprojections)')
+  const trajMisses = qbResults
+    .filter((r) => r.hasQbTrajectory && Math.abs(r.trajectoryScoreMoved) >= 0.5)
+    .map((r) => ({
+      r,
+      // Wrong if trajectory boosted score but actual AV was low, or depressed score and AV was high
+      wrongness: Math.abs(r.trajectoryScoreMoved) * Math.abs(r.projAv - r.actualAv),
+    }))
+    .sort((a, b) => b.wrongness - a.wrongness)
+    .slice(0, 10)
+
+  if (trajMisses.length) {
+    console.log(`  ${'Player'.padEnd(22)} ${'Yr'.padStart(5)} ${'Pick'.padStart(5)} ${'Label'.padEnd(16)} ${'ScoreMoved'.padStart(11)} ${'ActualAV'.padStart(9)} ${'ProjAV'.padStart(8)}`)
+    for (const { r } of trajMisses) {
+      const sign = r.trajectoryScoreMoved >= 0 ? '+' : ''
+      console.log(
+        `  ${r.player.name.padEnd(22)} ${String(r.player.year).padStart(5)} ${String(r.player.pick).padStart(5)}` +
+        ` ${(r.trajectoryLabel ?? 'unknown').padEnd(16)}` +
+        ` ${(sign + r.trajectoryScoreMoved.toFixed(2)).padStart(11)}` +
+        ` ${String(r.actualAv).padStart(9)}` +
+        ` ${r.projAv.toFixed(1).padStart(8)}`
+      )
+    }
+  } else {
+    console.log('  No significant trajectory-driven misprojections found.')
   }
 }
 

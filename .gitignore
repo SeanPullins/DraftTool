@@ -11,6 +11,7 @@ public/data/*
 !public/data/rb_seasons.json
 !public/data/prospects_2027_qb.json
 !public/data/ras_main_table.csv
+!public/data/qb_pff_seasons.json
 artifacts
 .env
 .env.local

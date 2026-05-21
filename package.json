@@ -13,7 +13,9 @@
     "data:refresh": "node scripts/refresh-data.mjs && node scripts/build-career-stats.mjs && node scripts/build-prospects-2027.mjs",
     "data:pff": "npm run sources:prepare && node scripts/build-pff-comparison-data.mjs",
     "test": "vitest run",
-    "evaluate": "node --experimental-strip-types scripts/evaluate-model.mts"
+    "evaluate": "node --experimental-strip-types scripts/evaluate-model.mts",
+    "data:qb-pff-import": "node scripts/build-qb-pff-seasons.mjs",
+    "data:qb-pff-audit": "node --experimental-strip-types scripts/evaluate-model.mts --walk-forward --pos QB --qb-trajectory-ablation"
   },
   "dependencies": {
     "@vitejs/plugin-react": "^6.0.1",
