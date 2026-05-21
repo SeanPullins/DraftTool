@@ -2394,6 +2394,13 @@ function ClassExplorer({ pool, history, pffProfiles, pffLookup, y1Data, careerSt
               wrPffContext?.latestSeason?.route_grade ??
               wrPffContext?.latestSeason?.offense_grade ??
               null
+            const pffContextLabel = pffProfile
+              ? 'PFF profile composite'
+              : qbPffContext
+                ? 'QB PFF season context'
+                : wrPffContext
+                  ? 'WR PFF season context'
+                  : 'No PFF match'
             const isExpanded = expandedId === player.id
             const canExpand = pffProfile !== null || outcomeFlag !== null
             const colCount = 12 + (useProjections ? 2 : 0)
@@ -2415,7 +2422,7 @@ function ClassExplorer({ pool, history, pffProfiles, pffLookup, y1Data, careerSt
                 <td>{player.games || 0}</td>
                 <td>{player.starts || 0}</td>
                 <td>{player.av || 0}</td>
-                <td className="pffCol" title={pffProfile ? 'PFF profile composite' : qbPffContext ? 'QB PFF season context' : wrPffContext ? 'WR PFF season context' : 'No PFF match'}>
+                <td className="pffCol" title={pffContextLabel}>
                   {pffContextScore != null ? pffContextScore.toFixed(0) : '—'}
                 </td>
                 {useProjections ? <td>{projected ? projected.av.toFixed(1) : '-'}</td> : null}
