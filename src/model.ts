@@ -324,24 +324,99 @@ export const compCutoffYear = 2021
 export const compCutoffForGroup: Record<string, number> = { SKILL: 2022, DB: 2022, QB: 2021, OL: 2020, FRONT: 2020 }
 
 export const calibratedAvModel: { intercept: number; features: Array<{ name: ModelSignal; coef: number; mean: number; sd: number }> } = {
-  intercept: 2.2004014562310035,
-  features: [
-    { name: 'draftScore', coef: 0.31947947119672315, mean: 65.99576186138597, sd: 23.344517317385453 },
-    { name: 'logPick', coef: -0.35498588886959903, mean: 4.512995778202057, sd: 0.9852590481027931 },
-    { name: 'pffComp', coef: 0.1006089042230861, mean: 59.37972116603295, sd: 12.105489832279053 },
-    { name: 'pffGrade', coef: 0.2127170956880477, mean: 59.21089987325728, sd: 11.209071232597717 },
-    { name: 'pffProd', coef: 0.1217359963782789, mean: 44.823447401774374, sd: 26.970209736123333 },
-    { name: 'pffEff', coef: -0.16542264368432483, mean: 76.55031685678067, sd: 14.41636658020626 },
-    { name: 'pffClean', coef: 0.02570371785419989, mean: 66.59353612167301, sd: 15.646482576825223 },
-    { name: 'ageScore', coef: 0.0629739702621933, mean: 61.667934093789604, sd: 13.903387389522521 },
-    { name: 'athletic', coef: 0.08308460771343065, mean: 53.28770293332807, sd: 16.108057294946907 },
-    { name: 'size', coef: -0.02159427729646015, mean: 57.2611301521237, sd: 22.821943730203717 },
-    { name: 'isQB', coef: -0.3413377811446161, mean: 0.08238276299112801, sd: 0.27494698280409635 },
-    { name: 'isSkill', coef: -0.1898380898326027, mean: 0.2572877059569075, sd: 0.43713927107998507 },
-    { name: 'isOL', coef: 0.2564974833852538, mean: 0.19011406844106463, sd: 0.3923910159800472 },
-    { name: 'isFront', coef: 0.07089016406692487, mean: 0.2674271229404309, sd: 0.4426170544118608 },
-    { name: 'isDB', coef: 0.11144897240710176, mean: 0.20278833967046894, sd: 0.40207614821593646 },
-  ],
+  "intercept": 2.2784192621518504,
+  "features": [
+    {
+      "name": "draftScore",
+      "coef": 0.39839143849360503,
+      "mean": 19.523883459784596,
+      "sd": 17.603139739037005
+    },
+    {
+      "name": "logPick",
+      "coef": -0.24355579701957905,
+      "mean": 4.475362354416563,
+      "sd": 0.9805907524086608
+    },
+    {
+      "name": "pffComp",
+      "coef": 0.03303679165233535,
+      "mean": 51.04321728691473,
+      "sd": 5.093641829579353
+    },
+    {
+      "name": "pffGrade",
+      "coef": -0.007541067916961973,
+      "mean": 51.02176870748301,
+      "sd": 4.7435183882436425
+    },
+    {
+      "name": "pffProd",
+      "coef": 0.031138220095352248,
+      "mean": 49.27314925970389,
+      "sd": 9.885059893079246
+    },
+    {
+      "name": "pffEff",
+      "coef": -0.061885031818842494,
+      "mean": 53.07408963585435,
+      "sd": 9.76565031587794
+    },
+    {
+      "name": "pffClean",
+      "coef": 0.057528310760892015,
+      "mean": 52.03985594237696,
+      "sd": 7.728104656375217
+    },
+    {
+      "name": "ageScore",
+      "coef": 0.1425155570156769,
+      "mean": 67.45858343337335,
+      "sd": 10.829861481756266
+    },
+    {
+      "name": "athletic",
+      "coef": 0.09991531947871193,
+      "mean": 49.24630711880713,
+      "sd": 12.51088903019528
+    },
+    {
+      "name": "size",
+      "coef": 0.0520202999704647,
+      "mean": 53.08960727147994,
+      "sd": 6.107897395883266
+    },
+    {
+      "name": "isQB",
+      "coef": -0.06794004701590725,
+      "mean": 0.04321728691476591,
+      "sd": 0.20334589503231748
+    },
+    {
+      "name": "isSkill",
+      "coef": -0.09397904561832544,
+      "mean": 0.27871148459383754,
+      "sd": 0.4483652450283577
+    },
+    {
+      "name": "isOL",
+      "coef": 0.1561528016029701,
+      "mean": 0.1600640256102441,
+      "sd": 0.3666654242162558
+    },
+    {
+      "name": "isFront",
+      "coef": 0.0025942868377599147,
+      "mean": 0.30912364945978393,
+      "sd": 0.462132252504046
+    },
+    {
+      "name": "isDB",
+      "coef": -0.006155969213553466,
+      "mean": 0.20888355342136855,
+      "sd": 0.4065110263343695
+    }
+  ]
 }
 
 export const group: Record<string, string> = {
@@ -385,6 +460,15 @@ export function clamp(value: number, min = 0, max = 99) {
 
 export function clean(s = '') {
   return s.toLowerCase().normalize('NFKD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]/g, '')
+}
+
+export function cleanPlayerName(s = '') {
+  return clean(
+    s
+      .replace(/\b(jr|sr|ii|iii|iv|v)\b\.?/gi, '')
+      .replace(/\bjunior\b/gi, '')
+      .replace(/\bsenior\b/gi, '')
+  )
 }
 
 export function avg(values: number[]) {
@@ -775,7 +859,7 @@ export function computeQbTrajectory(
   const cleanName  = clean(playerName)
 
   const latestSeason = pffSeasons.find(
-    (s) => clean(s.name) === cleanName && s.season === latestYear,
+    (s) => cleanPlayerName(s.name) === cleanName && s.season === latestYear,
   )
   if (!latestSeason) return null
 
@@ -783,7 +867,7 @@ export function computeQbTrajectory(
   if (latestVolume === 'insufficient') return null
 
   const priorSeason = pffSeasons.find(
-    (s) => clean(s.name) === cleanName && s.season === priorYear,
+    (s) => cleanPlayerName(s.name) === cleanName && s.season === priorYear,
   )
   const priorVolume = priorSeason ? volumeConfidence(priorSeason.dropbacks) : null
   const hasPrior = priorSeason != null && priorVolume !== 'insufficient'
@@ -922,9 +1006,9 @@ export function getQbPffContext(
   playerName: string,
   pffSeasons: QbPffSeason[],
 ): QbPffContext | null {
-  const cleanName = clean(playerName)
+  const cleanName = cleanPlayerName(playerName)
   const matchedSeasons = pffSeasons
-    .filter((s) => clean(s.name) === cleanName)
+    .filter((s) => cleanPlayerName(s.name) === cleanName)
     .sort((a, b) => a.season - b.season)
 
   if (!matchedSeasons.length) return null
@@ -973,10 +1057,10 @@ export function computeWrTrajectory(
 ): WrTrajectorySignal | null {
   const latestYear = draftYear - 1
   const priorYear = draftYear - 2
-  const cleanName = clean(playerName)
+  const cleanName = cleanPlayerName(playerName)
 
   const latestSeason = pffSeasons.find(
-    (s) => clean(s.name) === cleanName && s.season === latestYear,
+    (s) => cleanPlayerName(s.name) === cleanName && s.season === latestYear,
   )
   if (!latestSeason) return null
 
@@ -984,7 +1068,7 @@ export function computeWrTrajectory(
   if (latestVolume === 'insufficient') return null
 
   const priorSeason = pffSeasons.find(
-    (s) => clean(s.name) === cleanName && s.season === priorYear,
+    (s) => cleanPlayerName(s.name) === cleanName && s.season === priorYear,
   )
   const priorVolume = priorSeason ? wrVolumeConfidence(priorSeason.routes, priorSeason.targets) : null
   const hasPrior = priorSeason != null && priorVolume !== 'insufficient'
@@ -1106,9 +1190,9 @@ export function getWrPffContext(
   playerName: string,
   pffSeasons: WrPffSeason[],
 ): WrPffContext | null {
-  const cleanName = clean(playerName)
+  const cleanName = cleanPlayerName(playerName)
   const matchedSeasons = pffSeasons
-    .filter((s) => clean(s.name) === cleanName)
+    .filter((s) => cleanPlayerName(s.name) === cleanName)
     .sort((a, b) => a.season - b.season)
 
   if (!matchedSeasons.length) return null
