@@ -185,7 +185,7 @@ function normalizePff(profiles: RawPff[]): PffProfile[] {
 
 // ── Build Prospect from Historical ────────────────────────────────────────────
 
-function toProspect(player: Historical, pff?: PffProfile): Prospect {
+function toProspect(player: Historical, pff?: PffProfile, ras?: RasRecord | null): Prospect {
   const def = positionDefaults[player.pos] ?? {}
   // Film defaults at neutral 70 regardless of pick; pick-correlated defaults
   // duplicate the draft signal and add noise (confirmed by signal ablation).
@@ -209,6 +209,8 @@ function toProspect(player: Historical, pff?: PffProfile): Prospect {
     pffEfficiency:  pff?.pff.efficiency ?? 70,
     pffClean:       pff?.pff.clean      ?? 70,
     schemeTag: '',
+    officialRas:  ras?.ras  ?? null,
+    alltimeRas:   ras?.alltimeRas ?? null,
   }
 }
 
@@ -296,6 +298,50 @@ function fmtBias(x: number, dp = 1): string {
   return `${s}${x.toFixed(dp)}`
 }
 
+// ── RAS lookup helpers ────────────────────────────────────────────────────────
+
+type RasRecord = { ras: number | null; alltimeRas: number | null; sourceUrl: string }
+
+function normRasPos(p: string): string {
+  const x = p.toUpperCase().trim()
+  if (['OT', 'OG', 'OC', 'G', 'T', 'C', 'OL'].includes(x)) return 'OL'
+  if (['DE', 'DT', 'NT', 'OLB'].includes(x)) return 'DL'
+  if (['ILB', 'MLB'].includes(x)) return 'LB'
+  if (['FS', 'SS', 'DB'].includes(x)) return 'S'
+  if (x === 'FB') return 'RB'
+  return x  // QB, WR, RB, TE, LB, CB pass through
+}
+
+function buildRasLookup(rows: Record<string, string>[]) {
+  const byNYP = new Map<string, RasRecord>()
+  const byNY  = new Map<string, RasRecord | null>()
+  for (const row of rows) {
+    const rPos = normRasPos(row.pos ?? '')
+    if (!KNOWN_POSITIONS.has(rPos)) continue
+    const yr = parseInt(row.year ?? '')
+    if (!isFinite(yr)) continue
+    const rec: RasRecord = {
+      ras: row.ras && row.ras.trim() !== '' ? parseFloat(row.ras) : null,
+      alltimeRas: row.alltime_ras && row.alltime_ras.trim() !== '' ? parseFloat(row.alltime_ras) : null,
+      sourceUrl: row.source_url ?? '',
+    }
+    const pk = `${clean(row.name ?? '')}|${yr}|${rPos}`
+    byNYP.set(pk, rec)
+    const fk = `${clean(row.name ?? '')}|${yr}`
+    if (!byNY.has(fk)) byNY.set(fk, rec)
+    else byNY.set(fk, null) // ambiguous — multiple positions in same year
+  }
+  return { byNYP, byNY }
+}
+
+function getRas(name: string, year: number, pos: string, lookup: ReturnType<typeof buildRasLookup>): RasRecord | null {
+  const pk = `${clean(name)}|${year}|${pos}`
+  if (lookup.byNYP.has(pk)) return lookup.byNYP.get(pk)!
+  const fk = `${clean(name)}|${year}`
+  const fb = lookup.byNY.get(fk)
+  return fb ?? null  // null means ambiguous or not found
+}
+
 // ── Load data ─────────────────────────────────────────────────────────────────
 
 process.stdout.write('Loading data... ')
@@ -311,7 +357,10 @@ const pffProfiles = normalizePff(pffPayload.profiles)
 const pffByKey = new Map<string, PffProfile>()
 for (const p of pffProfiles) pffByKey.set(`${clean(p.name)}|${p.draftSeason}`, p)
 
-console.log(`✓  pool=${pool.length} pff=${pffProfiles.length}`)
+const rasRows   = parseCsv(readFileSync(DATA + 'ras_main_table.csv', 'utf-8'))
+const rasLookup = buildRasLookup(rasRows)
+
+console.log(`✓  pool=${pool.length} pff=${pffProfiles.length} ras=${rasRows.length}`)
 
 // Pre-compute true walk-forward slot baselines for each eval year (Phase 1).
 // For year Y, baselines are trained on pool players with year < Y — no leakage.
@@ -340,7 +389,8 @@ type EvalRow = {
   projCategory: Category   // argmax of odds
   actualAv:     number
   actualCategory: Category
-  hasPff:       boolean
+  hasPff:          boolean
+  hasOfficialRas:  boolean
   trueWfPickAv: number   // pick-only AV from position-group baselines trained on prior years
   slotBaseline: number   // expected AV for this pick range × position group
 }
@@ -359,7 +409,8 @@ const start = Date.now()
 
 for (const player of evalSet) {
   const pff      = pffByKey.get(`${clean(player.name)}|${player.year}`)
-  const prospect = toProspect(player, pff)
+  const rasRec   = getRas(player.name, player.year, player.pos, rasLookup)
+  const prospect = toProspect(player, pff, rasRec)
   // Walk-forward: restrict BOTH comp pool and pff profiles to prior years only.
   // preDraft=true disables tierWeight/snapBoost/experienceBonus in pffSim so comp
   // selection is based purely on pre-draft signals, not known NFL outcomes.
@@ -389,7 +440,8 @@ for (const player of evalSet) {
     projCategory,
     actualAv:     player.av,
     actualCategory: player.category,
-    hasPff:       !!pff,
+    hasPff:         !!pff,
+    hasOfficialRas: !!(rasRec?.ras != null),
     trueWfPickAv,
     slotBaseline: slotBL,
   })
@@ -587,6 +639,105 @@ console.log(`  Bust precision  (predicted Low → actual Low):   ${(bustPrec * 1
 // ── Build byYear index (used by SLOT VALUE and TOP BOARD sections) ────────────
 const byYear: Record<number, EvalRow[]> = {}
 for (const r of results) (byYear[r.player.year] ??= []).push(r)
+
+// ── RAS COVERAGE ──────────────────────────────────────────────────────────────
+
+console.log('\n══════════════════════════════════════════════════════════════')
+console.log(' RAS COVERAGE  (official RAS availability in evaluation set)')
+console.log('══════════════════════════════════════════════════════════════')
+
+const rasCovPct = (n: number, d: number) => d ? `${(n / d * 100).toFixed(0)}%` : 'N/A'
+const rasPresent = results.filter((r) => r.hasOfficialRas).length
+console.log(`\n  Overall: ${rasPresent}/${results.length} players have official RAS  (${rasCovPct(rasPresent, results.length)})`)
+console.log(`\n  By position:`)
+for (const pos of ['QB', 'RB', 'WR', 'TE', 'OL', 'DL', 'LB', 'CB', 'S']) {
+  const rows = byPos[pos]
+  if (!rows?.length) continue
+  const cov = rows.filter((r) => r.hasOfficialRas).length
+  console.log(`    ${pos.padEnd(3)}  ${String(cov).padStart(4)}/${rows.length}  (${rasCovPct(cov, rows.length)})`)
+}
+console.log(`\n  By pick range:`)
+for (const { label, lo, hi } of pickRanges) {
+  const rows = results.filter((r) => r.player.pick >= lo && r.player.pick <= hi)
+  const cov  = rows.filter((r) => r.hasOfficialRas).length
+  console.log(`    ${label.padEnd(22)}  ${String(cov).padStart(4)}/${rows.length}  (${rasCovPct(cov, rows.length)})`)
+}
+console.log(`\n  By draft year (sample):`)
+const rasYears = Object.entries(byYear).sort((a, b) => Number(a[0]) - Number(b[0]))
+for (const [yr, rows] of rasYears.filter((_, i) => i % 3 === 0).slice(0, 12)) {
+  const cov = rows.filter((r) => r.hasOfficialRas).length
+  console.log(`    ${yr}  ${String(cov).padStart(4)}/${rows.length}  (${rasCovPct(cov, rows.length)})`)
+}
+
+// ── RAS LIFT  (compare full model with and without official RAS) ──────────────
+
+console.log('\n══════════════════════════════════════════════════════════════')
+console.log(' RAS LIFT  (walk-forward model vs same model with RAS disabled)')
+console.log(' Restricted to players that have an official RAS value.')
+console.log('══════════════════════════════════════════════════════════════')
+
+const rasSubset = results.filter((r) => r.hasOfficialRas)
+if (rasSubset.length >= 30) {
+  // Variant A: current model (with official RAS blended in)
+  const varAScores  = rasSubset.map((r) => r.projScore)
+  const varAActuals = rasSubset.map((r) => r.actualAv)
+  const varARho  = spearman(varAScores, varAActuals)
+  const varAMae  = mae(rasSubset.map((r) => r.projAv), varAActuals)
+  const varABias = bias(rasSubset.map((r) => r.projAv), varAActuals)
+
+  // Variant B: re-run without official RAS for same players
+  const rasOffScores: number[] = []
+  const rasOffAvs:    number[] = []
+  for (const r of rasSubset) {
+    const ablPool        = walkForward ? pool.filter((p) => p.year < r.player.year) : pool
+    const ablPffProfiles = walkForward ? pffProfiles.filter((p) => p.draftSeason < r.player.year) : pffProfiles
+    const proj = project(r.prospect, ablPool, ablPffProfiles, r.player.id, undefined, undefined, undefined, undefined, walkForward, { disableOfficialRas: true })
+    rasOffScores.push(proj.score)
+    rasOffAvs.push(proj.expectedAv)
+  }
+  const varBRho  = spearman(rasOffScores, varAActuals)
+  const varBMae  = mae(rasOffAvs, varAActuals)
+  const varBBias = bias(rasOffAvs, varAActuals)
+
+  const dsign = (d: number) => (d >= 0 ? '+' : '') + d.toFixed(3)
+  console.log(`\n  Players with official RAS: n=${rasSubset.length}`)
+  console.log(`\n  ${'Variant'.padEnd(22)} ${'ρ'.padStart(7)} ${'MAE'.padStart(7)} ${'bias'.padStart(8)}`)
+  console.log(`  ${'With official RAS'.padEnd(22)} ${fmt(varARho).padStart(7)} ${varAMae.toFixed(1).padStart(7)} ${(varABias >= 0 ? '+' : '') + varABias.toFixed(1).padStart(7)} AV`)
+  console.log(`  ${'Without official RAS'.padEnd(22)} ${fmt(varBRho).padStart(7)} ${varBMae.toFixed(1).padStart(7)} ${(varBBias >= 0 ? '+' : '') + varBBias.toFixed(1).padStart(7)} AV`)
+  const dRho = varARho - varBRho
+  const dMae = varAMae - varBMae
+  console.log(`  ${'RAS Δ (with − without)'.padEnd(22)} ${dsign(dRho).padStart(7)} ${(dMae >= 0 ? '+' : '') + dMae.toFixed(1).padStart(7)}`)
+  console.log(`\n  Positive Δρ = RAS helps ranking; positive ΔMAE = RAS hurts AV calibration.`)
+
+  // By position
+  console.log(`\n  By position:`)
+  console.log(`  ${'Pos'.padEnd(4)} ${'n'.padStart(5)} ${'ρ(+RAS)'.padStart(9)} ${'ρ(−RAS)'.padStart(9)} ${'Δρ'.padStart(7)} ${'MAE(+)'.padStart(8)} ${'MAE(-)'.padStart(8)} ${'ΔMAE'.padStart(7)}`)
+  let rasIdx = 0
+  for (const pos of ['QB', 'RB', 'WR', 'TE', 'OL', 'DL', 'LB', 'CB', 'S']) {
+    const posRows = rasSubset.filter((r) => r.player.pos === pos)
+    if (posRows.length < 10) continue
+    const posScores = posRows.map((r) => r.projScore)
+    const posActuals = posRows.map((r) => r.actualAv)
+    const posRhoA = spearman(posScores, posActuals)
+    const posMaeA = mae(posRows.map((r) => r.projAv), posActuals)
+    // Get the corresponding rasOff scores for this position subset
+    // We need to map posRows back to indices in rasSubset
+    const posOffScores: number[] = []
+    const posOffAvs: number[]    = []
+    for (const r of posRows) {
+      const idx = rasSubset.indexOf(r)
+      posOffScores.push(rasOffScores[idx])
+      posOffAvs.push(rasOffAvs[idx])
+    }
+    const posRhoB = spearman(posOffScores, posActuals)
+    const posMaeB = mae(posOffAvs, posActuals)
+    const posSign = (x: number) => (x >= 0 ? '+' : '') + x.toFixed(3)
+    const dMaeSign = (x: number) => (x >= 0 ? '+' : '') + x.toFixed(1)
+    console.log(`  ${pos.padEnd(4)} ${String(posRows.length).padStart(5)} ${fmt(posRhoA).padStart(9)} ${fmt(posRhoB).padStart(9)} ${posSign(posRhoA - posRhoB).padStart(7)} ${posMaeA.toFixed(1).padStart(8)} ${posMaeB.toFixed(1).padStart(8)} ${dMaeSign(posMaeA - posMaeB).padStart(7)}`)
+  }
+} else {
+  console.log(`\n  Insufficient players with official RAS for comparison (n=${rasSubset.length} < 30).`)
+}
 
 // ── 3. SLOT VALUE DIAGNOSTICS ────────────────────────────────────────────────────
 
@@ -793,6 +944,11 @@ if (doAblation) {
       name: 'Age-adj PFF off',
       modify: (p) => p,
       opts: { disableAgeAdjPff: true },
+    },
+    {
+      name: 'Official RAS off',
+      modify: (p) => p,
+      opts: { disableOfficialRas: true },
     },
   ]
 

@@ -27,6 +27,8 @@ export type Prospect = {
   pffEfficiency: number
   pffClean: number
   schemeTag: string
+  officialRas?: number | null
+  alltimeRas?: number | null
 }
 
 export type Historical = {
@@ -212,6 +214,14 @@ export const group: Record<string, string> = {
 
 // Scout/film inputs removed — users have no film data and the signal added noise.
 // Weights redistribute proportionally from the original scout weight (QB .38 / SKILL .33 etc.)
+// Official RAS blend weight by group — how much official RAS (0-10 mapped to 0-100)
+// replaces the internal combine percentile athletic score when RAS is available.
+// QB: low because athletic testing is less predictive than production/accuracy/age for QBs.
+// OL/DB: higher because size+agility thresholds are primary evaluation criteria.
+export const rasBlendByGroup: Record<string, number> = {
+  QB: 0.20, SKILL: 0.55, OL: 0.60, FRONT: 0.55, DB: 0.65,
+}
+
 export const signalWeights: Record<string, { draft: number; athletic: number; size: number; age: number; strength: number }> = {
   QB:    { draft: .55, athletic: .08, size: .08, age: .19, strength: .10 },
   SKILL: { draft: .45, athletic: .28, size: .05, age: .15, strength: .07 },
@@ -594,6 +604,7 @@ export type ProjectOpts = {
   disableElitePremium?: boolean
   calibBlendOverride?: number
   disableAgeAdjPff?: boolean
+  disableOfficialRas?: boolean
 }
 
 export function project(input: Prospect, history: Historical[], pffProfiles: PffProfile[], excludeId?: string, y1Data?: Y1Data, careerStats?: CareerStatMap, injurySeverity?: 'major' | 'moderate' | 'minor', gradeDelta?: number | null, preDraft = false, opts?: ProjectOpts) {
@@ -612,7 +623,12 @@ export function project(input: Prospect, history: Historical[], pffProfiles: Pff
   const stats = (k: keyof Historical) => pool.map((p) => p[k]).filter((v): v is number => typeof v === 'number' && Number.isFinite(v))
   const pct = (value: number, values: number[], low = false) => values.length ? values.filter((v) => low ? v >= value : v <= value).length / values.length * 100 : 50
   const draft = 100 * Math.pow(1 - (input.pick - 1) / 259, .58)
-  const athletic = avg([pct(input.forty, stats('forty'), true), pct(input.vertical, stats('vertical')), pct(input.broad, stats('broad')), pct(input.cone, stats('cone'), true), pct(input.shuttle, stats('shuttle'), true)])
+  const combineAthleticScore = avg([pct(input.forty, stats('forty'), true), pct(input.vertical, stats('vertical')), pct(input.broad, stats('broad')), pct(input.cone, stats('cone'), true), pct(input.shuttle, stats('shuttle'), true)])
+  const officialRasSignal = (input.officialRas != null && !opts?.disableOfficialRas)
+    ? clamp(input.officialRas * 10, 0, 100) : null
+  const athletic = officialRasSignal != null
+    ? blend(combineAthleticScore, officialRasSignal, rasBlendByGroup[grp] ?? 0.55)
+    : combineAthleticScore
   const size = avg([pct(input.height, stats('height')), pct(input.weight, stats('weight'))])
   // School tier contributes a small direct score adjustment (not via a scout intermediate)
   const schoolBoost = schoolTierBoost(input.school)
@@ -793,6 +809,10 @@ export function project(input: Prospect, history: Historical[], pffProfiles: Pff
     pffBlend,
     percentile,
     ras,
+    officialRAS: input.officialRas ?? null,
+    alltimeRAS: input.alltimeRas ?? null,
+    combineAthleticScore,
+    athleticSource: (officialRasSignal != null ? 'official_ras' : 'combine_percentile') as 'official_ras' | 'combine_percentile',
     flags,
     y1Coverage,
     signals: { draft, athletic, size, age, strength, pff: pffSignal },

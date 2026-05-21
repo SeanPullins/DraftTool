@@ -187,6 +187,7 @@ export default function App() {
   const [rbSeasons, setRbSeasons] = useState<RbSeason[]>([])
   const [careerStats, setCareerStats] = useState<CareerStatMap>({})
   const [prospectsQb2027, setProspectsQb2027] = useState<ProspectQB[]>([])
+  const [rasLookup, setRasLookup] = useState<AppRasLookup | null>(null)
   const [boardView, setBoardView] = useState<'list' | 'grid'>('list')
   const [boardOrder, setBoardOrder] = useState<string[]>([])
   const [dragId, setDragId] = useState('')
@@ -309,7 +310,7 @@ export default function App() {
   useEffect(() => {
     async function load() {
       try {
-        const [combineCsv, draftCsv, pffPayload, extraData, consensusData, scoutData, injuryData, qbSeasonData, wrSeasonData, rbSeasonData, careerStatsData, prospectsQbData] = await Promise.all([
+        const [combineCsv, draftCsv, pffPayload, extraData, consensusData, scoutData, injuryData, qbSeasonData, wrSeasonData, rbSeasonData, careerStatsData, prospectsQbData, rasCsv] = await Promise.all([
           fetch(`${assetBase}data/combine.csv`).then((r) => r.text()),
           fetch(`${assetBase}data/draft_picks.csv`).then((r) => r.text()),
           loadPffPayload(),
@@ -322,6 +323,7 @@ export default function App() {
           fetch(`${assetBase}data/rb_seasons.json`).then((r) => r.json()).catch(() => null),
           fetch(`${assetBase}data/career_stats.json`).then((r) => r.json()).catch(() => null),
           fetch(`${assetBase}data/prospects_2027_qb.json`).then((r) => r.json()).catch(() => null),
+          fetch(`${assetBase}data/ras_main_table.csv`).then((r) => r.text()).catch(() => ''),
         ])
         const allProspects = buildProspectPool(parseCsv(combineCsv), parseCsv(draftCsv))
         const extraProspects = buildExtraProspects(extraData)
@@ -341,6 +343,7 @@ export default function App() {
         if (rbSeasonData?.records?.length) setRbSeasons(rbSeasonData.records)
         if (careerStatsData && typeof careerStatsData === 'object') setCareerStats(careerStatsData as CareerStatMap)
         if (Array.isArray(prospectsQbData) && prospectsQbData.length) setProspectsQb2027(prospectsQbData as ProspectQB[])
+        if (rasCsv) setRasLookup(buildAppRasLookup(parseCsv(rasCsv)))
       } catch {
         setError('Data files are missing. Run npm run data:refresh, then reload.')
       } finally {
@@ -403,7 +406,8 @@ export default function App() {
     }
 
     const pffMatch = pffProfiles.find((profile) => samePlayerSeason(profile, match.name, match.year, match.pos))
-    setInput(prospectFromHistorical(match, pffMatch))
+    const rasMatch = rasLookup ? getAppRas(match.name, match.year, match.pos, rasLookup) : null
+    setInput(prospectFromHistorical(match, pffMatch, rasMatch))
     setSelectedSavedId('')
     setNotes('')
     setPffQuery(pffMatch ? pffLabel(pffMatch) : '')
@@ -485,7 +489,7 @@ export default function App() {
       'PROJECTION',
       `Score: ${score} (${Math.round(projection.scoreLow)}–${Math.round(projection.scoreHigh)}) · ${projection.grade}`,
       `Expected AV: ${projection.expectedAv.toFixed(1)} | Floor: ${projection.floor.toFixed(1)} | Ceiling: ${projection.ceiling.toFixed(1)}`,
-      `Games: ${Math.round(projection.games)} | Starter yrs: ${projection.starts.toFixed(1)} | RAS: ${projection.ras.toFixed(1)}`,
+      `Games: ${Math.round(projection.games)} | Starter yrs: ${projection.starts.toFixed(1)} | ${projection.officialRAS != null ? `Off. RAS: ${projection.officialRAS.toFixed(2)}` : `RAS: ${projection.ras.toFixed(1)}`}`,
       '',
       'OUTCOME ODDS',
       ...([...outcomeOrder].reverse().map((o) => `  ${outcomeAVRange[o as Category]}: ${Math.round((projection.odds[o as Category] || 0) * 100)}%`)),
@@ -642,7 +646,7 @@ export default function App() {
     </div> : page === 'players' ? <div className="classPage">
       <PlayerBrowser pool={lookupPool} history={prospects} histFlagMap={histFlagMap} onOpenModal={openModal} onCompare={handleCompare} />
     </div> : page === 'compare' ? <div className="classPage">
-      <CompareView pool={lookupPool} history={prospects} pffProfiles={pffProfiles} y1Data={y1Data} careerStats={careerStats} initialQuery={compareQuery} />
+      <CompareView pool={lookupPool} history={prospects} pffProfiles={pffProfiles} y1Data={y1Data} careerStats={careerStats} initialQuery={compareQuery} rasLookup={rasLookup} />
     </div> : page === 'trade' ? <div className="classPage">
       <TradeCalculator />
     </div> : page === 'rankings' ? <div className="classPage">
@@ -817,7 +821,7 @@ export default function App() {
             <Metric label="NFL impact" value={projection.impactScore.toFixed(1)} />
             <Metric label="Games" value={Math.round(projection.games).toString()} />
             <Metric label="Starter yrs" value={projection.starts.toFixed(1)} />
-            <Metric label="RAS" value={projection.ras.toFixed(1)} />
+            <Metric label={projection.officialRAS != null ? 'Off. RAS' : 'RAS'} value={projection.officialRAS != null ? projection.officialRAS.toFixed(2) : projection.ras.toFixed(1)} />
           </div>
         </section>
 
@@ -1121,7 +1125,7 @@ function TableWrap({ children }: { children: ReactNode }) {
   return <div className="tableWrap">{children}</div>
 }
 
-function CompareView({ pool, history, pffProfiles, y1Data, careerStats, initialQuery = '' }: { pool: Historical[]; history: Historical[]; pffProfiles: PffProfile[]; y1Data?: Y1Data; careerStats?: CareerStatMap; initialQuery?: string }) {
+function CompareView({ pool, history, pffProfiles, y1Data, careerStats, initialQuery = '', rasLookup = null }: { pool: Historical[]; history: Historical[]; pffProfiles: PffProfile[]; y1Data?: Y1Data; careerStats?: CareerStatMap; initialQuery?: string; rasLookup?: AppRasLookup | null }) {
   const [q1, setQ1] = useState(initialQuery)
   const [q2, setQ2] = useState('')
   const [p1, setP1] = useState<Historical | null>(null)
@@ -1153,8 +1157,10 @@ function CompareView({ pool, history, pffProfiles, y1Data, careerStats, initialQ
 
   const pff1 = useMemo(() => p1 ? pffProfiles.find((pf) => samePlayerSeason(pf, p1.name, p1.year, p1.pos)) : undefined, [p1, pffProfiles])
   const pff2 = useMemo(() => p2 ? pffProfiles.find((pf) => samePlayerSeason(pf, p2.name, p2.year, p2.pos)) : undefined, [p2, pffProfiles])
-  const proj1 = useMemo(() => p1 ? project(prospectFromHistorical(p1, pff1), history, pffProfiles, p1.id, y1Data, careerStats) : null, [p1, pff1, history, pffProfiles, y1Data, careerStats])
-  const proj2 = useMemo(() => p2 ? project(prospectFromHistorical(p2, pff2), history, pffProfiles, p2.id, y1Data, careerStats) : null, [p2, pff2, history, pffProfiles, y1Data, careerStats])
+  const ras1 = useMemo(() => p1 && rasLookup ? getAppRas(p1.name, p1.year, p1.pos, rasLookup) : null, [p1, rasLookup])
+  const ras2 = useMemo(() => p2 && rasLookup ? getAppRas(p2.name, p2.year, p2.pos, rasLookup) : null, [p2, rasLookup])
+  const proj1 = useMemo(() => p1 ? project(prospectFromHistorical(p1, pff1, ras1), history, pffProfiles, p1.id, y1Data, careerStats) : null, [p1, pff1, ras1, history, pffProfiles, y1Data, careerStats])
+  const proj2 = useMemo(() => p2 ? project(prospectFromHistorical(p2, pff2, ras2), history, pffProfiles, p2.id, y1Data, careerStats) : null, [p2, pff2, ras2, history, pffProfiles, y1Data, careerStats])
 
   return <section className="panel tablePanel classPanel">
     <div className="panelTitle">
@@ -1180,15 +1186,16 @@ function CompareView({ pool, history, pffProfiles, y1Data, careerStats, initialQ
       <div className="compareVisual">
         <RadarChart a={proj1.signals} b={proj2.signals} aLabel={p1.name} bLabel={p2.name} />
       </div>
-      <CompareTable p1={p1} p2={p2} proj1={proj1} proj2={proj2} pff1={pff1} pff2={pff2} />
+      <CompareTable p1={p1} p2={p2} proj1={proj1} proj2={proj2} pff1={pff1} pff2={pff2} ras1={ras1} ras2={ras2} />
     </>}
   </section>
 }
 
-function CompareTable({ p1, p2, proj1, proj2, pff1, pff2 }: {
+function CompareTable({ p1, p2, proj1, proj2, pff1, pff2, ras1 = null, ras2 = null }: {
   p1: Historical; p2: Historical
   proj1: ReturnType<typeof project>; proj2: ReturnType<typeof project>
   pff1: PffProfile | undefined; pff2: PffProfile | undefined
+  ras1?: AppRasRecord | null; ras2?: AppRasRecord | null
 }) {
   type Dir = 'h' | 'l' | 'n'
   type CR = { label: string; v1: string; v2: string; n1: number | null; n2: number | null; dir: Dir }
@@ -1222,6 +1229,8 @@ function CompareTable({ p1, p2, proj1, proj2, pff1, pff2 }: {
         row('Broad jump (in.)', p1.broad, p2.broad, 'h'),
         row('3-cone drill', p1.cone, p2.cone, 'l', (v) => v.toFixed(2)),
         row('Shuttle', p1.shuttle, p2.shuttle, 'l', (v) => v.toFixed(2)),
+        row('Official RAS', ras1?.ras ?? null, ras2?.ras ?? null, 'h', (v) => v.toFixed(2)),
+        row('Alltime RAS', ras1?.alltimeRas ?? null, ras2?.alltimeRas ?? null, 'h', (v) => v.toFixed(2)),
       ],
     },
     ...((pff1 || pff2) ? [{
@@ -3236,7 +3245,7 @@ function stripSavedFields(saved: SavedProspect): Prospect {
   return prospect
 }
 
-function prospectFromHistorical(player: Historical, pff?: PffProfile): Prospect {
+function prospectFromHistorical(player: Historical, pff?: PffProfile, ras?: AppRasRecord | null): Prospect {
   const baseline = player.pick <= 32 ? 84 : player.pick <= 64 ? 78 : player.pick <= 100 ? 72 : player.pick <= 150 ? 66 : 60
   const template = withPositionDefaults(blankProspect, player.pos)
   return {
@@ -3262,6 +3271,8 @@ function prospectFromHistorical(player: Historical, pff?: PffProfile): Prospect 
     pffEfficiency: pff?.pff.efficiency ?? baseline,
     pffClean: pff?.pff.clean ?? 70,
     schemeTag: '',
+    officialRas: ras?.ras ?? null,
+    alltimeRas: ras?.alltimeRas ?? null,
   }
 }
 
@@ -3392,6 +3403,52 @@ function headerKey(value: string) {
 
 function withPositionDefaults(base: Prospect, pos: string): Prospect {
   return { ...base, ...positionDefaults[pos], pos }
+}
+
+// ── RAS lookup ────────────────────────────────────────────────────────────────
+
+type AppRasRecord = { ras: number | null; alltimeRas: number | null; sourceUrl: string }
+type AppRasLookup = { byNYP: Map<string, AppRasRecord>; byNY: Map<string, AppRasRecord | null> }
+
+function normRasPos(p: string): string {
+  const x = p.toUpperCase().trim()
+  if (['OT', 'OG', 'OC', 'G', 'T', 'C', 'OL'].includes(x)) return 'OL'
+  if (['DE', 'DT', 'NT', 'OLB'].includes(x)) return 'DL'
+  if (['ILB', 'MLB'].includes(x)) return 'LB'
+  if (['FS', 'SS', 'DB', 'SAF'].includes(x)) return 'S'
+  if (x === 'FB') return 'RB'
+  return x
+}
+
+const KNOWN_POSITIONS_RAS = new Set(['QB', 'RB', 'WR', 'TE', 'OL', 'DL', 'LB', 'CB', 'S'])
+
+function buildAppRasLookup(rows: Row[]): AppRasLookup {
+  const byNYP = new Map<string, AppRasRecord>()
+  const byNY  = new Map<string, AppRasRecord | null>()
+  for (const row of rows) {
+    const rPos = normRasPos(row.pos ?? '')
+    if (!KNOWN_POSITIONS_RAS.has(rPos)) continue
+    const yr = parseInt(row.year ?? '')
+    if (!isFinite(yr)) continue
+    const rec: AppRasRecord = {
+      ras:       row.ras && row.ras.trim() !== '' ? parseFloat(row.ras) : null,
+      alltimeRas: row.alltime_ras && row.alltime_ras.trim() !== '' ? parseFloat(row.alltime_ras) : null,
+      sourceUrl: row.source_url ?? '',
+    }
+    const pk = `${clean(row.name ?? '')}|${yr}|${rPos}`
+    byNYP.set(pk, rec)
+    const fk = `${clean(row.name ?? '')}|${yr}`
+    if (!byNY.has(fk)) byNY.set(fk, rec)
+    else byNY.set(fk, null) // ambiguous — skip fallback for this name+year
+  }
+  return { byNYP, byNY }
+}
+
+function getAppRas(name: string, year: number, pos: string, lookup: AppRasLookup): AppRasRecord | null {
+  const pk = `${clean(name)}|${year}|${pos}`
+  if (lookup.byNYP.has(pk)) return lookup.byNYP.get(pk)!
+  const fk = `${clean(name)}|${year}`
+  return lookup.byNY.get(fk) ?? null
 }
 
 function parseCsv(text: string): Row[] {
