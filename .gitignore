@@ -10,6 +10,7 @@ public/data/*
 !public/data/wr_seasons.json
 !public/data/rb_seasons.json
 !public/data/prospects_2027_qb.json
+!public/data/ras_main_table.csv
 artifacts
 .env
 .env.local
