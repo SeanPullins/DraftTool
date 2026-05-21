@@ -1,0 +1,19 @@
+{
+  "activeModel": "V4",
+  "models": {
+    "V4": {
+      "label": "V4 full-board calibration",
+      "status": "active",
+      "overallMae": 13.214671591981164,
+      "overallRmse": 21.122218572048283,
+      "overallSpearman": 0.5715707750183163
+    },
+    "V5": {
+      "label": "V5 position-specific framework",
+      "status": "framework",
+      "overallMae": null,
+      "overallRmse": null,
+      "overallSpearman": null
+    }
+  }
+}
