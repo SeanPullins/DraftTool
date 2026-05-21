@@ -1,6 +1,6 @@
 import { useDeferredValue, useEffect, useMemo, useRef, useState, type ChangeEvent, type CSSProperties, type ReactNode } from 'react'
-import type { Category, Prospect, Historical, PffProfile, QbSeason, QbPffSeason, WrSeason, RbSeason, Y1Data, CareerSeasonStat, CareerStatMap, ModelSignal } from './model'
-import { matureOutcomeCutoff, outcomeOrder, compCutoffYear, compCutoffForGroup, calibratedAvModel, group, signalWeights, clamp, clean, avg, q, project, isMatureOutcome, computeQbTrajectory, getQbPffContext } from './model'
+import type { Category, Prospect, Historical, PffProfile, QbSeason, QbPffSeason, WrPffSeason, WrSeason, RbSeason, Y1Data, CareerSeasonStat, CareerStatMap, ModelSignal } from './model'
+import { matureOutcomeCutoff, outcomeOrder, compCutoffYear, compCutoffForGroup, calibratedAvModel, group, signalWeights, clamp, clean, avg, q, project, isMatureOutcome, computeQbTrajectory, getQbPffContext, getWrPffContext } from './model'
 
 type Row = Record<string, string>
 type SavedProspect = Prospect & { id: string; updatedAt: string; notes?: string; savedScore?: number }
@@ -184,6 +184,7 @@ export default function App() {
   const [compareQuery, setCompareQuery] = useState('')
   const [qbSeasons, setQbSeasons] = useState<QbSeason[]>([])
   const [qbPffSeasons, setQbPffSeasons] = useState<QbPffSeason[]>([])
+  const [wrPffSeasons, setWrPffSeasons] = useState<WrPffSeason[]>([])
   const [wrSeasons, setWrSeasons] = useState<WrSeason[]>([])
   const [rbSeasons, setRbSeasons] = useState<RbSeason[]>([])
   const [careerStats, setCareerStats] = useState<CareerStatMap>({})
@@ -238,6 +239,15 @@ export default function App() {
 
   const activeQbTrajectory = activeQbPffContext?.trajectory ?? null
 
+  const activeWrPffContext = useMemo(
+    () => input.pos === 'WR'
+      ? getWrPffContext(input.draftSeason, input.name, wrPffSeasons)
+      : null,
+    [input.pos, input.draftSeason, input.name, wrPffSeasons],
+  )
+
+  const activeWrTrajectory = activeWrPffContext?.trajectory ?? null
+
   const fallbackQbGradeDelta = useMemo(
     () => input.pos === 'QB'
       ? (prospectsQb2027.find((p) => clean(p.name) === clean(input.name))?.trajectory.gradeDelta ?? null)
@@ -248,10 +258,12 @@ export default function App() {
   const activeQbGradeDelta = activeQbTrajectory?.gradeDelta ?? fallbackQbGradeDelta
 
   const projectedInput = useMemo<Prospect>(
-    () => input.pos === 'QB' && activeQbTrajectory
-      ? { ...input, qbTrajectory: activeQbTrajectory }
-      : input,
-    [input, activeQbTrajectory],
+    () => {
+      if (input.pos === 'QB' && activeQbTrajectory) return { ...input, qbTrajectory: activeQbTrajectory }
+      if (input.pos === 'WR' && activeWrTrajectory) return { ...input, wrTrajectory: activeWrTrajectory }
+      return input
+    },
+    [input, activeQbTrajectory, activeWrTrajectory],
   )
 
   const projection = useMemo(
@@ -279,15 +291,20 @@ export default function App() {
     () => saved
       .map((player) => {
         const qbContext = player.pos === 'QB' ? getQbPffContext(player.draftSeason, player.name, qbPffSeasons) : null
-        const playerWithQbContext = qbContext?.trajectory ? { ...player, qbTrajectory: qbContext.trajectory } : player
-        const projection = project(playerWithQbContext, prospects, pffProfiles, undefined, y1Data, careerStats, undefined, qbContext?.trajectory?.gradeDelta ?? null)
+        const wrContext = player.pos === 'WR' ? getWrPffContext(player.draftSeason, player.name, wrPffSeasons) : null
+        const playerWithContext = qbContext?.trajectory
+          ? { ...player, qbTrajectory: qbContext.trajectory }
+          : wrContext?.trajectory
+            ? { ...player, wrTrajectory: wrContext.trajectory }
+            : player
+        const projection = project(playerWithContext, prospects, pffProfiles, undefined, y1Data, careerStats, undefined, qbContext?.trajectory?.gradeDelta ?? null)
         const patternAlerts = extractPatternAlerts(projection.fullComps, histFlagMap)
         const historical = lookupPool.find((h) => clean(h.name) === clean(player.name) && h.year === player.draftSeason && h.pos === player.pos) ?? null
         const earlyFlag = historical ? (histFlagMap.get(historical.id) ?? null) : null
         return { player, projection, patternAlerts, earlyFlag }
       })
       .sort((a, b) => b.projection.score - a.projection.score),
-    [saved, prospects, pffProfiles, y1Data, careerStats, histFlagMap, lookupPool, qbPffSeasons],
+    [saved, prospects, pffProfiles, y1Data, careerStats, histFlagMap, lookupPool, qbPffSeasons, wrPffSeasons],
   )
 
   const orderedBoard = useMemo(() => {
