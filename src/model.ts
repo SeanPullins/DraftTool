@@ -216,7 +216,7 @@ export const signalWeights: Record<string, { draft: number; athletic: number; si
   QB:    { draft: .55, athletic: .08, size: .08, age: .19, strength: .10 },
   SKILL: { draft: .45, athletic: .28, size: .05, age: .15, strength: .07 },
   // OL: athletic strongly predictive (r=−0.25 to −0.30); age and size both matter
-  OL:    { draft: .45, athletic: .26, size: .23, age: .16, strength: .13 },
+  OL:    { draft: .37, athletic: .21, size: .19, age: .13, strength: .10 },
   // FRONT: age r=−0.327 and bench r=0.219 are the dominant signals
   FRONT: { draft: .33, athletic: .18, size: .09, age: .18, strength: .22 },
   // DB: cone/shuttle r=−0.21 to −0.22, age r=−0.294 → raise athletic+age
