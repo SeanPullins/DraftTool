@@ -557,7 +557,26 @@ export function schoolTierBoost(school: string): number {
   return 0
 }
 
-// ── Danger flags ──────────────────────────────────────────────────────────────
+// Age-adjusted PFF production multiplier (Phase 7).
+// Younger prospects producing at the same PFF level have more remaining ceiling;
+// older prospects have already demonstrated their peak output. Applied to pffSignal only,
+// not to draft capital, so it doesn't interfere with the draft-slot-based ranking.
+// Conservative multipliers to avoid overfitting; evaluated via ablation.
+function ageProductionMultiplier(age: number | null, pos: string): number {
+  const a = age ?? 22
+  if (pos === 'QB') {
+    if (a <= 20.8) return 1.08
+    if (a <= 21.6) return 1.04
+    if (a <= 22.8) return 1.00
+    if (a <= 24.0) return 0.96
+    return 0.91
+  }
+  if (a <= 20.5) return 1.08
+  if (a <= 21.2) return 1.04
+  if (a <= 22.0) return 1.00
+  if (a <= 23.0) return 0.96
+  return 0.91
+}
 
 function dangerFlags(input: Prospect, proj: { ceiling: number; floor: number; pffBlend: number }): string[] {
   const flags: string[] = []
@@ -571,7 +590,13 @@ function dangerFlags(input: Prospect, proj: { ceiling: number; floor: number; pf
 
 // ── Main projection engine ────────────────────────────────────────────────────
 
-export function project(input: Prospect, history: Historical[], pffProfiles: PffProfile[], excludeId?: string, y1Data?: Y1Data, careerStats?: CareerStatMap, injurySeverity?: 'major' | 'moderate' | 'minor', gradeDelta?: number | null, preDraft = false) {
+export type ProjectOpts = {
+  disableElitePremium?: boolean
+  calibBlendOverride?: number
+  disableAgeAdjPff?: boolean
+}
+
+export function project(input: Prospect, history: Historical[], pffProfiles: PffProfile[], excludeId?: string, y1Data?: Y1Data, careerStats?: CareerStatMap, injurySeverity?: 'major' | 'moderate' | 'minor', gradeDelta?: number | null, preDraft = false, opts?: ProjectOpts) {
   // Position-specific maturation cutoffs prevent underestimating AV for slow-developing groups.
   // OL/FRONT need 6+ seasons for AV to reflect sustained contribution (cutoff 2020).
   // SKILL/DB contribute immediately so 4 seasons is adequate (cutoff 2022).
@@ -617,6 +642,9 @@ export function project(input: Prospect, history: Historical[], pffProfiles: Pff
     // DB
     pffSignal = normPff.production * .42 + normPff.efficiency * .36 + normPff.grade * .22
   }
+  if (!opts?.disableAgeAdjPff) {
+    pffSignal = clamp(pffSignal * ageProductionMultiplier(input.age, input.pos), 0, 100)
+  }
   const wt = signalWeights[grp] ?? signalWeights['SKILL']
   const baseScore = draft * wt.draft + athletic * wt.athletic + size * wt.size + age * wt.age + strength * wt.strength
   // For SKILL, require exact position match; for other groups allow same-group comps
@@ -647,7 +675,7 @@ export function project(input: Prospect, history: Historical[], pffProfiles: Pff
   // leaning more on the calibrated regression for Rd1-2 corrects systematic AV underprediction.
   // QB comps outperform the position-agnostic regression (QBs have distinct AV dynamics);
   // use a lower blend for QB so comps dominate. Non-QB top picks benefit from the regression.
-  const calibBlend = grp === 'QB' ? 0.06 : (input.pick <= 32 ? 0.26 : input.pick <= 64 ? 0.16 : 0.10)
+  const calibBlend = opts?.calibBlendOverride ?? (grp === 'QB' ? 0.06 : (input.pick <= 32 ? 0.26 : input.pick <= 64 ? 0.16 : 0.10))
   const expectedAv = blend(compExpectedAv, calibratedAv, calibBlend)
   const posAvValues = pool.filter((p) => p.av >= 0).map((p) => p.av)
   const posRelScore = posAvValues.length >= 15 ? pct(expectedAv, posAvValues) : avToScore(expectedAv)
@@ -660,7 +688,7 @@ export function project(input: Prospect, history: Historical[], pffProfiles: Pff
   ) : 0
   // Top picks receive more coaching investment and playing time than comps alone predict;
   // premium decays from ~5pts at pick 1 to ~1pt at pick 40.
-  const elitePremium = input.pick <= 40 ? Math.max(0, (41 - input.pick) * 0.13) : 0
+  const elitePremium = (!opts?.disableElitePremium && input.pick <= 40) ? Math.max(0, (41 - input.pick) * 0.13) : 0
   const scoreAdj = trajectoryAdj - injuryPenalty + schoolBoost * 0.05 + elitePremium
   const score = clamp(rawScore * 0.46 + avScore * 0.54 + scoreAdj, 1, 99)
   const games = blend(comps.reduce((sum, c) => sum + c.player.games * c.sim, 0) / histWeight, pffComps.reduce((sum, c) => sum + (c.profile.nfl?.games || 0) * c.sim, 0) / pffWeight, pffBlend)
@@ -717,6 +745,32 @@ export function project(input: Prospect, history: Historical[], pffProfiles: Pff
     return false
   }).length : 0
 
+  // Confidence scoring (Phase 8): how much to trust this projection.
+  // Combines data completeness (fields present), comp density, and position volatility.
+  const missingFields: string[] = []
+  if (input.age == null) missingFields.push('age')
+  if (input.height == null) missingFields.push('height')
+  if (input.weight == null) missingFields.push('weight')
+  if (input.forty == null) missingFields.push('forty')
+  if (input.vertical == null) missingFields.push('vertical')
+  if (input.broad == null) missingFields.push('broad')
+  if (input.cone == null) missingFields.push('cone')
+  if (input.shuttle == null) missingFields.push('shuttle')
+  if (!pffBlend) missingFields.push('PFF profile')
+  // Weighted completeness: combine (57pts) + bio (13pts) + PFF (30pts) = 100
+  const dataCompleteness = Math.round(
+    (input.forty != null ? 14 : 0) + (input.vertical != null ? 10 : 0) +
+    (input.broad != null ? 10 : 0) + (input.cone != null ? 11 : 0) + (input.shuttle != null ? 12 : 0) +
+    (input.age != null ? 5 : 0) + (input.height != null ? 4 : 0) + (input.weight != null ? 4 : 0) +
+    (pffBlend > 0 ? 30 : 0)
+  )
+  const qualityComps = comps.slice(0, 20).filter((c) => c.sim > 0.3).length
+  const compDensityScore = Math.round(Math.min(qualityComps / 10, 1) * 100)
+  const posVolatilityPenalty = grp === 'QB' ? 8 : (input.pos === 'RB' ? 4 : 0)
+  const confidenceScore = Math.max(5, Math.min(99, Math.round(
+    dataCompleteness * 0.65 + compDensityScore * 0.35 - posVolatilityPenalty
+  )))
+
   return {
     score,
     scoreLow,
@@ -742,5 +796,6 @@ export function project(input: Prospect, history: Historical[], pffProfiles: Pff
     flags,
     y1Coverage,
     signals: { draft, athletic, size, age, strength, pff: pffSignal },
+    confidence: { score: confidenceScore, dataCompleteness, compDensity: compDensityScore, hasPff: pffBlend > 0, missingFields },
   }
 }

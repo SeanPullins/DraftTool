@@ -19,8 +19,8 @@
 
 import { readFileSync } from 'node:fs'
 import { gunzipSync } from 'node:zlib'
-import type { Historical, PffProfile, Prospect, Category } from '../src/model.ts'
-import { clean, project, calibratedExpectedAv, matureOutcomeCutoff, outcomeOrder } from '../src/model.ts'
+import { clean, project, calibratedExpectedAv, matureOutcomeCutoff, outcomeOrder, group } from '../src/model.ts'
+import type { Historical, PffProfile, Prospect, Category, ProjectOpts } from '../src/model.ts'
 
 // ── CLI flags ─────────────────────────────────────────────────────────────────
 
@@ -248,6 +248,38 @@ function bias(pred: number[], actual: number[]): number {
   return pred.reduce((s, p, i) => s + (p - actual[i]), 0) / pred.length
 }
 
+// Compute mean AV by pick range (×posGroup) from a training set.
+// Used for true walk-forward slot baselines and slot-value ratio diagnostics.
+function computeSlotBaselines(
+  trainRows: Historical[],
+): Map<string, number> {
+  const bands = [
+    { key: '1-32',   lo: 1,   hi: 32  },
+    { key: '33-64',  lo: 33,  hi: 64  },
+    { key: '65-100', lo: 65,  hi: 100 },
+    { key: '101-160',lo: 101, hi: 160 },
+    { key: '161+',   lo: 161, hi: 999 },
+  ]
+  const posGroups = ['QB', 'SKILL', 'OL', 'FRONT', 'DB']
+  const out = new Map<string, number>()
+  for (const pg of posGroups) {
+    const pgRows = trainRows.filter((r) => (group[r.pos] ?? 'SKILL') === pg)
+    for (const b of bands) {
+      const band = pgRows.filter((r) => r.pick >= b.lo && r.pick <= b.hi)
+      const mu = band.length >= 5 ? band.reduce((s, r) => s + (r.av || 0), 0) / band.length : null
+      // Fall back to global band average if position group has too few players
+      const globalBand = trainRows.filter((r) => r.pick >= b.lo && r.pick <= b.hi)
+      out.set(`${pg}|${b.key}`, mu ?? (globalBand.length ? globalBand.reduce((s, r) => s + (r.av || 0), 0) / globalBand.length : 0))
+    }
+  }
+  return out
+}
+
+function getSlotBaseline(baselines: Map<string, number>, posGroup: string, pick: number): number {
+  const bandKey = pick <= 32 ? '1-32' : pick <= 64 ? '33-64' : pick <= 100 ? '65-100' : pick <= 160 ? '101-160' : '161+'
+  return baselines.get(`${posGroup}|${bandKey}`) ?? baselines.get(`SKILL|${bandKey}`) ?? 0
+}
+
 function median(arr: number[]): number {
   const s = [...arr].sort((a, b) => a - b)
   const m = Math.floor(s.length / 2)
@@ -281,6 +313,20 @@ for (const p of pffProfiles) pffByKey.set(`${clean(p.name)}|${p.draftSeason}`, p
 
 console.log(`✓  pool=${pool.length} pff=${pffProfiles.length}`)
 
+// Pre-compute true walk-forward slot baselines for each eval year (Phase 1).
+// For year Y, baselines are trained on pool players with year < Y — no leakage.
+const yearSlotBaselines = new Map<number, Map<string, number>>()
+if (walkForward) {
+  const evalYears = [...new Set(pool.filter((p) => p.year >= 2000 && p.year <= yearMax).map((p) => p.year))].sort((a, b) => a - b)
+  for (const y of evalYears) {
+    const trainRows = pool.filter((p) => p.year < y && p.year >= 2000)
+    yearSlotBaselines.set(y, computeSlotBaselines(trainRows))
+  }
+} else {
+  // Non-WF: use the full pool as baseline (honest only for global eval, not per-player)
+  yearSlotBaselines.set(0, computeSlotBaselines(pool.filter((p) => p.year >= 2000 && p.year <= yearMax)))
+}
+
 // ── Run evaluation ────────────────────────────────────────────────────────────
 
 type EvalRow = {
@@ -295,6 +341,8 @@ type EvalRow = {
   actualAv:     number
   actualCategory: Category
   hasPff:       boolean
+  trueWfPickAv: number   // pick-only AV from position-group baselines trained on prior years
+  slotBaseline: number   // expected AV for this pick range × position group
 }
 
 const evalSet = pool.filter((p) =>
@@ -324,6 +372,13 @@ for (const player of evalSet) {
     (proj.odds[cat] ?? 0) > (proj.odds[best] ?? 0) ? cat : best
   , outcomeOrder[0])
 
+  const posGroup = group[player.pos] ?? 'SKILL'
+  const slotBL   = walkForward
+    ? getSlotBaseline(yearSlotBaselines.get(player.year) ?? new Map(), posGroup, player.pick)
+    : getSlotBaseline(yearSlotBaselines.get(0) ?? new Map(), posGroup, player.pick)
+  // True WF pick-only AV: slot baseline computed from prior-year data only (no model signals)
+  const trueWfPickAv = slotBL
+
   results.push({
     player, prospect,
     projScore:    proj.score,
@@ -335,6 +390,8 @@ for (const player of evalSet) {
     actualAv:     player.av,
     actualCategory: player.category,
     hasPff:       !!pff,
+    trueWfPickAv,
+    slotBaseline: slotBL,
   })
 
   done++
@@ -366,6 +423,13 @@ function metrics(rows: EvalRow[]): Metrics {
 
 // ── 1. OVERALL & BREAKDOWNS ───────────────────────────────────────────────────
 
+// 3-tier grouping — defined here so it can be used across OVERALL and later sections
+function tier(cat: Category): 'Low' | 'Mid' | 'High' {
+  if (cat === 'Bust' || cat === 'Reserve') return 'Low'
+  if (cat === 'Role' || cat === 'Starter') return 'Mid'
+  return 'High'  // High-end starter, Star
+}
+
 console.log('\n══════════════════════════════════════════════════════════════')
 console.log(` OVERALL${walkForward ? '  [quasi-walk-forward: comps+PFF time-filtered, calibration coefs static]' : ''}`)
 console.log('══════════════════════════════════════════════════════════════')
@@ -384,19 +448,39 @@ const pickMae      = mae(pickAvs, actuals)
 const pickRmse     = rmse(pickAvs, actuals)
 const pickBias     = bias(pickAvs, actuals)
 console.log(`  Pick-only   n=${overall.n}  ρ=${fmt(pickRho)}  MAE=${fmt(pickMae, 1)}  RMSE=${fmt(pickRmse, 1)}  bias=${fmtBias(pickBias)} AV`)
+if (walkForward) {
+  const trueWfAvs = results.map((r) => r.trueWfPickAv)
+  const trueWfRho = spearman(results.map((r) => r.trueWfPickAv), actuals)
+  const trueWfMae = mae(trueWfAvs, actuals)
+  const trueWfRmse = rmse(trueWfAvs, actuals)
+  const trueWfBias = bias(trueWfAvs, actuals)
+  console.log(`  TrueWF pk-only n=${overall.n}  ρ=${fmt(trueWfRho)}  MAE=${fmt(trueWfMae, 1)}  RMSE=${fmt(trueWfRmse, 1)}  bias=${fmtBias(trueWfBias)} AV  (pos-group×pick baselines from prior years)`)
+}
 const rhoLift = overall.rho - pickRho
 const maeLift = pickMae - overall.maeAv
 const rmseLift = pickRmse - overall.rmseAv
 console.log(`  Model lift        Δρ=${rhoLift >= 0 ? '+' : ''}${fmt(rhoLift)}  ΔMAE=${maeLift >= 0 ? '+' : ''}${fmt(maeLift, 1)}  ΔRMSE=${rmseLift >= 0 ? '+' : ''}${fmt(rmseLift, 1)}`)
 
-console.log('\n── By position ───────────────────────────────────────────────')
+console.log('\n── By position (model vs pick-only lift) ─────────────────')
 const byPos: Record<string, EvalRow[]> = {}
 for (const r of results) (byPos[r.player.pos] ??= []).push(r)
+const posPickScoresMap = new Map<string, { pickRhos: number[]; pickAvs_: number[]; actuals_: number[] }>()
 for (const pos of ['QB', 'RB', 'WR', 'TE', 'OL', 'DL', 'LB', 'CB', 'S']) {
   const rows = byPos[pos]
   if (!rows || rows.length < 5) continue
   const m = metrics(rows)
-  console.log(`  ${pos.padEnd(3)} n=${String(m.n).padStart(3)}  ρ=${fmt(m.rho)}  MAE=${fmt(m.maeAv, 1)}  RMSE=${fmt(m.rmseAv, 1)}  bias=${fmtBias(m.biasAv)}`)
+  const pScores = rows.map((r) => 100 * Math.pow(1 - (r.player.pick - 1) / 259, 0.58))
+  const pAvs    = rows.map((r) => { const d = 100 * Math.pow(1 - (r.player.pick - 1) / 259, 0.58); return calibratedExpectedAv(r.prospect, { draft: d, athletic: 50, size: 50, age: 50 }) })
+  const acts    = rows.map((r) => r.actualAv)
+  const pRho    = spearman(pScores, acts)
+  const pMae    = mae(pAvs, acts)
+  const dRho    = m.rho - pRho
+  const dMae    = pMae - m.maeAv
+  const dRhoStr = (dRho >= 0 ? '+' : '') + fmt(dRho)
+  const dMaeStr = (dMae >= 0 ? '+' : '') + fmt(dMae, 1)
+  const liftTag = dRho < -0.02 ? ' ⚠ below pk-only' : ''
+  console.log(`  ${pos.padEnd(3)} n=${String(m.n).padStart(3)}  ρ=${fmt(m.rho)} (pk:${fmt(pRho)} Δ${dRhoStr})  MAE=${fmt(m.maeAv, 1)} (ΔM ${dMaeStr})  bias=${fmtBias(m.biasAv)}${liftTag}`)
+  posPickScoresMap.set(pos, { pickRhos: pScores, pickAvs_: pAvs, actuals_: acts })
 }
 
 const pickRanges = [
@@ -437,18 +521,23 @@ for (const { label, lo, hi } of yearBands) {
   console.log(`  ${label.padEnd(12)} n=${String(m.n).padStart(3)}  ρ=${fmt(m.rho)}  MAE=${fmt(m.maeAv, 1)}  bias=${fmtBias(m.biasAv)}`)
 }
 
+// ── MODEL JOB BREAKDOWN ───────────────────────────────────────────────────────
+
+console.log('\n── Model job breakdown ───────────────────────────────────')
+console.log('  ┌ Rank quality     ρ=' + fmt(overall.rho) + '  (full model score vs actualAV)')
+const actualHighBkd  = results.filter((r) => tier(r.actualCategory) === 'High')
+const hiRecallBkd    = actualHighBkd.length ? actualHighBkd.filter((r) => tier(r.projCategory) === 'High').length / actualHighBkd.length : NaN
+const predLowBkd     = results.filter((r) => tier(r.projCategory) === 'Low')
+const bustPrecBkd    = predLowBkd.length ? predLowBkd.filter((r) => tier(r.actualCategory) === 'Low').length / predLowBkd.length : NaN
+console.log('  ├ AV calibration  MAE=' + fmt(overall.maeAv, 1) + '  RMSE=' + fmt(overall.rmseAv, 1) + '  bias=' + fmtBias(overall.biasAv))
+console.log('  ├ Star/HES recall ' + (hiRecallBkd * 100).toFixed(1) + '%  (actual High → predicted High,  n=' + actualHighBkd.length + ')')
+console.log('  └ Bust precision  ' + (bustPrecBkd * 100).toFixed(1) + '%  (predicted Low → actual Low,    n=' + predLowBkd.length + ')')
+
 // ── 2. CATEGORY CONFUSION MATRIX ─────────────────────────────────────────────
 
 console.log('\n══════════════════════════════════════════════════════════════')
 console.log(' CATEGORY CONFUSION MATRIX  (predicted row → actual column)')
 console.log('══════════════════════════════════════════════════════════════')
-
-// 3-tier grouping for readability
-function tier(cat: Category): 'Low' | 'Mid' | 'High' {
-  if (cat === 'Bust' || cat === 'Reserve') return 'Low'
-  if (cat === 'Role' || cat === 'Starter') return 'Mid'
-  return 'High'  // High-end starter, Star
-}
 
 const tiers = ['Low', 'Mid', 'High'] as const
 type Tier = typeof tiers[number]
@@ -495,7 +584,71 @@ const predLow     = results.filter((r) => tier(r.projCategory) === 'Low')
 const bustPrec    = predLow.length ? predLow.filter((r) => tier(r.actualCategory) === 'Low').length / predLow.length : NaN
 console.log(`  Bust precision  (predicted Low → actual Low):   ${(bustPrec * 100).toFixed(1)}%  (n=${predLow.length})`)
 
-// ── 3. TOP BOARD HIT RATE ─────────────────────────────────────────────────────
+// ── Build byYear index (used by SLOT VALUE and TOP BOARD sections) ────────────
+const byYear: Record<number, EvalRow[]> = {}
+for (const r of results) (byYear[r.player.year] ??= []).push(r)
+
+// ── 3. SLOT VALUE DIAGNOSTICS ────────────────────────────────────────────────────
+
+console.log('\n══════════════════════════════════════════════════════════════')
+console.log(' SLOT VALUE DIAGNOSTICS  (Phase 3: good/bad pick classification)')
+console.log(' slotValueRatio = actualAV / expectedAV-for-slot-position.')
+console.log(' goodPick ≥ 1.15×slot  |  badPick ≤ 0.60×slot  |  neutral otherwise')
+console.log('══════════════════════════════════════════════════════════════')
+
+// Attach slot labels to results
+type SlotLabel = 'good' | 'neutral' | 'bad'
+function slotLabel(r: EvalRow): SlotLabel {
+  if (r.slotBaseline <= 0) return 'neutral'
+  const ratio = r.actualAv / r.slotBaseline
+  return ratio >= 1.15 ? 'good' : ratio <= 0.60 ? 'bad' : 'neutral'
+}
+
+function slotStats(rows: EvalRow[]): string {
+  if (!rows.length) return 'n/a'
+  const good    = rows.filter((r) => slotLabel(r) === 'good').length
+  const bad     = rows.filter((r) => slotLabel(r) === 'bad').length
+  const neutral = rows.length - good - bad
+  return `goodPick=${(good / rows.length * 100).toFixed(0)}%  neutral=${(neutral / rows.length * 100).toFixed(0)}%  badPick=${(bad / rows.length * 100).toFixed(0)}%`
+}
+
+console.log('\n  Overall:  ' + slotStats(results))
+console.log('\n  By position:')
+for (const pos of ['QB', 'RB', 'WR', 'TE', 'OL', 'DL', 'LB', 'CB', 'S']) {
+  const rows = byPos[pos]
+  if (!rows || rows.length < 5) continue
+  console.log(`    ${pos.padEnd(3)}  ${slotStats(rows)}`)
+}
+console.log('\n  By pick range:')
+for (const { label, lo, hi } of pickRanges) {
+  const rows = results.filter((r) => r.player.pick >= lo && r.player.pick <= hi)
+  if (rows.length < 5) continue
+  console.log(`    ${label.padEnd(22)}  ${slotStats(rows)}`)
+}
+
+// Model top-32/64 board: what fraction are good picks?
+console.log('\n  Top-board slot value (per-year top-N sorted by projScore):')
+console.log(`  ${'Top-N'.padEnd(8)} ${'Model good%'.padStart(12)} ${'Model bad%'.padStart(11)} ${'Pick-only good%'.padStart(16)} ${'Oracle good%'.padStart(13)}`)
+const svYears = Object.entries(byYear)
+for (const boardSz of [32, 64, 100]) {
+  let mGood = 0, mBad = 0, mTotal = 0, pkGood = 0, pkTotal = 0, orGood = 0
+  for (const [, yearRows] of svYears) {
+    if (yearRows.length < boardSz) continue
+    const byScore = [...yearRows].sort((a, b) => b.projScore - a.projScore).slice(0, boardSz)
+    const byPick  = [...yearRows].sort((a, b) => a.player.pick - b.player.pick).slice(0, boardSz)
+    const byAv    = [...yearRows].sort((a, b) => b.actualAv - a.actualAv).slice(0, boardSz)
+    mGood  += byScore.filter((r) => slotLabel(r) === 'good').length
+    mBad   += byScore.filter((r) => slotLabel(r) === 'bad').length
+    mTotal += boardSz
+    pkGood += byPick.filter((r) => slotLabel(r) === 'good').length
+    pkTotal += boardSz
+    orGood += byAv.filter((r) => slotLabel(r) === 'good').length
+  }
+  const p = (n: number, d: number) => d ? (n / d * 100).toFixed(1) + '%' : 'N/A'
+  console.log(`  Top-${String(boardSz).padEnd(4)} ${p(mGood, mTotal).padStart(12)} ${p(mBad, mTotal).padStart(11)} ${p(pkGood, pkTotal).padStart(16)} ${p(orGood, mTotal).padStart(13)}`)
+}
+
+// ── 4. TOP BOARD HIT RATE ─────────────────────────────────────────────────────
 
 console.log('\n══════════════════════════════════════════════════════════════')
 console.log(' TOP BOARD HIT RATE  (per-year board quality)')
@@ -503,15 +656,12 @@ console.log(' Model sorts each draft class by projScore; reports how often')
 console.log(' top-N selections are actually High-tier (star/HES) vs busts.')
 console.log('══════════════════════════════════════════════════════════════')
 
-const byYear: Record<number, EvalRow[]> = {}
-for (const r of results) (byYear[r.player.year] ??= []).push(r)
-
-type BoardStats = { highHits: number; bustHits: number; total: number; years: number }
+type BoardStats = { highHits: number; bustHits: number; total: number; years: number; avCapture: number; avTotal: number }
 const boardN = [16, 32, 64, 100]
-const boardStats: Record<number, BoardStats> = Object.fromEntries(boardN.map((n) => [n, { highHits: 0, bustHits: 0, total: 0, years: 0 }]))
+const boardStats: Record<number, BoardStats> = Object.fromEntries(boardN.map((n) => [n, { highHits: 0, bustHits: 0, total: 0, years: 0, avCapture: 0, avTotal: 0 }]))
 
 // Actual top-N by AV within each year (the "oracle" answer)
-const oracleStats: Record<number, BoardStats> = Object.fromEntries(boardN.map((n) => [n, { highHits: 0, bustHits: 0, total: 0, years: 0 }]))
+const oracleStats: Record<number, BoardStats> = Object.fromEntries(boardN.map((n) => [n, { highHits: 0, bustHits: 0, total: 0, years: 0, avCapture: 0, avTotal: 0 }]))
 
 for (const [, yearRows] of Object.entries(byYear)) {
   const sorted     = [...yearRows].sort((a, b) => b.projScore - a.projScore)
@@ -523,21 +673,27 @@ for (const [, yearRows] of Object.entries(byYear)) {
     const s  = boardStats[n];  s.highHits += modelTop.filter((r) => tier(r.actualCategory)  === 'High').length
     s.bustHits += modelTop.filter((r) => tier(r.actualCategory) === 'Low').length
     s.total += n; s.years++
+    s.avCapture += modelTop.reduce((sum, r) => sum + r.actualAv, 0)
+    s.avTotal   += oracleTop.reduce((sum, r) => sum + r.actualAv, 0)
     const o  = oracleStats[n]; o.highHits += oracleTop.filter((r) => tier(r.actualCategory) === 'High').length
     o.bustHits += oracleTop.filter((r) => tier(r.actualCategory) === 'Low').length
     o.total += n; o.years++
+    o.avCapture += oracleTop.reduce((sum, r) => sum + r.actualAv, 0)
+    o.avTotal   += oracleTop.reduce((sum, r) => sum + r.actualAv, 0)
   }
 }
 
 const pct2 = (n: number, d: number) => d ? (n / d * 100).toFixed(1) + '%' : ' N/A'
-console.log(`  ${'Top-N'.padEnd(8)} ${'Star/HES%'.padStart(10)} ${'Bust%'.padStart(8)} ${'Years'.padStart(7)}   (oracle Star/HES%)`)
+console.log(`  ${'Top-N'.padEnd(8)} ${'Star/HES%'.padStart(10)} ${'Bust%'.padStart(8)} ${'AV cap%'.padStart(8)} ${'Years'.padStart(7)}   (oracle Star/HES%  oracle AV cap%)`)
 for (const n of boardN) {
   const s = boardStats[n], o = oracleStats[n]
   if (s.years === 0) continue
-  console.log(`  Top-${String(n).padEnd(4)} ${pct2(s.highHits, s.total).padStart(10)} ${pct2(s.bustHits, s.total).padStart(8)} ${String(s.years).padStart(7)}   (oracle: ${pct2(o.highHits, o.total)})`)
+  const avCapPct   = s.avTotal  ? (s.avCapture  / s.avTotal  * 100).toFixed(1) + '%' : 'N/A'
+  const oAvCapPct  = o.avTotal  ? (o.avCapture  / o.avTotal  * 100).toFixed(1) + '%' : 'N/A'
+  console.log(`  Top-${String(n).padEnd(4)} ${pct2(s.highHits, s.total).padStart(10)} ${pct2(s.bustHits, s.total).padStart(8)} ${avCapPct.padStart(8)} ${String(s.years).padStart(7)}   (oracle: ${pct2(o.highHits, o.total)}  ${oAvCapPct})`)
 }
 
-// ── 4. FLOOR / MEDIAN / CEILING CALIBRATION ──────────────────────────────────
+// ── 5. FLOOR / MEDIAN / CEILING CALIBRATION ──────────────────────────────────
 
 console.log('\n══════════════════════════════════════════════════════════════')
 console.log(' CALIBRATION  (where actual AV falls relative to projections)')
@@ -570,7 +726,7 @@ for (const { label, lo, hi } of pickRanges) {
   calibrate(results.filter((r) => r.player.pick >= lo && r.player.pick <= hi), label)
 }
 
-// ── 5. SIGNAL ABLATION ────────────────────────────────────────────────────────
+// ── 6. SIGNAL ABLATION ────────────────────────────────────────────────────────
 
 if (doAblation) {
   console.log('\n══════════════════════════════════════════════════════════════')
@@ -583,6 +739,7 @@ if (doAblation) {
   type AblationSpec = {
     name: string
     modify: (p: Prospect) => Prospect
+    opts?: ProjectOpts
   }
 
   const ablations: AblationSpec[] = [
@@ -617,6 +774,26 @@ if (doAblation) {
       name: 'School tier',
       modify: (p) => ({ ...p, school: '' }),
     },
+    {
+      name: 'Elite premium',
+      modify: (p) => p,
+      opts: { disableElitePremium: true },
+    },
+    {
+      name: 'Comps only (calib=0)',
+      modify: (p) => p,
+      opts: { calibBlendOverride: 0 },
+    },
+    {
+      name: 'Calib only (calib=1)',
+      modify: (p) => p,
+      opts: { calibBlendOverride: 1 },
+    },
+    {
+      name: 'Age-adj PFF off',
+      modify: (p) => p,
+      opts: { disableAgeAdjPff: true },
+    },
   ]
 
   // Limit ablation to a sample for speed if large eval set
@@ -633,7 +810,7 @@ if (doAblation) {
       const modified = abl.modify(r.prospect)
       const ablPool        = walkForward ? pool.filter((p) => p.year < r.player.year) : pool
       const ablPffProfiles = walkForward ? pffProfiles.filter((p) => p.draftSeason < r.player.year) : pffProfiles
-      const proj = project(modified, ablPool, ablPffProfiles, r.player.id, undefined, undefined, undefined, undefined, walkForward)
+      const proj = project(modified, ablPool, ablPffProfiles, r.player.id, undefined, undefined, undefined, undefined, walkForward, abl.opts)
       ablScores.push(proj.score)
       actuals.push(r.actualAv)
     }
@@ -647,7 +824,7 @@ if (doAblation) {
   console.log(`\n  Positive Δρ = signal hurts; negative Δρ = signal helps.`)
 }
 
-// ── 6. VERBOSE: WORST MISSES ──────────────────────────────────────────────────
+// ── 7. VERBOSE: WORST MISSES ──────────────────────────────────────────────────
 
 if (verbose) {
   console.log('\n══════════════════════════════════════════════════════════════')
@@ -659,12 +836,22 @@ if (verbose) {
   for (const r of sorted) {
     const err  = (r.projAv - r.actualAv).toFixed(1)
     const sign = r.projAv > r.actualAv ? '+' : ''
+    const tags: string[] = []
+    if ((r.prospect.age ?? 22) > 23.5)          tags.push('late-age')
+    if (!r.hasPff)                                tags.push('no-PFF')
+    if (r.player.pick <= 40 && r.actualAv < 12)  tags.push('top-pick-bust')
+    if (r.player.pick <= 40 && r.projAv < r.actualAv * 0.6) tags.push('top-pick-underproj')
+    if (r.projAv > r.projCeiling + 5 && r.actualAv > r.projCeiling) tags.push('above-ceiling')
+    const slotRatio = r.slotBaseline > 0 ? r.actualAv / r.slotBaseline : 1
+    if (slotRatio >= 2.5 && r.projAv < r.actualAv * 0.5) tags.push('slot-outlier-under')
+    if (slotRatio <= 0.2 && r.projAv > r.actualAv * 2.0) tags.push('slot-outlier-over')
     console.log(
       `  ${r.player.name.padEnd(22)} ${r.player.pos} ${r.player.year}` +
       ` pick ${String(r.player.pick).padStart(3)}` +
       `  actual=${String(r.actualAv).padStart(3)}` +
       `  proj=${r.projAv.toFixed(1).padStart(5)}` +
-      `  err=${sign}${err}`
+      `  err=${sign}${err}` +
+      (tags.length ? `  [${tags.join(', ')}]` : '')
     )
   }
 }
