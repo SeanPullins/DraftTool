@@ -1032,7 +1032,8 @@ export default function App() {
           {projection.pffComps.length ? <TableWrap>
             <table>
               <thead><tr>
-                <th>Player</th><th>Class</th><th>Pos</th><th>PFF</th><th>Pick</th><th>AV</th><th>Outcome</th><th>Sim</th>
+                <th>Player</th><th>Class</th><th>Pos</th><th>PFF</th>
+<th>Pick</th><th>AV</th><th>Outcome</th><th>Sim</th>
                 {input.pos === 'QB' && <><th className="qbStatCol" title="Year 1 passer rating">Y1 Rtg</th><th className="qbStatCol" title="Year 1 adjusted net yards per attempt">Y1 ANY/A</th></>}
                 {input.pos === 'WR' && <><th className="qbStatCol" title="Year 1 receiving yards">Y1 Yds</th><th className="qbStatCol" title="Year 1 receptions">Y1 Rec</th></>}
                 {input.pos === 'RB' && <><th className="qbStatCol" title="Year 1 rushing yards">Y1 Yds</th><th className="qbStatCol" title="Year 1 yards per carry">Y1 YPC</th></>}
@@ -2146,6 +2147,36 @@ function ClassExplorer({ pool, history, pffProfiles, pffLookup, y1Data, careerSt
   const [sortDir, setSortDir] = useState<SortDir>('asc')
   const [expandedId, setExpandedId] = useState<string | null>(null)
   const [showScatter, setShowScatter] = useState(false)
+  const [modelMode, setModelMode] = useState<'v4' | 'v57p'>('v4')
+  const [v57AuditRows, setV57AuditRows] = useState<any[]>([])
+
+  useEffect(() => {
+    let cancelled = false
+    const base = import.meta.env.BASE_URL || './'
+    fetch(`${base}data/model/v57_current_prospect_audit.json`)
+      .then((r) => r.ok ? r.json() : null)
+      .then((payload) => {
+        if (!cancelled && payload?.allScored?.length) setV57AuditRows(payload.allScored)
+      })
+      .catch(() => {
+        if (!cancelled) setV57AuditRows([])
+      })
+    return () => { cancelled = true }
+  }, [])
+
+  const v57ScoreMap = useMemo(() => {
+    const out = new Map<string, any>()
+    for (const row of v57AuditRows) {
+      const key = `${clean(row.name)}|${String(row.pos || '').toUpperCase()}|${Number(row.year)}`
+      out.set(key, row)
+    }
+    return out
+  }, [v57AuditRows])
+
+  const getV57Row = (player: Historical) => {
+    const key = `${clean(player.name)}|${String(player.pos || '').toUpperCase()}|${Number(player.year)}`
+    return v57ScoreMap.get(key) ?? null
+  }
 
   // Persistent cache: avoids recomputing the same player on year revisits
   const projCache = useRef(new Map<string, { av: number; score: number }>())
@@ -2355,7 +2386,15 @@ function ClassExplorer({ pool, history, pffProfiles, pffLookup, y1Data, careerSt
       ))}
     </div>
     {useProjections ? <p className="hint">Projected AV and Score use the calibrated 2016-2023 model plus each player's draft/combine and matched PFF profile when available.</p> : null}
-    {rows.length ? <TableWrap>
+    {rows.length ? <>
+              <label className="modelToggle" title="V5.7P is experimental and V4 remains the default.">
+                <span>Scoring model</span>
+                <select value={modelMode} onChange={(e) => setModelMode(e.target.value as 'v4' | 'v57p')}>
+                  <option value="v4">V4 Stable</option>
+                  <option value="v57p">V5.7P Experimental</option>
+                </select>
+              </label>
+<TableWrap>
       <table className="classTable">
         <thead>
           <tr>
@@ -2425,6 +2464,19 @@ function ClassExplorer({ pool, history, pffProfiles, pffLookup, y1Data, careerSt
                 <td className="pffCol" title={pffContextLabel}>
                   {pffContextScore != null ? pffContextScore.toFixed(0) : '—'}
                 </td>
+                {modelMode === 'v57p' ? (() => {
+                  const v57 = getV57Row(player)
+                  return <td className="pffCol" title={v57?.flag || 'V5.7P prospect-safe percentile'}>
+                    {v57?.v57Percentile != null ? Math.round(v57.v57Percentile) : '—'}
+                  </td>
+                })() : null}
+                {modelMode === 'v57p' ? (() => {
+                  const v57 = getV57Row(player)
+                  const delta = Number(v57?.v57Delta ?? 0)
+                  return <td className="pffCol" title={v57?.rawCorrection != null ? `Raw correction: ${Number(v57.rawCorrection).toFixed(1)}` : 'V5.7P delta'}>
+                    {v57 ? <span className={delta > 0 ? 'deltaUp' : delta < 0 ? 'deltaDown' : ''}>{delta > 0 ? '+' : ''}{delta.toFixed(1)}</span> : '—'}
+                  </td>
+                })() : null}
                 {useProjections ? <td>{projected ? projected.av.toFixed(1) : '-'}</td> : null}
                 {useProjections ? <td style={{ color: projected ? scoreColor(score) : undefined, fontWeight: projected ? 800 : undefined }}>{projected ? Math.round(projected.score) : '-'}</td> : null}
                 <td>{player.proBowls || 0}</td>
@@ -2487,7 +2539,8 @@ function ClassExplorer({ pool, history, pffProfiles, pffLookup, y1Data, careerSt
           </tfoot>
         )}
       </table>
-    </TableWrap> : <p className="emptyLine">No players match those filters yet. Pick a different year or position.</p>}
+    </TableWrap>
+    </> : <p className="emptyLine">No players match those filters yet. Pick a different year or position.</p>}
     {rows.length > 0 && (
       <div className="classMobileCards">
         {rows.slice(0, 100).map((player, index) => {
