@@ -1,4 +1,5 @@
 import fs from 'fs';
+import zlib from 'zlib';
 
 function readJson(path, fallback = null) {
   if (!fs.existsSync(path)) return fallback;
@@ -196,17 +197,87 @@ function makeStackFeatures(row) {
   };
 }
 
+function readJsonGzB64(path, fallback = null) {
+  if (!fs.existsSync(path)) return fallback;
+
+  try {
+    const encoded = fs.readFileSync(path, 'utf8').trim();
+    const compressed = Buffer.from(encoded, 'base64');
+    const json = zlib.gunzipSync(compressed).toString('utf8');
+    return JSON.parse(json);
+  } catch (err) {
+    console.warn(`[WARN] Failed to read ${path}: ${err.message}`);
+    return fallback;
+  }
+}
+
 function loadPffProfiles() {
   const payload =
     readJson('public/data/pff_comparison_profiles.json', null) ??
+    readJsonGzB64('public/data/pff_comparison_profiles.json.gz.b64', null) ??
     readJson('public/data/pff_profiles.json', null) ??
+    readJsonGzB64('public/data/pff_profiles.json.gz.b64', null) ??
     null;
 
-  const records = payload?.profiles ?? payload?.records ?? payload ?? [];
+  const records = payload?.profiles ?? payload?.records ?? payload?.players ?? payload?.data ?? payload ?? [];
+  const columns = payload?.columns ?? payload?.headers ?? payload?.fields ?? null;
 
   if (!Array.isArray(records)) return [];
 
-  return records;
+  // Already object-shaped.
+  if (records.length && !Array.isArray(records[0])) {
+    return records;
+  }
+
+  // Array rows with explicit columns.
+  if (Array.isArray(columns) && records.length && Array.isArray(records[0])) {
+    return records.map((row) => {
+      const obj = {};
+      columns.forEach((col, idx) => {
+        obj[col] = row[idx];
+      });
+      return obj;
+    });
+  }
+
+  // Compact PFF comparison profile format:
+  // [
+  //   name, school, position, draftSeason,
+  //   composite, grade, production, efficiency, clean,
+  //   outcomeMeta
+  // ]
+  if (records.length && Array.isArray(records[0])) {
+    return records.map((row) => ({
+      name: row[0],
+      player: row[0],
+      player_name: row[0],
+      school: row[1],
+      college: row[1],
+      position: row[2],
+      pos: row[2],
+      draftSeason: Number(row[3]),
+      draftYear: Number(row[3]),
+      year: Number(row[3]),
+      pff: {
+        composite: Number(row[4]),
+        grade: Number(row[5]),
+        production: Number(row[6]),
+        efficiency: Number(row[7]),
+        clean: Number(row[8]),
+      },
+      composite: Number(row[4]),
+      grade: Number(row[5]),
+      production: Number(row[6]),
+      efficiency: Number(row[7]),
+      clean: Number(row[8]),
+      meta: {
+        rawOutcome: row[9],
+      },
+      raw: row,
+    }));
+  }
+
+  return [];
 }
 
 function loadSeasonRows(path) {
@@ -362,6 +433,13 @@ for (const row of scored) {
     // If season PFF is genuinely strong, do not apply negative season-only correction.
     if (seasonOnly && (row.v4Percentile ?? 50) >= 80 && (row.seasonPffScore ?? 0) >= 75 && correction < 0) {
       correction = 0;
+    }
+
+    // Full-profile WR protection: strong season production should reduce negative correction.
+    if (hasFullProfile && (row.seasonPffScore ?? 0) >= 75 && correction < -3) {
+      correction = -3;
+    } else if (hasFullProfile && (row.seasonPffScore ?? 0) >= 72 && correction < -5) {
+      correction = -5;
     }
 
     // Low-ranked players can rise, but don't let season-only data create big jumps.
