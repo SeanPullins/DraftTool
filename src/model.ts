@@ -481,7 +481,7 @@ export function sim(input: Prospect, player: Historical, y1Data?: Y1Data, career
 // Position-aware PFF similarity for comp pool construction.
 // Each group weights the PFF dimensions that actually predict outcomes (matching pffSignal weights).
 // pffDist components sum to .96 in every branch to keep the distance scale consistent.
-export function pffSim(input: Prospect, profile: PffProfile, grp?: string) {
+export function pffSim(input: Prospect, profile: PffProfile, grp?: string, preDraft = false) {
   const g = grp ?? group[input.pos] ?? 'SKILL'
   const nflPick = profile.nfl?.draftPick ?? input.pick
   let pffDist: number
@@ -517,19 +517,18 @@ export function pffSim(input: Prospect, profile: PffProfile, grp?: string) {
     pffDist +
     (input.pos === profile.position ? 0 : .16)
   const recency = Math.pow(0.97, Math.max(0, 2024 - profile.draftSeason))
-  const experienceBonus = profile.games >= 36 ? 1.06 : profile.games >= 24 ? 1.03 : profile.games >= 12 ? 1.0 : 0.93
-  // A1: NFL snap count boosts proven starters — 2000+ snaps ≈ 3-4 full seasons as a starter.
-  // Only upweights; avoids double-penalising busts already discounted via tierWeight.
+  // preDraft mode: disable NFL-outcome weighting so comp selection is based purely on
+  // pre-draft signals (pick, position, PFF metrics). Used in walk-forward evaluation
+  // to avoid circular reasoning: known NFL success influencing which comps are selected.
+  const experienceBonus = preDraft ? 1.0 : (profile.games >= 36 ? 1.06 : profile.games >= 24 ? 1.03 : profile.games >= 12 ? 1.0 : 0.93)
   const nflSnaps = profile.nfl?.snaps ?? 0
-  const snapBoost = nflSnaps >= 2000 ? 1.05 : nflSnaps >= 800 ? 1.02 : 1.0
-  // Tier-weight: nfl.category r=0.373 vs composite r=0.190 in R2-5.
-  // Proven comps (Star/High-end starter) are more informative than busts with similar college metrics.
-  const tierWeight =
+  const snapBoost = preDraft ? 1.0 : (nflSnaps >= 2000 ? 1.05 : nflSnaps >= 800 ? 1.02 : 1.0)
+  const tierWeight = preDraft ? 1.0 : (
     profile.nfl?.category === 'Star'              ? 1.25 :
     profile.nfl?.category === 'High-end starter'  ? 1.15 :
     profile.nfl?.category === 'Starter'           ? 1.05 :
     profile.nfl?.category === 'Reserve'           ? 0.75 :
-    profile.nfl?.category === 'Bust'              ? 0.65 : 1.0
+    profile.nfl?.category === 'Bust'              ? 0.65 : 1.0)
   return Math.exp(-distance) * recency * experienceBonus * tierWeight * snapBoost
 }
 
@@ -572,7 +571,7 @@ function dangerFlags(input: Prospect, proj: { ceiling: number; floor: number; pf
 
 // ── Main projection engine ────────────────────────────────────────────────────
 
-export function project(input: Prospect, history: Historical[], pffProfiles: PffProfile[], excludeId?: string, y1Data?: Y1Data, careerStats?: CareerStatMap, injurySeverity?: 'major' | 'moderate' | 'minor', gradeDelta?: number | null) {
+export function project(input: Prospect, history: Historical[], pffProfiles: PffProfile[], excludeId?: string, y1Data?: Y1Data, careerStats?: CareerStatMap, injurySeverity?: 'major' | 'moderate' | 'minor', gradeDelta?: number | null, preDraft = false) {
   // Position-specific maturation cutoffs prevent underestimating AV for slow-developing groups.
   // OL/FRONT need 6+ seasons for AV to reflect sustained contribution (cutoff 2020).
   // SKILL/DB contribute immediately so 4 seasons is adequate (cutoff 2022).
@@ -625,7 +624,7 @@ export function project(input: Prospect, history: Historical[], pffProfiles: Pff
     const posMatch = grp === 'SKILL' ? p.position === input.pos : (p.position === input.pos || group[p.position] === group[input.pos])
     return p.nfl && isMatureOutcome(p.draftSeason) && p.id !== input.pffProfileId && posMatch
   })
-  const pffComps = pffPool.map((profile) => ({ profile, sim: pffSim(input, profile, grp) })).sort((a, b) => b.sim - a.sim).slice(0, 80)
+  const pffComps = pffPool.map((profile) => ({ profile, sim: pffSim(input, profile, grp, preDraft) })).sort((a, b) => b.sim - a.sim).slice(0, 80)
   // Position and pick-aware PFF blend: SKILL has real signal; QB gated by projected pick
   // range (PFF near-zero for picks 33+ QBs); OL/LB/DB/FRONT get small blends only.
   const pffBlend = pffComps.length >= 12 ? (
