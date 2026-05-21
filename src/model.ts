@@ -669,9 +669,15 @@ export function project(input: Prospect, history: Historical[], pffProfiles: Pff
     calibratedAv,
     expectedAv,
   ].sort((a, b) => a - b)
-  const floor = blend(q(rangeValues, .1), Math.max(0, expectedAv * .42), .25)
+  // Floor: late-round busts are common; multiplier shrinks with pick# so the floor
+  // doesn't float above true 10th-percentile outcomes for picks 100+.
+  const floorMult = input.pick <= 32 ? 0.42 : input.pick <= 100 ? 0.28 : 0.12
+  const floor = blend(q(rangeValues, .1), Math.max(0, expectedAv * floorMult), .25)
   const median = blend(q(rangeValues, .5), expectedAv, .35)
-  const ceiling = blend(q(rangeValues, .9), Math.max(expectedAv, expectedAv * 1.85), .25)
+  // Ceiling: early picks routinely produce outlier careers that exceed the comp-pool 90th
+  // percentile; widen the ceiling for top picks to capture more realistic upside.
+  const ceilMult = input.pick <= 32 ? 2.5 : input.pick <= 64 ? 2.1 : 1.85
+  const ceiling = blend(q(rangeValues, .9), Math.max(expectedAv, expectedAv * ceilMult), .25)
   const scoreLow = clamp(rawScore * 0.46 + (posAvValues.length >= 15 ? pct(floor, posAvValues) : avToScore(floor)) * 0.54 + scoreAdj, 1, 99)
   const scoreHigh = clamp(rawScore * 0.46 + (posAvValues.length >= 15 ? pct(ceiling, posAvValues) : avToScore(ceiling)) * 0.54 + scoreAdj, 1, 99)
   const max = Math.max(90, ceiling * 1.1)

@@ -1,23 +1,27 @@
 #!/usr/bin/env node
 // Evaluation harness for src/model.ts
-// Runs time-split backtests on historical players and computes Spearman ρ, MAE, RMSE.
+// Runs time-split backtests on historical players and computes:
+//   Spearman ρ, MAE, RMSE, signed bias, confusion matrix, calibration, signal ablation
 //
 // Usage:
 //   node --experimental-strip-types scripts/evaluate-model.mts
 //   node --experimental-strip-types scripts/evaluate-model.mts --pos WR
-//   node --experimental-strip-types scripts/evaluate-model.mts --year-max 2018
+//   node --experimental-strip-types scripts/evaluate-model.mts --year-max 2016
+//   node --experimental-strip-types scripts/evaluate-model.mts --ablation
+//   node --experimental-strip-types scripts/evaluate-model.mts --verbose
 
 import { readFileSync } from 'node:fs'
 import { gunzipSync } from 'node:zlib'
 import type { Historical, PffProfile, Prospect, Category } from '../src/model.ts'
-import { clean, project, matureOutcomeCutoff } from '../src/model.ts'
+import { clean, project, matureOutcomeCutoff, outcomeOrder } from '../src/model.ts'
 
 // ── CLI flags ─────────────────────────────────────────────────────────────────
 
 const args = process.argv.slice(2)
-const filterPos = args.includes('--pos') ? args[args.indexOf('--pos') + 1] : null
-const yearMax = args.includes('--year-max') ? parseInt(args[args.indexOf('--year-max') + 1]) : matureOutcomeCutoff - 3
-const verbose = args.includes('--verbose')
+const filterPos  = args.includes('--pos')       ? args[args.indexOf('--pos')       + 1] : null
+const yearMax    = args.includes('--year-max')  ? parseInt(args[args.indexOf('--year-max') + 1]) : matureOutcomeCutoff - 3
+const verbose    = args.includes('--verbose')
+const doAblation = args.includes('--ablation')
 
 // ── Data paths ────────────────────────────────────────────────────────────────
 
@@ -31,11 +35,9 @@ function parseCsv(text: string): Record<string, string>[] {
   let cell = ''
   let quoted = false
   for (let i = 0; i < text.length; i++) {
-    const ch = text[i]
-    const next = text[i + 1]
+    const ch = text[i], next = text[i + 1]
     if (ch === '"') {
-      if (quoted && next === '"') { cell += '"'; i++ }
-      else quoted = !quoted
+      if (quoted && next === '"') { cell += '"'; i++ } else quoted = !quoted
     } else if (ch === ',' && !quoted) {
       row.push(cell); cell = ''
     } else if ((ch === '\n' || ch === '\r') && !quoted) {
@@ -74,7 +76,7 @@ function norm(p: string): string {
   return x
 }
 
-function cat(av: number, games: number, starts: number, pb: number, ap: number): Category {
+function avToCat(av: number, games: number, starts: number, pb: number, ap: number): Category {
   if (ap || pb >= 2 || av >= 70) return 'Star'
   if (pb || av >= 45 || (starts >= 5 && av >= 35)) return 'High-end starter'
   if (av >= 24 || starts >= 3 || (games >= 64 && av >= 18)) return 'Starter'
@@ -102,53 +104,48 @@ const positionDefaults: Record<string, Partial<Prospect>> = {
 const KNOWN_POSITIONS = new Set(['QB', 'RB', 'WR', 'TE', 'OL', 'DL', 'LB', 'CB', 'S'])
 
 function buildPool(combine: Record<string, string>[], draft: Record<string, string>[]): Historical[] {
-  const byPfr = new Map(draft.filter((r) => r.pfr_player_id).map((r) => [r.pfr_player_id, r]))
+  const byPfr      = new Map(draft.filter((r) => r.pfr_player_id).map((r) => [r.pfr_player_id, r]))
   const byNameYear = new Map(draft.map((r) => [`${r.season}-${clean(r.pfr_player_name)}`, r]))
-  const usedDraftRows = new Set<Record<string, string>>()
+  const usedDraft  = new Set<Record<string, string>>()
 
   const fromCombine = combine.map((r, i) => {
     const year = n(r.draft_year) || n(r.season) || 0
     const d = byPfr.get(r.pfr_id) || byNameYear.get(`${year}-${clean(r.player_name)}`)
-    if (d) usedDraftRows.add(d)
+    if (d) usedDraft.add(d)
     return toHistorical(r, d, i, year)
   })
-
   const fromDraftOnly = draft
-    .filter((r) => !usedDraftRows.has(r))
+    .filter((r) => !usedDraft.has(r))
     .map((r, i) => toHistorical({}, r, combine.length + i, n(r.season) || 0))
 
   return [...fromCombine, ...fromDraftOnly]
     .filter((p) => p.year >= 2000 && p.name !== 'Unknown' && KNOWN_POSITIONS.has(p.pos))
 }
 
-function toHistorical(combineRow: Record<string, string>, draftRow: Record<string, string> | undefined, index: number, year: number): Historical {
-  const av = n(draftRow?.w_av) || n(draftRow?.car_av) || 0
-  const games = n(draftRow?.games) || 0
-  const starts = n(draftRow?.seasons_started) || 0
-  const proBowls = n(draftRow?.probowls) || 0
-  const allPros = n(draftRow?.allpro) || 0
+function toHistorical(cr: Record<string, string>, dr: Record<string, string> | undefined, idx: number, year: number): Historical {
+  const av      = n(dr?.w_av) || n(dr?.car_av) || 0
+  const games   = n(dr?.games) || 0
+  const starts  = n(dr?.seasons_started) || 0
+  const proBowls = n(dr?.probowls) || 0
+  const allPros  = n(dr?.allpro) || 0
   return {
-    id: `${year}-${combineRow.player_name || draftRow?.pfr_player_name || 'unknown'}-${index}`,
-    name: combineRow.player_name || draftRow?.pfr_player_name || 'Unknown',
-    school: combineRow.school || draftRow?.college || '',
+    id:       `${year}-${cr.player_name || dr?.pfr_player_name || 'unknown'}-${idx}`,
+    name:     cr.player_name || dr?.pfr_player_name || 'Unknown',
+    school:   cr.school || dr?.college || '',
     year,
-    pos: norm(combineRow.pos || draftRow?.position || ''),
-    pick: n(combineRow.draft_ovr) || n(draftRow?.pick) || 260,
-    age: n(draftRow?.age),
-    height: ht(combineRow.ht),
-    weight: n(combineRow.wt),
-    forty: n(combineRow.forty),
-    vertical: n(combineRow.vertical),
-    broad: n(combineRow.broad_jump),
-    cone: n(combineRow.cone),
-    shuttle: n(combineRow.shuttle),
-    bench: n(combineRow.bench),
-    games,
-    av,
-    starts,
-    proBowls,
-    allPros,
-    category: cat(av, games, starts, proBowls, allPros),
+    pos:      norm(cr.pos || dr?.position || ''),
+    pick:     n(cr.draft_ovr) || n(dr?.pick) || 260,
+    age:      n(dr?.age),
+    height:   ht(cr.ht),
+    weight:   n(cr.wt),
+    forty:    n(cr.forty),
+    vertical: n(cr.vertical),
+    broad:    n(cr.broad_jump),
+    cone:     n(cr.cone),
+    shuttle:  n(cr.shuttle),
+    bench:    n(cr.bench),
+    games, av, starts, proBowls, allPros,
+    category: avToCat(av, games, starts, proBowls, allPros),
   }
 }
 
@@ -161,65 +158,51 @@ type PffPayload = { profiles: RawPff[] }
 
 function normalizePff(profiles: RawPff[]): PffProfile[] {
   return profiles.flatMap((p) => {
-    if (!Array.isArray(p)) {
-      return [{ ...p, position: norm(p.position) }]
-    }
+    if (!Array.isArray(p)) return [{ ...p, position: norm(p.position) }]
     const [name, college, rawPos, draftSeason, composite, grade, production, efficiency, cleanPlay, nfl] = p
     const position = norm(rawPos)
     if (!KNOWN_POSITIONS.has(position)) return []
     return [{
       id: `${clean(name)}|${draftSeason}|${position}`,
-      name,
-      college,
-      position,
-      draftSeason,
-      games: 0,
+      name, college, position, draftSeason, games: 0,
       pff: { composite, grade, production, efficiency, clean: cleanPlay },
       nfl: nfl ? {
-        draftPick: nfl[0],
-        games: nfl[1],
-        starts: nfl[2],
-        snaps: nfl[3],
-        awards: nfl[4],
-        score: nfl[5],
-        category: nfl[6],
+        draftPick: nfl[0], games: nfl[1], starts: nfl[2], snaps: nfl[3],
+        awards: nfl[4], score: nfl[5], category: nfl[6],
         av: nfl[7] ?? nfl[5] * 0.82,
       } : null,
     }]
   })
 }
 
-// ── Build Prospect from Historical (mirrors App.tsx prospectFromHistorical) ────
+// ── Build Prospect from Historical ────────────────────────────────────────────
 
 function toProspect(player: Historical, pff?: PffProfile): Prospect {
   const baseline = player.pick <= 32 ? 84 : player.pick <= 64 ? 78 : player.pick <= 100 ? 72 : player.pick <= 150 ? 66 : 60
   const def = positionDefaults[player.pos] ?? {}
   return {
-    name: player.name,
-    school: player.school,
-    pos: player.pos,
-    draftSeason: player.year,
-    pick: player.pick < 260 ? player.pick : 200,
-    age: player.age ?? 22,
-    height: player.height ?? def.height ?? 73,
-    weight: player.weight ?? def.weight ?? 220,
-    forty: player.forty ?? def.forty ?? 4.6,
+    name: player.name, school: player.school, pos: player.pos,
+    draftSeason: player.year, pick: player.pick < 260 ? player.pick : 200,
+    age:      player.age      ?? 22,
+    height:   player.height   ?? def.height   ?? 73,
+    weight:   player.weight   ?? def.weight   ?? 220,
+    forty:    player.forty    ?? def.forty    ?? 4.6,
     vertical: player.vertical ?? def.vertical ?? 33,
-    broad: player.broad ?? def.broad ?? 118,
-    cone: player.cone ?? def.cone ?? 7.1,
-    shuttle: player.shuttle ?? def.shuttle ?? 4.3,
-    bench: player.bench ?? 0,
-    film: pff?.pff.grade ?? baseline,
-    production: pff?.pff.production ?? Math.max(55, baseline - 2),
-    fit: pff?.pff.composite ?? baseline,
-    health: pff?.pff.clean ?? 80,
-    processing: pff?.pff.efficiency ?? (player.pos === 'QB' ? baseline : Math.max(55, baseline - 4)),
-    pffProfileId: pff?.id ?? '',
-    pffComposite: pff?.pff.composite ?? baseline,
-    pffGrade: pff?.pff.grade ?? baseline,
-    pffProduction: pff?.pff.production ?? Math.max(55, baseline - 2),
-    pffEfficiency: pff?.pff.efficiency ?? baseline,
-    pffClean: pff?.pff.clean ?? 70,
+    broad:    player.broad    ?? def.broad    ?? 118,
+    cone:     player.cone     ?? def.cone     ?? 7.1,
+    shuttle:  player.shuttle  ?? def.shuttle  ?? 4.3,
+    bench:    player.bench    ?? 0,
+    film:        pff?.pff.grade      ?? baseline,
+    production:  pff?.pff.production ?? Math.max(55, baseline - 2),
+    fit:         pff?.pff.composite  ?? baseline,
+    health:      pff?.pff.clean      ?? 80,
+    processing:  pff?.pff.efficiency ?? (player.pos === 'QB' ? baseline : Math.max(55, baseline - 4)),
+    pffProfileId:   pff?.id ?? '',
+    pffComposite:   pff?.pff.composite  ?? baseline,
+    pffGrade:       pff?.pff.grade      ?? baseline,
+    pffProduction:  pff?.pff.production ?? Math.max(55, baseline - 2),
+    pffEfficiency:  pff?.pff.efficiency ?? baseline,
+    pffClean:       pff?.pff.clean      ?? 70,
     schemeTag: '',
   }
 }
@@ -243,9 +226,9 @@ function rankArray(arr: number[]): number[] {
 function spearman(xs: number[], ys: number[]): number {
   if (xs.length < 3) return NaN
   const rx = rankArray(xs), ry = rankArray(ys)
-  const n = xs.length
+  const nd = xs.length
   const d2 = rx.reduce((s, r, i) => s + (r - ry[i]) ** 2, 0)
-  return 1 - 6 * d2 / (n * (n * n - 1))
+  return 1 - 6 * d2 / (nd * (nd * nd - 1))
 }
 
 function mae(pred: number[], actual: number[]): number {
@@ -256,6 +239,10 @@ function rmse(pred: number[], actual: number[]): number {
   return Math.sqrt(pred.reduce((s, p, i) => s + (p - actual[i]) ** 2, 0) / pred.length)
 }
 
+function bias(pred: number[], actual: number[]): number {
+  return pred.reduce((s, p, i) => s + (p - actual[i]), 0) / pred.length
+}
+
 function median(arr: number[]): number {
   const s = [...arr].sort((a, b) => a - b)
   const m = Math.floor(s.length / 2)
@@ -263,47 +250,51 @@ function median(arr: number[]): number {
 }
 
 function fmt(x: number, dp = 3): string {
-  return isNaN(x) ? 'N/A' : x.toFixed(dp)
+  return isNaN(x) ? ' N/A ' : x.toFixed(dp)
 }
 
-// ── Load data ────────────────────────────────────────────────────────────────
+function fmtBias(x: number, dp = 1): string {
+  if (isNaN(x)) return '  N/A'
+  const s = x >= 0 ? '+' : ''
+  return `${s}${x.toFixed(dp)}`
+}
+
+// ── Load data ─────────────────────────────────────────────────────────────────
 
 process.stdout.write('Loading data... ')
 
-const combine = parseCsv(readFileSync(DATA + 'combine.csv', 'utf-8'))
-const draft   = parseCsv(readFileSync(DATA + 'draft_picks.csv', 'utf-8'))
-
-const b64   = readFileSync(DATA + 'pff_comparison_profiles.json.gz.b64', 'utf-8').replace(/\s/g, '')
-const bytes = Buffer.from(b64, 'base64')
-const pffPayload = JSON.parse(gunzipSync(bytes).toString('utf-8')) as PffPayload
+const combine    = parseCsv(readFileSync(DATA + 'combine.csv', 'utf-8'))
+const draft      = parseCsv(readFileSync(DATA + 'draft_picks.csv', 'utf-8'))
+const b64        = readFileSync(DATA + 'pff_comparison_profiles.json.gz.b64', 'utf-8').replace(/\s/g, '')
+const pffPayload = JSON.parse(gunzipSync(Buffer.from(b64, 'base64')).toString('utf-8')) as PffPayload
 
 const pool        = buildPool(combine, draft)
 const pffProfiles = normalizePff(pffPayload.profiles)
 
-// Build PFF lookup by clean name + season
 const pffByKey = new Map<string, PffProfile>()
-for (const p of pffProfiles) {
-  pffByKey.set(`${clean(p.name)}|${p.draftSeason}`, p)
-}
+for (const p of pffProfiles) pffByKey.set(`${clean(p.name)}|${p.draftSeason}`, p)
 
 console.log(`✓  pool=${pool.length} pff=${pffProfiles.length}`)
 
 // ── Run evaluation ────────────────────────────────────────────────────────────
 
 type EvalRow = {
-  player: Historical
-  projScore: number
-  projAv: number
-  actualAv: number
-  hasPff: boolean
+  player:       Historical
+  prospect:     Prospect
+  projScore:    number
+  projAv:       number
+  projFloor:    number
+  projMedian:   number
+  projCeiling:  number
+  projCategory: Category   // argmax of odds
+  actualAv:     number
+  actualCategory: Category
+  hasPff:       boolean
 }
 
 const evalSet = pool.filter((p) =>
-  p.year >= 2000 &&
-  p.year <= yearMax &&
-  p.pick < 260 &&
-  KNOWN_POSITIONS.has(p.pos) &&
-  (!filterPos || p.pos === filterPos)
+  p.year >= 2000 && p.year <= yearMax && p.pick < 260 &&
+  KNOWN_POSITIONS.has(p.pos) && (!filterPos || p.pos === filterPos)
 )
 
 console.log(`Evaluating ${evalSet.length} players (year ≤ ${yearMax}${filterPos ? `, pos=${filterPos}` : ''})...`)
@@ -313,30 +304,42 @@ let done = 0
 const start = Date.now()
 
 for (const player of evalSet) {
-  const pff = pffByKey.get(`${clean(player.name)}|${player.year}`)
+  const pff      = pffByKey.get(`${clean(player.name)}|${player.year}`)
   const prospect = toProspect(player, pff)
-  const proj = project(prospect, pool, pffProfiles, player.id)
+  const proj     = project(prospect, pool, pffProfiles, player.id)
+
+  // Predicted category = highest-odds outcome
+  const projCategory = outcomeOrder.reduce((best, cat) =>
+    (proj.odds[cat] ?? 0) > (proj.odds[best] ?? 0) ? cat : best
+  , outcomeOrder[0])
+
   results.push({
-    player,
-    projScore: proj.score,
-    projAv: proj.expectedAv,
-    actualAv: player.av,
-    hasPff: !!pff,
+    player, prospect,
+    projScore:    proj.score,
+    projAv:       proj.expectedAv,
+    projFloor:    proj.floor,
+    projMedian:   proj.median,
+    projCeiling:  proj.ceiling,
+    projCategory,
+    actualAv:     player.av,
+    actualCategory: player.category,
+    hasPff:       !!pff,
   })
+
   done++
   if (done % 200 === 0) {
-    const elapsed = (Date.now() - start) / 1000
-    process.stdout.write(`  ${done}/${evalSet.length} (${elapsed.toFixed(1)}s)\r`)
+    process.stdout.write(`  ${done}/${evalSet.length} (${((Date.now() - start) / 1000).toFixed(1)}s)\r`)
   }
 }
 
-const elapsed = ((Date.now() - start) / 1000).toFixed(1)
-console.log(`  Done in ${elapsed}s                    `)
+console.log(`  Done in ${((Date.now() - start) / 1000).toFixed(1)}s                    `)
 
-// ── Compute overall metrics ───────────────────────────────────────────────────
+// ── Core metrics helper ───────────────────────────────────────────────────────
 
-function metrics(rows: EvalRow[]): { rho: number; maeAv: number; rmseAv: number; n: number; medAv: number } {
-  if (rows.length < 3) return { rho: NaN, maeAv: NaN, rmseAv: NaN, n: rows.length, medAv: NaN }
+type Metrics = { rho: number; maeAv: number; rmseAv: number; biasAv: number; n: number; medAv: number }
+
+function metrics(rows: EvalRow[]): Metrics {
+  if (rows.length < 3) return { rho: NaN, maeAv: NaN, rmseAv: NaN, biasAv: NaN, n: rows.length, medAv: NaN }
   const scores  = rows.map((r) => r.projScore)
   const projAvs = rows.map((r) => r.projAv)
   const actuals = rows.map((r) => r.actualAv)
@@ -344,60 +347,55 @@ function metrics(rows: EvalRow[]): { rho: number; maeAv: number; rmseAv: number;
     rho:    spearman(scores, actuals),
     maeAv:  mae(projAvs, actuals),
     rmseAv: rmse(projAvs, actuals),
+    biasAv: bias(projAvs, actuals),
     n:      rows.length,
     medAv:  median(actuals),
   }
 }
 
-// ── Report ────────────────────────────────────────────────────────────────────
+// ── 1. OVERALL & BREAKDOWNS ───────────────────────────────────────────────────
 
-console.log('\n══════════════════════════════════════════════════════')
+console.log('\n══════════════════════════════════════════════════════════════')
 console.log(' OVERALL')
-console.log('══════════════════════════════════════════════════════')
+console.log('══════════════════════════════════════════════════════════════')
 const overall = metrics(results)
-console.log(`  n=${overall.n}  Spearman ρ=${fmt(overall.rho)}  MAE=${fmt(overall.maeAv, 1)} AV  RMSE=${fmt(overall.rmseAv, 1)} AV  median actual AV=${fmt(overall.medAv, 1)}`)
+console.log(`  n=${overall.n}  ρ=${fmt(overall.rho)}  MAE=${fmt(overall.maeAv, 1)}  RMSE=${fmt(overall.rmseAv, 1)}  bias=${fmtBias(overall.biasAv)} AV  med actual=${fmt(overall.medAv, 1)}`)
 
-// By position
-console.log('\n── By position ───────────────────────────────────────')
+console.log('\n── By position ───────────────────────────────────────────────')
 const byPos: Record<string, EvalRow[]> = {}
-for (const r of results) {
-  ;(byPos[r.player.pos] ??= []).push(r)
-}
+for (const r of results) (byPos[r.player.pos] ??= []).push(r)
 for (const pos of ['QB', 'RB', 'WR', 'TE', 'OL', 'DL', 'LB', 'CB', 'S']) {
   const rows = byPos[pos]
   if (!rows || rows.length < 5) continue
   const m = metrics(rows)
-  console.log(`  ${pos.padEnd(3)} n=${String(m.n).padStart(3)}  ρ=${fmt(m.rho)}  MAE=${fmt(m.maeAv, 1)}  RMSE=${fmt(m.rmseAv, 1)}`)
+  console.log(`  ${pos.padEnd(3)} n=${String(m.n).padStart(3)}  ρ=${fmt(m.rho)}  MAE=${fmt(m.maeAv, 1)}  RMSE=${fmt(m.rmseAv, 1)}  bias=${fmtBias(m.biasAv)}`)
 }
 
-// By pick range
-console.log('\n── By pick range ─────────────────────────────────────')
 const pickRanges = [
-  { label: 'Rd 1  (1-32)',   lo: 1,   hi: 32  },
-  { label: 'Rd 2  (33-64)',  lo: 33,  hi: 64  },
-  { label: 'Rd 3  (65-100)', lo: 65,  hi: 100 },
+  { label: 'Rd 1  (1-32)',     lo: 1,   hi: 32  },
+  { label: 'Rd 2  (33-64)',    lo: 33,  hi: 64  },
+  { label: 'Rd 3  (65-100)',   lo: 65,  hi: 100 },
   { label: 'Rd 4-5 (101-160)', lo: 101, hi: 160 },
-  { label: 'Rd 6-7 (161+)',  lo: 161, hi: 999 },
+  { label: 'Rd 6-7 (161+)',    lo: 161, hi: 999 },
 ]
+console.log('\n── By pick range (with signed bias) ──────────────────────────')
 for (const { label, lo, hi } of pickRanges) {
   const rows = results.filter((r) => r.player.pick >= lo && r.player.pick <= hi)
   if (rows.length < 5) continue
   const m = metrics(rows)
-  console.log(`  ${label.padEnd(20)} n=${String(m.n).padStart(3)}  ρ=${fmt(m.rho)}  MAE=${fmt(m.maeAv, 1)}  RMSE=${fmt(m.rmseAv, 1)}`)
+  console.log(`  ${label.padEnd(22)} n=${String(m.n).padStart(3)}  ρ=${fmt(m.rho)}  MAE=${fmt(m.maeAv, 1)}  bias=${fmtBias(m.biasAv)}`)
 }
 
-// By PFF availability
 const withPff    = results.filter((r) => r.hasPff)
 const withoutPff = results.filter((r) => !r.hasPff)
 if (withPff.length >= 10 && withoutPff.length >= 10) {
-  console.log('\n── PFF data availability ─────────────────────────────')
+  console.log('\n── PFF data availability ─────────────────────────────────────')
   const mp = metrics(withPff), mn = metrics(withoutPff)
-  console.log(`  With PFF    n=${String(mp.n).padStart(3)}  ρ=${fmt(mp.rho)}  MAE=${fmt(mp.maeAv, 1)}  RMSE=${fmt(mp.rmseAv, 1)}`)
-  console.log(`  Without PFF n=${String(mn.n).padStart(3)}  ρ=${fmt(mn.rho)}  MAE=${fmt(mn.maeAv, 1)}  RMSE=${fmt(mn.rmseAv, 1)}`)
+  console.log(`  With PFF    n=${String(mp.n).padStart(3)}  ρ=${fmt(mp.rho)}  MAE=${fmt(mp.maeAv, 1)}  bias=${fmtBias(mp.biasAv)}`)
+  console.log(`  Without PFF n=${String(mn.n).padStart(3)}  ρ=${fmt(mn.rho)}  MAE=${fmt(mn.maeAv, 1)}  bias=${fmtBias(mn.biasAv)}`)
 }
 
-// By draft year band
-console.log('\n── By draft year ─────────────────────────────────────')
+console.log('\n── By draft year ─────────────────────────────────────────────')
 const yearBands = [
   { label: '2000-2006', lo: 2000, hi: 2006 },
   { label: '2007-2012', lo: 2007, hi: 2012 },
@@ -408,17 +406,194 @@ for (const { label, lo, hi } of yearBands) {
   const rows = results.filter((r) => r.player.year >= lo && r.player.year <= hi)
   if (rows.length < 5) continue
   const m = metrics(rows)
-  console.log(`  ${label.padEnd(12)} n=${String(m.n).padStart(3)}  ρ=${fmt(m.rho)}  MAE=${fmt(m.maeAv, 1)}  RMSE=${fmt(m.rmseAv, 1)}`)
+  console.log(`  ${label.padEnd(12)} n=${String(m.n).padStart(3)}  ρ=${fmt(m.rho)}  MAE=${fmt(m.maeAv, 1)}  bias=${fmtBias(m.biasAv)}`)
 }
 
-// Verbose: worst misses
+// ── 2. CATEGORY CONFUSION MATRIX ─────────────────────────────────────────────
+
+console.log('\n══════════════════════════════════════════════════════════════')
+console.log(' CATEGORY CONFUSION MATRIX  (predicted row → actual column)')
+console.log('══════════════════════════════════════════════════════════════')
+
+// 3-tier grouping for readability
+function tier(cat: Category): 'Low' | 'Mid' | 'High' {
+  if (cat === 'Bust' || cat === 'Reserve') return 'Low'
+  if (cat === 'Role' || cat === 'Starter') return 'Mid'
+  return 'High'  // High-end starter, Star
+}
+
+const tiers = ['Low', 'Mid', 'High'] as const
+type Tier = typeof tiers[number]
+
+// 3×3 matrix
+const confMatrix: Record<Tier, Record<Tier, number>> = {
+  Low:  { Low: 0, Mid: 0, High: 0 },
+  Mid:  { Low: 0, Mid: 0, High: 0 },
+  High: { Low: 0, Mid: 0, High: 0 },
+}
+for (const r of results) {
+  confMatrix[tier(r.projCategory)][tier(r.actualCategory)]++
+}
+
+const colW = 8
+const hdr = `  ${'Pred \\ Actual'.padEnd(12)} ${'Low'.padStart(colW)} ${'Mid'.padStart(colW)} ${'High'.padStart(colW)}  ${'Total'.padStart(colW)}`
+console.log(hdr)
+for (const pred of tiers) {
+  const row = confMatrix[pred]
+  const total = row.Low + row.Mid + row.High
+  const pctLow  = total ? (row.Low  / total * 100).toFixed(0) + '%' : '-'
+  const pctMid  = total ? (row.Mid  / total * 100).toFixed(0) + '%' : '-'
+  const pctHigh = total ? (row.High / total * 100).toFixed(0) + '%' : '-'
+  console.log(`  ${'→'+pred.padEnd(11)} ${(row.Low  + ' ('+pctLow+')').padStart(colW)} ${(row.Mid  + ' ('+pctMid+')').padStart(colW)} ${(row.High + ' ('+pctHigh+')').padStart(colW)}  ${String(total).padStart(colW)}`)
+}
+
+// Column totals
+const actLow  = results.filter((r) => tier(r.actualCategory)  === 'Low').length
+const actMid  = results.filter((r) => tier(r.actualCategory)  === 'Mid').length
+const actHigh = results.filter((r) => tier(r.actualCategory)  === 'High').length
+console.log(`  ${'Actual total'.padEnd(12)} ${String(actLow).padStart(colW)} ${String(actMid).padStart(colW)} ${String(actHigh).padStart(colW)}  ${String(results.length).padStart(colW)}`)
+
+// Category-level accuracy
+const correct = results.filter((r) => tier(r.projCategory) === tier(r.actualCategory)).length
+console.log(`\n  Tier accuracy: ${correct}/${results.length} = ${(correct / results.length * 100).toFixed(1)}%`)
+
+// High-value recall: how often do actual Stars/HES get predicted High?
+const actualHigh  = results.filter((r) => tier(r.actualCategory) === 'High')
+const hiRecall    = actualHigh.length ? actualHigh.filter((r) => tier(r.projCategory) === 'High').length / actualHigh.length : NaN
+console.log(`  Star/HES recall (actual High → predicted High): ${(hiRecall * 100).toFixed(1)}%  (n=${actualHigh.length})`)
+
+// Bust precision: of "Low" predictions, how many actually busted?
+const predLow     = results.filter((r) => tier(r.projCategory) === 'Low')
+const bustPrec    = predLow.length ? predLow.filter((r) => tier(r.actualCategory) === 'Low').length / predLow.length : NaN
+console.log(`  Bust precision  (predicted Low → actual Low):   ${(bustPrec * 100).toFixed(1)}%  (n=${predLow.length})`)
+
+// ── 3. FLOOR / MEDIAN / CEILING CALIBRATION ──────────────────────────────────
+
+console.log('\n══════════════════════════════════════════════════════════════')
+console.log(' CALIBRATION  (where actual AV falls relative to projections)')
+console.log('══════════════════════════════════════════════════════════════')
+console.log('  Ideal: ~10% below floor, ~40% floor→median, ~40% median→ceiling, ~10% above ceiling')
+console.log()
+
+function calibrate(rows: EvalRow[], label: string) {
+  if (rows.length < 5) return
+  let belowFloor = 0, floorToMed = 0, medToCeil = 0, aboveCeil = 0
+  for (const r of rows) {
+    const av = r.actualAv
+    if      (av < r.projFloor)                        belowFloor++
+    else if (av < r.projMedian)                       floorToMed++
+    else if (av <= r.projCeiling)                     medToCeil++
+    else                                               aboveCeil++
+  }
+  const tot = rows.length
+  const pct = (x: number) => (x / tot * 100).toFixed(0).padStart(3) + '%'
+  console.log(`  ${label.padEnd(22)} n=${String(tot).padStart(4)}  below-floor=${pct(belowFloor)}  floor↔med=${pct(floorToMed)}  med↔ceil=${pct(medToCeil)}  above-ceil=${pct(aboveCeil)}`)
+}
+
+calibrate(results, 'Overall')
+for (const pos of ['QB', 'RB', 'WR', 'TE', 'OL', 'DL', 'LB', 'CB', 'S']) {
+  const rows = byPos[pos]
+  if (rows && rows.length >= 5) calibrate(rows, pos)
+}
+console.log()
+for (const { label, lo, hi } of pickRanges) {
+  calibrate(results.filter((r) => r.player.pick >= lo && r.player.pick <= hi), label)
+}
+
+// ── 4. SIGNAL ABLATION ────────────────────────────────────────────────────────
+
+if (doAblation) {
+  console.log('\n══════════════════════════════════════════════════════════════')
+  console.log(' SIGNAL ABLATION  (each signal neutralized → Δρ vs baseline)')
+  console.log(' Methodology: replace signal inputs with position-neutral values')
+  console.log('══════════════════════════════════════════════════════════════')
+
+  const baseRho = overall.rho
+
+  type AblationSpec = {
+    name: string
+    modify: (p: Prospect) => Prospect
+  }
+
+  const ablations: AblationSpec[] = [
+    {
+      name: 'Athletic (combine)',
+      modify: (p) => {
+        const def = positionDefaults[p.pos] ?? {}
+        return { ...p, forty: def.forty ?? 4.6, vertical: def.vertical ?? 33,
+          broad: def.broad ?? 118, cone: def.cone ?? 7.1, shuttle: def.shuttle ?? 4.3 }
+      },
+    },
+    {
+      name: 'Size (ht/wt)',
+      modify: (p) => {
+        const def = positionDefaults[p.pos] ?? {}
+        return { ...p, height: def.height ?? 73, weight: def.weight ?? 220 }
+      },
+    },
+    {
+      name: 'Scout / film',
+      modify: (p) => ({ ...p, film: 70, production: 70, fit: 70, health: 70, processing: 70 }),
+    },
+    {
+      name: 'PFF grades',
+      modify: (p) => ({ ...p, pffComposite: 70, pffGrade: 70, pffProduction: 70, pffEfficiency: 70, pffClean: 70 }),
+    },
+    {
+      name: 'Age signal',
+      modify: (p) => ({ ...p, age: 22 }),
+    },
+    {
+      name: 'Bench/strength',
+      modify: (p) => ({ ...p, bench: 0 }),
+    },
+  ]
+
+  // Limit ablation to a sample for speed if large eval set
+  const ablSample = results.length > 1500 ? results.filter((_, i) => i % 3 === 0) : results
+  console.log(`  (running on ${ablSample.length} players — ${results.length > 1500 ? 'sampled 1-in-3 for speed' : 'full set'})`)
+  console.log(`  Baseline ρ = ${fmt(baseRho)}\n`)
+
+  for (const abl of ablations) {
+    const ablStart = Date.now()
+    const ablScores: number[] = []
+    const actuals: number[] = []
+
+    for (const r of ablSample) {
+      const modified = abl.modify(r.prospect)
+      const proj = project(modified, pool, pffProfiles, r.player.id)
+      ablScores.push(proj.score)
+      actuals.push(r.actualAv)
+    }
+
+    const ablRho = spearman(ablScores, actuals)
+    const delta  = ablRho - baseRho
+    const elapsed2 = ((Date.now() - ablStart) / 1000).toFixed(1)
+    const sign = delta >= 0 ? '+' : ''
+    console.log(`  ${abl.name.padEnd(20)} ρ=${fmt(ablRho)}  Δρ=${sign}${fmt(delta)}  (${elapsed2}s)`)
+  }
+  console.log(`\n  Positive Δρ = signal hurts; negative Δρ = signal helps.`)
+}
+
+// ── 5. VERBOSE: WORST MISSES ──────────────────────────────────────────────────
+
 if (verbose) {
-  console.log('\n── Largest absolute misses (expectedAv vs actualAv) ─')
-  const sorted = [...results].sort((a, b) => Math.abs(b.projAv - b.actualAv) - Math.abs(a.projAv - a.actualAv)).slice(0, 20)
+  console.log('\n══════════════════════════════════════════════════════════════')
+  console.log(' WORST MISSES  (|expectedAv − actualAv|, top 20)')
+  console.log('══════════════════════════════════════════════════════════════')
+  const sorted = [...results]
+    .sort((a, b) => Math.abs(b.projAv - b.actualAv) - Math.abs(a.projAv - a.actualAv))
+    .slice(0, 20)
   for (const r of sorted) {
-    const err = (r.projAv - r.actualAv).toFixed(1)
+    const err  = (r.projAv - r.actualAv).toFixed(1)
     const sign = r.projAv > r.actualAv ? '+' : ''
-    console.log(`  ${r.player.name.padEnd(22)} ${r.player.pos} ${r.player.year} pick ${String(r.player.pick).padStart(3)}  actual=${String(r.actualAv).padStart(3)}  proj=${r.projAv.toFixed(1).padStart(5)}  err=${sign}${err}`)
+    console.log(
+      `  ${r.player.name.padEnd(22)} ${r.player.pos} ${r.player.year}` +
+      ` pick ${String(r.player.pick).padStart(3)}` +
+      `  actual=${String(r.actualAv).padStart(3)}` +
+      `  proj=${r.projAv.toFixed(1).padStart(5)}` +
+      `  err=${sign}${err}`
+    )
   }
 }
 
