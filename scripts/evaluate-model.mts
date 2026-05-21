@@ -10,11 +10,17 @@
 //   node --experimental-strip-types scripts/evaluate-model.mts --ablation
 //   node --experimental-strip-types scripts/evaluate-model.mts --verbose
 //   node --experimental-strip-types scripts/evaluate-model.mts --walk-forward
+//
+// Walk-forward mode (--walk-forward):
+//   For each player drafted in year Y, the comp pool is restricted to years < Y
+//   AND pff profiles are restricted to draftSeason < Y. preDraft mode disables
+//   NFL-outcome weighting in pffSim (tierWeight/snapBoost/experienceBonus = 1.0).
+//   Calibration coefficients are still globally trained — label: "quasi-walk-forward".
 
 import { readFileSync } from 'node:fs'
 import { gunzipSync } from 'node:zlib'
 import type { Historical, PffProfile, Prospect, Category } from '../src/model.ts'
-import { clean, project, matureOutcomeCutoff, outcomeOrder } from '../src/model.ts'
+import { clean, project, calibratedExpectedAv, matureOutcomeCutoff, outcomeOrder } from '../src/model.ts'
 
 // ── CLI flags ─────────────────────────────────────────────────────────────────
 
@@ -306,10 +312,12 @@ const start = Date.now()
 for (const player of evalSet) {
   const pff      = pffByKey.get(`${clean(player.name)}|${player.year}`)
   const prospect = toProspect(player, pff)
-  // Walk-forward: restrict comp pool to players drafted before this player's year
-  // to avoid using any future data and match real-world deployment conditions.
-  const evalPool = walkForward ? pool.filter((p) => p.year < player.year) : pool
-  const proj     = project(prospect, evalPool, pffProfiles, player.id)
+  // Walk-forward: restrict BOTH comp pool and pff profiles to prior years only.
+  // preDraft=true disables tierWeight/snapBoost/experienceBonus in pffSim so comp
+  // selection is based purely on pre-draft signals, not known NFL outcomes.
+  const evalPool       = walkForward ? pool.filter((p) => p.year < player.year) : pool
+  const evalPffProfiles = walkForward ? pffProfiles.filter((p) => p.draftSeason < player.year) : pffProfiles
+  const proj           = project(prospect, evalPool, evalPffProfiles, player.id, undefined, undefined, undefined, undefined, walkForward)
 
   // Predicted category = highest-odds outcome
   const projCategory = outcomeOrder.reduce((best, cat) =>
@@ -359,16 +367,27 @@ function metrics(rows: EvalRow[]): Metrics {
 // ── 1. OVERALL & BREAKDOWNS ───────────────────────────────────────────────────
 
 console.log('\n══════════════════════════════════════════════════════════════')
-console.log(' OVERALL')
+console.log(` OVERALL${walkForward ? '  [quasi-walk-forward: comps+PFF time-filtered, calibration coefs static]' : ''}`)
 console.log('══════════════════════════════════════════════════════════════')
 const overall = metrics(results)
-console.log(`  n=${overall.n}  ρ=${fmt(overall.rho)}  MAE=${fmt(overall.maeAv, 1)}  RMSE=${fmt(overall.rmseAv, 1)}  bias=${fmtBias(overall.biasAv)} AV  med actual=${fmt(overall.medAv, 1)}`)
+console.log(`  Full model  n=${overall.n}  ρ=${fmt(overall.rho)}  MAE=${fmt(overall.maeAv, 1)}  RMSE=${fmt(overall.rmseAv, 1)}  bias=${fmtBias(overall.biasAv)} AV`)
 
-// Pick-only baseline: ρ using draft capital alone (no combine, no PFF, no school)
-const pickScores  = results.map((r) => 100 * Math.pow(1 - (r.player.pick - 1) / 259, 0.58))
-const pickRho     = spearman(pickScores, results.map((r) => r.actualAv))
-const improvement = overall.rho - pickRho
-console.log(`\n  Pick-only baseline ρ=${fmt(pickRho)}  →  model lift: ${improvement >= 0 ? '+' : ''}${fmt(improvement)} ρ`)
+// Pick-only baseline: draft capital alone, plus calibrated AV from pick
+const pickScores   = results.map((r) => 100 * Math.pow(1 - (r.player.pick - 1) / 259, 0.58))
+const pickAvs      = results.map((r) => {
+  const draft = 100 * Math.pow(1 - (r.player.pick - 1) / 259, 0.58)
+  return calibratedExpectedAv(r.prospect, { draft, athletic: 50, size: 50, age: 50 })
+})
+const actuals      = results.map((r) => r.actualAv)
+const pickRho      = spearman(pickScores, actuals)
+const pickMae      = mae(pickAvs, actuals)
+const pickRmse     = rmse(pickAvs, actuals)
+const pickBias     = bias(pickAvs, actuals)
+console.log(`  Pick-only   n=${overall.n}  ρ=${fmt(pickRho)}  MAE=${fmt(pickMae, 1)}  RMSE=${fmt(pickRmse, 1)}  bias=${fmtBias(pickBias)} AV`)
+const rhoLift = overall.rho - pickRho
+const maeLift = pickMae - overall.maeAv
+const rmseLift = pickRmse - overall.rmseAv
+console.log(`  Model lift        Δρ=${rhoLift >= 0 ? '+' : ''}${fmt(rhoLift)}  ΔMAE=${maeLift >= 0 ? '+' : ''}${fmt(maeLift, 1)}  ΔRMSE=${rmseLift >= 0 ? '+' : ''}${fmt(rmseLift, 1)}`)
 
 console.log('\n── By position ───────────────────────────────────────────────')
 const byPos: Record<string, EvalRow[]> = {}
@@ -476,7 +495,49 @@ const predLow     = results.filter((r) => tier(r.projCategory) === 'Low')
 const bustPrec    = predLow.length ? predLow.filter((r) => tier(r.actualCategory) === 'Low').length / predLow.length : NaN
 console.log(`  Bust precision  (predicted Low → actual Low):   ${(bustPrec * 100).toFixed(1)}%  (n=${predLow.length})`)
 
-// ── 3. FLOOR / MEDIAN / CEILING CALIBRATION ──────────────────────────────────
+// ── 3. TOP BOARD HIT RATE ─────────────────────────────────────────────────────
+
+console.log('\n══════════════════════════════════════════════════════════════')
+console.log(' TOP BOARD HIT RATE  (per-year board quality)')
+console.log(' Model sorts each draft class by projScore; reports how often')
+console.log(' top-N selections are actually High-tier (star/HES) vs busts.')
+console.log('══════════════════════════════════════════════════════════════')
+
+const byYear: Record<number, EvalRow[]> = {}
+for (const r of results) (byYear[r.player.year] ??= []).push(r)
+
+type BoardStats = { highHits: number; bustHits: number; total: number; years: number }
+const boardN = [16, 32, 64, 100]
+const boardStats: Record<number, BoardStats> = Object.fromEntries(boardN.map((n) => [n, { highHits: 0, bustHits: 0, total: 0, years: 0 }]))
+
+// Actual top-N by AV within each year (the "oracle" answer)
+const oracleStats: Record<number, BoardStats> = Object.fromEntries(boardN.map((n) => [n, { highHits: 0, bustHits: 0, total: 0, years: 0 }]))
+
+for (const [, yearRows] of Object.entries(byYear)) {
+  const sorted     = [...yearRows].sort((a, b) => b.projScore - a.projScore)
+  const byActualAv = [...yearRows].sort((a, b) => b.actualAv - a.actualAv)
+  for (const n of boardN) {
+    if (yearRows.length < n) continue
+    const modelTop  = sorted.slice(0, n)
+    const oracleTop = byActualAv.slice(0, n)
+    const s  = boardStats[n];  s.highHits += modelTop.filter((r) => tier(r.actualCategory)  === 'High').length
+    s.bustHits += modelTop.filter((r) => tier(r.actualCategory) === 'Low').length
+    s.total += n; s.years++
+    const o  = oracleStats[n]; o.highHits += oracleTop.filter((r) => tier(r.actualCategory) === 'High').length
+    o.bustHits += oracleTop.filter((r) => tier(r.actualCategory) === 'Low').length
+    o.total += n; o.years++
+  }
+}
+
+const pct2 = (n: number, d: number) => d ? (n / d * 100).toFixed(1) + '%' : ' N/A'
+console.log(`  ${'Top-N'.padEnd(8)} ${'Star/HES%'.padStart(10)} ${'Bust%'.padStart(8)} ${'Years'.padStart(7)}   (oracle Star/HES%)`)
+for (const n of boardN) {
+  const s = boardStats[n], o = oracleStats[n]
+  if (s.years === 0) continue
+  console.log(`  Top-${String(n).padEnd(4)} ${pct2(s.highHits, s.total).padStart(10)} ${pct2(s.bustHits, s.total).padStart(8)} ${String(s.years).padStart(7)}   (oracle: ${pct2(o.highHits, o.total)})`)
+}
+
+// ── 4. FLOOR / MEDIAN / CEILING CALIBRATION ──────────────────────────────────
 
 console.log('\n══════════════════════════════════════════════════════════════')
 console.log(' CALIBRATION  (where actual AV falls relative to projections)')
@@ -509,7 +570,7 @@ for (const { label, lo, hi } of pickRanges) {
   calibrate(results.filter((r) => r.player.pick >= lo && r.player.pick <= hi), label)
 }
 
-// ── 4. SIGNAL ABLATION ────────────────────────────────────────────────────────
+// ── 5. SIGNAL ABLATION ────────────────────────────────────────────────────────
 
 if (doAblation) {
   console.log('\n══════════════════════════════════════════════════════════════')
@@ -552,6 +613,10 @@ if (doAblation) {
       name: 'Bench/strength',
       modify: (p) => ({ ...p, bench: 0 }),
     },
+    {
+      name: 'School tier',
+      modify: (p) => ({ ...p, school: '' }),
+    },
   ]
 
   // Limit ablation to a sample for speed if large eval set
@@ -566,8 +631,9 @@ if (doAblation) {
 
     for (const r of ablSample) {
       const modified = abl.modify(r.prospect)
-      const ablPool = walkForward ? pool.filter((p) => p.year < r.player.year) : pool
-      const proj = project(modified, ablPool, pffProfiles, r.player.id)
+      const ablPool        = walkForward ? pool.filter((p) => p.year < r.player.year) : pool
+      const ablPffProfiles = walkForward ? pffProfiles.filter((p) => p.draftSeason < r.player.year) : pffProfiles
+      const proj = project(modified, ablPool, ablPffProfiles, r.player.id, undefined, undefined, undefined, undefined, walkForward)
       ablScores.push(proj.score)
       actuals.push(r.actualAv)
     }
@@ -581,7 +647,7 @@ if (doAblation) {
   console.log(`\n  Positive Δρ = signal hurts; negative Δρ = signal helps.`)
 }
 
-// ── 5. VERBOSE: WORST MISSES ──────────────────────────────────────────────────
+// ── 6. VERBOSE: WORST MISSES ──────────────────────────────────────────────────
 
 if (verbose) {
   console.log('\n══════════════════════════════════════════════════════════════')
