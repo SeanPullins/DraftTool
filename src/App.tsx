@@ -355,7 +355,7 @@ export default function App() {
   useEffect(() => {
     async function load() {
       try {
-        const [combineCsv, draftCsv, pffPayload, extraData, consensusData, scoutData, injuryData, qbSeasonData, qbPffSeasonData, wrSeasonData, rbSeasonData, careerStatsData, prospectsQbData, rasCsv] = await Promise.all([
+        const [combineCsv, draftCsv, pffPayload, extraData, consensusData, scoutData, injuryData, qbSeasonData, qbPffSeasonData, wrPffSeasonData, wrSeasonData, rbSeasonData, careerStatsData, prospectsQbData, rasCsv] = await Promise.all([
           fetch(`${assetBase}data/combine.csv`).then((r) => r.text()),
           fetch(`${assetBase}data/draft_picks.csv`).then((r) => r.text()),
           loadPffPayload(),
@@ -365,6 +365,7 @@ export default function App() {
           fetch(`${assetBase}data/injury_flags_2025.json`).then((r) => r.json()).catch(() => null),
           fetch(`${assetBase}data/qb_seasons.json`).then((r) => r.json()).catch(() => null),
           fetch(`${assetBase}data/qb_pff_seasons.json`).then((r) => r.json()).catch(() => null),
+          fetch(`${assetBase}data/wr_pff_seasons.json`).then((r) => r.json()).catch(() => null),
           fetch(`${assetBase}data/wr_seasons.json`).then((r) => r.json()).catch(() => null),
           fetch(`${assetBase}data/rb_seasons.json`).then((r) => r.json()).catch(() => null),
           fetch(`${assetBase}data/career_stats.json`).then((r) => r.json()).catch(() => null),
@@ -386,6 +387,7 @@ export default function App() {
         if (injuryData?.flags?.length) setInjuryFlags(injuryData.flags)
         if (qbSeasonData?.records?.length) setQbSeasons(qbSeasonData.records)
         if (qbPffSeasonData?.records?.length) setQbPffSeasons(qbPffSeasonData.records)
+        if (wrPffSeasonData?.records?.length) setWrPffSeasons(wrPffSeasonData.records)
         if (wrSeasonData?.records?.length) setWrSeasons(wrSeasonData.records)
         if (rbSeasonData?.records?.length) setRbSeasons(rbSeasonData.records)
         if (careerStatsData && typeof careerStatsData === 'object') setCareerStats(careerStatsData as CareerStatMap)
