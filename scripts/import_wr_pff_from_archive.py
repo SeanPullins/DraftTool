@@ -79,13 +79,25 @@ def records_from_frame(df: pd.DataFrame, source_file: str, season: int):
     if "position" not in df.columns:
         raise ValueError(f"{source_file} has no position column")
 
-    wr_df = df[df["position"].astype(str).str.upper() == "WR"].copy()
+    # Include true WRs AND two-way/off-position players who have meaningful receiving usage.
+    # Example: Travis Hunter may be listed by PFF as CB, but he still belongs in receiving context.
+    routes = pd.to_numeric(df["routes"], errors="coerce") if "routes" in df.columns else 0
+    targets = pd.to_numeric(df["targets"], errors="coerce") if "targets" in df.columns else 0
+    receptions = pd.to_numeric(df["receptions"], errors="coerce") if "receptions" in df.columns else 0
+    yards = pd.to_numeric(df["yards"], errors="coerce") if "yards" in df.columns else 0
+
+    receiving_usage = (routes.fillna(0) > 0) | (targets.fillna(0) > 0) | (receptions.fillna(0) > 0) | (yards.fillna(0) != 0)
+    listed_wr = df["position"].astype(str).str.upper() == "WR"
+
+    wr_df = df[listed_wr | receiving_usage].copy()
+
     summary = {
         "source_file": source_file,
         "season": season,
         "rows_total": total_rows,
         "wr_rows": len(wr_df),
         "top_player": str(wr_df.iloc[0]["player"]) if len(wr_df) and "player" in wr_df.columns else None,
+        "note": "Includes WR plus off-position/two-way players with receiving usage.",
     }
 
     records = []
@@ -172,7 +184,7 @@ def main() -> int:
         "metadata": {
             "source_files": [p.name for p in paths],
             "record_type": "college_pff_receiving_summary_wr_only",
-            "position_filter": "WR",
+            "position_filter": "WR plus receiving-usage players, including two-way/off-position receiving rows",
             "season_mapping_basis": "Inferred from top-player/signature rows in each downloaded PFF receiving_summary CSV. No metric values were invented.",
             "included_seasons": included,
             "missing_seasons_in_input": missing,
