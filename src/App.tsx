@@ -1,6 +1,6 @@
 import { useDeferredValue, useEffect, useMemo, useRef, useState, type ChangeEvent, type CSSProperties, type ReactNode } from 'react'
-import type { Category, Prospect, Historical, PffProfile, QbSeason, WrSeason, RbSeason, Y1Data, CareerSeasonStat, CareerStatMap, ModelSignal } from './model'
-import { matureOutcomeCutoff, outcomeOrder, compCutoffYear, compCutoffForGroup, calibratedAvModel, group, signalWeights, clamp, clean, avg, q, project, isMatureOutcome } from './model'
+import type { Category, Prospect, Historical, PffProfile, QbSeason, QbPffSeason, WrSeason, RbSeason, Y1Data, CareerSeasonStat, CareerStatMap, ModelSignal } from './model'
+import { matureOutcomeCutoff, outcomeOrder, compCutoffYear, compCutoffForGroup, calibratedAvModel, group, signalWeights, clamp, clean, avg, q, project, isMatureOutcome, computeQbTrajectory } from './model'
 
 type Row = Record<string, string>
 type SavedProspect = Prospect & { id: string; updatedAt: string; notes?: string; savedScore?: number }
@@ -183,6 +183,7 @@ export default function App() {
   const [injuryFlags, setInjuryFlags] = useState<InjuryFlag[]>([])
   const [compareQuery, setCompareQuery] = useState('')
   const [qbSeasons, setQbSeasons] = useState<QbSeason[]>([])
+  const [qbPffSeasons, setQbPffSeasons] = useState<QbPffSeason[]>([])
   const [wrSeasons, setWrSeasons] = useState<WrSeason[]>([])
   const [rbSeasons, setRbSeasons] = useState<RbSeason[]>([])
   const [careerStats, setCareerStats] = useState<CareerStatMap>({})
@@ -226,12 +227,35 @@ export default function App() {
     () => injuryFlags.find((f) => clean(f.name) === clean(input.name)),
     [injuryFlags, input.name],
   )
-  // A3: look up QB grade trajectory for the active prospect so project() can apply it
-  const activeQbGradeDelta = useMemo(
-    () => input.pos === 'QB' ? (prospectsQb2027.find((p) => clean(p.name) === clean(input.name))?.trajectory.gradeDelta ?? null) : null,
+  // QB PFF trajectory: prefer computed season-over-season signal from qb_pff_seasons.json.
+  // Fallback to curated prospects_2027_qb.json gradeDelta if no computed trajectory is available.
+  const activeQbTrajectory = useMemo(
+    () => input.pos === 'QB'
+      ? computeQbTrajectory(input.draftSeason, input.name, qbPffSeasons)
+      : null,
+    [input.pos, input.draftSeason, input.name, qbPffSeasons],
+  )
+
+  const fallbackQbGradeDelta = useMemo(
+    () => input.pos === 'QB'
+      ? (prospectsQb2027.find((p) => clean(p.name) === clean(input.name))?.trajectory.gradeDelta ?? null)
+      : null,
     [prospectsQb2027, input.pos, input.name],
   )
-  const projection = useMemo(() => project(input, prospects, pffProfiles, undefined, y1Data, careerStats, activeInjuryFlag?.severity, activeQbGradeDelta), [input, prospects, pffProfiles, y1Data, careerStats, activeInjuryFlag, activeQbGradeDelta])
+
+  const activeQbGradeDelta = activeQbTrajectory?.gradeDelta ?? fallbackQbGradeDelta
+
+  const projectedInput = useMemo<Prospect>(
+    () => input.pos === 'QB' && activeQbTrajectory
+      ? { ...input, qbTrajectory: activeQbTrajectory }
+      : input,
+    [input, activeQbTrajectory],
+  )
+
+  const projection = useMemo(
+    () => project(projectedInput, prospects, pffProfiles, undefined, y1Data, careerStats, activeInjuryFlag?.severity, activeQbGradeDelta),
+    [projectedInput, prospects, pffProfiles, y1Data, careerStats, activeInjuryFlag, activeQbGradeDelta],
+  )
   const histFlagMap = useMemo(
     () => buildHistoricalFlagMap(
       lookupPool.filter((p) => p.year >= 2000 && p.year <= 2026 && p.pick < 260),
@@ -310,7 +334,7 @@ export default function App() {
   useEffect(() => {
     async function load() {
       try {
-        const [combineCsv, draftCsv, pffPayload, extraData, consensusData, scoutData, injuryData, qbSeasonData, wrSeasonData, rbSeasonData, careerStatsData, prospectsQbData, rasCsv] = await Promise.all([
+        const [combineCsv, draftCsv, pffPayload, extraData, consensusData, scoutData, injuryData, qbSeasonData, qbPffSeasonData, wrSeasonData, rbSeasonData, careerStatsData, prospectsQbData, rasCsv] = await Promise.all([
           fetch(`${assetBase}data/combine.csv`).then((r) => r.text()),
           fetch(`${assetBase}data/draft_picks.csv`).then((r) => r.text()),
           loadPffPayload(),
@@ -319,6 +343,7 @@ export default function App() {
           fetch(`${assetBase}data/scout_notes_2025.json`).then((r) => r.json()).catch(() => null),
           fetch(`${assetBase}data/injury_flags_2025.json`).then((r) => r.json()).catch(() => null),
           fetch(`${assetBase}data/qb_seasons.json`).then((r) => r.json()).catch(() => null),
+          fetch(`${assetBase}data/qb_pff_seasons.json`).then((r) => r.json()).catch(() => null),
           fetch(`${assetBase}data/wr_seasons.json`).then((r) => r.json()).catch(() => null),
           fetch(`${assetBase}data/rb_seasons.json`).then((r) => r.json()).catch(() => null),
           fetch(`${assetBase}data/career_stats.json`).then((r) => r.json()).catch(() => null),
@@ -339,6 +364,7 @@ export default function App() {
         if (scoutData?.notes?.length) setScoutNotes(scoutData.notes)
         if (injuryData?.flags?.length) setInjuryFlags(injuryData.flags)
         if (qbSeasonData?.records?.length) setQbSeasons(qbSeasonData.records)
+        if (qbPffSeasonData?.records?.length) setQbPffSeasons(qbPffSeasonData.records)
         if (wrSeasonData?.records?.length) setWrSeasons(wrSeasonData.records)
         if (rbSeasonData?.records?.length) setRbSeasons(rbSeasonData.records)
         if (careerStatsData && typeof careerStatsData === 'object') setCareerStats(careerStatsData as CareerStatMap)
