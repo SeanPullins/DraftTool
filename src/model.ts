@@ -595,6 +595,10 @@ function dangerFlags(input: Prospect, proj: { ceiling: number; floor: number; pf
   else if (input.pos === 'RB' && input.pick > 50) flags.push('RB depreciation risk')
   if (proj.ceiling - proj.floor > 35) flags.push('High outcome variance')
   if (proj.pffBlend === 0 && input.pick > 80) flags.push('Limited comp data')
+  if (input.officialRas != null) {
+    if (input.officialRas < 5.0 && input.pick <= 100) flags.push(`Athletic risk · RAS ${input.officialRas.toFixed(2)}`)
+    else if (input.officialRas < 6.0 && input.pick <= 32) flags.push(`Rd1 athletic concern · RAS ${input.officialRas.toFixed(2)}`)
+  }
   return flags
 }
 
@@ -687,11 +691,12 @@ export function project(input: Prospect, history: Historical[], pffProfiles: Pff
   const histExpectedAv = comps.reduce((sum, c) => sum + c.player.av * c.sim, 0) / histWeight
   const pffExpectedAv = pffComps.reduce((sum, c) => sum + (c.profile.nfl?.av || 0) * c.sim, 0) / pffWeight
   const compExpectedAv = blend(histExpectedAv, pffExpectedAv, pffBlend)
-  // Top picks benefit from institutional investment (more snaps, coaching) that comps underpredict;
-  // leaning more on the calibrated regression for Rd1-2 corrects systematic AV underprediction.
-  // QB comps outperform the position-agnostic regression (QBs have distinct AV dynamics);
-  // use a lower blend for QB so comps dominate. Non-QB top picks benefit from the regression.
-  const calibBlend = opts?.calibBlendOverride ?? (grp === 'QB' ? 0.06 : (input.pick <= 32 ? 0.26 : input.pick <= 64 ? 0.16 : 0.10))
+  // Ablation (walk-forward): 'Calib only (cb=1)' → +0.030 ρ vs current blend.
+  // Comp AV estimates degrade in WF mode because 90%+ of historical players lack real
+  // PFF data, making comp selection near-random beyond draft capital. Increasing
+  // calibBlend captures most of the regression benefit while preserving comp influence
+  // for floor/ceiling range. QB comps stay at low blend (QB dynamics differ from OLS).
+  const calibBlend = opts?.calibBlendOverride ?? (grp === 'QB' ? 0.08 : (input.pick <= 32 ? 0.55 : input.pick <= 64 ? 0.40 : 0.25))
   const expectedAv = blend(compExpectedAv, calibratedAv, calibBlend)
   const posAvValues = pool.filter((p) => p.av >= 0).map((p) => p.av)
   const posRelScore = posAvValues.length >= 15 ? pct(expectedAv, posAvValues) : avToScore(expectedAv)
@@ -752,6 +757,9 @@ export function project(input: Prospect, history: Historical[], pffProfiles: Pff
     ? Math.round(slotComps.filter((p) => p.av < expectedAv).length / slotComps.length * 100)
     : null
   const flags = dangerFlags(input, { ceiling, floor, pffBlend })
+  const rasHighlight: string | null = (input.officialRas != null && input.officialRas >= 9.0)
+    ? (input.pick > 128 ? `Athletic sleeper · RAS ${input.officialRas.toFixed(2)}` : `Elite athleticism · RAS ${input.officialRas.toFixed(2)}`)
+    : null
 
   const top10 = comps.slice(0, 10)
   const y1Coverage = y1Data ? top10.filter((c) => {
@@ -814,6 +822,7 @@ export function project(input: Prospect, history: Historical[], pffProfiles: Pff
     combineAthleticScore,
     athleticSource: (officialRasSignal != null ? 'official_ras' : 'combine_percentile') as 'official_ras' | 'combine_percentile',
     flags,
+    rasHighlight,
     y1Coverage,
     signals: { draft, athletic, size, age, strength, pff: pffSignal },
     confidence: { score: confidenceScore, dataCompleteness, compDensity: compDensityScore, hasPff: pffBlend > 0, missingFields },

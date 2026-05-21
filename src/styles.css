@@ -1774,6 +1774,18 @@ td small {
   padding: 2px 6px;
 }
 
+.rasHighlightFlag {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+  background: rgba(20,184,166,0.15);
+  color: #5eead4;
+  border: 1px solid rgba(20,184,166,0.3);
+  border-radius: 4px;
+  padding: 2px 6px;
+}
+
 /* ── Consensus range ─────────────────────────────── */
 .consensusRange {
   font-size: 10px;
