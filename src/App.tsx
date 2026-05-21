@@ -2383,6 +2383,17 @@ function ClassExplorer({ pool, history, pffProfiles, pffLookup, y1Data, careerSt
             const score = projected ? Math.round(projected.score) : 0
             const outcomeFlag = histFlagMap.get(player.id) ?? null
             const pffProfile = pffMap.get(player.id) ?? null
+            const qbPffContext = player.pos === 'QB' ? getQbPffContext(player.year, player.name, qbPffSeasons) : null
+            const wrPffContext = player.pos === 'WR' ? getWrPffContext(player.year, player.name, wrPffSeasons) : null
+            const pffContextScore =
+              pffProfile?.pff.composite ??
+              qbPffContext?.careerWeightedPassGrade ??
+              qbPffContext?.latestSeason?.grades_pass ??
+              wrPffContext?.careerWeightedRouteGrade ??
+              wrPffContext?.careerWeightedOffenseGrade ??
+              wrPffContext?.latestSeason?.route_grade ??
+              wrPffContext?.latestSeason?.offense_grade ??
+              null
             const isExpanded = expandedId === player.id
             const canExpand = pffProfile !== null || outcomeFlag !== null
             const colCount = 12 + (useProjections ? 2 : 0)
@@ -2404,7 +2415,9 @@ function ClassExplorer({ pool, history, pffProfiles, pffLookup, y1Data, careerSt
                 <td>{player.games || 0}</td>
                 <td>{player.starts || 0}</td>
                 <td>{player.av || 0}</td>
-                <td className="pffCol">{pffProfile ? pffProfile.pff.composite.toFixed(0) : '—'}</td>
+                <td className="pffCol" title={pffProfile ? 'PFF profile composite' : qbPffContext ? 'QB PFF season context' : wrPffContext ? 'WR PFF season context' : 'No PFF match'}>
+                  {pffContextScore != null ? pffContextScore.toFixed(0) : '—'}
+                </td>
                 {useProjections ? <td>{projected ? projected.av.toFixed(1) : '-'}</td> : null}
                 {useProjections ? <td style={{ color: projected ? scoreColor(score) : undefined, fontWeight: projected ? 800 : undefined }}>{projected ? Math.round(projected.score) : '-'}</td> : null}
                 <td>{player.proBowls || 0}</td>
