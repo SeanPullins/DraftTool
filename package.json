@@ -12,7 +12,8 @@
     "sources:prepare": "node scripts/prepare-sources.mjs",
     "data:refresh": "node scripts/refresh-data.mjs && node scripts/build-career-stats.mjs && node scripts/build-prospects-2027.mjs",
     "data:pff": "npm run sources:prepare && node scripts/build-pff-comparison-data.mjs",
-    "test": "vitest run"
+    "test": "vitest run",
+    "evaluate": "node --experimental-strip-types scripts/evaluate-model.mts"
   },
   "dependencies": {
     "@vitejs/plugin-react": "^6.0.1",

@@ -461,7 +461,7 @@ function y4SimFactor(player: Historical, careerStats: CareerStatMap): number {
 
 // ── Historical similarity ─────────────────────────────────────────────────────
 
-export function sim(input: Prospect, player: Historical, y1Data?: Y1Data, careerStats?: CareerStatMap) {
+export function sim(input: Prospect, player: Historical, y1Data?: Y1Data, careerStats?: CareerStatMap, refYear = 2022) {
   const distance =
     Math.abs(Math.log(input.pick + 1) - Math.log(player.pick + 1)) * .45 +
     z(input.height, player.height, 3) * .08 +
@@ -473,7 +473,7 @@ export function sim(input: Prospect, player: Historical, y1Data?: Y1Data, career
     z(input.shuttle, player.shuttle, .2) * .05 +
     (input.bench > 0 && player.bench ? z(input.bench, player.bench, 6) * .04 : 0) +
     (input.pos === player.pos ? 0 : .12)
-  const recency = Math.pow(0.96, Math.max(0, 2022 - player.year))
+  const recency = Math.pow(0.96, Math.max(0, refYear - player.year))
   const y1Factor = y1Data ? y1SimFactor(player, y1Data) : 1.0
   const y2Factor = careerStats ? y2SimFactor(player, careerStats) : 1.0
   const y3Factor = careerStats ? y3SimFactor(player, careerStats) : 1.0
@@ -536,6 +536,31 @@ export function pffSim(input: Prospect, profile: PffProfile, grp?: string) {
   return Math.exp(-distance) * recency * experienceBonus * tierWeight * snapBoost
 }
 
+// ── School production tier ────────────────────────────────────────────────────
+// Programs with elite historical draft production relative to recruiting rank.
+// Tier 1 (SEC/Big Ten blue-chips): consistent 30%+ starter rates over 2000-2022.
+// Tier 2 (other P4 heavyweights): meaningful but smaller edge.
+// Applied as a small scout-signal nudge; no positional differentiation.
+
+const SCHOOL_TIER1 = new Set([
+  'alabama', 'georgia', 'ohio state', 'michigan', 'lsu', 'clemson', 'notre dame',
+  'penn state', 'florida', 'florida state', 'auburn', 'oklahoma', 'texas', 'miami',
+  'usc', 'tennessee', 'louisville', 'iowa', 'wisconsin', 'washington',
+])
+const SCHOOL_TIER2 = new Set([
+  'oregon', 'stanford', 'nebraska', 'michigan state', 'pittsburgh', 'north carolina',
+  'kentucky', 'arkansas', 'mississippi state', 'baylor', 'tcu', 'west virginia',
+  'virginia tech', 'north carolina state', 'utah', 'ucla', 'texas a&m', 'ole miss',
+  'arizona state', 'georgia tech', 'kansas state', 'illinois',
+])
+
+export function schoolTierBoost(school: string): number {
+  const s = school.toLowerCase().trim()
+  if (SCHOOL_TIER1.has(s)) return 2.5
+  if (SCHOOL_TIER2.has(s)) return 1.0
+  return 0
+}
+
 // ── Danger flags ──────────────────────────────────────────────────────────────
 
 function dangerFlags(input: Prospect, proj: { ceiling: number; floor: number; pffBlend: number }): string[] {
@@ -568,7 +593,8 @@ export function project(input: Prospect, history: Historical[], pffProfiles: Pff
   const draft = 100 * Math.pow(1 - (input.pick - 1) / 259, .58)
   const athletic = avg([pct(input.forty, stats('forty'), true), pct(input.vertical, stats('vertical')), pct(input.broad, stats('broad')), pct(input.cone, stats('cone'), true), pct(input.shuttle, stats('shuttle'), true)])
   const size = avg([pct(input.height, stats('height')), pct(input.weight, stats('weight'))])
-  const scout = input.film * .32 + input.production * .23 + input.fit * .17 + input.health * .12 + input.processing * .16
+  const schoolBoost = schoolTierBoost(input.school)
+  const scout = input.film * .32 + input.production * .23 + input.fit * .17 + input.health * .12 + input.processing * .16 + schoolBoost
   const age = ageSignal(input.age, input.pos)
   const benchPool = stats('bench').filter((v) => v > 0)
   const strength = input.bench > 0 && benchPool.length >= 10 ? pct(input.bench, benchPool) : 50
@@ -615,7 +641,7 @@ export function project(input: Prospect, history: Historical[], pffProfiles: Pff
   const rawScore = baseScore * (1 - pffBlend) + pffSignal * pffBlend
   const calibratedAv = calibratedExpectedAv(input, { draft, athletic, size, age })
 
-  const comps = pool.map((p) => ({ player: p, sim: sim(input, p, y1Data, careerStats) })).sort((a, b) => b.sim - a.sim).slice(0, 80)
+  const comps = pool.map((p) => ({ player: p, sim: sim(input, p, y1Data, careerStats, grpCutoff) })).sort((a, b) => b.sim - a.sim).slice(0, 80)
   const histWeight = comps.reduce((sum, c) => sum + c.sim, 0) || 1
   const pffWeight = pffComps.reduce((sum, c) => sum + c.sim, 0) || 1
   const histExpectedAv = comps.reduce((sum, c) => sum + c.player.av * c.sim, 0) / histWeight
