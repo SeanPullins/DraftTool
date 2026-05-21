@@ -755,11 +755,14 @@ export default function App() {
             <button type="button" className={`panelToggle ${openPanels.scouting ? 'open' : 'closed'}`} onClick={() => togglePanel('scouting')} aria-label="Toggle panel">▾</button>
           </div>
           <div className={`panelBody${openPanels.scouting ? '' : ' collapsed'}`}>
-            <Slider label="Film" value={input.film} onChange={(v) => update('film', v)} />
-            <Slider label="Production" value={input.production} onChange={(v) => update('production', v)} />
-            <Slider label="Role fit" value={input.fit} onChange={(v) => update('fit', v)} />
-            <Slider label="Availability" value={input.health} onChange={(v) => update('health', v)} />
-            <Slider label="Processing" value={input.processing} onChange={(v) => update('processing', v)} />
+            <Slider
+              label="Scout grade"
+              value={Math.round(input.film * .32 + input.production * .23 + input.fit * .17 + input.health * .12 + input.processing * .16)}
+              onChange={(v) => setInput((c) => ({ ...c, film: v, production: v, fit: v, health: v, processing: v }))}
+            />
+            <p style={{ fontSize: '0.72rem', color: 'var(--text-muted, #888)', margin: '4px 0 0 2px' }}>
+              Overall pre-draft grade (1–99). Leave at 70 if unknown; PFF data fills this automatically when a player is matched.
+            </p>
           </div>
         </section>
 

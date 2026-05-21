@@ -178,8 +178,10 @@ function normalizePff(profiles: RawPff[]): PffProfile[] {
 // ── Build Prospect from Historical ────────────────────────────────────────────
 
 function toProspect(player: Historical, pff?: PffProfile): Prospect {
-  const baseline = player.pick <= 32 ? 84 : player.pick <= 64 ? 78 : player.pick <= 100 ? 72 : player.pick <= 150 ? 66 : 60
   const def = positionDefaults[player.pos] ?? {}
+  // Film defaults at neutral 70 regardless of pick; pick-correlated defaults
+  // duplicate the draft signal and add noise (confirmed by signal ablation).
+  // PFF grades replace the neutral default when a match is found.
   return {
     name: player.name, school: player.school, pos: player.pos,
     draftSeason: player.year, pick: player.pick < 260 ? player.pick : 200,
@@ -192,16 +194,16 @@ function toProspect(player: Historical, pff?: PffProfile): Prospect {
     cone:     player.cone     ?? def.cone     ?? 7.1,
     shuttle:  player.shuttle  ?? def.shuttle  ?? 4.3,
     bench:    player.bench    ?? 0,
-    film:        pff?.pff.grade      ?? baseline,
-    production:  pff?.pff.production ?? Math.max(55, baseline - 2),
-    fit:         pff?.pff.composite  ?? baseline,
-    health:      pff?.pff.clean      ?? 80,
-    processing:  pff?.pff.efficiency ?? (player.pos === 'QB' ? baseline : Math.max(55, baseline - 4)),
+    film:        pff?.pff.grade      ?? 70,
+    production:  pff?.pff.production ?? 70,
+    fit:         pff?.pff.composite  ?? 70,
+    health:      pff?.pff.clean      ?? 70,
+    processing:  pff?.pff.efficiency ?? 70,
     pffProfileId:   pff?.id ?? '',
-    pffComposite:   pff?.pff.composite  ?? baseline,
-    pffGrade:       pff?.pff.grade      ?? baseline,
-    pffProduction:  pff?.pff.production ?? Math.max(55, baseline - 2),
-    pffEfficiency:  pff?.pff.efficiency ?? baseline,
+    pffComposite:   pff?.pff.composite  ?? 70,
+    pffGrade:       pff?.pff.grade      ?? 70,
+    pffProduction:  pff?.pff.production ?? 70,
+    pffEfficiency:  pff?.pff.efficiency ?? 70,
     pffClean:       pff?.pff.clean      ?? 70,
     schemeTag: '',
   }

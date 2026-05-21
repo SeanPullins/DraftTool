@@ -217,7 +217,7 @@ export const group: Record<string, string> = {
 
 export const signalWeights: Record<string, { draft: number; athletic: number; size: number; scout: number; age: number; strength: number }> = {
   QB:    { draft: .34, athletic: .05, size: .05, scout: .38, age: .12, strength: .06 },
-  SKILL: { draft: .27, athletic: .21, size: .06, scout: .33, age: .10, strength: .03 },
+  SKILL: { draft: .30, athletic: .19, size: .03, scout: .33, age: .10, strength: .05 },
   // OL: cone/shuttle/forty are strongly predictive (r=−0.25 to −0.30) → raise athletic; age matters more than size
   OL:    { draft: .28, athletic: .16, size: .14, scout: .24, age: .10, strength: .08 },
   // FRONT: age r=−0.327 and bench r=0.219 are the dominant signals → raise age+strength
@@ -674,9 +674,11 @@ export function project(input: Prospect, history: Historical[], pffProfiles: Pff
   const floorMult = input.pick <= 32 ? 0.42 : input.pick <= 100 ? 0.28 : 0.12
   const floor = blend(q(rangeValues, .1), Math.max(0, expectedAv * floorMult), .25)
   const median = blend(q(rangeValues, .5), expectedAv, .35)
-  // Ceiling: early picks routinely produce outlier careers that exceed the comp-pool 90th
-  // percentile; widen the ceiling for top picks to capture more realistic upside.
-  const ceilMult = input.pick <= 32 ? 2.5 : input.pick <= 64 ? 2.1 : 1.85
+  // Ceiling: widen for early picks and all QBs to capture the lottery effect.
+  // QBs drafted anywhere can become elite — Brady (199), Wilson (75), Dak (135).
+  const ceilMult = grp === 'QB'
+    ? (input.pick <= 64 ? 3.5 : 2.8)
+    : (input.pick <= 32 ? 2.5 : input.pick <= 64 ? 2.1 : 1.85)
   const ceiling = blend(q(rangeValues, .9), Math.max(expectedAv, expectedAv * ceilMult), .25)
   const scoreLow = clamp(rawScore * 0.46 + (posAvValues.length >= 15 ? pct(floor, posAvValues) : avToScore(floor)) * 0.54 + scoreAdj, 1, 99)
   const scoreHigh = clamp(rawScore * 0.46 + (posAvValues.length >= 15 ? pct(ceiling, posAvValues) : avToScore(ceiling)) * 0.54 + scoreAdj, 1, 99)
