@@ -672,11 +672,11 @@ export default function App() {
     </div>
 
     {error ? <section className="panel empty">{error}</section> : page === 'class' ? <div className="classPage">
-      <ClassExplorer pool={lookupPool} history={prospects} pffProfiles={pffProfiles} pffLookup={pffLookup} y1Data={y1Data} careerStats={careerStats} histFlagMap={histFlagMap} currentName={input.name} currentYear={input.draftSeason} saved={saved} />
+      <ClassExplorer pool={lookupPool} history={prospects} pffProfiles={pffProfiles} pffLookup={pffLookup} y1Data={y1Data} careerStats={careerStats} histFlagMap={histFlagMap} currentName={input.name} currentYear={input.draftSeason} saved={saved} qbPffSeasons={qbPffSeasons} />
     </div> : page === 'players' ? <div className="classPage">
       <PlayerBrowser pool={lookupPool} history={prospects} histFlagMap={histFlagMap} onOpenModal={openModal} onCompare={handleCompare} />
     </div> : page === 'compare' ? <div className="classPage">
-      <CompareView pool={lookupPool} history={prospects} pffProfiles={pffProfiles} y1Data={y1Data} careerStats={careerStats} initialQuery={compareQuery} rasLookup={rasLookup} />
+      <CompareView pool={lookupPool} history={prospects} pffProfiles={pffProfiles} y1Data={y1Data} careerStats={careerStats} initialQuery={compareQuery} rasLookup={rasLookup} qbPffSeasons={qbPffSeasons} />
     </div> : page === 'trade' ? <div className="classPage">
       <TradeCalculator />
     </div> : page === 'rankings' ? <div className="classPage">
@@ -684,7 +684,7 @@ export default function App() {
     </div> : page === 'guide' ? <div className="classPage">
       <GuideView />
     </div> : page === 'prospects' ? <div className="classPage">
-      <ProspectsView prospects2027={prospectsQb2027} history={prospects} pffProfiles={pffProfiles} careerStats={careerStats} histFlagMap={histFlagMap} onLoad={loadProspect2027} />
+      <ProspectsView prospects2027={prospectsQb2027} history={prospects} pffProfiles={pffProfiles} careerStats={careerStats} histFlagMap={histFlagMap} qbPffSeasons={qbPffSeasons} onLoad={loadProspect2027} />
     </div> : <div className="layout">
       <aside className="controlPanel" data-pane="edit">
         <section className="panel loadPanel">
@@ -1087,6 +1087,7 @@ export default function App() {
         history={prospects}
         pffProfiles={pffProfiles}
         careerStats={careerStats}
+        qbPffSeasons={qbPffSeasons}
         onClose={() => setModalPlayer(null)}
         onCompare={handleCompare}
       />
@@ -1157,7 +1158,7 @@ function TableWrap({ children }: { children: ReactNode }) {
   return <div className="tableWrap">{children}</div>
 }
 
-function CompareView({ pool, history, pffProfiles, y1Data, careerStats, initialQuery = '', rasLookup = null }: { pool: Historical[]; history: Historical[]; pffProfiles: PffProfile[]; y1Data?: Y1Data; careerStats?: CareerStatMap; initialQuery?: string; rasLookup?: AppRasLookup | null }) {
+function CompareView({ pool, history, pffProfiles, y1Data, careerStats, initialQuery = '', rasLookup = null, qbPffSeasons }: { pool: Historical[]; history: Historical[]; pffProfiles: PffProfile[]; y1Data?: Y1Data; careerStats?: CareerStatMap; initialQuery?: string; rasLookup?: AppRasLookup | null; qbPffSeasons: QbPffSeason[] }) {
   const [q1, setQ1] = useState(initialQuery)
   const [q2, setQ2] = useState('')
   const [p1, setP1] = useState<Historical | null>(null)
@@ -1191,8 +1192,22 @@ function CompareView({ pool, history, pffProfiles, y1Data, careerStats, initialQ
   const pff2 = useMemo(() => p2 ? pffProfiles.find((pf) => samePlayerSeason(pf, p2.name, p2.year, p2.pos)) : undefined, [p2, pffProfiles])
   const ras1 = useMemo(() => p1 && rasLookup ? getAppRas(p1.name, p1.year, p1.pos, rasLookup) : null, [p1, rasLookup])
   const ras2 = useMemo(() => p2 && rasLookup ? getAppRas(p2.name, p2.year, p2.pos, rasLookup) : null, [p2, rasLookup])
-  const proj1 = useMemo(() => p1 ? project(prospectFromHistorical(p1, pff1, ras1), history, pffProfiles, p1.id, y1Data, careerStats) : null, [p1, pff1, ras1, history, pffProfiles, y1Data, careerStats])
-  const proj2 = useMemo(() => p2 ? project(prospectFromHistorical(p2, pff2, ras2), history, pffProfiles, p2.id, y1Data, careerStats) : null, [p2, pff2, ras2, history, pffProfiles, y1Data, careerStats])
+  const qbContext1 = useMemo(() => p1?.pos === 'QB' ? getQbPffContext(p1.year, p1.name, qbPffSeasons) : null, [p1, qbPffSeasons])
+  const qbContext2 = useMemo(() => p2?.pos === 'QB' ? getQbPffContext(p2.year, p2.name, qbPffSeasons) : null, [p2, qbPffSeasons])
+
+  const proj1 = useMemo(() => {
+    if (!p1) return null
+    const base = prospectFromHistorical(p1, pff1, ras1)
+    const withQb = qbContext1?.trajectory ? { ...base, qbTrajectory: qbContext1.trajectory } : base
+    return project(withQb, history, pffProfiles, p1.id, y1Data, careerStats, undefined, qbContext1?.trajectory?.gradeDelta ?? null)
+  }, [p1, pff1, ras1, history, pffProfiles, y1Data, careerStats, qbContext1])
+
+  const proj2 = useMemo(() => {
+    if (!p2) return null
+    const base = prospectFromHistorical(p2, pff2, ras2)
+    const withQb = qbContext2?.trajectory ? { ...base, qbTrajectory: qbContext2.trajectory } : base
+    return project(withQb, history, pffProfiles, p2.id, y1Data, careerStats, undefined, qbContext2?.trajectory?.gradeDelta ?? null)
+  }, [p2, pff2, ras2, history, pffProfiles, y1Data, careerStats, qbContext2])
 
   return <section className="panel tablePanel classPanel">
     <div className="panelTitle">
@@ -1642,15 +1657,17 @@ function RankStat({ label, rank, total }: { label: string; rank: number; total: 
   </div>
 }
 
-function PlayerModal({ player, history, pffProfiles, careerStats, onClose, onCompare }: {
+function PlayerModal({ player, history, pffProfiles, careerStats, qbPffSeasons, onClose, onCompare }: {
   player: Historical
   history: Historical[]
   pffProfiles: PffProfile[]
   careerStats: CareerStatMap
+  qbPffSeasons: QbPffSeason[]
   onClose: () => void
   onCompare: (name: string) => void
 }) {
   const pffMatch = pffProfiles.find((pf) => samePlayerSeason(pf, player.name, player.year, player.pos))
+  const qbPffContext = player.pos === 'QB' ? getQbPffContext(player.year, player.name, qbPffSeasons) : null
   const outcomeFlag = classifyHistoricalOutcome(player, pffMatch ?? null)
   const pct = posPercentile(player, history)
   const arcValues = syntheticArcValues(player)
@@ -1722,6 +1739,18 @@ function PlayerModal({ player, history, pffProfiles, careerStats, onClose, onCom
                 {player.cone ? <span>{player.cone.toFixed(2)}<small>Cone</small></span> : null}
                 {player.shuttle ? <span>{player.shuttle.toFixed(2)}<small>Shuttle</small></span> : null}
                 {player.bench ? <span>{player.bench}<small>Bench</small></span> : null}
+              </div>
+            </div>
+          )}
+          {qbPffContext && (
+            <div className="modalSection">
+              <div className="modalSectionTitle">QB PFF Context</div>
+              <div className="modalStats">
+                <div className="modalStat"><div className="modalStatVal">{qbPffContext.preDraftSeasons.length}</div><div className="modalStatLbl">Pre-draft seasons</div></div>
+                <div className="modalStat"><div className="modalStatVal">{qbPffContext.totalDropbacks}</div><div className="modalStatLbl">Dropbacks</div></div>
+                <div className="modalStat"><div className="modalStatVal">{qbPffContext.careerWeightedPassGrade != null ? qbPffContext.careerWeightedPassGrade.toFixed(1) : '—'}</div><div className="modalStatLbl">Weighted pass grade</div></div>
+                <div className="modalStat"><div className="modalStatVal">{qbPffContext.trajectory?.gradeDelta != null ? (qbPffContext.trajectory.gradeDelta >= 0 ? '+' : '') + qbPffContext.trajectory.gradeDelta.toFixed(1) : '—'}</div><div className="modalStatLbl">Grade delta</div></div>
+                <div className="modalStat"><div className="modalStatVal">{qbPffContext.trajectory?.trajectoryLabel ?? '—'}</div><div className="modalStatLbl">Trajectory</div></div>
               </div>
             </div>
           )}
@@ -2055,7 +2084,7 @@ function BrowserHeader({ label, sortKey, active, dir, onSort }: { label: string;
   </th>
 }
 
-function ClassExplorer({ pool, history, pffProfiles, pffLookup, y1Data, careerStats, histFlagMap, currentName, currentYear, saved }: { pool: Historical[]; history: Historical[]; pffProfiles: PffProfile[]; pffLookup: Map<string, PffProfile>; y1Data?: Y1Data; careerStats?: CareerStatMap; histFlagMap: Map<string, HistoricalOutcomeFlag>; currentName: string; currentYear: number; saved: SavedProspect[] }) {
+function ClassExplorer({ pool, history, pffProfiles, pffLookup, y1Data, careerStats, histFlagMap, currentName, currentYear, saved, qbPffSeasons }: { pool: Historical[]; history: Historical[]; pffProfiles: PffProfile[]; pffLookup: Map<string, PffProfile>; y1Data?: Y1Data; careerStats?: CareerStatMap; histFlagMap: Map<string, HistoricalOutcomeFlag>; currentName: string; currentYear: number; saved: SavedProspect[]; qbPffSeasons: QbPffSeason[] }) {
   const years = useMemo(() => {
     const set = new Set<number>()
     for (const player of pool) set.add(player.year)
@@ -2126,14 +2155,16 @@ function ClassExplorer({ pool, history, pffProfiles, pffLookup, y1Data, careerSt
       const cached = projCache.current.get(cacheKey)
       if (cached) { out.set(player.id, cached); continue }
       const pffMatch = pffLookup.get(`${clean(player.name)}|${player.year}|${group[player.pos] ?? player.pos}`) ?? undefined
+      const qbContext = player.pos === 'QB' ? getQbPffContext(player.year, player.name, qbPffSeasons) : null
       const synthesized = prospectFromHistorical(player, pffMatch)
-      const projected = project(synthesized, history, pffProfiles, player.id, y1Data, careerStats)
+      const synthesizedWithQbContext = qbContext?.trajectory ? { ...synthesized, qbTrajectory: qbContext.trajectory } : synthesized
+      const projected = project(synthesizedWithQbContext, history, pffProfiles, player.id, y1Data, careerStats, undefined, qbContext?.trajectory?.gradeDelta ?? null)
       const result = { av: projected.expectedAv, score: projected.score }
       projCache.current.set(cacheKey, result)
       out.set(player.id, result)
     }
     return out
-  }, [deferredFiltered, history, pffProfiles, pffLookup, useProjections, y1Data])
+  }, [deferredFiltered, history, pffProfiles, pffLookup, useProjections, y1Data, careerStats, qbPffSeasons])
 
   // O(1) player-to-PFF lookup for this class
   const pffMap = useMemo(() => {
@@ -3017,13 +3048,14 @@ function trajectoryDisplay(t: ProspectTrajectory): { icon: string; label: string
 }
 
 function ProspectsView({
-  prospects2027, history, pffProfiles, careerStats, histFlagMap, onLoad,
+  prospects2027, history, pffProfiles, careerStats, histFlagMap, qbPffSeasons, onLoad,
 }: {
   prospects2027: ProspectQB[]
   history: Historical[]
   pffProfiles: PffProfile[]
   careerStats: CareerStatMap
   histFlagMap: Map<string, HistoricalOutcomeFlag>
+  qbPffSeasons: QbPffSeason[]
   onLoad: (p: ProspectQB) => void
 }) {
   const [nameFilter, setNameFilter] = useState('')
@@ -3038,14 +3070,17 @@ function ProspectsView({
   const ranked = useMemo(() => {
     if (!history.length) return []
     return prospects2027.map((p) => {
-      const proj = project(p, history, pffProfiles, undefined, undefined, careerStats, undefined, p.trajectory.gradeDelta)
+      const qbContext = getQbPffContext(p.draftSeason, p.name, qbPffSeasons)
+      const prospectWithQbContext = qbContext?.trajectory ? { ...p, qbTrajectory: qbContext.trajectory } : p
+      const gradeDelta = qbContext?.trajectory?.gradeDelta ?? p.trajectory.gradeDelta
+      const proj = project(prospectWithQbContext, history, pffProfiles, undefined, undefined, careerStats, undefined, gradeDelta)
       const baseline = pickBaseline(p.pick)
       const pickSurplus = proj.expectedAv - baseline
       const riskFlags = prospectRiskFlags(p, bustRates)
       const patternAlerts = extractPatternAlerts(proj.fullComps, histFlagMap)
       return { prospect: p, proj, pickBaseline: baseline, pickSurplus, riskFlags, patternAlerts }
     })
-  }, [prospects2027, history, pffProfiles, careerStats, pickBaseline, bustRates, histFlagMap])
+  }, [prospects2027, history, pffProfiles, careerStats, pickBaseline, bustRates, histFlagMap, qbPffSeasons])
 
   const sorted = useMemo(() => {
     const base = [...ranked]
