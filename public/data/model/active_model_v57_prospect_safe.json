@@ -1,6 +1,6 @@
 {
   "version": "V5.7P",
-  "label": "V5.7P prospect-safe experimental",
+  "label": "V5.7P Prospect-Safe Experimental",
   "status": "experimental",
   "defaultLive": false,
   "baseModel": "V4",
@@ -35,5 +35,5 @@
       "seasonPff": 570
     }
   },
-  "recommendation": "Wire as optional experimental model toggle. Keep V4 as default."
+  "recommendation": "Wire as optional experimental model toggle. Keep V4 Stable as default."
 }
