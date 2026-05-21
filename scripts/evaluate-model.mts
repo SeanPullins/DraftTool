@@ -9,6 +9,7 @@
 //   node --experimental-strip-types scripts/evaluate-model.mts --year-max 2016
 //   node --experimental-strip-types scripts/evaluate-model.mts --ablation
 //   node --experimental-strip-types scripts/evaluate-model.mts --verbose
+//   node --experimental-strip-types scripts/evaluate-model.mts --walk-forward
 
 import { readFileSync } from 'node:fs'
 import { gunzipSync } from 'node:zlib'
@@ -18,10 +19,11 @@ import { clean, project, matureOutcomeCutoff, outcomeOrder } from '../src/model.
 // ── CLI flags ─────────────────────────────────────────────────────────────────
 
 const args = process.argv.slice(2)
-const filterPos  = args.includes('--pos')       ? args[args.indexOf('--pos')       + 1] : null
-const yearMax    = args.includes('--year-max')  ? parseInt(args[args.indexOf('--year-max') + 1]) : matureOutcomeCutoff - 3
-const verbose    = args.includes('--verbose')
-const doAblation = args.includes('--ablation')
+const filterPos    = args.includes('--pos')           ? args[args.indexOf('--pos')           + 1] : null
+const yearMax      = args.includes('--year-max')      ? parseInt(args[args.indexOf('--year-max') + 1]) : matureOutcomeCutoff - 3
+const verbose      = args.includes('--verbose')
+const doAblation   = args.includes('--ablation')
+const walkForward  = args.includes('--walk-forward')
 
 // ── Data paths ────────────────────────────────────────────────────────────────
 
@@ -194,11 +196,6 @@ function toProspect(player: Historical, pff?: PffProfile): Prospect {
     cone:     player.cone     ?? def.cone     ?? 7.1,
     shuttle:  player.shuttle  ?? def.shuttle  ?? 4.3,
     bench:    player.bench    ?? 0,
-    film:        pff?.pff.grade      ?? 70,
-    production:  pff?.pff.production ?? 70,
-    fit:         pff?.pff.composite  ?? 70,
-    health:      pff?.pff.clean      ?? 70,
-    processing:  pff?.pff.efficiency ?? 70,
     pffProfileId:   pff?.id ?? '',
     pffComposite:   pff?.pff.composite  ?? 70,
     pffGrade:       pff?.pff.grade      ?? 70,
@@ -299,7 +296,8 @@ const evalSet = pool.filter((p) =>
   KNOWN_POSITIONS.has(p.pos) && (!filterPos || p.pos === filterPos)
 )
 
-console.log(`Evaluating ${evalSet.length} players (year ≤ ${yearMax}${filterPos ? `, pos=${filterPos}` : ''})...`)
+const modeLabel = walkForward ? ' walk-forward' : ''
+console.log(`Evaluating ${evalSet.length} players (year ≤ ${yearMax}${filterPos ? `, pos=${filterPos}` : ''}${modeLabel})...`)
 
 const results: EvalRow[] = []
 let done = 0
@@ -308,7 +306,10 @@ const start = Date.now()
 for (const player of evalSet) {
   const pff      = pffByKey.get(`${clean(player.name)}|${player.year}`)
   const prospect = toProspect(player, pff)
-  const proj     = project(prospect, pool, pffProfiles, player.id)
+  // Walk-forward: restrict comp pool to players drafted before this player's year
+  // to avoid using any future data and match real-world deployment conditions.
+  const evalPool = walkForward ? pool.filter((p) => p.year < player.year) : pool
+  const proj     = project(prospect, evalPool, pffProfiles, player.id)
 
   // Predicted category = highest-odds outcome
   const projCategory = outcomeOrder.reduce((best, cat) =>
@@ -362,6 +363,12 @@ console.log(' OVERALL')
 console.log('══════════════════════════════════════════════════════════════')
 const overall = metrics(results)
 console.log(`  n=${overall.n}  ρ=${fmt(overall.rho)}  MAE=${fmt(overall.maeAv, 1)}  RMSE=${fmt(overall.rmseAv, 1)}  bias=${fmtBias(overall.biasAv)} AV  med actual=${fmt(overall.medAv, 1)}`)
+
+// Pick-only baseline: ρ using draft capital alone (no combine, no PFF, no school)
+const pickScores  = results.map((r) => 100 * Math.pow(1 - (r.player.pick - 1) / 259, 0.58))
+const pickRho     = spearman(pickScores, results.map((r) => r.actualAv))
+const improvement = overall.rho - pickRho
+console.log(`\n  Pick-only baseline ρ=${fmt(pickRho)}  →  model lift: ${improvement >= 0 ? '+' : ''}${fmt(improvement)} ρ`)
 
 console.log('\n── By position ───────────────────────────────────────────────')
 const byPos: Record<string, EvalRow[]> = {}
@@ -534,10 +541,6 @@ if (doAblation) {
       },
     },
     {
-      name: 'Scout / film',
-      modify: (p) => ({ ...p, film: 70, production: 70, fit: 70, health: 70, processing: 70 }),
-    },
-    {
       name: 'PFF grades',
       modify: (p) => ({ ...p, pffComposite: 70, pffGrade: 70, pffProduction: 70, pffEfficiency: 70, pffClean: 70 }),
     },
@@ -563,7 +566,8 @@ if (doAblation) {
 
     for (const r of ablSample) {
       const modified = abl.modify(r.prospect)
-      const proj = project(modified, pool, pffProfiles, r.player.id)
+      const ablPool = walkForward ? pool.filter((p) => p.year < r.player.year) : pool
+      const proj = project(modified, ablPool, pffProfiles, r.player.id)
       ablScores.push(proj.score)
       actuals.push(r.actualAv)
     }

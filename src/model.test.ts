@@ -95,7 +95,6 @@ describe('calibratedExpectedAv', () => {
     name: 'Test', school: 'Test U', pos: 'WR', draftSeason: 2020, pick: 10,
     age: 22, height: 73, weight: 210, forty: 4.4, vertical: 38, broad: 125,
     cone: 6.9, shuttle: 4.2, bench: 0,
-    film: 80, production: 75, fit: 70, health: 80, processing: 72,
     pffProfileId: '', pffComposite: 80, pffGrade: 78, pffProduction: 72,
     pffEfficiency: 76, pffClean: 70, schemeTag: '',
   }
@@ -131,7 +130,6 @@ function makeProspect(overrides: Partial<Prospect> = {}): Prospect {
     name: 'Prospect', school: 'College U', pos: 'WR', draftSeason: 2025, pick: 15,
     age: 22, height: 73, weight: 205, forty: 4.4, vertical: 38, broad: 125,
     cone: 6.9, shuttle: 4.2, bench: 0,
-    film: 80, production: 75, fit: 70, health: 80, processing: 72,
     pffProfileId: '', pffComposite: 80, pffGrade: 78, pffProduction: 72,
     pffEfficiency: 76, pffClean: 70, schemeTag: '',
     ...overrides,

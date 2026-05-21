@@ -20,11 +20,6 @@ export type Prospect = {
   cone: number
   shuttle: number
   bench: number
-  film: number
-  production: number
-  fit: number
-  health: number
-  processing: number
   pffProfileId: string
   pffComposite: number
   pffGrade: number
@@ -215,15 +210,17 @@ export const group: Record<string, string> = {
   S: 'DB',
 }
 
-export const signalWeights: Record<string, { draft: number; athletic: number; size: number; scout: number; age: number; strength: number }> = {
-  QB:    { draft: .34, athletic: .05, size: .05, scout: .38, age: .12, strength: .06 },
-  SKILL: { draft: .30, athletic: .19, size: .03, scout: .33, age: .10, strength: .05 },
-  // OL: cone/shuttle/forty are strongly predictive (r=−0.25 to −0.30) → raise athletic; age matters more than size
-  OL:    { draft: .28, athletic: .16, size: .14, scout: .24, age: .10, strength: .08 },
-  // FRONT: age r=−0.327 and bench r=0.219 are the dominant signals → raise age+strength
-  FRONT: { draft: .26, athletic: .14, size: .07, scout: .22, age: .14, strength: .17 },
+// Scout/film inputs removed — users have no film data and the signal added noise.
+// Weights redistribute proportionally from the original scout weight (QB .38 / SKILL .33 etc.)
+export const signalWeights: Record<string, { draft: number; athletic: number; size: number; age: number; strength: number }> = {
+  QB:    { draft: .55, athletic: .08, size: .08, age: .19, strength: .10 },
+  SKILL: { draft: .45, athletic: .28, size: .05, age: .15, strength: .07 },
+  // OL: athletic strongly predictive (r=−0.25 to −0.30); age and size both matter
+  OL:    { draft: .45, athletic: .26, size: .23, age: .16, strength: .13 },
+  // FRONT: age r=−0.327 and bench r=0.219 are the dominant signals
+  FRONT: { draft: .33, athletic: .18, size: .09, age: .18, strength: .22 },
   // DB: cone/shuttle r=−0.21 to −0.22, age r=−0.294 → raise athletic+age
-  DB:    { draft: .28, athletic: .25, size: .04, scout: .26, age: .14, strength: .03 },
+  DB:    { draft: .38, athletic: .34, size: .05, age: .19, strength: .04 },
 }
 
 // ── Utility ───────────────────────────────────────────────────────────────────
@@ -593,8 +590,8 @@ export function project(input: Prospect, history: Historical[], pffProfiles: Pff
   const draft = 100 * Math.pow(1 - (input.pick - 1) / 259, .58)
   const athletic = avg([pct(input.forty, stats('forty'), true), pct(input.vertical, stats('vertical')), pct(input.broad, stats('broad')), pct(input.cone, stats('cone'), true), pct(input.shuttle, stats('shuttle'), true)])
   const size = avg([pct(input.height, stats('height')), pct(input.weight, stats('weight'))])
+  // School tier contributes a small direct score adjustment (not via a scout intermediate)
   const schoolBoost = schoolTierBoost(input.school)
-  const scout = input.film * .32 + input.production * .23 + input.fit * .17 + input.health * .12 + input.processing * .16 + schoolBoost
   const age = ageSignal(input.age, input.pos)
   const benchPool = stats('bench').filter((v) => v > 0)
   const strength = input.bench > 0 && benchPool.length >= 10 ? pct(input.bench, benchPool) : 50
@@ -622,7 +619,7 @@ export function project(input: Prospect, history: Historical[], pffProfiles: Pff
     pffSignal = normPff.production * .42 + normPff.efficiency * .36 + normPff.grade * .22
   }
   const wt = signalWeights[grp] ?? signalWeights['SKILL']
-  const baseScore = draft * wt.draft + athletic * wt.athletic + size * wt.size + scout * wt.scout + age * wt.age + strength * wt.strength
+  const baseScore = draft * wt.draft + athletic * wt.athletic + size * wt.size + age * wt.age + strength * wt.strength
   // For SKILL, require exact position match; for other groups allow same-group comps
   const pffPool = pffProfiles.filter((p) => {
     const posMatch = grp === 'SKILL' ? p.position === input.pos : (p.position === input.pos || group[p.position] === group[input.pos])
@@ -657,7 +654,7 @@ export function project(input: Prospect, history: Historical[], pffProfiles: Pff
   const trajectoryAdj = (input.pos === 'QB' && gradeDelta != null) ? (
     gradeDelta <= -12 ? -7 : gradeDelta <= -6 ? -4 : gradeDelta >= 10 ? 3 : gradeDelta >= 5 ? 2 : 0
   ) : 0
-  const scoreAdj = trajectoryAdj - injuryPenalty
+  const scoreAdj = trajectoryAdj - injuryPenalty + schoolBoost * 0.05
   const score = clamp(rawScore * 0.46 + avScore * 0.54 + scoreAdj, 1, 99)
   const games = blend(comps.reduce((sum, c) => sum + c.player.games * c.sim, 0) / histWeight, pffComps.reduce((sum, c) => sum + (c.profile.nfl?.games || 0) * c.sim, 0) / pffWeight, pffBlend)
   const starts = blend(comps.reduce((sum, c) => sum + c.player.starts * c.sim, 0) / histWeight, pffComps.reduce((sum, c) => sum + (c.profile.nfl?.starts || 0) * c.sim, 0) / pffWeight / 16, pffBlend)
@@ -725,6 +722,6 @@ export function project(input: Prospect, history: Historical[], pffProfiles: Pff
     ras,
     flags,
     y1Coverage,
-    signals: { draft, athletic, size, scout, age, strength, pff: pffSignal },
+    signals: { draft, athletic, size, age, strength, pff: pffSignal },
   }
 }
