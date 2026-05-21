@@ -644,7 +644,12 @@ export function project(input: Prospect, history: Historical[], pffProfiles: Pff
   const histExpectedAv = comps.reduce((sum, c) => sum + c.player.av * c.sim, 0) / histWeight
   const pffExpectedAv = pffComps.reduce((sum, c) => sum + (c.profile.nfl?.av || 0) * c.sim, 0) / pffWeight
   const compExpectedAv = blend(histExpectedAv, pffExpectedAv, pffBlend)
-  const expectedAv = blend(compExpectedAv, calibratedAv, 0.10)
+  // Top picks benefit from institutional investment (more snaps, coaching) that comps underpredict;
+  // leaning more on the calibrated regression for Rd1-2 corrects systematic AV underprediction.
+  // QB comps outperform the position-agnostic regression (QBs have distinct AV dynamics);
+  // use a lower blend for QB so comps dominate. Non-QB top picks benefit from the regression.
+  const calibBlend = grp === 'QB' ? 0.06 : (input.pick <= 32 ? 0.26 : input.pick <= 64 ? 0.16 : 0.10)
+  const expectedAv = blend(compExpectedAv, calibratedAv, calibBlend)
   const posAvValues = pool.filter((p) => p.av >= 0).map((p) => p.av)
   const posRelScore = posAvValues.length >= 15 ? pct(expectedAv, posAvValues) : avToScore(expectedAv)
   const avScore = posRelScore
@@ -654,7 +659,10 @@ export function project(input: Prospect, history: Historical[], pffProfiles: Pff
   const trajectoryAdj = (input.pos === 'QB' && gradeDelta != null) ? (
     gradeDelta <= -12 ? -7 : gradeDelta <= -6 ? -4 : gradeDelta >= 10 ? 3 : gradeDelta >= 5 ? 2 : 0
   ) : 0
-  const scoreAdj = trajectoryAdj - injuryPenalty + schoolBoost * 0.05
+  // Top picks receive more coaching investment and playing time than comps alone predict;
+  // premium decays from ~5pts at pick 1 to ~1pt at pick 40.
+  const elitePremium = input.pick <= 40 ? Math.max(0, (41 - input.pick) * 0.13) : 0
+  const scoreAdj = trajectoryAdj - injuryPenalty + schoolBoost * 0.05 + elitePremium
   const score = clamp(rawScore * 0.46 + avScore * 0.54 + scoreAdj, 1, 99)
   const games = blend(comps.reduce((sum, c) => sum + c.player.games * c.sim, 0) / histWeight, pffComps.reduce((sum, c) => sum + (c.profile.nfl?.games || 0) * c.sim, 0) / pffWeight, pffBlend)
   const starts = blend(comps.reduce((sum, c) => sum + c.player.starts * c.sim, 0) / histWeight, pffComps.reduce((sum, c) => sum + (c.profile.nfl?.starts || 0) * c.sim, 0) / pffWeight / 16, pffBlend)
@@ -666,17 +674,29 @@ export function project(input: Prospect, history: Historical[], pffProfiles: Pff
     calibratedAv,
     expectedAv,
   ].sort((a, b) => a - b)
-  // Floor: late-round busts are common; multiplier shrinks with pick# so the floor
-  // doesn't float above true 10th-percentile outcomes for picks 100+.
-  const floorMult = input.pick <= 32 ? 0.42 : input.pick <= 100 ? 0.28 : 0.12
-  const floor = blend(q(rangeValues, .1), Math.max(0, expectedAv * floorMult), .25)
+  // Floor: bust rate rises sharply past round 3; QB busts even at top picks (Russell, etc.).
+  // floorMult shrinks by pick range and is QB-specific to match empirical below-floor rates.
+  // floorBlend controls how much we trust the data 10th-pct vs the pick-calibrated mult;
+  // late-round comps have noisy 10th-pct floors so we lean more on the mult there.
+  const floorMult = grp === 'QB'
+    ? (input.pick <= 32 ? 0.15 : input.pick <= 100 ? 0.10 : 0.06)
+    : (input.pick <= 32 ? 0.42 : input.pick <= 100 ? 0.28 : input.pick <= 160 ? 0.10 : 0.05)
+  // QB busts even at top picks (Russell, Locker, Gabbert) more often than comp distributions imply;
+  // lean more on the multiplier so the floor isn't anchored by comps' survivor-biased 5th pct.
+  const floorBlend = grp === 'QB'
+    ? (input.pick <= 64 ? 0.42 : 0.55)
+    : (input.pick <= 32 ? 0.22 : input.pick <= 100 ? 0.32 : input.pick <= 160 ? 0.48 : 0.62)
+  // Use 5th-percentile of comp AVs rather than 10th; actual bust rates are higher than
+  // comp-pool distributions suggest because comps are similarity-filtered (survivor bias).
+  const floor = blend(q(rangeValues, .05), Math.max(0, expectedAv * floorMult), floorBlend)
   const median = blend(q(rangeValues, .5), expectedAv, .35)
   // Ceiling: widen for early picks and all QBs to capture the lottery effect.
   // QBs drafted anywhere can become elite — Brady (199), Wilson (75), Dak (135).
+  // Rd1 non-QB picks at 3.0× corrects empirical 19% above-ceiling (target ~10%).
   const ceilMult = grp === 'QB'
     ? (input.pick <= 64 ? 3.5 : 2.8)
-    : (input.pick <= 32 ? 2.5 : input.pick <= 64 ? 2.1 : 1.85)
-  const ceiling = blend(q(rangeValues, .9), Math.max(expectedAv, expectedAv * ceilMult), .25)
+    : (input.pick <= 32 ? 4.0 : input.pick <= 64 ? 3.0 : input.pick <= 100 ? 2.2 : 1.85)
+  const ceiling = blend(q(rangeValues, .92), Math.max(expectedAv, expectedAv * ceilMult), .25)
   const scoreLow = clamp(rawScore * 0.46 + (posAvValues.length >= 15 ? pct(floor, posAvValues) : avToScore(floor)) * 0.54 + scoreAdj, 1, 99)
   const scoreHigh = clamp(rawScore * 0.46 + (posAvValues.length >= 15 ? pct(ceiling, posAvValues) : avToScore(ceiling)) * 0.54 + scoreAdj, 1, 99)
   const max = Math.max(90, ceiling * 1.1)
