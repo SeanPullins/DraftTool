@@ -1,6 +1,6 @@
 import { useDeferredValue, useEffect, useMemo, useRef, useState, type ChangeEvent, type CSSProperties, type ReactNode } from 'react'
 import type { Category, Prospect, Historical, PffProfile, QbSeason, QbPffSeason, WrSeason, RbSeason, Y1Data, CareerSeasonStat, CareerStatMap, ModelSignal } from './model'
-import { matureOutcomeCutoff, outcomeOrder, compCutoffYear, compCutoffForGroup, calibratedAvModel, group, signalWeights, clamp, clean, avg, q, project, isMatureOutcome, computeQbTrajectory } from './model'
+import { matureOutcomeCutoff, outcomeOrder, compCutoffYear, compCutoffForGroup, calibratedAvModel, group, signalWeights, clamp, clean, avg, q, project, isMatureOutcome, computeQbTrajectory, getQbPffContext } from './model'
 
 type Row = Record<string, string>
 type SavedProspect = Prospect & { id: string; updatedAt: string; notes?: string; savedScore?: number }
@@ -227,14 +227,16 @@ export default function App() {
     () => injuryFlags.find((f) => clean(f.name) === clean(input.name)),
     [injuryFlags, input.name],
   )
-  // QB PFF trajectory: prefer computed season-over-season signal from qb_pff_seasons.json.
-  // Fallback to curated prospects_2027_qb.json gradeDelta if no computed trajectory is available.
-  const activeQbTrajectory = useMemo(
+  // Universal QB PFF context: applies to all QBs, not only the 2027 prospect file.
+  // Leakage guard lives in getQbPffContext(): it only uses seasons before the player's draftSeason.
+  const activeQbPffContext = useMemo(
     () => input.pos === 'QB'
-      ? computeQbTrajectory(input.draftSeason, input.name, qbPffSeasons)
+      ? getQbPffContext(input.draftSeason, input.name, qbPffSeasons)
       : null,
     [input.pos, input.draftSeason, input.name, qbPffSeasons],
   )
+
+  const activeQbTrajectory = activeQbPffContext?.trajectory ?? null
 
   const fallbackQbGradeDelta = useMemo(
     () => input.pos === 'QB'
@@ -276,14 +278,16 @@ export default function App() {
   const draftBoard = useMemo(
     () => saved
       .map((player) => {
-        const projection = project(player, prospects, pffProfiles, undefined, y1Data, careerStats)
+        const qbContext = player.pos === 'QB' ? getQbPffContext(player.draftSeason, player.name, qbPffSeasons) : null
+        const playerWithQbContext = qbContext?.trajectory ? { ...player, qbTrajectory: qbContext.trajectory } : player
+        const projection = project(playerWithQbContext, prospects, pffProfiles, undefined, y1Data, careerStats, undefined, qbContext?.trajectory?.gradeDelta ?? null)
         const patternAlerts = extractPatternAlerts(projection.fullComps, histFlagMap)
         const historical = lookupPool.find((h) => clean(h.name) === clean(player.name) && h.year === player.draftSeason && h.pos === player.pos) ?? null
         const earlyFlag = historical ? (histFlagMap.get(historical.id) ?? null) : null
         return { player, projection, patternAlerts, earlyFlag }
       })
       .sort((a, b) => b.projection.score - a.projection.score),
-    [saved, prospects, pffProfiles, y1Data, careerStats, histFlagMap, lookupPool],
+    [saved, prospects, pffProfiles, y1Data, careerStats, histFlagMap, lookupPool, qbPffSeasons],
   )
 
   const orderedBoard = useMemo(() => {

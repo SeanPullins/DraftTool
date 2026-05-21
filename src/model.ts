@@ -177,6 +177,22 @@ export type QbTrajectorySignal = {
   trajectoryLabel: QbTrajectoryLabel
 }
 
+export type QbPffContext = {
+  source: 'qb_pff_seasons.json'
+  matchedSeasons: QbPffSeason[]
+  preDraftSeasons: QbPffSeason[]
+  latestSeason: QbPffSeason | null
+  priorSeason: QbPffSeason | null
+  careerWeightedPassGrade: number | null
+  careerWeightedAccuracy: number | null
+  careerWeightedBttRate: number | null
+  careerWeightedTwpRate: number | null
+  careerWeightedEpa: number | null
+  careerWeightedPositiveEpa: number | null
+  totalDropbacks: number
+  trajectory: QbTrajectorySignal | null
+}
+
 export type Y1Data = { qb: QbSeason[]; wr: WrSeason[]; rb: RbSeason[] }
 
 export type CareerSeasonStat = {
@@ -791,6 +807,65 @@ export function computeQbTrajectory(
     positiveEpaDelta,
     trajectoryScore,
     trajectoryLabel,
+  }
+}
+
+
+function weightedQbMetric(
+  seasons: QbPffSeason[],
+  field: keyof Pick<QbPffSeason, 'grades_pass' | 'accuracy_percent' | 'btt_rate' | 'twp_rate' | 'epa' | 'positive_epa_percent'>,
+): number | null {
+  let numerator = 0
+  let denominator = 0
+
+  for (const season of seasons) {
+    const raw = season[field]
+    const weight = season.dropbacks ?? 0
+    if (raw == null || !Number.isFinite(raw) || weight <= 0) continue
+    numerator += raw * weight
+    denominator += weight
+  }
+
+  return denominator > 0 ? numerator / denominator : null
+}
+
+export function getQbPffContext(
+  draftYear: number,
+  playerName: string,
+  pffSeasons: QbPffSeason[],
+): QbPffContext | null {
+  const cleanName = clean(playerName)
+  const matchedSeasons = pffSeasons
+    .filter((s) => clean(s.name) === cleanName)
+    .sort((a, b) => a.season - b.season)
+
+  if (!matchedSeasons.length) return null
+
+  // Leakage guard: for every QB, historical or future, only use seasons before draft year.
+  const preDraftSeasons = matchedSeasons
+    .filter((s) => s.season < draftYear)
+    .sort((a, b) => a.season - b.season)
+
+  if (!preDraftSeasons.length) return null
+
+  const latestSeason = preDraftSeasons[preDraftSeasons.length - 1] ?? null
+  const priorSeason = preDraftSeasons.length >= 2 ? preDraftSeasons[preDraftSeasons.length - 2] : null
+  const totalDropbacks = preDraftSeasons.reduce((sum, s) => sum + (s.dropbacks ?? 0), 0)
+
+  return {
+    source: 'qb_pff_seasons.json',
+    matchedSeasons,
+    preDraftSeasons,
+    latestSeason,
+    priorSeason,
+    careerWeightedPassGrade: weightedQbMetric(preDraftSeasons, 'grades_pass'),
+    careerWeightedAccuracy: weightedQbMetric(preDraftSeasons, 'accuracy_percent'),
+    careerWeightedBttRate: weightedQbMetric(preDraftSeasons, 'btt_rate'),
+    careerWeightedTwpRate: weightedQbMetric(preDraftSeasons, 'twp_rate'),
+    careerWeightedEpa: weightedQbMetric(preDraftSeasons, 'epa'),
+    careerWeightedPositiveEpa: weightedQbMetric(preDraftSeasons, 'positive_epa_percent'),
+    totalDropbacks,
+    trajectory: computeQbTrajectory(draftYear, playerName, pffSeasons),
   }
 }
 
