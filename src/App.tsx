@@ -1342,6 +1342,7 @@ function PlayerBrowser({ pool, history, histFlagMap, onOpenModal, onCompare }: {
   const [yearFrom, setYearFrom] = useState(2000)
   const [yearTo, setYearTo] = useState(2030)
   const [outcome, setOutcome] = useState('All')
+  const [showMoreFilters, setShowMoreFilters] = useState(false)
   const [sortKey, setSortKey] = useState<BrowserSortKey>('av')
   const [sortDir, setSortDir] = useState<SortDir>('desc')
 
@@ -1403,28 +1404,37 @@ function PlayerBrowser({ pool, history, histFlagMap, onOpenModal, onCompare }: {
     </div>
     {mode === 'rankings' ? <RankingsView history={history} onOpenModal={onOpenModal} /> : <>
       <div className="browserControls">
-        <label className="field browserSearch"><span>Search</span><input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Name or school…" /></label>
-        <label className="field"><span>Position</span>
+        <label className="field browserSearch"><span>Search</span><input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Name or school…" autoComplete="off" /></label>
+        <label className="field browserPosField"><span>Position</span>
           <select value={pos} onChange={(e) => setPos(e.target.value)}>
             {positionFilters.map((p) => <option key={p} value={p}>{p === 'All' ? 'All positions' : p}</option>)}
           </select>
         </label>
-        <label className="field"><span>From</span>
-          <select value={yearFrom} onChange={(e) => setYearFrom(Number(e.target.value))}>
-            {years.map((y) => <option key={y} value={y}>{y}</option>)}
-          </select>
-        </label>
-        <label className="field"><span>To</span>
-          <select value={yearTo} onChange={(e) => setYearTo(Number(e.target.value))}>
-            {years.map((y) => <option key={y} value={y}>{y}</option>)}
-          </select>
-        </label>
-        <label className="field"><span>Outcome</span>
-          <select value={outcome} onChange={(e) => setOutcome(e.target.value)}>
-            <option value="All">All outcomes</option>
-            {outcomeOrder.map((cat) => <option key={cat} value={cat}>{cat}</option>)}
-          </select>
-        </label>
+        <button
+          type="button"
+          className={`secondary browserFilterToggle${showMoreFilters ? ' on' : ''}${(yearFrom !== 2000 || yearTo !== 2030 || outcome !== 'All') ? ' browserFilterToggle-active' : ''}`}
+          onClick={() => setShowMoreFilters((v) => !v)}
+        >
+          Filters{(yearFrom !== 2000 || yearTo !== 2030 || outcome !== 'All') ? ' •' : ''}
+        </button>
+        <div className={`browserAdvancedFilters${showMoreFilters ? ' open' : ''}`}>
+          <label className="field"><span>From</span>
+            <select value={yearFrom} onChange={(e) => setYearFrom(Number(e.target.value))}>
+              {years.map((y) => <option key={y} value={y}>{y}</option>)}
+            </select>
+          </label>
+          <label className="field"><span>To</span>
+            <select value={yearTo} onChange={(e) => setYearTo(Number(e.target.value))}>
+              {years.map((y) => <option key={y} value={y}>{y}</option>)}
+            </select>
+          </label>
+          <label className="field"><span>Outcome</span>
+            <select value={outcome} onChange={(e) => setOutcome(e.target.value)}>
+              <option value="All">All outcomes</option>
+              {outcomeOrder.map((cat) => <option key={cat} value={cat}>{cat}</option>)}
+            </select>
+          </label>
+        </div>
       </div>
       {display.length ? <>
         <TableWrap>
@@ -2366,7 +2376,10 @@ function ClassExplorer({ pool, history, pffProfiles, pffLookup, y1Data, careerSt
                 {outcomeFlag && <div className="mobileClassCardFlag"><FlagBadge flag={outcomeFlag} /></div>}
               </div>
               {useProjections && projected && (
-                <div className="mobileClassCardScore" style={{ color: scoreColor(score) }}>{score}</div>
+                <div className="mobileClassCardRight">
+                  <div className="mobileClassCardScore" style={{ color: scoreColor(score) }}>{score}</div>
+                  <div className="mobileClassCardProjAv">AV {projected.av.toFixed(1)}</div>
+                </div>
               )}
             </div>
           )
@@ -3528,7 +3541,7 @@ function norm(p: string): string {
   if (['OT', 'G', 'T', 'LT', 'RT', 'OG', 'C', 'OL', 'IOL', 'OC'].includes(x)) return 'OL'
   if (['DE', 'DT', 'NT', 'DL', 'IDL', 'DI', 'OLB', 'EDGE', 'ED'].includes(x)) return 'DL'
   if (['ILB', 'MLB', 'WILL', 'MIKE', 'SAM'].includes(x)) return 'LB'
-  if (['FS', 'SS', 'DB'].includes(x)) return 'S'
+  if (['FS', 'SS', 'DB', 'SAF'].includes(x)) return 'S'
   if (x === 'FB') return 'RB'
   // Unknown positions (K, P, LS, etc.) return as-is; buildProspectPool filters non-positions
   return x
