@@ -100,8 +100,8 @@ const assetBase = import.meta.env.BASE_URL
 const savedKey = 'draftlens.savedProspects.v2'
 const previousSavedKey = 'draftlens.savedProspects.v1'
 const csvTemplate = [
-  'name,school,pos,draftSeason,pick,age,height,weight,forty,vertical,broad,cone,shuttle,bench,film,production,fit,health,processing,pffComposite,pffGrade,pffProduction,pffEfficiency,pffClean',
-  'Example Receiver,State,WR,2026,42,21.4,73,204,4.45,37,124,6.92,4.18,0,84,82,80,86,76,82,83,82,79,86',
+  'name,school,pos,draftSeason,pick,age,height,weight,forty,vertical,broad,cone,shuttle,bench,pffComposite,pffGrade,pffProduction,pffEfficiency,pffClean',
+  'Example Receiver,State,WR,2026,42,21.4,73,204,4.45,37,124,6.92,4.18,0,82,83,82,79,86',
 ].join('\n')
 
 const start: Prospect = {
@@ -119,11 +119,6 @@ const start: Prospect = {
   cone: 6.9,
   shuttle: 4.15,
   bench: 0,
-  film: 86,
-  production: 84,
-  fit: 82,
-  health: 80,
-  processing: 78,
   pffProfileId: '',
   pffComposite: 82,
   pffGrade: 83,
@@ -148,11 +143,6 @@ const blankProspect: Prospect = {
   cone: 7.1,
   shuttle: 4.3,
   bench: 0,
-  film: 70,
-  production: 70,
-  fit: 70,
-  health: 80,
-  processing: 70,
   pffProfileId: '',
   pffComposite: 70,
   pffGrade: 70,
@@ -203,7 +193,7 @@ export default function App() {
   const [baselineScore, setBaselineScore] = useState<number | null>(null)
   const [mobileTab, setMobileTab] = useState<MobileTab>('edit')
   const [page, setPage] = useState<Page>(() => readPageFromHash())
-  const [openPanels, setOpenPanels] = useState<Record<string, boolean>>({ loader: true, card: false, measurables: false, scouting: true, pff: false })
+  const [openPanels, setOpenPanels] = useState<Record<string, boolean>>({ loader: true, card: false, measurables: false, pff: false })
   const [modalPlayer, setModalPlayer] = useState<Historical | null>(null)
   const [theme, setTheme] = useState<'dark' | 'light'>(() => (localStorage.getItem('draftlens.theme') as 'dark' | 'light') ?? 'dark')
 
@@ -749,20 +739,6 @@ export default function App() {
           </div>
         </section>
 
-        <section className="panel formPanel">
-          <div className="panelTitle">
-            <div><p>Evaluation</p><h2>Scouting Inputs</h2></div>
-            <button type="button" className={`panelToggle ${openPanels.scouting ? 'open' : 'closed'}`} onClick={() => togglePanel('scouting')} aria-label="Toggle panel">▾</button>
-          </div>
-          <div className={`panelBody${openPanels.scouting ? '' : ' collapsed'}`}>
-            <Slider label="Film" value={input.film} onChange={(v) => update('film', v)} />
-            <Slider label="Production" value={input.production} onChange={(v) => update('production', v)} />
-            <Slider label="Role fit" value={input.fit} onChange={(v) => update('fit', v)} />
-            <Slider label="Availability" value={input.health} onChange={(v) => update('health', v)} />
-            <Slider label="Processing" value={input.processing} onChange={(v) => update('processing', v)} />
-          </div>
-        </section>
-
         <section className="panel formPanel pffPanel">
           <div className="panelTitle">
             <div><p>PFF College Signal</p><h2>Performance Profile</h2></div>
@@ -869,7 +845,6 @@ export default function App() {
             <Signal label="Athletic" value={projection.signals.athletic} />
             <Signal label="Size" value={projection.signals.size} />
             <Signal label="Strength" value={projection.signals.strength} />
-            <Signal label="Scouting" value={projection.signals.scout} />
             <Signal label="Age" value={projection.signals.age} />
             <Signal label="PFF" value={projection.signals.pff} />
           </div>
@@ -1316,15 +1291,15 @@ function CompareTable({ p1, p2, proj1, proj2, pff1, pff2 }: {
 }
 
 function RadarChart({ a, b, aLabel, bLabel }: {
-  a: { draft: number; athletic: number; size: number; scout: number; age: number; pff: number }
-  b: { draft: number; athletic: number; size: number; scout: number; age: number; pff: number }
+  a: { draft: number; athletic: number; size: number; strength: number; age: number; pff: number }
+  b: { draft: number; athletic: number; size: number; strength: number; age: number; pff: number }
   aLabel: string; bLabel: string
 }) {
   const axes: { key: keyof typeof a; label: string }[] = [
     { key: 'draft', label: 'Draft' },
     { key: 'athletic', label: 'Athletic' },
     { key: 'size', label: 'Size' },
-    { key: 'scout', label: 'Scouting' },
+    { key: 'strength', label: 'Strength' },
     { key: 'age', label: 'Age' },
     { key: 'pff', label: 'PFF' },
   ]
@@ -1859,7 +1834,6 @@ function GuideView() {
           ['Athletic', '40-yd, vertical, broad jump, cone, shuttle vs. peers','QB 5% · Skill 21% · OL 8% · Front 20% · DB 22%'],
           ['Strength', 'Bench press reps vs. position group peers',           'QB 6% · Skill 3% · OL 10% · Front 10% · DB 4%'],
           ['Size',     'Height + weight vs. position group',                  'QB 5% · Skill 6% · OL 18% · Front 8% · DB 4%'],
-          ['Scouting', 'Weighted Film/Production/Fit/Health/Processing grades','QB 38% · Skill 33% · OL 28% · Front 28% · DB 31%'],
           ['Age',      'Draft age; younger = higher upside ceiling',          'QB 12% · Skill 10% · OL 8% · Front 8% · DB 10%'],
           ['PFF',      'College PFF metrics (position-aware weights)',        'SKILL 35% · QB 7–28% by pick · OL 12% · Front 10% · DB 10%'],
         ] as [string, string, string][]).map(([sig, cap, wt]) => (
@@ -2630,14 +2604,6 @@ function prospectRiskFlags(p: ProspectQB, bustRates: QbBustRates): RiskFlag[] {
       reason: `Only 2025 college season available — no prior-year context. Single-season projections carry ±10–15 pts wider confidence range and no trajectory signal.`,
     })
   }
-  if (p.processing < 60) {
-    flags.push({
-      id: 'proc', label: 'Slow reads',
-      severity: p.processing < 50 ? 'high' : 'medium',
-      bustRate: null, sampleN: 0,
-      reason: `Avg time-to-throw implies extended decision cycles. NFL-speed pass rush negates long delivery windows — historically correlates with poor performance behind inferior NFL offensive lines.`,
-    })
-  }
   return flags
 }
 
@@ -3276,11 +3242,6 @@ function prospectFromHistorical(player: Historical, pff?: PffProfile): Prospect 
     cone: player.cone ?? template.cone,
     shuttle: player.shuttle ?? template.shuttle,
     bench: player.bench ?? 0,
-    film: pff?.pff.grade ?? baseline,
-    production: pff?.pff.production ?? Math.max(55, baseline - 2),
-    fit: pff?.pff.composite ?? baseline,
-    health: pff?.pff.clean ?? 80,
-    processing: pff?.pff.efficiency ?? (player.pos === 'QB' ? baseline : Math.max(55, baseline - 4)),
     pffProfileId: pff?.id ?? '',
     pffComposite: pff?.pff.composite ?? baseline,
     pffGrade: pff?.pff.grade ?? baseline,
@@ -3300,11 +3261,6 @@ function prospectFromPff(profile: PffProfile, historical: Historical | undefined
     pos: profile.position,
     draftSeason: profile.draftSeason,
     pick: profile.nfl?.draftPick ?? historical?.pick ?? current.pick,
-    film: clamp(profile.pff.grade, 1, 99),
-    production: clamp(profile.pff.production, 1, 99),
-    fit: clamp(avg([profile.pff.composite, profile.pff.efficiency]), 1, 99),
-    health: clamp(profile.pff.clean, 1, 99),
-    processing: clamp(profile.position === 'QB' ? profile.pff.efficiency : avg([profile.pff.grade, profile.pff.clean]), 1, 99),
     pffProfileId: profile.id,
     pffComposite: clamp(profile.pff.composite, 1, 99),
     pffGrade: clamp(profile.pff.grade, 1, 99),
@@ -3336,16 +3292,11 @@ function prospectFromUnknown(value: unknown): Prospect | null {
     cone: numberField(record, 'cone', template.cone),
     shuttle: numberField(record, 'shuttle', template.shuttle),
     bench: numberField(record, 'bench', 0),
-    film: clamp(numberField(record, 'film', template.film), 1, 99),
-    production: clamp(numberField(record, 'production', template.production), 1, 99),
-    fit: clamp(numberField(record, 'fit', template.fit), 1, 99),
-    health: clamp(numberField(record, 'health', template.health), 1, 99),
-    processing: clamp(numberField(record, 'processing', template.processing), 1, 99),
     pffProfileId: stringField(record, 'pffProfileId', ''),
-    pffComposite: clamp(numberField(record, 'pffComposite', numberField(record, 'production', template.pffComposite)), 1, 99),
-    pffGrade: clamp(numberField(record, 'pffGrade', numberField(record, 'film', template.pffGrade)), 1, 99),
-    pffProduction: clamp(numberField(record, 'pffProduction', numberField(record, 'production', template.pffProduction)), 1, 99),
-    pffEfficiency: clamp(numberField(record, 'pffEfficiency', numberField(record, 'processing', template.pffEfficiency)), 1, 99),
+    pffComposite: clamp(numberField(record, 'pffComposite', template.pffComposite), 1, 99),
+    pffGrade: clamp(numberField(record, 'pffGrade', template.pffGrade), 1, 99),
+    pffProduction: clamp(numberField(record, 'pffProduction', template.pffProduction), 1, 99),
+    pffEfficiency: clamp(numberField(record, 'pffEfficiency', template.pffEfficiency), 1, 99),
     pffClean: clamp(numberField(record, 'pffClean', template.pffClean), 1, 99),
     schemeTag: stringField(record, 'schemeTag', ''),
   }
@@ -3373,12 +3324,9 @@ function prospectFromCsvRow(row: Row): Prospect | null {
 
   const pos = norm(rowText(row, ['pos', 'position'], 'WR'))
   const template = withPositionDefaults(blankProspect, pos)
-  const production = rowNum(row, ['production', 'prod'], template.production)
-  const film = rowNum(row, ['film', 'grade', 'scouting_grade'], template.film)
-  const processing = rowNum(row, ['processing', 'processor'], template.processing)
-  const pffGrade = rowNum(row, ['pffGrade', 'pff_grade', 'grade'], film)
-  const pffProduction = rowNum(row, ['pffProduction', 'pff_production', 'production'], production)
-  const pffEfficiency = rowNum(row, ['pffEfficiency', 'pff_efficiency', 'efficiency'], processing)
+  const pffGrade = rowNum(row, ['pffGrade', 'pff_grade', 'film', 'grade', 'scouting_grade'], template.pffGrade)
+  const pffProduction = rowNum(row, ['pffProduction', 'pff_production', 'production', 'prod'], template.pffProduction)
+  const pffEfficiency = rowNum(row, ['pffEfficiency', 'pff_efficiency', 'efficiency', 'processing', 'processor'], template.pffEfficiency)
   const pffComposite = rowNum(row, ['pffComposite', 'pff_composite', 'pff', 'composite'], avg([pffGrade, pffProduction, pffEfficiency]))
 
   return {
@@ -3397,11 +3345,6 @@ function prospectFromCsvRow(row: Row): Prospect | null {
     cone: rowNum(row, ['cone', 'three_cone', '3cone', '3_cone'], template.cone),
     shuttle: rowNum(row, ['shuttle', 'short_shuttle'], template.shuttle),
     bench: rowNum(row, ['bench', 'bench_reps', 'benchPress'], 0),
-    film: clamp(film, 1, 99),
-    production: clamp(production, 1, 99),
-    fit: clamp(rowNum(row, ['fit', 'role_fit'], template.fit), 1, 99),
-    health: clamp(rowNum(row, ['health', 'availability'], template.health), 1, 99),
-    processing: clamp(processing, 1, 99),
     pffProfileId: '',
     pffComposite: clamp(pffComposite, 1, 99),
     pffGrade: clamp(pffGrade, 1, 99),
