@@ -781,7 +781,8 @@ export default function App() {
             {activeConsensusPick && <p className="consensusRange">
               Consensus #{activeConsensusPick.consensus} · range {activeConsensusPick.lo}–{activeConsensusPick.hi}
             </p>}
-            {(projection.flags.length > 0 || projection.rasHighlight) && <div className="flagRow">
+            {(projection.flags.length > 0 || projection.rasHighlight || projection.trajectoryHighlight) && <div className="flagRow">
+              {projection.trajectoryHighlight && <span className="rasHighlightFlag">{projection.trajectoryHighlight}</span>}
               {projection.rasHighlight && <span className="rasHighlightFlag">{projection.rasHighlight}</span>}
               {projection.flags.map((f) => <span key={f} className="dangerFlag">{f}</span>)}
             </div>}

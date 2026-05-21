@@ -29,6 +29,7 @@ export type Prospect = {
   schemeTag: string
   officialRas?: number | null
   alltimeRas?: number | null
+  qbTrajectory?: QbTrajectorySignal | null
 }
 
 export type Historical = {
@@ -135,6 +136,45 @@ export type RbSeason = {
   ctch_pct: number | null
   rec_succ: number | null
   pos: string
+}
+
+export type QbPffSeason = {
+  name: string
+  player_id: number
+  season: number
+  team: string
+  games: number
+  dropbacks: number | null
+  grades_pass: number | null
+  grades_offense: number | null
+  accuracy_percent: number | null
+  btt_rate: number | null
+  twp_rate: number | null
+  epa: number | null
+  positive_epa_percent: number | null
+  ypa: number | null
+  avg_depth_of_target: number | null
+  avg_time_to_throw: number | null
+  pressure_to_sack_rate: number | null
+  sack_percent: number | null
+}
+
+export type QbVolumeConfidence = 'high' | 'medium' | 'low_sample' | 'insufficient'
+export type QbTrajectoryLabel = 'elite_breakout' | 'rising' | 'stable_good' | 'stable_limited' | 'volatile_spike' | 'regressing' | 'unknown'
+
+export type QbTrajectorySignal = {
+  latestSeason: number
+  priorSeason: number | null
+  latestVolume: QbVolumeConfidence
+  priorVolume: QbVolumeConfidence | null
+  gradeDelta: number | null
+  accuracyDelta: number | null
+  bttRateDelta: number | null
+  twpRateDelta: number | null
+  epaDelta: number | null
+  positiveEpaDelta: number | null
+  trajectoryScore: number        // 0–100
+  trajectoryLabel: QbTrajectoryLabel
 }
 
 export type Y1Data = { qb: QbSeason[]; wr: WrSeason[]; rb: RbSeason[] }
@@ -599,7 +639,159 @@ function dangerFlags(input: Prospect, proj: { ceiling: number; floor: number; pf
     if (input.officialRas < 5.0 && input.pick <= 100) flags.push(`Athletic risk · RAS ${input.officialRas.toFixed(2)}`)
     else if (input.officialRas < 6.0 && input.pick <= 32) flags.push(`Rd1 athletic concern · RAS ${input.officialRas.toFixed(2)}`)
   }
+  if (input.pos === 'QB' && input.qbTrajectory) {
+    const t = input.qbTrajectory
+    const highVol = t.latestVolume === 'high' || t.latestVolume === 'medium'
+    if ((t.trajectoryLabel === 'regressing' || t.trajectoryLabel === 'volatile_spike') && highVol) {
+      const tag = t.trajectoryLabel === 'volatile_spike' ? 'Volatile spike' : 'Grade regression'
+      const delta = t.gradeDelta != null ? ` · ${t.gradeDelta > 0 ? '+' : ''}${t.gradeDelta.toFixed(1)} pts` : ''
+      flags.push(`${tag}${delta}`)
+    }
+  }
   return flags
+}
+
+// ── QB PFF trajectory ─────────────────────────────────────────────────────────
+
+function volumeConfidence(dropbacks: number | null): QbVolumeConfidence {
+  if (dropbacks == null) return 'insufficient'
+  if (dropbacks >= 300) return 'high'
+  if (dropbacks >= 150) return 'medium'
+  if (dropbacks >= 100) return 'low_sample'
+  return 'insufficient'
+}
+
+export function computeQbTrajectory(
+  draftYear: number,
+  playerName: string,
+  pffSeasons: QbPffSeason[],
+): QbTrajectorySignal | null {
+  const latestYear = draftYear - 1
+  const priorYear  = draftYear - 2
+  const cleanName  = clean(playerName)
+
+  const latestSeason = pffSeasons.find(
+    (s) => clean(s.name) === cleanName && s.season === latestYear,
+  )
+  if (!latestSeason) return null
+
+  const latestVolume = volumeConfidence(latestSeason.dropbacks)
+  if (latestVolume === 'insufficient') return null
+
+  const priorSeason = pffSeasons.find(
+    (s) => clean(s.name) === cleanName && s.season === priorYear,
+  )
+  const priorVolume = priorSeason ? volumeConfidence(priorSeason.dropbacks) : null
+  const hasPrior = priorSeason != null && priorVolume !== 'insufficient'
+
+  let gradeDelta:       number | null = null
+  let accuracyDelta:    number | null = null
+  let bttRateDelta:     number | null = null
+  let twpRateDelta:     number | null = null
+  let epaDelta:         number | null = null
+  let positiveEpaDelta: number | null = null
+
+  if (hasPrior && priorSeason) {
+    if (latestSeason.grades_pass != null && priorSeason.grades_pass != null)
+      gradeDelta = latestSeason.grades_pass - priorSeason.grades_pass
+    if (latestSeason.accuracy_percent != null && priorSeason.accuracy_percent != null)
+      accuracyDelta = latestSeason.accuracy_percent - priorSeason.accuracy_percent
+    if (latestSeason.btt_rate != null && priorSeason.btt_rate != null)
+      bttRateDelta = latestSeason.btt_rate - priorSeason.btt_rate
+    if (latestSeason.twp_rate != null && priorSeason.twp_rate != null)
+      twpRateDelta = latestSeason.twp_rate - priorSeason.twp_rate
+    if (latestSeason.epa != null && priorSeason.epa != null)
+      epaDelta = latestSeason.epa - priorSeason.epa
+    if (latestSeason.positive_epa_percent != null && priorSeason.positive_epa_percent != null)
+      positiveEpaDelta = latestSeason.positive_epa_percent - priorSeason.positive_epa_percent
+  }
+
+  let trajectoryScore = 50
+  let trajectoryLabel: QbTrajectoryLabel = 'unknown'
+
+  if (hasPrior) {
+    // gradeDelta: each +1 pt = +1.0, each -1 = -1.0 (cap ±15)
+    if (gradeDelta != null) {
+      const contribution = clamp(gradeDelta, -15, 15) * 1.0
+      trajectoryScore += contribution
+    }
+    // accuracyDelta: each +1% = +1.5, each -1% = -1.5 (cap ±10)
+    if (accuracyDelta != null) {
+      const contribution = clamp(accuracyDelta * 1.5, -10, 10)
+      trajectoryScore += contribution
+    }
+    // twpRateDelta: lower is better — each +1% = -2.0, each -1% = +2.0 (cap ±8)
+    if (twpRateDelta != null) {
+      const contribution = clamp(-twpRateDelta * 2.0, -8, 8)
+      trajectoryScore += contribution
+    }
+    // epaDelta: each +0.05 = +1.0, each -0.05 = -1.0 (cap ±5)
+    if (epaDelta != null) {
+      const contribution = clamp((epaDelta / 0.05) * 1.0, -5, 5)
+      trajectoryScore += contribution
+    }
+    // positiveEpaDelta: each +1% = +0.5, each -1% = -0.5 (cap ±5)
+    if (positiveEpaDelta != null) {
+      const contribution = clamp(positiveEpaDelta * 0.5, -5, 5)
+      trajectoryScore += contribution
+    }
+    // Volume bonus/penalty
+    const deltasPositive =
+      (gradeDelta ?? 0) > 0 ||
+      (accuracyDelta ?? 0) > 0 ||
+      (positiveEpaDelta ?? 0) > 0
+
+    if (latestVolume === 'high' && deltasPositive) {
+      trajectoryScore += 3
+    } else if (latestVolume === 'low_sample') {
+      trajectoryScore -= 5
+    }
+
+    // Clamp to [20, 80]
+    trajectoryScore = clamp(trajectoryScore, 20, 80)
+
+    // Assign label
+    if (
+      gradeDelta != null && gradeDelta >= 8 &&
+      latestVolume === 'high' &&
+      (twpRateDelta == null || twpRateDelta <= 0.5) &&
+      (positiveEpaDelta == null || positiveEpaDelta > 0)
+    ) {
+      trajectoryLabel = 'elite_breakout'
+    } else if (
+      gradeDelta != null && gradeDelta >= 8 &&
+      (latestVolume !== 'high' || (twpRateDelta != null && twpRateDelta >= 1.5))
+    ) {
+      trajectoryLabel = 'volatile_spike'
+    } else if (trajectoryScore >= 57) {
+      trajectoryLabel = 'rising'
+    } else if (trajectoryScore <= 43) {
+      trajectoryLabel = 'regressing'
+    } else if (latestSeason.grades_pass != null && latestSeason.grades_pass >= 78) {
+      trajectoryLabel = 'stable_good'
+    } else {
+      trajectoryLabel = 'stable_limited'
+    }
+  } else {
+    // No prior data
+    trajectoryScore = 50
+    trajectoryLabel = 'unknown'
+  }
+
+  return {
+    latestSeason: latestYear,
+    priorSeason:  hasPrior ? priorYear : null,
+    latestVolume,
+    priorVolume:  hasPrior ? priorVolume : null,
+    gradeDelta,
+    accuracyDelta,
+    bttRateDelta,
+    twpRateDelta,
+    epaDelta,
+    positiveEpaDelta,
+    trajectoryScore,
+    trajectoryLabel,
+  }
 }
 
 // ── Main projection engine ────────────────────────────────────────────────────
@@ -703,9 +895,15 @@ export function project(input: Prospect, history: Historical[], pffProfiles: Pff
   const avScore = posRelScore
   // A2: injury penalty shifts the score down based on severity
   const injuryPenalty = injurySeverity === 'major' ? 8 : injurySeverity === 'moderate' ? 4 : injurySeverity === 'minor' ? 2 : 0
-  // A3: QB grade trajectory — declining arc projects 4-7 pts lower; rising arc gets a small boost
-  const trajectoryAdj = (input.pos === 'QB' && gradeDelta != null) ? (
-    gradeDelta <= -12 ? -7 : gradeDelta <= -6 ? -4 : gradeDelta >= 10 ? 3 : gradeDelta >= 5 ? 2 : 0
+  // A3: QB grade trajectory — volume-gated; walk-forward ablation showed raw step-function
+  // at full weight (Δρ=-0.007) so weight is halved and gated by dropback volume confidence.
+  // 'high' volume (300+ db) → full factor; 'medium' (150+) → 60%; 'low_sample' → 25%.
+  const traj = input.qbTrajectory ?? null
+  const volFactor = traj?.latestVolume === 'high' ? 1.0
+    : traj?.latestVolume === 'medium' ? 0.6
+    : traj?.latestVolume === 'low_sample' ? 0.25 : 0
+  const trajectoryAdj = (input.pos === 'QB' && gradeDelta != null && traj != null && volFactor > 0) ? (
+    (gradeDelta <= -12 ? -4 : gradeDelta <= -6 ? -2 : gradeDelta >= 10 ? 2 : gradeDelta >= 5 ? 1 : 0) * volFactor
   ) : 0
   // Top picks receive more coaching investment and playing time than comps alone predict;
   // premium decays from ~5pts at pick 1 to ~1pt at pick 40.
@@ -760,6 +958,15 @@ export function project(input: Prospect, history: Historical[], pffProfiles: Pff
   const rasHighlight: string | null = (input.officialRas != null && input.officialRas >= 9.0)
     ? (input.pick > 128 ? `Athletic sleeper · RAS ${input.officialRas.toFixed(2)}` : `Elite athleticism · RAS ${input.officialRas.toFixed(2)}`)
     : null
+  const trajectoryHighlight: string | null = (input.pos === 'QB' && input.qbTrajectory != null) ? (() => {
+    const t = input.qbTrajectory!
+    const delta = t.gradeDelta != null ? ` · +${t.gradeDelta.toFixed(1)} pts` : ''
+    if (t.trajectoryLabel === 'elite_breakout' && (t.latestVolume === 'high' || t.latestVolume === 'medium'))
+      return `Elite breakout trajectory${delta}`
+    if (t.trajectoryLabel === 'rising' && t.latestVolume === 'high')
+      return `Rising trajectory${delta}`
+    return null
+  })() : null
 
   const top10 = comps.slice(0, 10)
   const y1Coverage = y1Data ? top10.filter((c) => {
@@ -823,6 +1030,8 @@ export function project(input: Prospect, history: Historical[], pffProfiles: Pff
     athleticSource: (officialRasSignal != null ? 'official_ras' : 'combine_percentile') as 'official_ras' | 'combine_percentile',
     flags,
     rasHighlight,
+    trajectoryHighlight,
+    qbTrajectory: input.qbTrajectory ?? null,
     y1Coverage,
     signals: { draft, athletic, size, age, strength, pff: pffSignal },
     confidence: { score: confidenceScore, dataCompleteness, compDensity: compDensityScore, hasPff: pffBlend > 0, missingFields },
