@@ -191,6 +191,7 @@ export default function App() {
   const [careerStats, setCareerStats] = useState<CareerStatMap>({})
   const [prospectsQb2027, setProspectsQb2027] = useState<ProspectQB[]>([])
   const [prospectsTe2027, setProspectsTe2027] = useState<any[]>([])
+  const [prospectsRb2027, setProspectsRb2027] = useState<any[]>([])
   const [rasLookup, setRasLookup] = useState<AppRasLookup | null>(null)
   const [boardView, setBoardView] = useState<'list' | 'grid'>('list')
   const [boardOrder, setBoardOrder] = useState<string[]>([])
@@ -357,7 +358,7 @@ export default function App() {
   useEffect(() => {
     async function load() {
       try {
-        const [combineCsv, draftCsv, pffPayload, extraData, consensusData, scoutData, injuryData, qbSeasonData, qbPffSeasonData, wrPffSeasonData, tePffSeasonData, wrSeasonData, rbSeasonData, careerStatsData, prospectsQbData, prospectsTeData, rasCsv] = await Promise.all([
+        const [combineCsv, draftCsv, pffPayload, extraData, consensusData, scoutData, injuryData, qbSeasonData, qbPffSeasonData, wrPffSeasonData, tePffSeasonData, wrSeasonData, rbSeasonData, careerStatsData, prospectsQbData, prospectsTeData, prospectsRbData, rasCsv] = await Promise.all([
           fetch(`${assetBase}data/combine.csv`).then((r) => r.text()),
           fetch(`${assetBase}data/draft_picks.csv`).then((r) => r.text()),
           loadPffPayload(),
@@ -374,6 +375,7 @@ export default function App() {
           fetch(`${assetBase}data/career_stats.json`).then((r) => r.json()).catch(() => null),
           fetch(`${assetBase}data/prospects_2027_qb.json`).then((r) => r.json()).catch(() => null),
           fetch(`${assetBase}data/prospects_2027_te.json`).then((r) => r.json()).catch(() => null),
+          fetch(`${assetBase}data/prospects_2027_rb.json`).then((r) => r.json()).catch(() => null),
           fetch(`${assetBase}data/ras_main_table.csv`).then((r) => r.text()).catch(() => ''),
         ])
         const allProspects = buildProspectPool(parseCsv(combineCsv), parseCsv(draftCsv))
@@ -708,7 +710,7 @@ export default function App() {
     </div> : page === 'guide' ? <div className="classPage">
       <GuideView />
     </div> : page === 'prospects' ? <div className="classPage">
-      <ProspectsView prospects2027={[...prospectsQb2027, ...prospectsTe2027] as any} history={prospects} pffProfiles={pffProfiles} careerStats={careerStats} histFlagMap={histFlagMap} qbPffSeasons={qbPffSeasons} wrPffSeasons={wrPffSeasons} onLoad={loadProspect2027} />
+      <ProspectsView prospects2027={[...prospectsQb2027, ...prospectsTe2027, ...prospectsRb2027] as any} history={prospects} pffProfiles={pffProfiles} careerStats={careerStats} histFlagMap={histFlagMap} qbPffSeasons={qbPffSeasons} wrPffSeasons={wrPffSeasons} onLoad={loadProspect2027} />
     </div> : <div className="layout">
       <aside className="controlPanel" data-pane="edit">
         <section className="panel loadPanel">
