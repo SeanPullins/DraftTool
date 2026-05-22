@@ -2587,15 +2587,30 @@ function ClassExplorer({ pool, history, pffProfiles, pffLookup, y1Data, careerSt
         : wrContext?.trajectory
           ? { ...synthesized, wrTrajectory: wrContext.trajectory }
           : synthesized
+      const projected = project(synthesizedWithContext, history, pffProfiles, player.id, y1Data, careerStats, undefined, qbContext?.trajectory?.gradeDelta ?? null)
       const overlay = projectionOverlay.get(projectionOverlayKey(player.year, player.pos, player.name))
+
       if (overlay) {
-        const result = { av: overlay.av, score: overlay.score }
+        const hasDraftPrior =
+          overlay.forecast?.draft != null ||
+          overlay.forecast?.draftPrior != null ||
+          overlay.forecast?.projectedPick != null ||
+          player.pick < 260
+
+        // Generated position files are useful signals, but not yet calibrated enough
+        // to fully replace the existing DraftLens score across every position.
+        const overlayWeight = hasDraftPrior ? 0.30 : 0.20
+        const baseWeight = 1 - overlayWeight
+
+        const blendedScore = projected.score * baseWeight + overlay.score * overlayWeight
+        const blendedAv = projected.expectedAv * baseWeight + overlay.av * overlayWeight
+
+        const result = { av: blendedAv, score: blendedScore }
         projCache.current.set(cacheKey, result)
         out.set(player.id, result)
         continue
       }
 
-      const projected = project(synthesizedWithContext, history, pffProfiles, player.id, y1Data, careerStats, undefined, qbContext?.trajectory?.gradeDelta ?? null)
       const result = { av: projected.expectedAv, score: projected.score }
       projCache.current.set(cacheKey, result)
       out.set(player.id, result)
