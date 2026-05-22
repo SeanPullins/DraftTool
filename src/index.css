@@ -1,0 +1,126 @@
+
+.explainBtn {
+  margin-top: 6px;
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  border: 1px solid rgba(255,255,255,0.18);
+  background: rgba(255,255,255,0.06);
+  color: inherit;
+  border-radius: 999px;
+  padding: 4px 9px;
+  font-size: 0.75rem;
+  cursor: pointer;
+}
+
+.explainBtn:hover {
+  background: rgba(255,255,255,0.12);
+}
+
+.explainOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: rgba(0,0,0,0.62);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.explainModal {
+  width: min(920px, 96vw);
+  max-height: 88vh;
+  overflow: auto;
+  background: #111827;
+  color: #f9fafb;
+  border: 1px solid rgba(255,255,255,0.14);
+  border-radius: 18px;
+  padding: 20px;
+  box-shadow: 0 24px 70px rgba(0,0,0,0.45);
+}
+
+.explainHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  border-bottom: 1px solid rgba(255,255,255,0.12);
+  padding-bottom: 14px;
+  margin-bottom: 14px;
+}
+
+.explainHeader p {
+  margin: 0 0 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.72rem;
+  opacity: 0.72;
+}
+
+.explainHeader h2 {
+  margin: 0 0 4px;
+}
+
+.explainHeader small {
+  opacity: 0.75;
+}
+
+.explainSummary {
+  line-height: 1.5;
+  margin-bottom: 12px;
+}
+
+.explainBadges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 10px 0 16px;
+}
+
+.explainBadges span {
+  border-radius: 999px;
+  padding: 5px 10px;
+  background: rgba(249,115,22,0.14);
+  border: 1px solid rgba(249,115,22,0.28);
+  color: #fed7aa;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.explainGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.explainGrid section {
+  background: rgba(255,255,255,0.055);
+  border: 1px solid rgba(255,255,255,0.10);
+  border-radius: 14px;
+  padding: 14px;
+}
+
+.explainGrid h3 {
+  margin: 0 0 8px;
+  font-size: 0.95rem;
+}
+
+.explainGrid ul {
+  margin: 0;
+  padding-left: 18px;
+}
+
+.explainGrid li {
+  margin: 6px 0;
+}
+
+@media (max-width: 760px) {
+  .explainGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .explainHeader {
+    flex-direction: column;
+  }
+}

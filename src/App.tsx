@@ -2132,6 +2132,190 @@ function BrowserHeader({ label, sortKey, active, dir, onSort }: { label: string;
   </th>
 }
 
+
+function safeNum(value: any): number | null {
+  const n = Number(value)
+  return Number.isFinite(n) ? n : null
+}
+
+function fmtNum(value: any, digits = 1): string {
+  const n = safeNum(value)
+  return n == null ? '—' : n.toFixed(digits)
+}
+
+function getAny(obj: any, keys: string[]): any {
+  if (!obj) return null
+  for (const key of keys) {
+    if (obj[key] != null) return obj[key]
+  }
+  return null
+}
+
+function buildPlayerExplanation(player: any, ctx: any) {
+  const strengths: string[] = []
+  const risks: string[] = []
+  const drivers: string[] = []
+  const badges: string[] = []
+
+  const pos = String(player.pos || '').toUpperCase()
+  const pick = safeNum(player.pick)
+  const projectedScore = safeNum(ctx?.projected?.score)
+  const projectedAv = safeNum(ctx?.projected?.av)
+  const pffScore = safeNum(ctx?.pffContextScore)
+
+  if (pick != null) {
+    drivers.push(`Projected/actual pick: #${pick}`)
+    if (pick <= 32) badges.push('Round 1 profile')
+    else if (pick <= 100) badges.push('Top-100 profile')
+    else badges.push('Day 3 / value range')
+  }
+
+  if (projectedScore != null) {
+    drivers.push(`Model score: ${Math.round(projectedScore)}`)
+    if (projectedScore >= 85) strengths.push('High model score relative to the class.')
+    else if (projectedScore >= 70) strengths.push('Solid model score with starter/value potential.')
+    else risks.push('Model score is more developmental than blue-chip.')
+  }
+
+  if (projectedAv != null) {
+    drivers.push(`Projected AV: ${projectedAv.toFixed(1)}`)
+  }
+
+  if (pffScore != null) {
+    drivers.push(`${ctx?.pffContextLabel || 'PFF context'}: ${pffScore.toFixed(1)}`)
+    if (pffScore >= 90) strengths.push('Elite PFF profile/season signal.')
+    else if (pffScore >= 80) strengths.push('Strong PFF profile/season signal.')
+    else if (pffScore < 65) risks.push('PFF profile is more modest than top-tier prospects.')
+  }
+
+  const qb = ctx?.qbContext
+  const wr = ctx?.wrContext
+
+  if (pos === 'QB' && qb) {
+    const passGrade = safeNum(getAny(qb, ['pass_grade', 'grades_pass']))
+    const offGrade = safeNum(getAny(qb, ['offense_grade', 'grades_offense']))
+    const btt = safeNum(getAny(qb, ['btt_rate', 'btt_pct']))
+    const twp = safeNum(getAny(qb, ['twp_rate', 'twp_pct']))
+    const ttt = safeNum(getAny(qb, ['time_to_throw', 'avg_time_to_throw']))
+    const adot = safeNum(getAny(qb, ['adot', 'avg_depth_of_target']))
+    const p2s = safeNum(getAny(qb, ['pressure_to_sack_rate', 'pressure_to_sack_pct']))
+
+    if (passGrade != null) drivers.push(`QB pass grade: ${passGrade.toFixed(1)}`)
+    if (offGrade != null) drivers.push(`QB offense grade: ${offGrade.toFixed(1)}`)
+    if (btt != null) drivers.push(`BTT%: ${btt.toFixed(1)}`)
+    if (twp != null) drivers.push(`TWP%: ${twp.toFixed(1)}`)
+    if (ttt != null) drivers.push(`Time to throw: ${ttt.toFixed(2)}s`)
+    if (adot != null) drivers.push(`ADOT: ${adot.toFixed(1)}`)
+    if (p2s != null) drivers.push(`Pressure-to-sack: ${p2s.toFixed(1)}%`)
+
+    if (passGrade != null && passGrade >= 90) strengths.push('Elite passing grade.')
+    if (offGrade != null && offGrade >= 90) strengths.push('Elite overall offensive grade.')
+    if (btt != null && btt >= 6) strengths.push('High big-time throw creation.')
+    if (twp != null && twp <= 2) strengths.push('Strong ball-security profile.')
+    if (twp != null && twp >= 4) risks.push('Turnover-worthy play rate is a risk flag.')
+    if (ttt != null && ttt >= 3.0) risks.push('Longer time-to-throw profile may create NFL pressure risk.')
+
+    badges.push('QB data linked')
+  }
+
+  if ((pos === 'WR' || pos === 'TE') && wr) {
+    const routeGrade = safeNum(getAny(wr, ['route_grade', 'grades_pass_route']))
+    const offGrade = safeNum(getAny(wr, ['offense_grade', 'grades_offense']))
+    const yprr = safeNum(getAny(wr, ['yprr']))
+    const targets = safeNum(getAny(wr, ['targets']))
+    const yards = safeNum(getAny(wr, ['yards']))
+
+    if (routeGrade != null) drivers.push(`Route grade: ${routeGrade.toFixed(1)}`)
+    if (offGrade != null) drivers.push(`Offense grade: ${offGrade.toFixed(1)}`)
+    if (yprr != null) drivers.push(`YPRR: ${yprr.toFixed(2)}`)
+    if (targets != null) drivers.push(`Targets: ${targets.toFixed(0)}`)
+    if (yards != null) drivers.push(`Yards: ${yards.toFixed(0)}`)
+
+    if (routeGrade != null && routeGrade >= 80) strengths.push('Strong route-winning profile.')
+    if (yprr != null && yprr >= 2.5) strengths.push('High yards-per-route efficiency.')
+    if (offGrade != null && offGrade >= 80) strengths.push('Strong overall receiving profile.')
+    if (routeGrade != null && routeGrade < 65) risks.push('Route grade is below ideal draft-value threshold.')
+
+    badges.push(`${pos} data linked`)
+  }
+
+  if (player.av != null && Number(player.av) > 0) {
+    drivers.push(`Historical AV: ${player.av}`)
+  }
+
+  if (player.proBowls) strengths.push(`NFL outcome marker: ${player.proBowls} Pro Bowl(s).`)
+  if (player.allPro) strengths.push(`NFL outcome marker: ${player.allPro} All-Pro selection(s).`)
+
+  if (!strengths.length) strengths.push('Ranking is mainly supported by draft slot, model projection, and available profile data.')
+  if (!risks.length) risks.push('No major dataset red flag surfaced from the currently loaded fields.')
+
+  const summary = `${player.name} ranks here because the model combines draft slot/value, projected score, available PFF data, and position-specific production signals.`
+  const valueRead =
+    pick != null && projectedScore != null
+      ? projectedScore >= 80 && pick > 50
+        ? 'Potential value: model score is strong relative to projected draft slot.'
+        : projectedScore < 65 && pick <= 50
+          ? 'Possible overpay risk: draft slot is aggressive relative to model score.'
+          : 'Fair-value range: model score and draft slot are broadly aligned.'
+      : 'Value read is limited because pick or score data is missing.'
+
+  return {
+    player,
+    summary,
+    valueRead,
+    badges,
+    strengths,
+    risks,
+    drivers,
+  }
+}
+
+function PlayerExplanationModal({ explanation, onClose }: { explanation: any; onClose: () => void }) {
+  if (!explanation) return null
+
+  return <div className="explainOverlay" role="dialog" aria-modal="true">
+    <div className="explainModal">
+      <div className="explainHeader">
+        <div>
+          <p>Explain Player</p>
+          <h2>{explanation.player.name}</h2>
+          <small>{explanation.player.year} · {explanation.player.pos} · {explanation.player.school || 'No school'} · Pick #{explanation.player.pick}</small>
+        </div>
+        <button type="button" className="secondary" onClick={onClose}>Close</button>
+      </div>
+
+      <p className="explainSummary">{explanation.summary}</p>
+
+      <div className="explainBadges">
+        {explanation.badges.map((badge: string) => <span key={badge}>{badge}</span>)}
+      </div>
+
+      <div className="explainGrid">
+        <section>
+          <h3>Why the model likes him</h3>
+          <ul>{explanation.strengths.map((item: string) => <li key={item}>{item}</li>)}</ul>
+        </section>
+
+        <section>
+          <h3>Risks / limitations</h3>
+          <ul>{explanation.risks.map((item: string) => <li key={item}>{item}</li>)}</ul>
+        </section>
+
+        <section>
+          <h3>Model drivers</h3>
+          <ul>{explanation.drivers.map((item: string) => <li key={item}>{item}</li>)}</ul>
+        </section>
+
+        <section>
+          <h3>Value read</h3>
+          <p>{explanation.valueRead}</p>
+        </section>
+      </div>
+    </div>
+  </div>
+}
+
+
 function ClassExplorer({ pool, history, pffProfiles, pffLookup, y1Data, careerStats, histFlagMap, currentName, currentYear, saved, qbPffSeasons, wrPffSeasons }: { pool: Historical[]; history: Historical[]; pffProfiles: PffProfile[]; pffLookup: Map<string, PffProfile>; y1Data?: Y1Data; careerStats?: CareerStatMap; histFlagMap: Map<string, HistoricalOutcomeFlag>; currentName: string; currentYear: number; saved: SavedProspect[]; qbPffSeasons: QbPffSeason[]; wrPffSeasons: WrPffSeason[]; }) {
   const years = useMemo(() => {
     const set = new Set<number>()
@@ -2147,6 +2331,7 @@ function ClassExplorer({ pool, history, pffProfiles, pffLookup, y1Data, careerSt
   const [sortDir, setSortDir] = useState<SortDir>('asc')
   const [expandedId, setExpandedId] = useState<string | null>(null)
   const [showScatter, setShowScatter] = useState(false)
+  const [explanation, setExplanation] = useState<any | null>(null)
   const [v57AuditRows, setV57AuditRows] = useState<any[]>([])
 
   useEffect(() => {
@@ -2385,6 +2570,7 @@ function ClassExplorer({ pool, history, pffProfiles, pffLookup, y1Data, careerSt
       ))}
     </div>
     {useProjections ? <p className="hint">Projected AV and Score use the calibrated 2016-2023 model plus each player's draft/combine and matched PFF profile when available.</p> : null}
+    {explanation ? <PlayerExplanationModal explanation={explanation} onClose={() => setExplanation(null)} /> : null}
     {rows.length ? <TableWrap>
       <table className="classTable">
         <thead>
@@ -2446,6 +2632,19 @@ function ClassExplorer({ pool, history, pffProfiles, pffLookup, y1Data, careerSt
                   <b>{player.name}</b>
                   {isSaved && <span className="savedBadge" title="Saved prospect">★</span>}
                   <small>{player.school || 'No school'}</small>
+                  <button
+                    type="button"
+                    className="explainBtn"
+                    onClick={() => setExplanation(buildPlayerExplanation(player, {
+                      projected,
+                      pffContextScore,
+                      pffContextLabel,
+                      qbContext: player.pos === 'QB' ? getQbPffContext(player.year, player.name, qbPffSeasons) : null,
+                      wrContext: player.pos === 'WR' || player.pos === 'TE' ? getWrPffContext(player.year, player.name, wrPffSeasons) : null,
+                    }))}
+                  >
+                    Explain
+                  </button>
                 </td>
                 <td><span className="posCell">{player.pos}{posRank != null && <span className="posRank">#{posRank}</span>}</span></td>
                 <td>{player.pick >= 260 ? 'UDFA' : player.pick}</td>
