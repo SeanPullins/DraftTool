@@ -1,10 +1,11 @@
 {
-  "generatedAt": "2026-05-22T18:24:52.245Z",
-  "model": "RB_FORECAST_RUSHING_RECEIVING_V1",
+  "generatedAt": "2026-05-22T18:32:16.379Z",
+  "model": "RB_FORECAST_RUSHING_RECEIVING_RAS_V1",
+  "sourceSeason": 2025,
   "notes": [
     "RB-only forecast model.",
     "Does not change QB, WR, or TE scoring.",
-    "Uses 2025 RB rushing/receiving/pass-pro PFF data to forecast 2027 RB prospects.",
+    "Uses RB rushing/receiving/pass-pro PFF data plus RAS when available.",
     "No actual draft slot is used."
   ],
   "records": [
@@ -21,7 +22,7 @@
       "score": 79,
       "pick": 1,
       "projectedPick": 1,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 79,
         "rushing": 89,
@@ -81,7 +82,7 @@
       "score": 76,
       "pick": 2,
       "projectedPick": 2,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 76,
         "rushing": 86,
@@ -141,7 +142,7 @@
       "score": 73,
       "pick": 3,
       "projectedPick": 3,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 73,
         "rushing": 83,
@@ -201,7 +202,7 @@
       "score": 73,
       "pick": 4,
       "projectedPick": 4,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 73,
         "rushing": 86,
@@ -261,7 +262,7 @@
       "score": 72,
       "pick": 5,
       "projectedPick": 5,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 72,
         "rushing": 78,
@@ -321,7 +322,7 @@
       "score": 71,
       "pick": 6,
       "projectedPick": 6,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 71,
         "rushing": 91,
@@ -381,7 +382,7 @@
       "score": 71,
       "pick": 7,
       "projectedPick": 7,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 71,
         "rushing": 78,
@@ -441,7 +442,7 @@
       "score": 71,
       "pick": 8,
       "projectedPick": 8,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 71,
         "rushing": 77,
@@ -501,7 +502,7 @@
       "score": 71,
       "pick": 9,
       "projectedPick": 9,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 71,
         "rushing": 75,
@@ -561,7 +562,7 @@
       "score": 70,
       "pick": 10,
       "projectedPick": 10,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 70,
         "rushing": 75,
@@ -621,7 +622,7 @@
       "score": 70,
       "pick": 11,
       "projectedPick": 11,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 70,
         "rushing": 74,
@@ -681,7 +682,7 @@
       "score": 70,
       "pick": 12,
       "projectedPick": 12,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 70,
         "rushing": 77,
@@ -741,7 +742,7 @@
       "score": 70,
       "pick": 13,
       "projectedPick": 13,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 70,
         "rushing": 88,
@@ -801,7 +802,7 @@
       "score": 69,
       "pick": 14,
       "projectedPick": 14,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 69,
         "rushing": 74,
@@ -861,7 +862,7 @@
       "score": 68,
       "pick": 15,
       "projectedPick": 15,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 68,
         "rushing": 71,
@@ -921,7 +922,7 @@
       "score": 67,
       "pick": 16,
       "projectedPick": 16,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 67,
         "rushing": 79,
@@ -981,7 +982,7 @@
       "score": 67,
       "pick": 17,
       "projectedPick": 17,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 67,
         "rushing": 72,
@@ -1041,7 +1042,7 @@
       "score": 66,
       "pick": 18,
       "projectedPick": 18,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 66,
         "rushing": 74,
@@ -1101,7 +1102,7 @@
       "score": 66,
       "pick": 19,
       "projectedPick": 19,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 66,
         "rushing": 74,
@@ -1161,7 +1162,7 @@
       "score": 66,
       "pick": 20,
       "projectedPick": 20,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 66,
         "rushing": 68,
@@ -1221,7 +1222,7 @@
       "score": 66,
       "pick": 21,
       "projectedPick": 21,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 66,
         "rushing": 74,
@@ -1281,7 +1282,7 @@
       "score": 66,
       "pick": 22,
       "projectedPick": 22,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 66,
         "rushing": 70,
@@ -1341,7 +1342,7 @@
       "score": 66,
       "pick": 23,
       "projectedPick": 23,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 66,
         "rushing": 76,
@@ -1401,7 +1402,7 @@
       "score": 65,
       "pick": 24,
       "projectedPick": 24,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 65,
         "rushing": 77,
@@ -1461,7 +1462,7 @@
       "score": 65,
       "pick": 25,
       "projectedPick": 25,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 65,
         "rushing": 77,
@@ -1521,7 +1522,7 @@
       "score": 65,
       "pick": 26,
       "projectedPick": 26,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 65,
         "rushing": 75,
@@ -1581,7 +1582,7 @@
       "score": 65,
       "pick": 27,
       "projectedPick": 27,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 65,
         "rushing": 74,
@@ -1641,7 +1642,7 @@
       "score": 64,
       "pick": 28,
       "projectedPick": 28,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 64,
         "rushing": 82,
@@ -1701,7 +1702,7 @@
       "score": 64,
       "pick": 29,
       "projectedPick": 29,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 64,
         "rushing": 78,
@@ -1761,7 +1762,7 @@
       "score": 63,
       "pick": 30,
       "projectedPick": 30,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 63,
         "rushing": 73,
@@ -1821,7 +1822,7 @@
       "score": 63,
       "pick": 31,
       "projectedPick": 31,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 63,
         "rushing": 74,
@@ -1881,7 +1882,7 @@
       "score": 63,
       "pick": 32,
       "projectedPick": 32,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 63,
         "rushing": 68,
@@ -1941,7 +1942,7 @@
       "score": 63,
       "pick": 33,
       "projectedPick": 33,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 63,
         "rushing": 68,
@@ -2001,7 +2002,7 @@
       "score": 63,
       "pick": 34,
       "projectedPick": 34,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 63,
         "rushing": 85,
@@ -2061,7 +2062,7 @@
       "score": 63,
       "pick": 35,
       "projectedPick": 35,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 63,
         "rushing": 80,
@@ -2121,7 +2122,7 @@
       "score": 62,
       "pick": 36,
       "projectedPick": 36,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 62,
         "rushing": 74,
@@ -2181,7 +2182,7 @@
       "score": 62,
       "pick": 37,
       "projectedPick": 37,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 62,
         "rushing": 75,
@@ -2241,7 +2242,7 @@
       "score": 62,
       "pick": 38,
       "projectedPick": 38,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 62,
         "rushing": 85,
@@ -2301,7 +2302,7 @@
       "score": 62,
       "pick": 39,
       "projectedPick": 39,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 62,
         "rushing": 68,
@@ -2361,7 +2362,7 @@
       "score": 62,
       "pick": 40,
       "projectedPick": 40,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 62,
         "rushing": 64,
@@ -2421,7 +2422,7 @@
       "score": 61,
       "pick": 41,
       "projectedPick": 41,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 61,
         "rushing": 73,
@@ -2481,7 +2482,7 @@
       "score": 61,
       "pick": 42,
       "projectedPick": 42,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 61,
         "rushing": 72,
@@ -2541,7 +2542,7 @@
       "score": 61,
       "pick": 43,
       "projectedPick": 43,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 61,
         "rushing": 72,
@@ -2601,7 +2602,7 @@
       "score": 61,
       "pick": 44,
       "projectedPick": 44,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 61,
         "rushing": 75,
@@ -2661,7 +2662,7 @@
       "score": 61,
       "pick": 45,
       "projectedPick": 45,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 61,
         "rushing": 71,
@@ -2721,7 +2722,7 @@
       "score": 61,
       "pick": 46,
       "projectedPick": 46,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 61,
         "rushing": 81,
@@ -2781,7 +2782,7 @@
       "score": 61,
       "pick": 47,
       "projectedPick": 47,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 61,
         "rushing": 64,
@@ -2841,7 +2842,7 @@
       "score": 61,
       "pick": 48,
       "projectedPick": 48,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 61,
         "rushing": 79,
@@ -2901,7 +2902,7 @@
       "score": 61,
       "pick": 49,
       "projectedPick": 49,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 61,
         "rushing": 73,
@@ -2961,7 +2962,7 @@
       "score": 60,
       "pick": 50,
       "projectedPick": 50,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 60,
         "rushing": 72,
@@ -3021,7 +3022,7 @@
       "score": 60,
       "pick": 51,
       "projectedPick": 51,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 60,
         "rushing": 71,
@@ -3081,7 +3082,7 @@
       "score": 60,
       "pick": 52,
       "projectedPick": 52,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 60,
         "rushing": 64,
@@ -3141,7 +3142,7 @@
       "score": 60,
       "pick": 53,
       "projectedPick": 53,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 60,
         "rushing": 72,
@@ -3201,7 +3202,7 @@
       "score": 60,
       "pick": 54,
       "projectedPick": 54,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 60,
         "rushing": 71,
@@ -3261,7 +3262,7 @@
       "score": 60,
       "pick": 55,
       "projectedPick": 55,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 60,
         "rushing": 74,
@@ -3321,7 +3322,7 @@
       "score": 60,
       "pick": 56,
       "projectedPick": 56,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 60,
         "rushing": 66,
@@ -3381,7 +3382,7 @@
       "score": 60,
       "pick": 57,
       "projectedPick": 57,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 60,
         "rushing": 63,
@@ -3441,7 +3442,7 @@
       "score": 59,
       "pick": 58,
       "projectedPick": 58,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 59,
         "rushing": 74,
@@ -3501,7 +3502,7 @@
       "score": 59,
       "pick": 59,
       "projectedPick": 59,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 59,
         "rushing": 71,
@@ -3561,7 +3562,7 @@
       "score": 59,
       "pick": 60,
       "projectedPick": 60,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 59,
         "rushing": 73,
@@ -3621,7 +3622,7 @@
       "score": 59,
       "pick": 61,
       "projectedPick": 61,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 59,
         "rushing": 71,
@@ -3681,7 +3682,7 @@
       "score": 59,
       "pick": 62,
       "projectedPick": 62,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 59,
         "rushing": 72,
@@ -3741,7 +3742,7 @@
       "score": 59,
       "pick": 63,
       "projectedPick": 63,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 59,
         "rushing": 68,
@@ -3801,7 +3802,7 @@
       "score": 59,
       "pick": 64,
       "projectedPick": 64,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 59,
         "rushing": 61,
@@ -3861,7 +3862,7 @@
       "score": 59,
       "pick": 65,
       "projectedPick": 65,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 59,
         "rushing": 70,
@@ -3921,7 +3922,7 @@
       "score": 58,
       "pick": 66,
       "projectedPick": 66,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 58,
         "rushing": 76,
@@ -3981,7 +3982,7 @@
       "score": 58,
       "pick": 67,
       "projectedPick": 67,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 58,
         "rushing": 69,
@@ -4041,7 +4042,7 @@
       "score": 58,
       "pick": 68,
       "projectedPick": 68,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 58,
         "rushing": 69,
@@ -4101,7 +4102,7 @@
       "score": 58,
       "pick": 69,
       "projectedPick": 69,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 58,
         "rushing": 71,
@@ -4161,7 +4162,7 @@
       "score": 58,
       "pick": 70,
       "projectedPick": 70,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 58,
         "rushing": 60,
@@ -4221,7 +4222,7 @@
       "score": 58,
       "pick": 71,
       "projectedPick": 71,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 58,
         "rushing": 60,
@@ -4281,7 +4282,7 @@
       "score": 57,
       "pick": 72,
       "projectedPick": 72,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 57,
         "rushing": 66,
@@ -4341,7 +4342,7 @@
       "score": 57,
       "pick": 73,
       "projectedPick": 73,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 57,
         "rushing": 63,
@@ -4401,7 +4402,7 @@
       "score": 57,
       "pick": 74,
       "projectedPick": 74,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 57,
         "rushing": 72,
@@ -4461,7 +4462,7 @@
       "score": 57,
       "pick": 75,
       "projectedPick": 75,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 57,
         "rushing": 65,
@@ -4521,7 +4522,7 @@
       "score": 57,
       "pick": 76,
       "projectedPick": 76,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 57,
         "rushing": 68,
@@ -4581,7 +4582,7 @@
       "score": 57,
       "pick": 77,
       "projectedPick": 77,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 57,
         "rushing": 74,
@@ -4641,7 +4642,7 @@
       "score": 57,
       "pick": 78,
       "projectedPick": 78,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 57,
         "rushing": 65,
@@ -4701,7 +4702,7 @@
       "score": 57,
       "pick": 79,
       "projectedPick": 79,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 57,
         "rushing": 67,
@@ -4761,7 +4762,7 @@
       "score": 57,
       "pick": 80,
       "projectedPick": 80,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 57,
         "rushing": 64,
@@ -4821,7 +4822,7 @@
       "score": 56,
       "pick": 81,
       "projectedPick": 81,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 56,
         "rushing": 66,
@@ -4881,7 +4882,7 @@
       "score": 56,
       "pick": 82,
       "projectedPick": 82,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 56,
         "rushing": 72,
@@ -4941,7 +4942,7 @@
       "score": 56,
       "pick": 83,
       "projectedPick": 83,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 56,
         "rushing": 61,
@@ -5001,7 +5002,7 @@
       "score": 56,
       "pick": 84,
       "projectedPick": 84,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 56,
         "rushing": 69,
@@ -5061,7 +5062,7 @@
       "score": 56,
       "pick": 85,
       "projectedPick": 85,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 56,
         "rushing": 67,
@@ -5121,7 +5122,7 @@
       "score": 56,
       "pick": 86,
       "projectedPick": 86,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 56,
         "rushing": 72,
@@ -5181,7 +5182,7 @@
       "score": 55,
       "pick": 87,
       "projectedPick": 87,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 55,
         "rushing": 69,
@@ -5241,7 +5242,7 @@
       "score": 55,
       "pick": 88,
       "projectedPick": 88,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 55,
         "rushing": 64,
@@ -5301,7 +5302,7 @@
       "score": 55,
       "pick": 89,
       "projectedPick": 89,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 55,
         "rushing": 70,
@@ -5361,7 +5362,7 @@
       "score": 55,
       "pick": 90,
       "projectedPick": 90,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 55,
         "rushing": 69,
@@ -5421,7 +5422,7 @@
       "score": 55,
       "pick": 91,
       "projectedPick": 91,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 55,
         "rushing": 73,
@@ -5481,7 +5482,7 @@
       "score": 55,
       "pick": 92,
       "projectedPick": 92,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 55,
         "rushing": 72,
@@ -5541,7 +5542,7 @@
       "score": 55,
       "pick": 93,
       "projectedPick": 93,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 55,
         "rushing": 65,
@@ -5601,7 +5602,7 @@
       "score": 55,
       "pick": 94,
       "projectedPick": 94,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 55,
         "rushing": 72,
@@ -5661,7 +5662,7 @@
       "score": 55,
       "pick": 95,
       "projectedPick": 95,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 55,
         "rushing": 66,
@@ -5721,7 +5722,7 @@
       "score": 55,
       "pick": 96,
       "projectedPick": 96,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 55,
         "rushing": 64,
@@ -5781,7 +5782,7 @@
       "score": 55,
       "pick": 97,
       "projectedPick": 97,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 55,
         "rushing": 64,
@@ -5841,7 +5842,7 @@
       "score": 55,
       "pick": 98,
       "projectedPick": 98,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 55,
         "rushing": 65,
@@ -5901,7 +5902,7 @@
       "score": 55,
       "pick": 99,
       "projectedPick": 99,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 55,
         "rushing": 64,
@@ -5961,7 +5962,7 @@
       "score": 54,
       "pick": 100,
       "projectedPick": 100,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 54,
         "rushing": 69,
@@ -6021,7 +6022,7 @@
       "score": 54,
       "pick": 101,
       "projectedPick": 101,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 54,
         "rushing": 63,
@@ -6081,7 +6082,7 @@
       "score": 54,
       "pick": 102,
       "projectedPick": 102,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 54,
         "rushing": 62,
@@ -6141,7 +6142,7 @@
       "score": 54,
       "pick": 103,
       "projectedPick": 103,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 54,
         "rushing": 71,
@@ -6201,7 +6202,7 @@
       "score": 54,
       "pick": 104,
       "projectedPick": 104,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 54,
         "rushing": 56,
@@ -6261,7 +6262,7 @@
       "score": 54,
       "pick": 105,
       "projectedPick": 105,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 54,
         "rushing": 64,
@@ -6321,7 +6322,7 @@
       "score": 54,
       "pick": 106,
       "projectedPick": 106,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 54,
         "rushing": 77,
@@ -6381,7 +6382,7 @@
       "score": 54,
       "pick": 107,
       "projectedPick": 107,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 54,
         "rushing": 62,
@@ -6441,7 +6442,7 @@
       "score": 53,
       "pick": 108,
       "projectedPick": 108,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 53,
         "rushing": 64,
@@ -6501,7 +6502,7 @@
       "score": 53,
       "pick": 109,
       "projectedPick": 109,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 53,
         "rushing": 64,
@@ -6561,7 +6562,7 @@
       "score": 53,
       "pick": 110,
       "projectedPick": 110,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 53,
         "rushing": 66,
@@ -6621,7 +6622,7 @@
       "score": 53,
       "pick": 111,
       "projectedPick": 111,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 53,
         "rushing": 61,
@@ -6681,7 +6682,7 @@
       "score": 53,
       "pick": 112,
       "projectedPick": 112,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 53,
         "rushing": 61,
@@ -6741,7 +6742,7 @@
       "score": 53,
       "pick": 113,
       "projectedPick": 113,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 53,
         "rushing": 58,
@@ -6801,7 +6802,7 @@
       "score": 53,
       "pick": 114,
       "projectedPick": 114,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 53,
         "rushing": 60,
@@ -6861,7 +6862,7 @@
       "score": 53,
       "pick": 115,
       "projectedPick": 115,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 53,
         "rushing": 63,
@@ -6921,7 +6922,7 @@
       "score": 52,
       "pick": 116,
       "projectedPick": 116,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 52,
         "rushing": 63,
@@ -6981,7 +6982,7 @@
       "score": 52,
       "pick": 117,
       "projectedPick": 117,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 52,
         "rushing": 62,
@@ -7041,7 +7042,7 @@
       "score": 52,
       "pick": 118,
       "projectedPick": 118,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 52,
         "rushing": 62,
@@ -7101,7 +7102,7 @@
       "score": 52,
       "pick": 119,
       "projectedPick": 119,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 52,
         "rushing": 62,
@@ -7161,7 +7162,7 @@
       "score": 52,
       "pick": 120,
       "projectedPick": 120,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 52,
         "rushing": 62,
@@ -7221,7 +7222,7 @@
       "score": 52,
       "pick": 121,
       "projectedPick": 121,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 52,
         "rushing": 64,
@@ -7281,7 +7282,7 @@
       "score": 52,
       "pick": 122,
       "projectedPick": 122,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 52,
         "rushing": 66,
@@ -7341,7 +7342,7 @@
       "score": 52,
       "pick": 123,
       "projectedPick": 123,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 52,
         "rushing": 65,
@@ -7401,7 +7402,7 @@
       "score": 52,
       "pick": 124,
       "projectedPick": 124,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 52,
         "rushing": 64,
@@ -7461,7 +7462,7 @@
       "score": 52,
       "pick": 125,
       "projectedPick": 125,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 52,
         "rushing": 70,
@@ -7521,7 +7522,7 @@
       "score": 52,
       "pick": 126,
       "projectedPick": 126,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 52,
         "rushing": 60,
@@ -7581,7 +7582,7 @@
       "score": 52,
       "pick": 127,
       "projectedPick": 127,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 52,
         "rushing": 65,
@@ -7641,7 +7642,7 @@
       "score": 52,
       "pick": 128,
       "projectedPick": 128,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 52,
         "rushing": 66,
@@ -7701,7 +7702,7 @@
       "score": 51,
       "pick": 129,
       "projectedPick": 129,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 51,
         "rushing": 65,
@@ -7761,7 +7762,7 @@
       "score": 51,
       "pick": 130,
       "projectedPick": 130,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 51,
         "rushing": 62,
@@ -7821,7 +7822,7 @@
       "score": 51,
       "pick": 131,
       "projectedPick": 131,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 51,
         "rushing": 65,
@@ -7881,7 +7882,7 @@
       "score": 51,
       "pick": 132,
       "projectedPick": 132,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 51,
         "rushing": 72,
@@ -7941,7 +7942,7 @@
       "score": 51,
       "pick": 133,
       "projectedPick": 133,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 51,
         "rushing": 61,
@@ -8001,7 +8002,7 @@
       "score": 51,
       "pick": 134,
       "projectedPick": 134,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 51,
         "rushing": 55,
@@ -8061,7 +8062,7 @@
       "score": 51,
       "pick": 135,
       "projectedPick": 135,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 51,
         "rushing": 65,
@@ -8121,7 +8122,7 @@
       "score": 51,
       "pick": 136,
       "projectedPick": 136,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 51,
         "rushing": 60,
@@ -8181,7 +8182,7 @@
       "score": 51,
       "pick": 137,
       "projectedPick": 137,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 51,
         "rushing": 68,
@@ -8241,7 +8242,7 @@
       "score": 51,
       "pick": 138,
       "projectedPick": 138,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 51,
         "rushing": 58,
@@ -8301,7 +8302,7 @@
       "score": 51,
       "pick": 139,
       "projectedPick": 139,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 51,
         "rushing": 60,
@@ -8361,7 +8362,7 @@
       "score": 51,
       "pick": 140,
       "projectedPick": 140,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 51,
         "rushing": 58,
@@ -8421,7 +8422,7 @@
       "score": 50,
       "pick": 141,
       "projectedPick": 141,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 50,
         "rushing": 65,
@@ -8481,7 +8482,7 @@
       "score": 50,
       "pick": 142,
       "projectedPick": 142,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 50,
         "rushing": 63,
@@ -8541,7 +8542,7 @@
       "score": 50,
       "pick": 143,
       "projectedPick": 143,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 50,
         "rushing": 59,
@@ -8601,7 +8602,7 @@
       "score": 50,
       "pick": 144,
       "projectedPick": 144,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 50,
         "rushing": 62,
@@ -8661,7 +8662,7 @@
       "score": 50,
       "pick": 145,
       "projectedPick": 145,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 50,
         "rushing": 65,
@@ -8721,7 +8722,7 @@
       "score": 50,
       "pick": 146,
       "projectedPick": 146,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 50,
         "rushing": 61,
@@ -8781,7 +8782,7 @@
       "score": 50,
       "pick": 147,
       "projectedPick": 147,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 50,
         "rushing": 60,
@@ -8841,7 +8842,7 @@
       "score": 49,
       "pick": 148,
       "projectedPick": 148,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 49,
         "rushing": 57,
@@ -8901,7 +8902,7 @@
       "score": 49,
       "pick": 149,
       "projectedPick": 149,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 49,
         "rushing": 61,
@@ -8961,7 +8962,7 @@
       "score": 49,
       "pick": 150,
       "projectedPick": 150,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 49,
         "rushing": 57,
@@ -9021,7 +9022,7 @@
       "score": 49,
       "pick": 151,
       "projectedPick": 151,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 49,
         "rushing": 62,
@@ -9081,7 +9082,7 @@
       "score": 49,
       "pick": 152,
       "projectedPick": 152,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 49,
         "rushing": 60,
@@ -9141,7 +9142,7 @@
       "score": 49,
       "pick": 153,
       "projectedPick": 153,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 49,
         "rushing": 57,
@@ -9201,7 +9202,7 @@
       "score": 49,
       "pick": 154,
       "projectedPick": 154,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 49,
         "rushing": 59,
@@ -9261,7 +9262,7 @@
       "score": 48,
       "pick": 155,
       "projectedPick": 155,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 48,
         "rushing": 63,
@@ -9321,7 +9322,7 @@
       "score": 48,
       "pick": 156,
       "projectedPick": 156,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 48,
         "rushing": 59,
@@ -9381,7 +9382,7 @@
       "score": 48,
       "pick": 157,
       "projectedPick": 157,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 48,
         "rushing": 60,
@@ -9441,7 +9442,7 @@
       "score": 48,
       "pick": 158,
       "projectedPick": 158,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 48,
         "rushing": 69,
@@ -9501,7 +9502,7 @@
       "score": 48,
       "pick": 159,
       "projectedPick": 159,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 48,
         "rushing": 64,
@@ -9561,7 +9562,7 @@
       "score": 48,
       "pick": 160,
       "projectedPick": 160,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 48,
         "rushing": 51,
@@ -9621,7 +9622,7 @@
       "score": 48,
       "pick": 161,
       "projectedPick": 161,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 48,
         "rushing": 66,
@@ -9681,7 +9682,7 @@
       "score": 48,
       "pick": 162,
       "projectedPick": 162,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 48,
         "rushing": 56,
@@ -9741,7 +9742,7 @@
       "score": 47,
       "pick": 163,
       "projectedPick": 163,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 47,
         "rushing": 63,
@@ -9801,7 +9802,7 @@
       "score": 47,
       "pick": 164,
       "projectedPick": 164,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 47,
         "rushing": 58,
@@ -9861,7 +9862,7 @@
       "score": 47,
       "pick": 165,
       "projectedPick": 165,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 47,
         "rushing": 62,
@@ -9921,7 +9922,7 @@
       "score": 47,
       "pick": 166,
       "projectedPick": 166,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 47,
         "rushing": 54,
@@ -9981,7 +9982,7 @@
       "score": 47,
       "pick": 167,
       "projectedPick": 167,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 47,
         "rushing": 58,
@@ -10041,7 +10042,7 @@
       "score": 47,
       "pick": 168,
       "projectedPick": 168,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 47,
         "rushing": 59,
@@ -10101,7 +10102,7 @@
       "score": 47,
       "pick": 169,
       "projectedPick": 169,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 47,
         "rushing": 57,
@@ -10161,7 +10162,7 @@
       "score": 47,
       "pick": 170,
       "projectedPick": 170,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 47,
         "rushing": 58,
@@ -10221,7 +10222,7 @@
       "score": 47,
       "pick": 171,
       "projectedPick": 171,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 47,
         "rushing": 58,
@@ -10281,7 +10282,7 @@
       "score": 47,
       "pick": 172,
       "projectedPick": 172,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 47,
         "rushing": 63,
@@ -10341,7 +10342,7 @@
       "score": 46,
       "pick": 173,
       "projectedPick": 173,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 46,
         "rushing": 61,
@@ -10401,7 +10402,7 @@
       "score": 46,
       "pick": 174,
       "projectedPick": 174,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 46,
         "rushing": 58,
@@ -10461,7 +10462,7 @@
       "score": 46,
       "pick": 175,
       "projectedPick": 175,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 46,
         "rushing": 63,
@@ -10521,7 +10522,7 @@
       "score": 46,
       "pick": 176,
       "projectedPick": 176,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 46,
         "rushing": 58,
@@ -10581,7 +10582,7 @@
       "score": 46,
       "pick": 177,
       "projectedPick": 177,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 46,
         "rushing": 60,
@@ -10641,7 +10642,7 @@
       "score": 46,
       "pick": 178,
       "projectedPick": 178,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 46,
         "rushing": 61,
@@ -10701,7 +10702,7 @@
       "score": 46,
       "pick": 179,
       "projectedPick": 179,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 46,
         "rushing": 61,
@@ -10761,7 +10762,7 @@
       "score": 46,
       "pick": 180,
       "projectedPick": 180,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 46,
         "rushing": 59,
@@ -10821,7 +10822,7 @@
       "score": 46,
       "pick": 181,
       "projectedPick": 181,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 46,
         "rushing": 63,
@@ -10881,7 +10882,7 @@
       "score": 45,
       "pick": 182,
       "projectedPick": 182,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 45,
         "rushing": 61,
@@ -10941,7 +10942,7 @@
       "score": 45,
       "pick": 183,
       "projectedPick": 183,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 45,
         "rushing": 54,
@@ -11001,7 +11002,7 @@
       "score": 45,
       "pick": 184,
       "projectedPick": 184,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 45,
         "rushing": 59,
@@ -11061,7 +11062,7 @@
       "score": 45,
       "pick": 185,
       "projectedPick": 185,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 45,
         "rushing": 59,
@@ -11121,7 +11122,7 @@
       "score": 45,
       "pick": 186,
       "projectedPick": 186,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 45,
         "rushing": 50,
@@ -11181,7 +11182,7 @@
       "score": 45,
       "pick": 187,
       "projectedPick": 187,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 45,
         "rushing": 58,
@@ -11241,7 +11242,7 @@
       "score": 45,
       "pick": 188,
       "projectedPick": 188,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 45,
         "rushing": 52,
@@ -11301,7 +11302,7 @@
       "score": 45,
       "pick": 189,
       "projectedPick": 189,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 45,
         "rushing": 53,
@@ -11361,7 +11362,7 @@
       "score": 44,
       "pick": 190,
       "projectedPick": 190,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 44,
         "rushing": 54,
@@ -11421,7 +11422,7 @@
       "score": 44,
       "pick": 191,
       "projectedPick": 191,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 44,
         "rushing": 56,
@@ -11481,7 +11482,7 @@
       "score": 44,
       "pick": 192,
       "projectedPick": 192,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 44,
         "rushing": 57,
@@ -11541,7 +11542,7 @@
       "score": 44,
       "pick": 193,
       "projectedPick": 193,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 44,
         "rushing": 58,
@@ -11601,7 +11602,7 @@
       "score": 44,
       "pick": 194,
       "projectedPick": 194,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 44,
         "rushing": 54,
@@ -11661,7 +11662,7 @@
       "score": 44,
       "pick": 195,
       "projectedPick": 195,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 44,
         "rushing": 61,
@@ -11721,7 +11722,7 @@
       "score": 44,
       "pick": 196,
       "projectedPick": 196,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 44,
         "rushing": 57,
@@ -11781,7 +11782,7 @@
       "score": 44,
       "pick": 197,
       "projectedPick": 197,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 44,
         "rushing": 49,
@@ -11841,7 +11842,7 @@
       "score": 43,
       "pick": 198,
       "projectedPick": 198,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 43,
         "rushing": 62,
@@ -11901,7 +11902,7 @@
       "score": 43,
       "pick": 199,
       "projectedPick": 199,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 43,
         "rushing": 51,
@@ -11961,7 +11962,7 @@
       "score": 43,
       "pick": 200,
       "projectedPick": 200,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 43,
         "rushing": 58,
@@ -12021,7 +12022,7 @@
       "score": 43,
       "pick": 201,
       "projectedPick": 201,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 43,
         "rushing": 53,
@@ -12081,7 +12082,7 @@
       "score": 42,
       "pick": 202,
       "projectedPick": 202,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 42,
         "rushing": 56,
@@ -12141,7 +12142,7 @@
       "score": 42,
       "pick": 203,
       "projectedPick": 203,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 42,
         "rushing": 58,
@@ -12201,7 +12202,7 @@
       "score": 42,
       "pick": 204,
       "projectedPick": 204,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 42,
         "rushing": 56,
@@ -12261,7 +12262,7 @@
       "score": 42,
       "pick": 205,
       "projectedPick": 205,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 42,
         "rushing": 48,
@@ -12321,7 +12322,7 @@
       "score": 42,
       "pick": 206,
       "projectedPick": 206,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 42,
         "rushing": 50,
@@ -12381,7 +12382,7 @@
       "score": 41,
       "pick": 207,
       "projectedPick": 207,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 41,
         "rushing": 58,
@@ -12441,7 +12442,7 @@
       "score": 41,
       "pick": 208,
       "projectedPick": 208,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 41,
         "rushing": 50,
@@ -12501,7 +12502,7 @@
       "score": 41,
       "pick": 209,
       "projectedPick": 209,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 41,
         "rushing": 58,
@@ -12561,7 +12562,7 @@
       "score": 40,
       "pick": 210,
       "projectedPick": 210,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 40,
         "rushing": 53,
@@ -12621,7 +12622,7 @@
       "score": 39,
       "pick": 211,
       "projectedPick": 211,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 39,
         "rushing": 51,
@@ -12681,7 +12682,7 @@
       "score": 39,
       "pick": 212,
       "projectedPick": 212,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 39,
         "rushing": 51,
@@ -12741,7 +12742,7 @@
       "score": 38,
       "pick": 213,
       "projectedPick": 213,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 38,
         "rushing": 55,
@@ -12801,7 +12802,7 @@
       "score": 37,
       "pick": 214,
       "projectedPick": 214,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 37,
         "rushing": 51,
@@ -12861,7 +12862,7 @@
       "score": 37,
       "pick": 215,
       "projectedPick": 215,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 37,
         "rushing": 50,
@@ -12921,7 +12922,7 @@
       "score": 36,
       "pick": 216,
       "projectedPick": 216,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 36,
         "rushing": 50,
@@ -12981,7 +12982,7 @@
       "score": 36,
       "pick": 217,
       "projectedPick": 217,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 36,
         "rushing": 52,
@@ -13041,7 +13042,7 @@
       "score": 36,
       "pick": 218,
       "projectedPick": 218,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 36,
         "rushing": 47,
@@ -13101,7 +13102,7 @@
       "score": 35,
       "pick": 219,
       "projectedPick": 219,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 35,
         "rushing": 51,
@@ -13161,7 +13162,7 @@
       "score": 34,
       "pick": 220,
       "projectedPick": 220,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 34,
         "rushing": 52,
@@ -13221,7 +13222,7 @@
       "score": 33,
       "pick": 221,
       "projectedPick": 221,
-      "source": "rb_rushing_forecast",
+      "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 33,
         "rushing": 50,

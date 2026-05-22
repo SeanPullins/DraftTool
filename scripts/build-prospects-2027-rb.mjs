@@ -237,131 +237,153 @@ const payload = readJson('public/data/rb_pff_seasons.json', { records: [] });
 const rows = payload.records ?? [];
 const rasMap = buildRasMap();
 
-const latestSeason = 2025;
-const latest = rows.filter((r) => Number(r.season) === latestSeason);
+const seasonsToBuild = [2025, 2026, 2027];
 
-const seen = new Set();
-const prospects = [];
+function buildProspectsForDraftYear(draftYear) {
+  const season = draftYear - 2;
 
-for (const r of latest) {
-  const key = clean(r.name || r.player);
-  if (!key || seen.has(key)) continue;
+  // For the 2027 board, we currently use 2025 season data.
+  // For 2026, use 2024 if available; for 2025, use 2023 if available.
+  // If a season is thin/missing, this will naturally produce fewer rows.
+  const seasonRows = rows.filter((r) => Number(r.season) === season);
 
-  const attempts = num(r.attempts, 0);
-  const touches = num(r.total_touches, 0);
-  const yards = num(r.yards, 0);
+  const seen = new Set();
+  const prospects = [];
 
-  // Meaningful 2027 RB candidate filter.
-  if (attempts < 80 && touches < 100 && yards < 500) continue;
+  for (const r of seasonRows) {
+    const key = clean(r.name || r.player);
+    if (!key || seen.has(key)) continue;
 
-  seen.add(key);
+    const attempts = num(r.attempts, 0);
+    const touches = num(r.total_touches, 0);
+    const yards = num(r.yards, 0);
 
-  const rasRecord = getRasForPlayer(rasMap, r.name || r.player, 2027);
-  const scores = finalRbForecastScore(r, rasRecord);
+    // Meaningful RB candidate filter.
+    if (attempts < 80 && touches < 100 && yards < 500) continue;
 
-  prospects.push({
-    id: `rb-2027-${key}`,
-    name: r.name,
-    school: r.team_name,
-    team: r.team_name,
-    year: 2027,
-    draftYear: 2027,
-    pos: 'RB',
-    position: 'RB',
+    seen.add(key);
 
-    grade: scores.final,
-    score: scores.final,
-    pick: null,
-    projectedPick: null,
-    source: 'rb_rushing_forecast',
+    const rasRecord = getRasForPlayer(rasMap, r.name || r.player, draftYear);
+    const scores = finalRbForecastScore(r, rasRecord);
 
-    forecast: {
-      final: scores.final,
-      rushing: scores.rushing,
-      receiving: scores.receiving,
-      passPro: scores.passPro,
-      usage: scores.usage,
-      ras: scores.ras,
-      completeness: scores.completeness,
-      penalty: scores.penalty,
-      weights: {
-        rushing: 48,
-        receiving: 15,
-        passPro: 8,
-        usage: 15,
-        ras: 7,
-        completeness: 7,
+    prospects.push({
+      id: `rb-${draftYear}-${key}`,
+      name: r.name,
+      school: r.team_name,
+      team: r.team_name,
+      year: draftYear,
+      draftYear,
+      pos: 'RB',
+      position: 'RB',
+
+      grade: scores.final,
+      score: scores.final,
+      pick: null,
+      projectedPick: null,
+      source: 'rb_rushing_receiving_ras_forecast',
+
+      forecast: {
+        final: scores.final,
+        rushing: scores.rushing,
+        receiving: scores.receiving,
+        passPro: scores.passPro,
+        usage: scores.usage,
+        ras: scores.ras,
+        completeness: scores.completeness,
+        penalty: scores.penalty,
+        weights: {
+          rushing: 48,
+          receiving: 15,
+          passPro: 8,
+          usage: 15,
+          ras: 7,
+          completeness: 7,
+        },
       },
-    },
 
-    pff: {
-      attempts: r.attempts,
-      yards: r.yards,
-      ypa: r.ypa,
-      touchdowns: r.touchdowns,
-      run_grade: r.run_grade,
-      offense_grade: r.offense_grade,
-      yards_after_contact: r.yards_after_contact,
-      yco_attempt: r.yco_attempt,
-      avoided_tackles: r.avoided_tackles,
-      elusive_rating: r.elusive_rating,
-      breakaway_percent: r.breakaway_percent,
-      breakaway_yards: r.breakaway_yards,
-      explosive: r.explosive,
-      targets: r.targets,
-      receptions: r.receptions,
-      rec_yards: r.rec_yards,
-      route_grade: r.route_grade,
-      yprr: r.yprr,
-      pass_block_grade: r.pass_block_grade,
-      fumbles: r.fumbles,
-      total_touches: r.total_touches,
-      ras: rasRecord?.ras ?? null,
-      alltime_ras: rasRecord?.alltimeRas ?? null,
-      ras_source_url: rasRecord?.sourceUrl ?? null,
-    },
+      pff: {
+        attempts: r.attempts,
+        yards: r.yards,
+        ypa: r.ypa,
+        touchdowns: r.touchdowns,
+        run_grade: r.run_grade,
+        offense_grade: r.offense_grade,
+        yards_after_contact: r.yards_after_contact,
+        yco_attempt: r.yco_attempt,
+        avoided_tackles: r.avoided_tackles,
+        elusive_rating: r.elusive_rating,
+        breakaway_percent: r.breakaway_percent,
+        breakaway_yards: r.breakaway_yards,
+        explosive: r.explosive,
+        targets: r.targets,
+        receptions: r.receptions,
+        rec_yards: r.rec_yards,
+        route_grade: r.route_grade,
+        yprr: r.yprr,
+        pass_block_grade: r.pass_block_grade,
+        fumbles: r.fumbles,
+        total_touches: r.total_touches,
+        ras: rasRecord?.ras ?? null,
+        alltime_ras: rasRecord?.alltimeRas ?? null,
+        ras_source_url: rasRecord?.sourceUrl ?? null,
+      },
+    });
+  }
+
+  prospects.sort((a, b) =>
+    b.grade - a.grade ||
+    Number(b.pff.yards || 0) - Number(a.pff.yards || 0) ||
+    String(a.name).localeCompare(String(b.name))
+  );
+
+  prospects.forEach((p, idx) => {
+    p.rank = idx + 1;
+
+    // Synthetic display rank only. Not actual draft capital.
+    p.pick = idx + 1;
+    p.projectedPick = idx + 1;
   });
+
+  return { season, prospects };
 }
 
-prospects.sort((a, b) =>
-  b.grade - a.grade ||
-  Number(b.pff.yards || 0) - Number(a.pff.yards || 0) ||
-  String(a.name).localeCompare(String(b.name))
-);
+const built = new Map();
 
-prospects.forEach((p, idx) => {
-  p.rank = idx + 1;
+for (const draftYear of seasonsToBuild) {
+  const { season, prospects } = buildProspectsForDraftYear(draftYear);
+  built.set(draftYear, prospects);
 
-  // Synthetic display rank only. Not actual draft capital.
-  p.pick = idx + 1;
-  p.projectedPick = idx + 1;
-});
+  fs.writeFileSync(`public/data/prospects_${draftYear}_rb.json`, JSON.stringify({
+    generatedAt: new Date().toISOString(),
+    model: 'RB_FORECAST_RUSHING_RECEIVING_RAS_V1',
+    sourceSeason: season,
+    notes: [
+      'RB-only forecast model.',
+      'Does not change QB, WR, or TE scoring.',
+      'Uses RB rushing/receiving/pass-pro PFF data plus RAS when available.',
+      'No actual draft slot is used.'
+    ],
+    records: prospects,
+  }, null, 2));
 
-fs.writeFileSync('public/data/prospects_2027_rb.json', JSON.stringify({
-  generatedAt: new Date().toISOString(),
-  model: 'RB_FORECAST_RUSHING_RECEIVING_V1',
-  notes: [
-    'RB-only forecast model.',
-    'Does not change QB, WR, or TE scoring.',
-    'Uses 2025 RB rushing/receiving/pass-pro PFF data to forecast 2027 RB prospects.',
-    'No actual draft slot is used.'
-  ],
-  records: prospects,
-}, null, 2));
+  console.log(`Wrote public/data/prospects_${draftYear}_rb.json (${prospects.length} RBs from ${season} season)`);
+  console.table(prospects.slice(0, 15).map((p) => ({
+    rank: p.rank,
+    name: p.name,
+    school: p.school,
+    grade: p.grade,
+    rush: p.forecast.rushing,
+    recv: p.forecast.receiving,
+    passPro: p.forecast.passPro,
+    usage: p.forecast.usage,
+    ras: p.forecast.ras,
+    officialRAS: p.pff.ras,
+    run: p.pff.run_grade,
+    yco: p.pff.yco_attempt,
+    elusive: p.pff.elusive_rating,
+    yards: p.pff.yards,
+  })));
+}
 
-console.log(`Wrote public/data/prospects_2027_rb.json (${prospects.length} RBs)`);
-console.table(prospects.slice(0, 20).map((p) => ({
-  rank: p.rank,
-  name: p.name,
-  school: p.school,
-  grade: p.grade,
-  rush: p.forecast.rushing,
-  recv: p.forecast.receiving,
-  passPro: p.forecast.passPro,
-  usage: p.forecast.usage,
-  ras: p.forecast.ras,
-  run: p.pff.run_grade,
-  yco: p.pff.yco_attempt,
-  elusive: p.pff.elusive_rating,
-  yards: p.pff.yards,
-})));
+const prospects = built.get(2027) ?? [];
+
