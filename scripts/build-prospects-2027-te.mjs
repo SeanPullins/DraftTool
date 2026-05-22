@@ -21,7 +21,6 @@ function scoreTe(row) {
     Math.min(100, targets) * 0.05 +
     passBlock * 0.05;
 
-  // Small bump for real TE usage rather than pure detached WR usage.
   if (inline >= 25) score += 2;
 
   return Math.round(Math.max(0, Math.min(100, score)));
@@ -29,7 +28,6 @@ function scoreTe(row) {
 
 const payload = JSON.parse(fs.readFileSync('public/data/te_pff_seasons.json', 'utf8'));
 const rows = payload.records ?? [];
-
 const latest = rows.filter(r => Number(r.season) === 2025);
 
 const seen = new Set();
@@ -40,7 +38,6 @@ for (const r of latest) {
   const targets = Number(r.targets ?? 0);
   const yards = Number(r.yards ?? 0);
 
-  // Filter tiny samples.
   if (routes < 80 && targets < 15 && yards < 150) continue;
 
   const key = clean(r.name);

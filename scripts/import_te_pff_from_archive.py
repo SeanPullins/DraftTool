@@ -9,8 +9,6 @@ from pathlib import Path
 import pandas as pd
 
 
-# Archive 3 appears to contain receiving_summary (22) through (12)
-# mapping 2015 through 2025.
 FILE_NUM_TO_SEASON = {
     22: 2015,
     21: 2016,
@@ -187,7 +185,7 @@ def main():
     print(f"Wrote {out_path} ({len(deduped)} TE seasons)")
     print("Included seasons:", payload["summary"]["includedSeasons"])
 
-    print("\\nTop 2025 TE rows by route grade:")
+    print("\nTop 2025 TE rows by route grade:")
     latest = [r for r in deduped if r["season"] == 2025]
     latest = sorted(latest, key=lambda r: r.get("route_grade") or 0, reverse=True)[:15]
     for r in latest:
