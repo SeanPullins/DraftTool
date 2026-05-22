@@ -179,6 +179,13 @@ export type QbTrajectorySignal = {
 
 export type Y1Data = { qb: QbSeason[]; wr: WrSeason[]; rb: RbSeason[] }
 
+export type Y1NflStats = {
+  qb: Array<{ key: string; season: number; games: number | null; att: number | null; cmp_pct: number | null; rtg: number | null; ypa: number | null; epa_per_att: number | null }>
+  wr: Array<{ key: string; season: number; games: number | null; tgt: number | null; rec: number | null; yds: number | null; ypr: number | null; ctch_pct: number | null; epa_per_tgt: number | null }>
+  rb: Array<{ key: string; season: number; games: number | null; rush_att: number | null; rush_yds: number | null; rush_ypa: number | null; epa_per_carry: number | null }>
+  te: Array<{ key: string; season: number; games: number | null; tgt: number | null; rec: number | null; yds: number | null; ypr: number | null; ctch_pct: number | null; epa_per_tgt: number | null }>
+}
+
 export type CareerSeasonStat = {
   season: number
   pos: string
@@ -219,7 +226,10 @@ export const outcomeOrder: Category[] = ['Bust', 'Reserve', 'Role', 'Starter', '
 export const compCutoffYear = 2021
 export const compCutoffForGroup: Record<string, number> = { SKILL: 2022, DB: 2022, QB: 2021, OL: 2020, FRONT: 2020 }
 
-export const calibratedAvModel: { intercept: number; features: Array<{ name: ModelSignal; coef: number; mean: number; sd: number }> } = {
+export type CalibrationModel = { intercept: number; features: Array<{ name: ModelSignal; coef: number; mean: number; sd: number }> }
+export type CalibrationModelSet = { global: CalibrationModel; QB?: CalibrationModel; SKILL?: CalibrationModel; OL?: CalibrationModel; FRONT?: CalibrationModel; DB?: CalibrationModel }
+
+export const calibratedAvModel: CalibrationModel = {
   intercept: 2.2004014562310035,
   features: [
     { name: 'draftScore', coef: 0.31947947119672315, mean: 65.99576186138597, sd: 23.344517317385453 },
@@ -436,24 +446,67 @@ export function calibratedExpectedAv(input: Prospect, signals: { draft: number; 
   return blend(modelAv, baselineAv, weight)
 }
 
+export function calibratedExpectedAvFromModel(
+  input: Prospect,
+  signals: { draft: number; athletic: number; size: number; age: number },
+  model: CalibrationModel,
+): number {
+  const values: Record<ModelSignal, number> = {
+    draftScore: signals.draft,
+    logPick: Math.log(clamp(input.pick, 1, 260)),
+    pffComp: input.pffComposite,
+    pffGrade: input.pffGrade,
+    pffProd: input.pffProduction,
+    pffEff: input.pffEfficiency,
+    pffClean: input.pffClean,
+    ageScore: signals.age,
+    athletic: signals.athletic,
+    size: signals.size,
+    isQB: input.pos === 'QB' ? 1 : 0,
+    isSkill: group[input.pos] === 'SKILL' ? 1 : 0,
+    isOL: group[input.pos] === 'OL' ? 1 : 0,
+    isFront: group[input.pos] === 'FRONT' ? 1 : 0,
+    isDB: group[input.pos] === 'DB' ? 1 : 0,
+  }
+  const logAv = model.features.reduce(
+    (sum, f) => sum + f.coef * ((values[f.name] - f.mean) / (f.sd > 0 ? f.sd : 1)),
+    model.intercept,
+  )
+  const modelAv = clamp(Math.expm1(logAv), 0, 110)
+  const { av: baselineAv, weight } = pickRangeBaseline(input.pick)
+  return blend(modelAv, baselineAv, weight)
+}
+
 // ── Y1/Y2/Y3/Y4 similarity factors ───────────────────────────────────────────
 
-function y1SimFactor(player: Historical, y1Data: Y1Data): number {
+function y1SimFactor(player: Historical, y1Data: Y1Data, y1NflStats?: Y1NflStats | null): number {
   if (player.pos === 'QB') {
-    const s = y1Data.qb.find((r) => r.key === clean(player.name) && r.season === player.year)
-    if (s?.rtg != null) {
+    // Try new comprehensive stats first, fall back to curated y1Data
+    const s = y1NflStats?.qb.find(r => r.key === clean(player.name) && r.season === player.year)
+    if (s?.rtg != null && s.att != null && s.att >= 20) {
       return clamp(0.5 + (s.rtg / 100) * 0.7, 0.88, 1.12)
     }
+    const old = y1Data.qb.find((r) => r.key === clean(player.name) && r.season === player.year)
+    if (old?.rtg != null) return clamp(0.5 + (old.rtg / 100) * 0.7, 0.88, 1.12)
   } else if (player.pos === 'WR') {
-    const s = y1Data.wr.find((r) => r.key === clean(player.name) && r.season === player.year)
-    if (s?.yds != null) {
+    const s = y1NflStats?.wr.find(r => r.key === clean(player.name) && r.season === player.year)
+    if (s?.yds != null && s.tgt != null && s.tgt >= 10) {
       return clamp(0.84 + (s.yds / 1000) * 0.17, 0.88, 1.12)
     }
+    const old = y1Data.wr.find((r) => r.key === clean(player.name) && r.season === player.year)
+    if (old?.yds != null) return clamp(0.84 + (old.yds / 1000) * 0.17, 0.88, 1.12)
+  } else if (player.pos === 'TE') {
+    const s = y1NflStats?.te.find(r => r.key === clean(player.name) && r.season === player.year)
+    if (s?.yds != null && s.tgt != null && s.tgt >= 10) {
+      return clamp(0.84 + (s.yds / 600) * 0.17, 0.88, 1.12)  // TE yards threshold lower
+    }
   } else if (player.pos === 'RB') {
-    const s = y1Data.rb.find((r) => r.key === clean(player.name) && r.season === player.year)
-    if (s?.rush_yds != null) {
+    const s = y1NflStats?.rb.find(r => r.key === clean(player.name) && r.season === player.year)
+    if (s?.rush_yds != null && s.rush_att != null && s.rush_att >= 10) {
       return clamp(0.5 + (s.rush_yds / 900) * 0.5, 0.88, 1.12)
     }
+    const old = y1Data.rb.find((r) => r.key === clean(player.name) && r.season === player.year)
+    if (old?.rush_yds != null) return clamp(0.5 + (old.rush_yds / 900) * 0.5, 0.88, 1.12)
   }
   return 1.0
 }
@@ -508,7 +561,7 @@ function y4SimFactor(player: Historical, careerStats: CareerStatMap): number {
 
 // ── Historical similarity ─────────────────────────────────────────────────────
 
-export function sim(input: Prospect, player: Historical, y1Data?: Y1Data, careerStats?: CareerStatMap, refYear = 2022) {
+export function sim(input: Prospect, player: Historical, y1Data?: Y1Data, careerStats?: CareerStatMap, refYear = 2022, y1NflStats?: Y1NflStats | null) {
   const distance =
     Math.abs(Math.log(input.pick + 1) - Math.log(player.pick + 1)) * .45 +
     z(input.height, player.height, 3) * .08 +
@@ -521,7 +574,7 @@ export function sim(input: Prospect, player: Historical, y1Data?: Y1Data, career
     (input.bench > 0 && player.bench ? z(input.bench, player.bench, 6) * .04 : 0) +
     (input.pos === player.pos ? 0 : .12)
   const recency = Math.pow(0.96, Math.max(0, refYear - player.year))
-  const y1Factor = y1Data ? y1SimFactor(player, y1Data) : 1.0
+  const y1Factor = y1Data ? y1SimFactor(player, y1Data, y1NflStats) : 1.0
   const y2Factor = careerStats ? y2SimFactor(player, careerStats) : 1.0
   const y3Factor = careerStats ? y3SimFactor(player, careerStats) : 1.0
   const y4Factor = careerStats ? y4SimFactor(player, careerStats) : 1.0
@@ -803,7 +856,7 @@ export type ProjectOpts = {
   disableOfficialRas?: boolean
 }
 
-export function project(input: Prospect, history: Historical[], pffProfiles: PffProfile[], excludeId?: string, y1Data?: Y1Data, careerStats?: CareerStatMap, injurySeverity?: 'major' | 'moderate' | 'minor', gradeDelta?: number | null, preDraft = false, opts?: ProjectOpts) {
+export function project(input: Prospect, history: Historical[], pffProfiles: PffProfile[], excludeId?: string, y1Data?: Y1Data, careerStats?: CareerStatMap, injurySeverity?: 'major' | 'moderate' | 'minor', gradeDelta?: number | null, preDraft = false, opts?: ProjectOpts, y1NflStats?: Y1NflStats | null, calibModels?: CalibrationModelSet | null) {
   // Position-specific maturation cutoffs prevent underestimating AV for slow-developing groups.
   // OL/FRONT need 6+ seasons for AV to reflect sustained contribution (cutoff 2020).
   // SKILL/DB contribute immediately so 4 seasons is adequate (cutoff 2022).
@@ -875,9 +928,14 @@ export function project(input: Prospect, history: Historical[], pffProfiles: Pff
     .10
   ) : 0
   const rawScore = baseScore * (1 - pffBlend) + pffSignal * pffBlend
-  const calibratedAv = calibratedExpectedAv(input, { draft, athletic, size, age })
+  const calibModel = calibModels
+    ? ((calibModels[grp as keyof CalibrationModelSet] as CalibrationModel | undefined) ?? calibModels.global)
+    : null
+  const calibratedAv = calibModel
+    ? calibratedExpectedAvFromModel(input, { draft, athletic, size, age }, calibModel)
+    : calibratedExpectedAv(input, { draft, athletic, size, age })
 
-  const comps = pool.map((p) => ({ player: p, sim: sim(input, p, y1Data, careerStats, grpCutoff) })).sort((a, b) => b.sim - a.sim).slice(0, 80)
+  const comps = pool.map((p) => ({ player: p, sim: sim(input, p, y1Data, careerStats, grpCutoff, y1NflStats) })).sort((a, b) => b.sim - a.sim).slice(0, 80)
   const histWeight = comps.reduce((sum, c) => sum + c.sim, 0) || 1
   const pffWeight = pffComps.reduce((sum, c) => sum + c.sim, 0) || 1
   const histExpectedAv = comps.reduce((sum, c) => sum + c.player.av * c.sim, 0) / histWeight
@@ -888,7 +946,7 @@ export function project(input: Prospect, history: Historical[], pffProfiles: Pff
   // PFF data, making comp selection near-random beyond draft capital. Increasing
   // calibBlend captures most of the regression benefit while preserving comp influence
   // for floor/ceiling range. QB comps stay at low blend (QB dynamics differ from OLS).
-  const calibBlend = opts?.calibBlendOverride ?? (grp === 'QB' ? 0.08 : (input.pick <= 32 ? 0.55 : input.pick <= 64 ? 0.40 : 0.25))
+  const calibBlend = opts?.calibBlendOverride ?? (grp === 'QB' ? 0.20 : (input.pick <= 32 ? 0.55 : input.pick <= 64 ? 0.40 : 0.25))
   const expectedAv = blend(compExpectedAv, calibratedAv, calibBlend)
   const posAvValues = pool.filter((p) => p.av >= 0).map((p) => p.av)
   const posRelScore = posAvValues.length >= 15 ? pct(expectedAv, posAvValues) : avToScore(expectedAv)
