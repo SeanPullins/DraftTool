@@ -50,6 +50,15 @@ type PatternAlert = {
   description: string
 }
 type Projection = ReturnType<typeof project>
+type PositionProjectionOverlay = {
+  score: number
+  av: number
+  model: string
+  source: string
+  grade?: number
+  forecast?: Record<string, unknown>
+  pff?: Record<string, unknown>
+}
 type LoaderMessage = { tone: 'good' | 'warn'; text: string } | null
 type MobileTab = 'edit' | 'results' | 'board'
 type Page = 'workbench' | 'class' | 'players' | 'compare' | 'trade' | 'rankings' | 'guide' | 'prospects'
@@ -193,6 +202,7 @@ export default function App() {
   const [prospectsQb2027, setProspectsQb2027] = useState<ProspectQB[]>([])
   const [prospectsTe2027, setProspectsTe2027] = useState<any[]>([])
   const [prospectsRb2027, setProspectsRb2027] = useState<any[]>([])
+  const [projectionOverlay, setProjectionOverlay] = useState<Map<string, PositionProjectionOverlay>>(new Map())
   const [rasLookup, setRasLookup] = useState<AppRasLookup | null>(null)
   const [boardView, setBoardView] = useState<'list' | 'grid'>('list')
   const [boardOrder, setBoardOrder] = useState<string[]>([])
@@ -410,6 +420,46 @@ export default function App() {
       }
     }
     load()
+  }, [])
+
+  useEffect(() => {
+    let cancelled = false
+
+    async function loadProjectionOverlay() {
+      const files = [
+        'prospects_2024_qb.json',
+        'prospects_2025_qb.json',
+        'prospects_2026_qb.json',
+        'prospects_2027_qb.json',
+
+        'prospects_2024_wr.json',
+        'prospects_2025_wr.json',
+        'prospects_2026_wr.json',
+        'prospects_2027_wr.json',
+
+        'prospects_2024_te.json',
+        'prospects_2025_te.json',
+        'prospects_2026_te.json',
+        'prospects_2027_te.json',
+
+        'prospects_2025_rb.json',
+        'prospects_2026_rb.json',
+        'prospects_2027_rb.json',
+      ]
+
+      const payloads = await Promise.all(
+        files.map((file) =>
+          fetch(`${assetBase}data/${file}`)
+            .then((r) => r.ok ? r.json() : null)
+            .catch(() => null)
+        )
+      )
+
+      if (!cancelled) setProjectionOverlay(buildProjectionOverlayMap(payloads))
+    }
+
+    loadProjectionOverlay()
+    return () => { cancelled = true }
   }, [])
 
   useEffect(() => {
@@ -701,7 +751,7 @@ export default function App() {
     </div>
 
     {error ? <section className="panel empty">{error}</section> : page === 'class' ? <div className="classPage">
-      <ClassExplorer pool={lookupPool} history={prospects} pffProfiles={pffProfiles} pffLookup={pffLookup} y1Data={y1Data} careerStats={careerStats} histFlagMap={histFlagMap} currentName={input.name} currentYear={input.draftSeason} saved={saved} qbPffSeasons={qbPffSeasons} wrPffSeasons={wrPffSeasons} tePffSeasons={tePffSeasons} rbPffSeasons={rbPffSeasons} />
+      <ClassExplorer pool={lookupPool} history={prospects} pffProfiles={pffProfiles} pffLookup={pffLookup} y1Data={y1Data} careerStats={careerStats} histFlagMap={histFlagMap} currentName={input.name} currentYear={input.draftSeason} saved={saved} projectionOverlay={projectionOverlay} qbPffSeasons={qbPffSeasons} wrPffSeasons={wrPffSeasons} tePffSeasons={tePffSeasons} rbPffSeasons={rbPffSeasons} />
     </div> : page === 'players' ? <div className="classPage">
       <PlayerBrowser pool={lookupPool} history={prospects} histFlagMap={histFlagMap} onOpenModal={openModal} onCompare={handleCompare} />
     </div> : page === 'compare' ? <div className="classPage">
@@ -2423,7 +2473,7 @@ function buildLatestPffSeasonMap(seasons: any[]) {
 }
 
 
-function ClassExplorer({ pool, history, pffProfiles, pffLookup, y1Data, careerStats, histFlagMap, currentName, currentYear, saved, qbPffSeasons, wrPffSeasons, tePffSeasons, rbPffSeasons }: { pool: Historical[]; history: Historical[]; pffProfiles: PffProfile[]; pffLookup: Map<string, PffProfile>; y1Data?: Y1Data; careerStats?: CareerStatMap; histFlagMap: Map<string, HistoricalOutcomeFlag>; currentName: string; currentYear: number; saved: SavedProspect[]; qbPffSeasons: QbPffSeason[]; wrPffSeasons: WrPffSeason[]; tePffSeasons: any[]; rbPffSeasons: any[]; }) {
+function ClassExplorer({ pool, history, pffProfiles, pffLookup, y1Data, careerStats, histFlagMap, currentName, currentYear, saved, projectionOverlay, qbPffSeasons, wrPffSeasons, tePffSeasons, rbPffSeasons }: { pool: Historical[]; history: Historical[]; pffProfiles: PffProfile[]; pffLookup: Map<string, PffProfile>; y1Data?: Y1Data; careerStats?: CareerStatMap; histFlagMap: Map<string, HistoricalOutcomeFlag>; currentName: string; currentYear: number; saved: SavedProspect[]; projectionOverlay: Map<string, PositionProjectionOverlay>; qbPffSeasons: QbPffSeason[]; wrPffSeasons: WrPffSeason[]; tePffSeasons: any[]; rbPffSeasons: any[]; }) {
   const years = useMemo(() => {
     const set = new Set<number>()
     for (const player of pool) set.add(player.year)
@@ -2523,7 +2573,7 @@ function ClassExplorer({ pool, history, pffProfiles, pffLookup, y1Data, careerSt
     const out = new Map<string, { av: number; score: number }>()
     if (!useProjections) return out
     // Cache key encodes inputs that affect projection output
-    const inputSig = `${history.length}|${pffProfiles.length}|${y1Data?.qb.length ?? 0}|${y1Data?.wr.length ?? 0}|${y1Data?.rb.length ?? 0}|${Object.keys(careerStats ?? {}).length}`
+    const inputSig = `${history.length}|${pffProfiles.length}|${y1Data?.qb.length ?? 0}|${y1Data?.wr.length ?? 0}|${y1Data?.rb.length ?? 0}|${Object.keys(careerStats ?? {}).length}|overlay:${projectionOverlay.size}`
     for (const player of deferredFiltered) {
       const cacheKey = `${player.id}|${inputSig}`
       const cached = projCache.current.get(cacheKey)
@@ -2537,13 +2587,21 @@ function ClassExplorer({ pool, history, pffProfiles, pffLookup, y1Data, careerSt
         : wrContext?.trajectory
           ? { ...synthesized, wrTrajectory: wrContext.trajectory }
           : synthesized
+      const overlay = projectionOverlay.get(projectionOverlayKey(player.year, player.pos, player.name))
+      if (overlay) {
+        const result = { av: overlay.av, score: overlay.score }
+        projCache.current.set(cacheKey, result)
+        out.set(player.id, result)
+        continue
+      }
+
       const projected = project(synthesizedWithContext, history, pffProfiles, player.id, y1Data, careerStats, undefined, qbContext?.trajectory?.gradeDelta ?? null)
       const result = { av: projected.expectedAv, score: projected.score }
       projCache.current.set(cacheKey, result)
       out.set(player.id, result)
     }
     return out
-  }, [deferredFiltered, history, pffProfiles, pffLookup, useProjections, y1Data, careerStats, qbPffSeasons, wrPffSeasons])
+  }, [deferredFiltered, history, pffProfiles, pffLookup, useProjections, y1Data, careerStats, qbPffSeasons, wrPffSeasons, projectionOverlay])
 
   // O(1) player-to-PFF lookup for this class
   const pffMap = useMemo(() => {
@@ -4030,6 +4088,64 @@ function normalizePffProfiles(profiles: RawPffProfile[]): PffProfile[] {
     }
   }).filter((profile) => profile.name && positions.includes(profile.position))
 }
+
+
+function projectionOverlayKey(year: number, pos: string, name: string): string {
+  return `${Number(year)}|${String(pos || '').toUpperCase()}|${clean(name)}`
+}
+
+function buildProjectionOverlayMap(payloads: unknown): Map<string, PositionProjectionOverlay> {
+  const map = new Map<string, PositionProjectionOverlay>()
+  if (!Array.isArray(payloads)) return map
+
+  for (const payload of payloads) {
+    if (!payload || typeof payload !== 'object') continue
+
+    const model = stringField(payload as Record<string, unknown>, 'model', 'generated_projection')
+    const records = (payload as { records?: unknown[] }).records
+    if (!Array.isArray(records)) continue
+
+    for (const entry of records) {
+      const r = asRecord(entry)
+      if (!r) continue
+
+      const name = stringField(r, 'name', '')
+      const pos = norm(stringField(r, 'pos', stringField(r, 'position', '')))
+      const year = numberField(r, 'year', numberField(r, 'draftYear', 0))
+      if (!name || !year || !positions.includes(pos)) continue
+
+      const forecast = asRecord(r.forecast) ?? undefined
+      const pff = asRecord(r.pff) ?? undefined
+
+      const score =
+        numberField(r, 'grade', 0) ||
+        numberField(r, 'score', 0) ||
+        (forecast ? numberField(forecast, 'final', 0) : 0)
+
+      if (!score) continue
+
+      const av =
+        forecast ? (
+          numberField(forecast, 'projectedAv', 0) ||
+          numberField(forecast, 'av', 0) ||
+          Math.round(score * 0.55)
+        ) : Math.round(score * 0.55)
+
+      map.set(projectionOverlayKey(year, pos, name), {
+        score,
+        av,
+        grade: numberField(r, 'grade', score),
+        model,
+        source: stringField(r, 'source', model),
+        forecast,
+        pff,
+      })
+    }
+  }
+
+  return map
+}
+
 
 function buildExtraProspects(data: unknown): Historical[] {
   if (!data || typeof data !== 'object') return []
