@@ -18,6 +18,82 @@ function readJson(path, fallback = null) {
   return JSON.parse(fs.readFileSync(path, 'utf8'));
 }
 
+function parseCsv(text) {
+  const lines = String(text || '').trim().split(/\r?\n/).filter(Boolean);
+  if (!lines.length) return [];
+  const headers = lines[0].split(',').map((h) => h.trim());
+
+  return lines.slice(1).map((line) => {
+    const values = [];
+    let cur = '';
+    let inQuotes = false;
+
+    for (let i = 0; i < line.length; i++) {
+      const ch = line[i];
+      if (ch === '"') inQuotes = !inQuotes;
+      else if (ch === ',' && !inQuotes) {
+        values.push(cur);
+        cur = '';
+      } else {
+        cur += ch;
+      }
+    }
+    values.push(cur);
+
+    const obj = {};
+    headers.forEach((h, i) => {
+      obj[h] = values[i] ?? '';
+    });
+    return obj;
+  });
+}
+
+function buildRasMap(path = 'public/data/ras_main_table.csv') {
+  if (!fs.existsSync(path)) return new Map();
+
+  const rows = parseCsv(fs.readFileSync(path, 'utf8'));
+  const out = new Map();
+
+  for (const row of rows) {
+    // Skip duplicated header row.
+    if (row.name === 'name' || row.pos === 'pos') continue;
+
+    const pos = String(row.pos || '').toUpperCase();
+    if (pos !== 'RB') continue;
+
+    const name = clean(row.name || '');
+    const year = Number(row.year);
+    if (!name || !Number.isFinite(year)) continue;
+
+    const ras = Number(row.ras);
+    const alltimeRas = Number(row.alltime_ras);
+
+    out.set(`${name}|${year}`, {
+      ras: Number.isFinite(ras) ? ras : null,
+      alltimeRas: Number.isFinite(alltimeRas) ? alltimeRas : null,
+      sourceUrl: row.source_url || null,
+      college: row.college || null,
+    });
+  }
+
+  return out;
+}
+
+function getRasForPlayer(rasMap, name, draftYear) {
+  const key = `${clean(name)}|${Number(draftYear)}`;
+  return rasMap.get(key) || null;
+}
+
+function rasScore(rasRecord) {
+  if (!rasRecord) return 50;
+
+  const ras = Number(rasRecord.ras ?? rasRecord.alltimeRas);
+  if (!Number.isFinite(ras)) return 50;
+
+  // Convert 0-10 RAS to 0-100 score.
+  return clamp(ras * 10);
+}
+
 function rushingScore(row) {
   const run = num(row.run_grade, 50);
   const off = num(row.offense_grade, 50);
@@ -127,20 +203,22 @@ function completenessBonus(row) {
   return clamp(bonus, 0, 10);
 }
 
-function finalRbForecastScore(row) {
+function finalRbForecastScore(row, rasRecord = null) {
   const rush = rushingScore(row);
   const recv = receivingScore(row);
   const pro = passProScore(row);
   const use = usageScore(row);
+  const ras = rasScore(rasRecord);
   const bonus = completenessBonus(row) * 10;
   const penalty = riskPenalty(row);
 
   const final =
-    rush * 0.52 +
-    recv * 0.16 +
+    rush * 0.48 +
+    recv * 0.15 +
     pro * 0.08 +
-    use * 0.16 +
-    bonus * 0.08 -
+    use * 0.15 +
+    ras * 0.07 +
+    bonus * 0.07 -
     penalty;
 
   return {
@@ -149,6 +227,7 @@ function finalRbForecastScore(row) {
     receiving: Math.round(clamp(recv)),
     passPro: Math.round(clamp(pro)),
     usage: Math.round(clamp(use)),
+    ras: Math.round(clamp(ras)),
     completeness: Math.round(clamp(bonus)),
     penalty,
   };
@@ -156,6 +235,7 @@ function finalRbForecastScore(row) {
 
 const payload = readJson('public/data/rb_pff_seasons.json', { records: [] });
 const rows = payload.records ?? [];
+const rasMap = buildRasMap();
 
 const latestSeason = 2025;
 const latest = rows.filter((r) => Number(r.season) === latestSeason);
@@ -176,7 +256,8 @@ for (const r of latest) {
 
   seen.add(key);
 
-  const scores = finalRbForecastScore(r);
+  const rasRecord = getRasForPlayer(rasMap, r.name || r.player, 2027);
+  const scores = finalRbForecastScore(r, rasRecord);
 
   prospects.push({
     id: `rb-2027-${key}`,
@@ -200,14 +281,16 @@ for (const r of latest) {
       receiving: scores.receiving,
       passPro: scores.passPro,
       usage: scores.usage,
+      ras: scores.ras,
       completeness: scores.completeness,
       penalty: scores.penalty,
       weights: {
-        rushing: 52,
-        receiving: 16,
+        rushing: 48,
+        receiving: 15,
         passPro: 8,
-        usage: 16,
-        completeness: 8,
+        usage: 15,
+        ras: 7,
+        completeness: 7,
       },
     },
 
@@ -233,6 +316,9 @@ for (const r of latest) {
       pass_block_grade: r.pass_block_grade,
       fumbles: r.fumbles,
       total_touches: r.total_touches,
+      ras: rasRecord?.ras ?? null,
+      alltime_ras: rasRecord?.alltimeRas ?? null,
+      ras_source_url: rasRecord?.sourceUrl ?? null,
     },
   });
 }
@@ -273,6 +359,7 @@ console.table(prospects.slice(0, 20).map((p) => ({
   recv: p.forecast.receiving,
   passPro: p.forecast.passPro,
   usage: p.forecast.usage,
+  ras: p.forecast.ras,
   run: p.pff.run_grade,
   yco: p.pff.yco_attempt,
   elusive: p.pff.elusive_rating,
