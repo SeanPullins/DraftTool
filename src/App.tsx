@@ -59,6 +59,15 @@ type PositionProjectionOverlay = {
   forecast?: Record<string, unknown>
   pff?: Record<string, unknown>
 }
+
+type PositionCompSignal = {
+  compAdjustment: number
+  confidence: number
+  realDraftPrior: boolean
+  avgCompDelta?: number
+  projectionComps: Array<{ name: string; year: number; pick: number; delta: number; weight?: number; dist?: number }>
+  styleComps: Array<{ name: string; year: number; pick: number; delta: number; weight?: number; dist?: number }>
+}
 type LoaderMessage = { tone: 'good' | 'warn'; text: string } | null
 type MobileTab = 'edit' | 'results' | 'board'
 type Page = 'workbench' | 'class' | 'players' | 'compare' | 'trade' | 'rankings' | 'guide' | 'prospects'
@@ -203,6 +212,7 @@ export default function App() {
   const [prospectsTe2027, setProspectsTe2027] = useState<any[]>([])
   const [prospectsRb2027, setProspectsRb2027] = useState<any[]>([])
   const [projectionOverlay, setProjectionOverlay] = useState<Map<string, PositionProjectionOverlay>>(new Map())
+  const [compSignalMap, setCompSignalMap] = useState<Map<string, PositionCompSignal>>(new Map())
   const [rasLookup, setRasLookup] = useState<AppRasLookup | null>(null)
   const [boardView, setBoardView] = useState<'list' | 'grid'>('list')
   const [boardOrder, setBoardOrder] = useState<string[]>([])
@@ -459,6 +469,22 @@ export default function App() {
     }
 
     loadProjectionOverlay()
+    return () => { cancelled = true }
+  }, [])
+
+  useEffect(() => {
+    let cancelled = false
+    const base = import.meta.env.BASE_URL || './'
+
+    fetch(`${base}data/model/position_comp_adjustment_report.json`)
+      .then((r) => r.ok ? r.json() : null)
+      .then((payload) => {
+        if (!cancelled) setCompSignalMap(buildCompSignalMap(payload))
+      })
+      .catch(() => {
+        if (!cancelled) setCompSignalMap(new Map())
+      })
+
     return () => { cancelled = true }
   }, [])
 
@@ -751,7 +777,7 @@ export default function App() {
     </div>
 
     {error ? <section className="panel empty">{error}</section> : page === 'class' ? <div className="classPage">
-      <ClassExplorer pool={lookupPool} history={prospects} pffProfiles={pffProfiles} pffLookup={pffLookup} y1Data={y1Data} careerStats={careerStats} histFlagMap={histFlagMap} currentName={input.name} currentYear={input.draftSeason} saved={saved} projectionOverlay={projectionOverlay} qbPffSeasons={qbPffSeasons} wrPffSeasons={wrPffSeasons} tePffSeasons={tePffSeasons} rbPffSeasons={rbPffSeasons} />
+      <ClassExplorer pool={lookupPool} history={prospects} pffProfiles={pffProfiles} pffLookup={pffLookup} y1Data={y1Data} careerStats={careerStats} histFlagMap={histFlagMap} currentName={input.name} currentYear={input.draftSeason} saved={saved} projectionOverlay={projectionOverlay} compSignalMap={compSignalMap} qbPffSeasons={qbPffSeasons} wrPffSeasons={wrPffSeasons} tePffSeasons={tePffSeasons} rbPffSeasons={rbPffSeasons} />
     </div> : page === 'players' ? <div className="classPage">
       <PlayerBrowser pool={lookupPool} history={prospects} histFlagMap={histFlagMap} onOpenModal={openModal} onCompare={handleCompare} />
     </div> : page === 'compare' ? <div className="classPage">
@@ -2388,6 +2414,17 @@ function buildPlayerExplanation(player: any, ctx: any) {
     cleanedDrivers.unshift('Season PFF data linked.')
   }
 
+  const compSignal = ctx?.compSignal || null
+  const compAdjustment = safeNum(compSignal?.compAdjustment)
+  const compConfidence = safeNum(compSignal?.confidence)
+
+  if (compSignal && compAdjustment != null) {
+    badges.push('Comp signal')
+    drivers.push(`Comp signal: ${compAdjustment >= 0 ? '+' : ''}${compAdjustment.toFixed(1)}`)
+    if (compConfidence != null) drivers.push(`Comp confidence: ${compConfidence.toFixed(2)}`)
+    if (!compSignal.realDraftPrior) drivers.push('Comp signal context only: no real draft prior yet.')
+  }
+
   return {
     player,
     summary,
@@ -2396,6 +2433,7 @@ function buildPlayerExplanation(player: any, ctx: any) {
     strengths,
     risks,
     drivers: cleanedDrivers,
+    compSignal,
   }
 }
 
@@ -2435,6 +2473,31 @@ function PlayerExplanationModal({ explanation, onClose }: { explanation: any; on
           <ul>{explanation.drivers.map((item: string) => <li key={item}>{item}</li>)}</ul>
         </section>
 
+        {explanation.compSignal ? <section>
+          <h3>Historical comp signal</h3>
+          <p>
+            Adjustment: <strong>{Number(explanation.compSignal.compAdjustment || 0) >= 0 ? '+' : ''}{Number(explanation.compSignal.compAdjustment || 0).toFixed(1)}</strong>
+            {' · '}Confidence: {Number(explanation.compSignal.confidence || 0).toFixed(2)}
+            {!explanation.compSignal.realDraftPrior ? ' · Context only: no real draft prior' : ''}
+          </p>
+          {explanation.compSignal.projectionComps?.length ? <>
+            <h4>Projection comps</h4>
+            <ul>
+              {explanation.compSignal.projectionComps.slice(0, 4).map((c: any) => (
+                <li key={`proj-${c.name}-${c.year}`}>{c.name} {c.year} · Pick #{c.pick} · Δ{Number(c.delta || 0).toFixed(1)}</li>
+              ))}
+            </ul>
+          </> : null}
+          {explanation.compSignal.styleComps?.length ? <>
+            <h4>Style comps</h4>
+            <ul>
+              {explanation.compSignal.styleComps.slice(0, 4).map((c: any) => (
+                <li key={`style-${c.name}-${c.year}`}>{c.name} {c.year} · Pick #{c.pick} · Δ{Number(c.delta || 0).toFixed(1)}</li>
+              ))}
+            </ul>
+          </> : null}
+        </section> : null}
+
         <section>
           <h3>Value read</h3>
           <p>{explanation.valueRead}</p>
@@ -2473,7 +2536,7 @@ function buildLatestPffSeasonMap(seasons: any[]) {
 }
 
 
-function ClassExplorer({ pool, history, pffProfiles, pffLookup, y1Data, careerStats, histFlagMap, currentName, currentYear, saved, projectionOverlay, qbPffSeasons, wrPffSeasons, tePffSeasons, rbPffSeasons }: { pool: Historical[]; history: Historical[]; pffProfiles: PffProfile[]; pffLookup: Map<string, PffProfile>; y1Data?: Y1Data; careerStats?: CareerStatMap; histFlagMap: Map<string, HistoricalOutcomeFlag>; currentName: string; currentYear: number; saved: SavedProspect[]; projectionOverlay: Map<string, PositionProjectionOverlay>; qbPffSeasons: QbPffSeason[]; wrPffSeasons: WrPffSeason[]; tePffSeasons: any[]; rbPffSeasons: any[]; }) {
+function ClassExplorer({ pool, history, pffProfiles, pffLookup, y1Data, careerStats, histFlagMap, currentName, currentYear, saved, projectionOverlay, compSignalMap, qbPffSeasons, wrPffSeasons, tePffSeasons, rbPffSeasons }: { pool: Historical[]; history: Historical[]; pffProfiles: PffProfile[]; pffLookup: Map<string, PffProfile>; y1Data?: Y1Data; careerStats?: CareerStatMap; histFlagMap: Map<string, HistoricalOutcomeFlag>; currentName: string; currentYear: number; saved: SavedProspect[]; projectionOverlay: Map<string, PositionProjectionOverlay>; compSignalMap: Map<string, PositionCompSignal>; qbPffSeasons: QbPffSeason[]; wrPffSeasons: WrPffSeason[]; tePffSeasons: any[]; rbPffSeasons: any[]; }) {
   const years = useMemo(() => {
     const set = new Set<number>()
     for (const player of pool) set.add(player.year)
@@ -2808,6 +2871,7 @@ function ClassExplorer({ pool, history, pffProfiles, pffLookup, y1Data, careerSt
                         wrContext: player.pos === 'WR' ? latestWrPffMap.get(pffKey) : null,
                         teContext: player.pos === 'TE' ? latestTePffMap.get(pffKey) : null,
                         rbContext: player.pos === 'RB' ? latestRbPffMap.get(pffKey) : null,
+                        compSignal: compSignalMap.get(projectionOverlayKey(player.year, player.pos, player.name)) ?? null,
                       }))
                     }}
                   >
@@ -4085,6 +4149,60 @@ function normalizePffProfiles(profiles: RawPffProfile[]): PffProfile[] {
 function projectionOverlayKey(year: number, pos: string, name: string): string {
   return `${Number(year)}|${String(pos || '').toUpperCase()}|${clean(name)}`
 }
+
+
+function normalizeCompList(value: unknown): PositionCompSignal['projectionComps'] {
+  if (!Array.isArray(value)) return []
+
+  return value.map((item) => {
+    const r = asRecord(item)
+    if (!r) return null
+
+    return {
+      name: stringField(r, 'name', ''),
+      year: numberField(r, 'year', 0),
+      pick: numberField(r, 'pick', 0),
+      delta: numberField(r, 'delta', 0),
+      weight: numberField(r, 'weight', 1),
+      dist: numberField(r, 'dist', 0),
+    }
+  }).filter(Boolean) as PositionCompSignal['projectionComps']
+}
+
+function buildCompSignalMap(payload: unknown): Map<string, PositionCompSignal> {
+  const map = new Map<string, PositionCompSignal>()
+  const root = asRecord(payload)
+  const byPosition = asRecord(root?.byPosition)
+  if (!byPosition) return map
+
+  for (const pos of Object.keys(byPosition)) {
+    const block = asRecord(byPosition[pos])
+    const candidates = Array.isArray(block?.candidates) ? block.candidates : []
+
+    for (const item of candidates) {
+      const r = asRecord(item)
+      if (!r) continue
+
+      const name = stringField(r, 'name', '')
+      const year = numberField(r, 'year', 0)
+      const cleanPos = norm(pos)
+
+      if (!name || !year || !positions.includes(cleanPos)) continue
+
+      map.set(projectionOverlayKey(year, cleanPos, name), {
+        compAdjustment: numberField(r, 'compAdjustment', 0),
+        confidence: numberField(r, 'confidence', 0),
+        realDraftPrior: Boolean(r.realDraftPrior),
+        avgCompDelta: numberField(r, 'avgCompDelta', 0),
+        projectionComps: normalizeCompList(r.projectionComps),
+        styleComps: normalizeCompList(r.styleComps),
+      })
+    }
+  }
+
+  return map
+}
+
 
 function buildProjectionOverlayMap(payloads: unknown): Map<string, PositionProjectionOverlay> {
   const map = new Map<string, PositionProjectionOverlay>()
