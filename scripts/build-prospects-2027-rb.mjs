@@ -87,10 +87,11 @@ function getRasForPlayer(rasMap, name, draftYear) {
 function rasScore(rasRecord) {
   if (!rasRecord) return 50;
 
-  const ras = Number(rasRecord.ras ?? rasRecord.alltimeRas);
-  if (!Number.isFinite(ras)) return 50;
+  const raw = rasRecord.ras ?? rasRecord.alltimeRas;
+  const ras = Number(raw);
 
-  // Convert 0-10 RAS to 0-100 score.
+  if (!Number.isFinite(ras) || ras <= 0) return 50;
+
   return clamp(ras * 10);
 }
 

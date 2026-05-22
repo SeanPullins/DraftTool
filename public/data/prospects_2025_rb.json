@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-05-22T18:32:16.342Z",
+  "generatedAt": "2026-05-22T18:52:27.506Z",
   "model": "RB_FORECAST_RUSHING_RECEIVING_RAS_V1",
   "sourceSeason": 2023,
   "notes": [
@@ -9,6 +9,66 @@
     "No actual draft slot is used."
   ],
   "records": [
+    {
+      "id": "rb-2025-ashtonjeanty",
+      "name": "Ashton Jeanty",
+      "school": "BOISE ST",
+      "team": "BOISE ST",
+      "year": 2025,
+      "draftYear": 2025,
+      "pos": "RB",
+      "position": "RB",
+      "grade": 79,
+      "score": 79,
+      "pick": 1,
+      "projectedPick": 1,
+      "source": "rb_rushing_receiving_ras_forecast",
+      "forecast": {
+        "final": 79,
+        "rushing": 89,
+        "receiving": 96,
+        "passPro": 68,
+        "usage": 73,
+        "ras": 50,
+        "completeness": 90,
+        "penalty": 4,
+        "weights": {
+          "rushing": 48,
+          "receiving": 15,
+          "passPro": 8,
+          "usage": 15,
+          "ras": 7,
+          "completeness": 7
+        }
+      },
+      "pff": {
+        "attempts": 217,
+        "yards": 1344,
+        "ypa": 6.2,
+        "touchdowns": 14,
+        "run_grade": 94.6,
+        "offense_grade": 94.9,
+        "yards_after_contact": 981,
+        "yco_attempt": 4.52,
+        "avoided_tackles": 79,
+        "elusive_rating": 174.9,
+        "breakaway_percent": 40.6,
+        "breakaway_yards": 545,
+        "explosive": 37,
+        "targets": 48,
+        "receptions": 44,
+        "rec_yards": 578,
+        "route_grade": 91.6,
+        "yprr": 3.19,
+        "pass_block_grade": 59.5,
+        "fumbles": 5,
+        "total_touches": 261,
+        "ras": 0,
+        "alltime_ras": 0,
+        "ras_source_url": "https://ras.football/ras-information/?PlayerID=27171"
+      },
+      "rank": 1
+    },
     {
       "id": "rb-2025-omarionhampton",
       "name": "Omarion Hampton",
@@ -20,8 +80,8 @@
       "position": "RB",
       "grade": 77,
       "score": 77,
-      "pick": 1,
-      "projectedPick": 1,
+      "pick": 2,
+      "projectedPick": 2,
       "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 77,
@@ -66,66 +126,6 @@
         "ras": 9.7,
         "alltime_ras": 9.72,
         "ras_source_url": "https://ras.football/ras-information/?PlayerID=27244"
-      },
-      "rank": 1
-    },
-    {
-      "id": "rb-2025-ashtonjeanty",
-      "name": "Ashton Jeanty",
-      "school": "BOISE ST",
-      "team": "BOISE ST",
-      "year": 2025,
-      "draftYear": 2025,
-      "pos": "RB",
-      "position": "RB",
-      "grade": 76,
-      "score": 76,
-      "pick": 2,
-      "projectedPick": 2,
-      "source": "rb_rushing_receiving_ras_forecast",
-      "forecast": {
-        "final": 76,
-        "rushing": 89,
-        "receiving": 96,
-        "passPro": 68,
-        "usage": 73,
-        "ras": 0,
-        "completeness": 90,
-        "penalty": 4,
-        "weights": {
-          "rushing": 48,
-          "receiving": 15,
-          "passPro": 8,
-          "usage": 15,
-          "ras": 7,
-          "completeness": 7
-        }
-      },
-      "pff": {
-        "attempts": 217,
-        "yards": 1344,
-        "ypa": 6.2,
-        "touchdowns": 14,
-        "run_grade": 94.6,
-        "offense_grade": 94.9,
-        "yards_after_contact": 981,
-        "yco_attempt": 4.52,
-        "avoided_tackles": 79,
-        "elusive_rating": 174.9,
-        "breakaway_percent": 40.6,
-        "breakaway_yards": 545,
-        "explosive": 37,
-        "targets": 48,
-        "receptions": 44,
-        "rec_yards": 578,
-        "route_grade": 91.6,
-        "yprr": 3.19,
-        "pass_block_grade": 59.5,
-        "fumbles": 5,
-        "total_touches": 261,
-        "ras": 0,
-        "alltime_ras": 0,
-        "ras_source_url": "https://ras.football/ras-information/?PlayerID=27171"
       },
       "rank": 2
     },
@@ -3130,6 +3130,66 @@
       "rank": 52
     },
     {
+      "id": "rb-2025-lequintallen",
+      "name": "LeQuint Allen",
+      "school": "SYRACUSE",
+      "team": "SYRACUSE",
+      "year": 2025,
+      "draftYear": 2025,
+      "pos": "RB",
+      "position": "RB",
+      "grade": 60,
+      "score": 60,
+      "pick": 53,
+      "projectedPick": 53,
+      "source": "rb_rushing_receiving_ras_forecast",
+      "forecast": {
+        "final": 60,
+        "rushing": 65,
+        "receiving": 62,
+        "passPro": 58,
+        "usage": 66,
+        "ras": 50,
+        "completeness": 20,
+        "penalty": 0,
+        "weights": {
+          "rushing": 48,
+          "receiving": 15,
+          "passPro": 8,
+          "usage": 15,
+          "ras": 7,
+          "completeness": 7
+        }
+      },
+      "pff": {
+        "attempts": 245,
+        "yards": 1069,
+        "ypa": 4.4,
+        "touchdowns": 9,
+        "run_grade": 82,
+        "offense_grade": 76.8,
+        "yards_after_contact": 702,
+        "yco_attempt": 2.87,
+        "avoided_tackles": 55,
+        "elusive_rating": 62.7,
+        "breakaway_percent": 28,
+        "breakaway_yards": 299,
+        "explosive": 24,
+        "targets": 46,
+        "receptions": 40,
+        "rec_yards": 215,
+        "route_grade": 63,
+        "yprr": 0.86,
+        "pass_block_grade": 44.8,
+        "fumbles": 2,
+        "total_touches": 284,
+        "ras": 0,
+        "alltime_ras": 0,
+        "ras_source_url": "https://ras.football/ras-information/?PlayerID=27224"
+      },
+      "rank": 53
+    },
+    {
       "id": "rb-2025-ladamianwebb",
       "name": "La'Damian Webb",
       "school": "S ALABAMA",
@@ -3140,8 +3200,8 @@
       "position": "RB",
       "grade": 60,
       "score": 60,
-      "pick": 53,
-      "projectedPick": 53,
+      "pick": 54,
+      "projectedPick": 54,
       "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 60,
@@ -3187,7 +3247,67 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 53
+      "rank": 54
+    },
+    {
+      "id": "rb-2025-philmafah",
+      "name": "Phil Mafah",
+      "school": "CLEMSON",
+      "team": "CLEMSON",
+      "year": 2025,
+      "draftYear": 2025,
+      "pos": "RB",
+      "position": "RB",
+      "grade": 60,
+      "score": 60,
+      "pick": 55,
+      "projectedPick": 55,
+      "source": "rb_rushing_receiving_ras_forecast",
+      "forecast": {
+        "final": 60,
+        "rushing": 71,
+        "receiving": 42,
+        "passPro": 56,
+        "usage": 54,
+        "ras": 50,
+        "completeness": 50,
+        "penalty": 0,
+        "weights": {
+          "rushing": 48,
+          "receiving": 15,
+          "passPro": 8,
+          "usage": 15,
+          "ras": 7,
+          "completeness": 7
+        }
+      },
+      "pff": {
+        "attempts": 178,
+        "yards": 966,
+        "ypa": 5.4,
+        "touchdowns": 13,
+        "run_grade": 87.4,
+        "offense_grade": 81.1,
+        "yards_after_contact": 654,
+        "yco_attempt": 3.67,
+        "avoided_tackles": 39,
+        "elusive_rating": 77.5,
+        "breakaway_percent": 45.4,
+        "breakaway_yards": 439,
+        "explosive": 22,
+        "targets": 27,
+        "receptions": 21,
+        "rec_yards": 108,
+        "route_grade": 55.7,
+        "yprr": 0.5,
+        "pass_block_grade": 47.8,
+        "fumbles": 3,
+        "total_touches": 199,
+        "ras": 0,
+        "alltime_ras": 0,
+        "ras_source_url": "https://ras.football/ras-information/?PlayerID=27413"
+      },
+      "rank": 55
     },
     {
       "id": "rb-2025-deionhankins",
@@ -3200,8 +3320,8 @@
       "position": "RB",
       "grade": 60,
       "score": 60,
-      "pick": 54,
-      "projectedPick": 54,
+      "pick": 56,
+      "projectedPick": 56,
       "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 60,
@@ -3247,7 +3367,7 @@
         "alltime_ras": 7.28,
         "ras_source_url": "https://ras.football/ras-information/?PlayerID=29458"
       },
-      "rank": 54
+      "rank": 56
     },
     {
       "id": "rb-2025-abusamaiii",
@@ -3260,8 +3380,8 @@
       "position": "RB",
       "grade": 60,
       "score": 60,
-      "pick": 55,
-      "projectedPick": 55,
+      "pick": 57,
+      "projectedPick": 57,
       "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 60,
@@ -3307,7 +3427,7 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 55
+      "rank": 57
     },
     {
       "id": "rb-2025-aaronbedgood",
@@ -3320,8 +3440,8 @@
       "position": "RB",
       "grade": 60,
       "score": 60,
-      "pick": 56,
-      "projectedPick": 56,
+      "pick": 58,
+      "projectedPick": 58,
       "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 60,
@@ -3367,7 +3487,7 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 56
+      "rank": 58
     },
     {
       "id": "rb-2025-marquezcooper",
@@ -3380,8 +3500,8 @@
       "position": "RB",
       "grade": 59,
       "score": 59,
-      "pick": 57,
-      "projectedPick": 57,
+      "pick": 59,
+      "projectedPick": 59,
       "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 59,
@@ -3427,7 +3547,7 @@
         "alltime_ras": 0.04,
         "ras_source_url": "https://ras.football/ras-information/?PlayerID=29232"
       },
-      "rank": 57
+      "rank": 59
     },
     {
       "id": "rb-2025-ayoadeyi",
@@ -3440,8 +3560,8 @@
       "position": "RB",
       "grade": 59,
       "score": 59,
-      "pick": 58,
-      "projectedPick": 58,
+      "pick": 60,
+      "projectedPick": 60,
       "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 59,
@@ -3487,7 +3607,7 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 58
+      "rank": 60
     },
     {
       "id": "rb-2025-davonbooth",
@@ -3500,8 +3620,8 @@
       "position": "RB",
       "grade": 59,
       "score": 59,
-      "pick": 59,
-      "projectedPick": 59,
+      "pick": 61,
+      "projectedPick": 61,
       "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 59,
@@ -3547,7 +3667,7 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 59
+      "rank": 61
     },
     {
       "id": "rb-2025-rahsulfaison",
@@ -3560,8 +3680,8 @@
       "position": "RB",
       "grade": 59,
       "score": 59,
-      "pick": 60,
-      "projectedPick": 60,
+      "pick": 62,
+      "projectedPick": 62,
       "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 59,
@@ -3607,7 +3727,7 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 60
+      "rank": 62
     },
     {
       "id": "rb-2025-romanhemby",
@@ -3620,8 +3740,8 @@
       "position": "RB",
       "grade": 59,
       "score": 59,
-      "pick": 61,
-      "projectedPick": 61,
+      "pick": 63,
+      "projectedPick": 63,
       "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 59,
@@ -3667,7 +3787,7 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 61
+      "rank": 63
     },
     {
       "id": "rb-2025-johnleeeldridgeiii",
@@ -3680,8 +3800,8 @@
       "position": "RB",
       "grade": 59,
       "score": 59,
-      "pick": 62,
-      "projectedPick": 62,
+      "pick": 64,
+      "projectedPick": 64,
       "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 59,
@@ -3727,7 +3847,7 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 62
+      "rank": 64
     },
     {
       "id": "rb-2025-rashadamos",
@@ -3740,8 +3860,8 @@
       "position": "RB",
       "grade": 58,
       "score": 58,
-      "pick": 63,
-      "projectedPick": 63,
+      "pick": 65,
+      "projectedPick": 65,
       "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 58,
@@ -3787,7 +3907,7 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 63
+      "rank": 65
     },
     {
       "id": "rb-2025-jalenwhite",
@@ -3800,8 +3920,8 @@
       "position": "RB",
       "grade": 58,
       "score": 58,
-      "pick": 64,
-      "projectedPick": 64,
+      "pick": 66,
+      "projectedPick": 66,
       "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 58,
@@ -3847,7 +3967,7 @@
         "alltime_ras": 7.88,
         "ras_source_url": "https://ras.football/ras-information/?PlayerID=27709"
       },
-      "rank": 64
+      "rank": 66
     },
     {
       "id": "rb-2025-bhayshultuten",
@@ -3860,8 +3980,8 @@
       "position": "RB",
       "grade": 58,
       "score": 58,
-      "pick": 65,
-      "projectedPick": 65,
+      "pick": 67,
+      "projectedPick": 67,
       "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 58,
@@ -3907,7 +4027,7 @@
         "alltime_ras": 9.58,
         "ras_source_url": "https://ras.football/ras-information/?PlayerID=27254"
       },
-      "rank": 65
+      "rank": 67
     },
     {
       "id": "rb-2025-dariustaylor",
@@ -3920,8 +4040,8 @@
       "position": "RB",
       "grade": 58,
       "score": 58,
-      "pick": 66,
-      "projectedPick": 66,
+      "pick": 68,
+      "projectedPick": 68,
       "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 58,
@@ -3967,7 +4087,7 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 66
+      "rank": 68
     },
     {
       "id": "rb-2025-camskattebo",
@@ -3980,8 +4100,8 @@
       "position": "RB",
       "grade": 58,
       "score": 58,
-      "pick": 67,
-      "projectedPick": 67,
+      "pick": 69,
+      "projectedPick": 69,
       "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 58,
@@ -4027,7 +4147,7 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 67
+      "rank": 69
     },
     {
       "id": "rb-2025-dylansampson",
@@ -4040,8 +4160,8 @@
       "position": "RB",
       "grade": 58,
       "score": 58,
-      "pick": 68,
-      "projectedPick": 68,
+      "pick": 70,
+      "projectedPick": 70,
       "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 58,
@@ -4087,7 +4207,7 @@
         "alltime_ras": 6.62,
         "ras_source_url": "https://ras.football/ras-information/?PlayerID=27395"
       },
-      "rank": 68
+      "rank": 70
     },
     {
       "id": "rb-2025-coreykiner",
@@ -4100,8 +4220,8 @@
       "position": "RB",
       "grade": 57,
       "score": 57,
-      "pick": 69,
-      "projectedPick": 69,
+      "pick": 71,
+      "projectedPick": 71,
       "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 57,
@@ -4147,67 +4267,7 @@
         "alltime_ras": 4.06,
         "ras_source_url": "https://ras.football/ras-information/?PlayerID=27398"
       },
-      "rank": 69
-    },
-    {
-      "id": "rb-2025-philmafah",
-      "name": "Phil Mafah",
-      "school": "CLEMSON",
-      "team": "CLEMSON",
-      "year": 2025,
-      "draftYear": 2025,
-      "pos": "RB",
-      "position": "RB",
-      "grade": 57,
-      "score": 57,
-      "pick": 70,
-      "projectedPick": 70,
-      "source": "rb_rushing_receiving_ras_forecast",
-      "forecast": {
-        "final": 57,
-        "rushing": 71,
-        "receiving": 42,
-        "passPro": 56,
-        "usage": 54,
-        "ras": 0,
-        "completeness": 50,
-        "penalty": 0,
-        "weights": {
-          "rushing": 48,
-          "receiving": 15,
-          "passPro": 8,
-          "usage": 15,
-          "ras": 7,
-          "completeness": 7
-        }
-      },
-      "pff": {
-        "attempts": 178,
-        "yards": 966,
-        "ypa": 5.4,
-        "touchdowns": 13,
-        "run_grade": 87.4,
-        "offense_grade": 81.1,
-        "yards_after_contact": 654,
-        "yco_attempt": 3.67,
-        "avoided_tackles": 39,
-        "elusive_rating": 77.5,
-        "breakaway_percent": 45.4,
-        "breakaway_yards": 439,
-        "explosive": 22,
-        "targets": 27,
-        "receptions": 21,
-        "rec_yards": 108,
-        "route_grade": 55.7,
-        "yprr": 0.5,
-        "pass_block_grade": 47.8,
-        "fumbles": 3,
-        "total_touches": 199,
-        "ras": 0,
-        "alltime_ras": 0,
-        "ras_source_url": "https://ras.football/ras-information/?PlayerID=27413"
-      },
-      "rank": 70
+      "rank": 71
     },
     {
       "id": "rb-2025-daijunedwards",
@@ -4220,8 +4280,8 @@
       "position": "RB",
       "grade": 57,
       "score": 57,
-      "pick": 71,
-      "projectedPick": 71,
+      "pick": 72,
+      "projectedPick": 72,
       "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 57,
@@ -4267,7 +4327,7 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 71
+      "rank": 72
     },
     {
       "id": "rb-2025-montrelljohnsonjr",
@@ -4280,8 +4340,8 @@
       "position": "RB",
       "grade": 57,
       "score": 57,
-      "pick": 72,
-      "projectedPick": 72,
+      "pick": 73,
+      "projectedPick": 73,
       "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 57,
@@ -4327,7 +4387,7 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 72
+      "rank": 73
     },
     {
       "id": "rb-2025-jordanwaters",
@@ -4340,8 +4400,8 @@
       "position": "RB",
       "grade": 57,
       "score": 57,
-      "pick": 73,
-      "projectedPick": 73,
+      "pick": 74,
+      "projectedPick": 74,
       "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 57,
@@ -4387,7 +4447,7 @@
         "alltime_ras": 8.69,
         "ras_source_url": "https://ras.football/ras-information/?PlayerID=29672"
       },
-      "rank": 73
+      "rank": 74
     },
     {
       "id": "rb-2025-roberthenryjr",
@@ -4400,8 +4460,8 @@
       "position": "RB",
       "grade": 57,
       "score": 57,
-      "pick": 74,
-      "projectedPick": 74,
+      "pick": 75,
+      "projectedPick": 75,
       "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 57,
@@ -4447,7 +4507,7 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 74
+      "rank": 75
     },
     {
       "id": "rb-2025-blakecorum",
@@ -4460,8 +4520,8 @@
       "position": "RB",
       "grade": 56,
       "score": 56,
-      "pick": 75,
-      "projectedPick": 75,
+      "pick": 76,
+      "projectedPick": 76,
       "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 56,
@@ -4506,66 +4566,6 @@
         "ras": null,
         "alltime_ras": null,
         "ras_source_url": null
-      },
-      "rank": 75
-    },
-    {
-      "id": "rb-2025-lequintallen",
-      "name": "LeQuint Allen",
-      "school": "SYRACUSE",
-      "team": "SYRACUSE",
-      "year": 2025,
-      "draftYear": 2025,
-      "pos": "RB",
-      "position": "RB",
-      "grade": 56,
-      "score": 56,
-      "pick": 76,
-      "projectedPick": 76,
-      "source": "rb_rushing_receiving_ras_forecast",
-      "forecast": {
-        "final": 56,
-        "rushing": 65,
-        "receiving": 62,
-        "passPro": 58,
-        "usage": 66,
-        "ras": 0,
-        "completeness": 20,
-        "penalty": 0,
-        "weights": {
-          "rushing": 48,
-          "receiving": 15,
-          "passPro": 8,
-          "usage": 15,
-          "ras": 7,
-          "completeness": 7
-        }
-      },
-      "pff": {
-        "attempts": 245,
-        "yards": 1069,
-        "ypa": 4.4,
-        "touchdowns": 9,
-        "run_grade": 82,
-        "offense_grade": 76.8,
-        "yards_after_contact": 702,
-        "yco_attempt": 2.87,
-        "avoided_tackles": 55,
-        "elusive_rating": 62.7,
-        "breakaway_percent": 28,
-        "breakaway_yards": 299,
-        "explosive": 24,
-        "targets": 46,
-        "receptions": 40,
-        "rec_yards": 215,
-        "route_grade": 63,
-        "yprr": 0.86,
-        "pass_block_grade": 44.8,
-        "fumbles": 2,
-        "total_touches": 284,
-        "ras": 0,
-        "alltime_ras": 0,
-        "ras_source_url": "https://ras.football/ras-information/?PlayerID=27224"
       },
       "rank": 76
     },
@@ -5350,6 +5350,66 @@
       "rank": 89
     },
     {
+      "id": "rb-2025-antariobrown",
+      "name": "Antario Brown",
+      "school": "N ILLINOIS",
+      "team": "N ILLINOIS",
+      "year": 2025,
+      "draftYear": 2025,
+      "pos": "RB",
+      "position": "RB",
+      "grade": 54,
+      "score": 54,
+      "pick": 90,
+      "projectedPick": 90,
+      "source": "rb_rushing_receiving_ras_forecast",
+      "forecast": {
+        "final": 54,
+        "rushing": 68,
+        "receiving": 40,
+        "passPro": 41,
+        "usage": 59,
+        "ras": 50,
+        "completeness": 0,
+        "penalty": 0,
+        "weights": {
+          "rushing": 48,
+          "receiving": 15,
+          "passPro": 8,
+          "usage": 15,
+          "ras": 7,
+          "completeness": 7
+        }
+      },
+      "pff": {
+        "attempts": 211,
+        "yards": 1294,
+        "ypa": 6.1,
+        "touchdowns": 10,
+        "run_grade": 80.2,
+        "offense_grade": 81.6,
+        "yards_after_contact": 651,
+        "yco_attempt": 3.09,
+        "avoided_tackles": 34,
+        "elusive_rating": 52.6,
+        "breakaway_percent": 46.2,
+        "breakaway_yards": 598,
+        "explosive": 28,
+        "targets": 13,
+        "receptions": 12,
+        "rec_yards": 52,
+        "route_grade": 73.2,
+        "yprr": 0.5,
+        "pass_block_grade": 40.3,
+        "fumbles": 1,
+        "total_touches": 223,
+        "ras": 0,
+        "alltime_ras": 0,
+        "ras_source_url": "https://ras.football/ras-information/?PlayerID=27679"
+      },
+      "rank": 90
+    },
+    {
       "id": "rb-2025-jasemcclellan",
       "name": "Jase McClellan",
       "school": "ALABAMA",
@@ -5360,8 +5420,8 @@
       "position": "RB",
       "grade": 54,
       "score": 54,
-      "pick": 90,
-      "projectedPick": 90,
+      "pick": 91,
+      "projectedPick": 91,
       "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 54,
@@ -5407,7 +5467,7 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 90
+      "rank": 91
     },
     {
       "id": "rb-2025-willshipley",
@@ -5420,8 +5480,8 @@
       "position": "RB",
       "grade": 54,
       "score": 54,
-      "pick": 91,
-      "projectedPick": 91,
+      "pick": 92,
+      "projectedPick": 92,
       "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 54,
@@ -5467,7 +5527,7 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 91
+      "rank": 92
     },
     {
       "id": "rb-2025-lorenzolingard",
@@ -5480,8 +5540,8 @@
       "position": "RB",
       "grade": 54,
       "score": 54,
-      "pick": 92,
-      "projectedPick": 92,
+      "pick": 93,
+      "projectedPick": 93,
       "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 54,
@@ -5527,7 +5587,7 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 92
+      "rank": 93
     },
     {
       "id": "rb-2025-wesleykennedyiii",
@@ -5540,8 +5600,8 @@
       "position": "RB",
       "grade": 54,
       "score": 54,
-      "pick": 93,
-      "projectedPick": 93,
+      "pick": 94,
+      "projectedPick": 94,
       "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 54,
@@ -5587,7 +5647,7 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 93
+      "rank": 94
     },
     {
       "id": "rb-2025-dawsonpendergrass",
@@ -5600,8 +5660,8 @@
       "position": "RB",
       "grade": 54,
       "score": 54,
-      "pick": 94,
-      "projectedPick": 94,
+      "pick": 95,
+      "projectedPick": 95,
       "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 54,
@@ -5647,7 +5707,7 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 94
+      "rank": 95
     },
     {
       "id": "rb-2025-marcuscarroll",
@@ -5660,8 +5720,8 @@
       "position": "RB",
       "grade": 53,
       "score": 53,
-      "pick": 95,
-      "projectedPick": 95,
+      "pick": 96,
+      "projectedPick": 96,
       "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 53,
@@ -5707,7 +5767,7 @@
         "alltime_ras": 1.55,
         "ras_source_url": "https://ras.football/ras-information/?PlayerID=28146"
       },
-      "rank": 95
+      "rank": 96
     },
     {
       "id": "rb-2025-jaquindenjackson",
@@ -5720,8 +5780,8 @@
       "position": "RB",
       "grade": 53,
       "score": 53,
-      "pick": 96,
-      "projectedPick": 96,
+      "pick": 97,
+      "projectedPick": 97,
       "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 53,
@@ -5767,7 +5827,7 @@
         "alltime_ras": 4.98,
         "ras_source_url": "https://ras.football/ras-information/?PlayerID=27387"
       },
-      "rank": 96
+      "rank": 97
     },
     {
       "id": "rb-2025-nayquanwright",
@@ -5780,8 +5840,8 @@
       "position": "RB",
       "grade": 53,
       "score": 53,
-      "pick": 97,
-      "projectedPick": 97,
+      "pick": 98,
+      "projectedPick": 98,
       "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 53,
@@ -5827,7 +5887,7 @@
         "alltime_ras": 7.37,
         "ras_source_url": "https://ras.football/ras-information/?PlayerID=29327"
       },
-      "rank": 97
+      "rank": 98
     },
     {
       "id": "rb-2025-kanyeroberts",
@@ -5840,8 +5900,8 @@
       "position": "RB",
       "grade": 53,
       "score": 53,
-      "pick": 98,
-      "projectedPick": 98,
+      "pick": 99,
+      "projectedPick": 99,
       "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 53,
@@ -5887,7 +5947,7 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 98
+      "rank": 99
     },
     {
       "id": "rb-2025-cjbaxter",
@@ -5900,8 +5960,8 @@
       "position": "RB",
       "grade": 53,
       "score": 53,
-      "pick": 99,
-      "projectedPick": 99,
+      "pick": 100,
+      "projectedPick": 100,
       "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 53,
@@ -5947,7 +6007,7 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 99
+      "rank": 100
     },
     {
       "id": "rb-2025-montewatkins",
@@ -5960,8 +6020,8 @@
       "position": "RB",
       "grade": 53,
       "score": 53,
-      "pick": 100,
-      "projectedPick": 100,
+      "pick": 101,
+      "projectedPick": 101,
       "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 53,
@@ -6007,7 +6067,7 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 100
+      "rank": 101
     },
     {
       "id": "rb-2025-taweewalker",
@@ -6020,8 +6080,8 @@
       "position": "RB",
       "grade": 53,
       "score": 53,
-      "pick": 101,
-      "projectedPick": 101,
+      "pick": 102,
+      "projectedPick": 102,
       "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 53,
@@ -6067,7 +6127,7 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 101
+      "rank": 102
     },
     {
       "id": "rb-2025-rasheenali",
@@ -6080,8 +6140,8 @@
       "position": "RB",
       "grade": 52,
       "score": 52,
-      "pick": 102,
-      "projectedPick": 102,
+      "pick": 103,
+      "projectedPick": 103,
       "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 52,
@@ -6127,7 +6187,7 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 102
+      "rank": 103
     },
     {
       "id": "rb-2025-jalenbuckley",
@@ -6140,8 +6200,8 @@
       "position": "RB",
       "grade": 52,
       "score": 52,
-      "pick": 103,
-      "projectedPick": 103,
+      "pick": 104,
+      "projectedPick": 104,
       "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 52,
@@ -6187,7 +6247,7 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 103
+      "rank": 104
     },
     {
       "id": "rb-2025-kyerobichaux",
@@ -6200,8 +6260,8 @@
       "position": "RB",
       "grade": 52,
       "score": 52,
-      "pick": 104,
-      "projectedPick": 104,
+      "pick": 105,
+      "projectedPick": 105,
       "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 52,
@@ -6247,7 +6307,7 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 104
+      "rank": 105
     },
     {
       "id": "rb-2025-nicholassingleton",
@@ -6260,8 +6320,8 @@
       "position": "RB",
       "grade": 52,
       "score": 52,
-      "pick": 105,
-      "projectedPick": 105,
+      "pick": 106,
+      "projectedPick": 106,
       "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 52,
@@ -6307,7 +6367,7 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 105
+      "rank": 106
     },
     {
       "id": "rb-2025-marionlukes",
@@ -6320,8 +6380,8 @@
       "position": "RB",
       "grade": 52,
       "score": 52,
-      "pick": 106,
-      "projectedPick": 106,
+      "pick": 107,
+      "projectedPick": 107,
       "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 52,
@@ -6367,7 +6427,7 @@
         "alltime_ras": 6.12,
         "ras_source_url": "https://ras.football/ras-information/?PlayerID=27707"
       },
-      "rank": 106
+      "rank": 107
     },
     {
       "id": "rb-2025-kaelonblack",
@@ -6380,8 +6440,8 @@
       "position": "RB",
       "grade": 52,
       "score": 52,
-      "pick": 107,
-      "projectedPick": 107,
+      "pick": 108,
+      "projectedPick": 108,
       "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 52,
@@ -6427,7 +6487,7 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 107
+      "rank": 108
     },
     {
       "id": "rb-2025-camedwards",
@@ -6440,8 +6500,8 @@
       "position": "RB",
       "grade": 52,
       "score": 52,
-      "pick": 108,
-      "projectedPick": 108,
+      "pick": 109,
+      "projectedPick": 109,
       "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 52,
@@ -6487,7 +6547,7 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 108
+      "rank": 109
     },
     {
       "id": "rb-2025-doneriodavenport",
@@ -6500,8 +6560,8 @@
       "position": "RB",
       "grade": 52,
       "score": 52,
-      "pick": 109,
-      "projectedPick": 109,
+      "pick": 110,
+      "projectedPick": 110,
       "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 52,
@@ -6547,7 +6607,7 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 109
+      "rank": 110
     },
     {
       "id": "rb-2025-anwarlewis",
@@ -6560,8 +6620,8 @@
       "position": "RB",
       "grade": 52,
       "score": 52,
-      "pick": 110,
-      "projectedPick": 110,
+      "pick": 111,
+      "projectedPick": 111,
       "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 52,
@@ -6607,7 +6667,7 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 110
+      "rank": 111
     },
     {
       "id": "rb-2025-braydonbennett",
@@ -6620,8 +6680,8 @@
       "position": "RB",
       "grade": 52,
       "score": 52,
-      "pick": 111,
-      "projectedPick": 111,
+      "pick": 112,
+      "projectedPick": 112,
       "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 52,
@@ -6666,66 +6726,6 @@
         "ras": null,
         "alltime_ras": null,
         "ras_source_url": null
-      },
-      "rank": 111
-    },
-    {
-      "id": "rb-2025-antariobrown",
-      "name": "Antario Brown",
-      "school": "N ILLINOIS",
-      "team": "N ILLINOIS",
-      "year": 2025,
-      "draftYear": 2025,
-      "pos": "RB",
-      "position": "RB",
-      "grade": 51,
-      "score": 51,
-      "pick": 112,
-      "projectedPick": 112,
-      "source": "rb_rushing_receiving_ras_forecast",
-      "forecast": {
-        "final": 51,
-        "rushing": 68,
-        "receiving": 40,
-        "passPro": 41,
-        "usage": 59,
-        "ras": 0,
-        "completeness": 0,
-        "penalty": 0,
-        "weights": {
-          "rushing": 48,
-          "receiving": 15,
-          "passPro": 8,
-          "usage": 15,
-          "ras": 7,
-          "completeness": 7
-        }
-      },
-      "pff": {
-        "attempts": 211,
-        "yards": 1294,
-        "ypa": 6.1,
-        "touchdowns": 10,
-        "run_grade": 80.2,
-        "offense_grade": 81.6,
-        "yards_after_contact": 651,
-        "yco_attempt": 3.09,
-        "avoided_tackles": 34,
-        "elusive_rating": 52.6,
-        "breakaway_percent": 46.2,
-        "breakaway_yards": 598,
-        "explosive": 28,
-        "targets": 13,
-        "receptions": 12,
-        "rec_yards": 52,
-        "route_grade": 73.2,
-        "yprr": 0.5,
-        "pass_block_grade": 40.3,
-        "fumbles": 1,
-        "total_touches": 223,
-        "ras": 0,
-        "alltime_ras": 0,
-        "ras_source_url": "https://ras.football/ras-information/?PlayerID=27679"
       },
       "rank": 112
     },
@@ -12430,6 +12430,66 @@
       "rank": 207
     },
     {
+      "id": "rb-2025-kalebjohnson",
+      "name": "Kaleb Johnson",
+      "school": "IOWA",
+      "team": "IOWA",
+      "year": 2025,
+      "draftYear": 2025,
+      "pos": "RB",
+      "position": "RB",
+      "grade": 37,
+      "score": 37,
+      "pick": 208,
+      "projectedPick": 208,
+      "source": "rb_rushing_receiving_ras_forecast",
+      "forecast": {
+        "final": 37,
+        "rushing": 52,
+        "receiving": 29,
+        "passPro": 51,
+        "usage": 30,
+        "ras": 50,
+        "completeness": 0,
+        "penalty": 4,
+        "weights": {
+          "rushing": 48,
+          "receiving": 15,
+          "passPro": 8,
+          "usage": 15,
+          "ras": 7,
+          "completeness": 7
+        }
+      },
+      "pff": {
+        "attempts": 117,
+        "yards": 463,
+        "ypa": 4,
+        "touchdowns": 3,
+        "run_grade": 64.7,
+        "offense_grade": 65.2,
+        "yards_after_contact": 306,
+        "yco_attempt": 2.62,
+        "avoided_tackles": 18,
+        "elusive_rating": 39.2,
+        "breakaway_percent": 41.7,
+        "breakaway_yards": 193,
+        "explosive": 8,
+        "targets": 5,
+        "receptions": 3,
+        "rec_yards": 25,
+        "route_grade": 57.1,
+        "yprr": 0.57,
+        "pass_block_grade": 62.8,
+        "fumbles": 2,
+        "total_touches": 120,
+        "ras": 0,
+        "alltime_ras": 0,
+        "ras_source_url": "https://ras.football/ras-information/?PlayerID=27434"
+      },
+      "rank": 208
+    },
+    {
       "id": "rb-2025-ruebenowensii",
       "name": "Rueben Owens II",
       "school": "TEXAS A&M",
@@ -12440,8 +12500,8 @@
       "position": "RB",
       "grade": 37,
       "score": 37,
-      "pick": 208,
-      "projectedPick": 208,
+      "pick": 209,
+      "projectedPick": 209,
       "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 37,
@@ -12487,7 +12547,7 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 208
+      "rank": 209
     },
     {
       "id": "rb-2025-ethanpayne",
@@ -12500,8 +12560,8 @@
       "position": "RB",
       "grade": 37,
       "score": 37,
-      "pick": 209,
-      "projectedPick": 209,
+      "pick": 210,
+      "projectedPick": 210,
       "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 37,
@@ -12547,7 +12607,7 @@
         "alltime_ras": 1.11,
         "ras_source_url": "https://ras.football/ras-information/?PlayerID=28855"
       },
-      "rank": 209
+      "rank": 210
     },
     {
       "id": "rb-2025-oshaanallison",
@@ -12560,8 +12620,8 @@
       "position": "RB",
       "grade": 36,
       "score": 36,
-      "pick": 210,
-      "projectedPick": 210,
+      "pick": 211,
+      "projectedPick": 211,
       "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 36,
@@ -12607,7 +12667,7 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 210
+      "rank": 211
     },
     {
       "id": "rb-2025-vannschield",
@@ -12620,8 +12680,8 @@
       "position": "RB",
       "grade": 36,
       "score": 36,
-      "pick": 211,
-      "projectedPick": 211,
+      "pick": 212,
+      "projectedPick": 212,
       "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 36,
@@ -12667,7 +12727,7 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 211
+      "rank": 212
     },
     {
       "id": "rb-2025-delbertmimmsiii",
@@ -12680,8 +12740,8 @@
       "position": "RB",
       "grade": 36,
       "score": 36,
-      "pick": 212,
-      "projectedPick": 212,
+      "pick": 213,
+      "projectedPick": 213,
       "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 36,
@@ -12727,7 +12787,7 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 212
+      "rank": 213
     },
     {
       "id": "rb-2025-mikehollins",
@@ -12740,8 +12800,8 @@
       "position": "RB",
       "grade": 36,
       "score": 36,
-      "pick": 213,
-      "projectedPick": 213,
+      "pick": 214,
+      "projectedPick": 214,
       "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 36,
@@ -12787,7 +12847,7 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 213
+      "rank": 214
     },
     {
       "id": "rb-2025-mikewashingtonjr",
@@ -12800,8 +12860,8 @@
       "position": "RB",
       "grade": 35,
       "score": 35,
-      "pick": 214,
-      "projectedPick": 214,
+      "pick": 215,
+      "projectedPick": 215,
       "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 35,
@@ -12847,7 +12907,7 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 214
+      "rank": 215
     },
     {
       "id": "rb-2025-rashoddubinion",
@@ -12860,8 +12920,8 @@
       "position": "RB",
       "grade": 35,
       "score": 35,
-      "pick": 215,
-      "projectedPick": 215,
+      "pick": 216,
+      "projectedPick": 216,
       "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 35,
@@ -12907,7 +12967,7 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 215
+      "rank": 216
     },
     {
       "id": "rb-2025-zahirabdussalaam",
@@ -12920,8 +12980,8 @@
       "position": "RB",
       "grade": 34,
       "score": 34,
-      "pick": 216,
-      "projectedPick": 216,
+      "pick": 217,
+      "projectedPick": 217,
       "source": "rb_rushing_receiving_ras_forecast",
       "forecast": {
         "final": 34,
@@ -12966,66 +13026,6 @@
         "ras": 0.38,
         "alltime_ras": 0.43,
         "ras_source_url": "https://ras.football/ras-information/?PlayerID=27888"
-      },
-      "rank": 216
-    },
-    {
-      "id": "rb-2025-kalebjohnson",
-      "name": "Kaleb Johnson",
-      "school": "IOWA",
-      "team": "IOWA",
-      "year": 2025,
-      "draftYear": 2025,
-      "pos": "RB",
-      "position": "RB",
-      "grade": 34,
-      "score": 34,
-      "pick": 217,
-      "projectedPick": 217,
-      "source": "rb_rushing_receiving_ras_forecast",
-      "forecast": {
-        "final": 34,
-        "rushing": 52,
-        "receiving": 29,
-        "passPro": 51,
-        "usage": 30,
-        "ras": 0,
-        "completeness": 0,
-        "penalty": 4,
-        "weights": {
-          "rushing": 48,
-          "receiving": 15,
-          "passPro": 8,
-          "usage": 15,
-          "ras": 7,
-          "completeness": 7
-        }
-      },
-      "pff": {
-        "attempts": 117,
-        "yards": 463,
-        "ypa": 4,
-        "touchdowns": 3,
-        "run_grade": 64.7,
-        "offense_grade": 65.2,
-        "yards_after_contact": 306,
-        "yco_attempt": 2.62,
-        "avoided_tackles": 18,
-        "elusive_rating": 39.2,
-        "breakaway_percent": 41.7,
-        "breakaway_yards": 193,
-        "explosive": 8,
-        "targets": 5,
-        "receptions": 3,
-        "rec_yards": 25,
-        "route_grade": 57.1,
-        "yprr": 0.57,
-        "pass_block_grade": 62.8,
-        "fumbles": 2,
-        "total_touches": 120,
-        "ras": 0,
-        "alltime_ras": 0,
-        "ras_source_url": "https://ras.football/ras-information/?PlayerID=27434"
       },
       "rank": 217
     },
