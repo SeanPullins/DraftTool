@@ -136,10 +136,10 @@ function finalRbForecastScore(row) {
   const penalty = riskPenalty(row);
 
   const final =
-    rush * 0.48 +
-    recv * 0.18 +
+    rush * 0.52 +
+    recv * 0.16 +
     pro * 0.08 +
-    use * 0.18 +
+    use * 0.16 +
     bonus * 0.08 -
     penalty;
 
@@ -203,10 +203,10 @@ for (const r of latest) {
       completeness: scores.completeness,
       penalty: scores.penalty,
       weights: {
-        rushing: 48,
-        receiving: 18,
+        rushing: 52,
+        receiving: 16,
         passPro: 8,
-        usage: 18,
+        usage: 16,
         completeness: 8,
       },
     },
