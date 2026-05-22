@@ -2316,6 +2316,34 @@ function PlayerExplanationModal({ explanation, onClose }: { explanation: any; on
 }
 
 
+
+function pffSeasonMapKey(year: number, name: string) {
+  return `${clean(name)}|${Number(year)}`
+}
+
+function buildLatestPffSeasonMap(seasons: any[]) {
+  const out = new Map<string, any>()
+
+  for (const row of seasons || []) {
+    const name = row.name || row.player || row.player_name || ''
+    const season = Number(row.season || row.year)
+    if (!name || !Number.isFinite(season)) continue
+
+    for (let draftYear = season + 1; draftYear <= 2030; draftYear++) {
+      const key = pffSeasonMapKey(draftYear, name)
+      const current = out.get(key)
+      const currentSeason = Number(current?.season || current?.year || 0)
+
+      if (!current || season > currentSeason) {
+        out.set(key, row)
+      }
+    }
+  }
+
+  return out
+}
+
+
 function ClassExplorer({ pool, history, pffProfiles, pffLookup, y1Data, careerStats, histFlagMap, currentName, currentYear, saved, qbPffSeasons, wrPffSeasons }: { pool: Historical[]; history: Historical[]; pffProfiles: PffProfile[]; pffLookup: Map<string, PffProfile>; y1Data?: Y1Data; careerStats?: CareerStatMap; histFlagMap: Map<string, HistoricalOutcomeFlag>; currentName: string; currentYear: number; saved: SavedProspect[]; qbPffSeasons: QbPffSeason[]; wrPffSeasons: WrPffSeason[]; }) {
   const years = useMemo(() => {
     const set = new Set<number>()
@@ -2361,6 +2389,9 @@ function ClassExplorer({ pool, history, pffProfiles, pffLookup, y1Data, careerSt
     const key = `${clean(player.name)}|${String(player.pos || '').toUpperCase()}|${Number(player.year)}`
     return v57ScoreMap.get(key) ?? null
   }
+
+  const latestQbPffMap = useMemo(() => buildLatestPffSeasonMap(qbPffSeasons), [qbPffSeasons])
+  const latestWrPffMap = useMemo(() => buildLatestPffSeasonMap(wrPffSeasons), [wrPffSeasons])
 
   // Persistent cache: avoids recomputing the same player on year revisits
   const projCache = useRef(new Map<string, { av: number; score: number }>())
@@ -2635,13 +2666,17 @@ function ClassExplorer({ pool, history, pffProfiles, pffLookup, y1Data, careerSt
                   <button
                     type="button"
                     className="explainBtn"
-                    onClick={() => setExplanation(buildPlayerExplanation(player, {
-                      projected,
-                      pffContextScore,
-                      pffContextLabel,
-                      qbContext: player.pos === 'QB' ? getQbPffContext(player.year, player.name, qbPffSeasons) : null,
-                      wrContext: player.pos === 'WR' || player.pos === 'TE' ? getWrPffContext(player.year, player.name, wrPffSeasons) : null,
-                    }))}
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      const pffKey = pffSeasonMapKey(player.year, player.name)
+                      setExplanation(buildPlayerExplanation(player, {
+                        projected,
+                        pffContextScore,
+                        pffContextLabel,
+                        qbContext: player.pos === 'QB' ? latestQbPffMap.get(pffKey) : null,
+                        wrContext: player.pos === 'WR' || player.pos === 'TE' ? latestWrPffMap.get(pffKey) : null,
+                      }))
+                    }}
                   >
                     Explain
                   </button>
