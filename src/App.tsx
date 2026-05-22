@@ -2186,15 +2186,23 @@ function buildPlayerExplanation(player: any, ctx: any) {
     drivers.push(`Projected AV: ${projectedAv.toFixed(1)}`)
   }
 
-  if (pffScore != null) {
+  const hasSeasonContext = Boolean(ctx?.qbContext || ctx?.wrContext || ctx?.teContext)
+  const pffLabel = String(ctx?.pffContextLabel || '')
+  const isNoPffProfile = /no pff match/i.test(pffLabel)
+
+  if (pffScore != null && pffScore > 0 && !isNoPffProfile) {
     drivers.push(`${ctx?.pffContextLabel || 'PFF context'}: ${pffScore.toFixed(1)}`)
     if (pffScore >= 90) strengths.push('Elite PFF profile/season signal.')
     else if (pffScore >= 80) strengths.push('Strong PFF profile/season signal.')
     else if (pffScore < 65) risks.push('PFF profile is more modest than top-tier prospects.')
+  } else if (hasSeasonContext) {
+    drivers.push('Season PFF data linked.')
+  } else if (isNoPffProfile) {
+    risks.push('No full PFF comparison profile matched yet.')
   }
 
   const qb = ctx?.qbContext
-  const wr = ctx?.wrContext
+  const wr = ctx?.wrContext || ctx?.teContext
 
   if (pos === 'QB' && qb) {
     const passGrade = safeNum(getAny(qb, ['pass_grade', 'grades_pass']))
