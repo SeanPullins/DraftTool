@@ -367,13 +367,35 @@ function dedupeCandidates(rows) {
 
 const dedupedCandidates = dedupeCandidates(candidates);
 
+function isScoreReady(row) {
+  return Boolean(
+    row.realDraftPrior &&
+    Math.abs(Number(row.recommendedAdjustment || 0)) > 0.01
+  );
+}
+
+function isContextOnly(row) {
+  return !isScoreReady(row);
+}
+
+const scoreReadyCandidates = dedupedCandidates.filter(isScoreReady);
+const contextOnlyCandidates = dedupedCandidates.filter(isContextOnly);
+
+function sortByMovement(rows) {
+  return rows
+    .slice()
+    .sort((a, b) => Math.abs(b.recommendedAdjustment) - Math.abs(a.recommendedAdjustment));
+}
+
 const report = {
   generatedAt: new Date().toISOString(),
   notes: [
     'Offline report only. Does not change site scores.',
+    'scoreReady contains only real-draft-prior players with nonzero recommended adjustment.',
+    'contextOnly contains future/no-draft or zero-adjustment players for scouting context only.',
     'Recommended adjustment is capped and uses only conservative comp + score-ready quantum traits.',
-    'Future/no-draft players remain context-only unless a real draft prior exists.',
     'Actual drafted rows are preferred over generated/rank-based rows.',
+    'Late draft picks are damped by draft capital.',
     'WR quantum traits are intentionally excluded from score-ready adjustment for now.',
   ],
   caps: {
@@ -382,18 +404,34 @@ const report = {
     WR: 1.0,
     TE: 1.5,
   },
-  byPosition: Object.fromEntries(POSITIONS.map(pos => {
-    const rows = dedupedCandidates
-      .filter(c => c.pos === pos)
-      .sort((a, b) => Math.abs(b.recommendedAdjustment) - Math.abs(a.recommendedAdjustment))
-      .slice(0, 60);
+  counts: {
+    all: dedupedCandidates.length,
+    scoreReady: scoreReadyCandidates.length,
+    contextOnly: contextOnlyCandidates.length,
+  },
+  scoreReady: {
+    byPosition: Object.fromEntries(POSITIONS.map(pos => {
+      const rows = sortByMovement(scoreReadyCandidates.filter(c => c.pos === pos)).slice(0, 60);
+      return [pos, rows];
+    })),
+    topMovers: sortByMovement(scoreReadyCandidates).slice(0, 80),
+  },
+  contextOnly: {
+    byPosition: Object.fromEntries(POSITIONS.map(pos => {
+      const rows = contextOnlyCandidates
+        .filter(c => c.pos === pos)
+        .slice(0, 80);
+      return [pos, rows];
+    })),
+    sample: contextOnlyCandidates.slice(0, 80),
+  },
 
+  // Backward-compatible fields for older audit snippets.
+  byPosition: Object.fromEntries(POSITIONS.map(pos => {
+    const rows = sortByMovement(scoreReadyCandidates.filter(c => c.pos === pos)).slice(0, 60);
     return [pos, rows];
   })),
-  topMovers: dedupedCandidates
-    .slice()
-    .sort((a, b) => Math.abs(b.recommendedAdjustment) - Math.abs(a.recommendedAdjustment))
-    .slice(0, 80),
+  topMovers: sortByMovement(scoreReadyCandidates).slice(0, 80),
 };
 
 fs.mkdirSync('public/data/model', { recursive: true });
@@ -415,7 +453,9 @@ console.log(JSON.stringify({
     recommendedAdjustment: c.recommendedAdjustment,
     reasons: c.reasons,
   })),
-  byPositionCounts: Object.fromEntries(POSITIONS.map(pos => [pos, report.byPosition[pos].length])),
+  counts: report.counts,
+  scoreReadyByPositionCounts: Object.fromEntries(POSITIONS.map(pos => [pos, report.scoreReady.byPosition[pos].length])),
+  contextOnlyByPositionCounts: Object.fromEntries(POSITIONS.map(pos => [pos, report.contextOnly.byPosition[pos].length])),
 }, null, 2));
 
 console.log('Wrote public/data/model/score_adjustment_candidates.json');
