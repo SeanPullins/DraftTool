@@ -2202,7 +2202,7 @@ function buildPlayerExplanation(player: any, ctx: any) {
   }
 
   const qb = ctx?.qbContext
-  const wr = ctx?.wrContext || ctx?.teContext
+  const wr = ctx?.wrContext || ctx?.teContext || ctx?.teContext
 
   if (pos === 'QB' && qb) {
     const passGrade = safeNum(getAny(qb, ['pass_grade', 'grades_pass']))
@@ -2272,6 +2272,17 @@ function buildPlayerExplanation(player: any, ctx: any) {
           : 'Fair-value range: model score and draft slot are broadly aligned.'
       : 'Value read is limited because pick or score data is missing.'
 
+  const seasonPffLinked = Boolean(ctx?.qbContext || ctx?.wrContext || ctx?.teContext)
+
+  const cleanedDrivers = drivers.filter((item) => {
+    if (seasonPffLinked && /^No PFF match/i.test(String(item))) return false
+    return true
+  })
+
+  if (seasonPffLinked && !cleanedDrivers.some((item) => /Season PFF data linked/i.test(String(item)))) {
+    cleanedDrivers.unshift('Season PFF data linked.')
+  }
+
   return {
     player,
     summary,
@@ -2279,7 +2290,7 @@ function buildPlayerExplanation(player: any, ctx: any) {
     badges,
     strengths,
     risks,
-    drivers,
+    drivers: cleanedDrivers,
   }
 }
 
