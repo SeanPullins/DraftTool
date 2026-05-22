@@ -4,6 +4,26 @@ function clean(s = '') {
   return String(s).toLowerCase().replace(/[^a-z0-9]/g, '');
 }
 
+const QB_DRAFT_YEAR_OVERRIDES = new Map([
+  // Confirmed/known 2026 QBs — keep these OUT of 2027.
+  ['fernandomendoza', 2026],
+  ['diegopavia', 2026],
+  ['haynesking', 2026],
+  ['joefagnano', 2026],
+  ['fagnano', 2026],
+  ['joeyaguilar', 2026],
+]);
+
+const KNOWN_2026_QBS = new Set(
+  [...QB_DRAFT_YEAR_OVERRIDES.entries()]
+    .filter(([, year]) => year === 2026)
+    .map(([name]) => name)
+);
+
+function expectedQbDraftYear(name) {
+  return QB_DRAFT_YEAR_OVERRIDES.get(clean(name)) || null;
+}
+
 function parseCsv(text) {
   const lines = String(text || '').trim().split(/\r?\n/).filter(Boolean);
   if (!lines.length) return [];
@@ -361,6 +381,14 @@ function makeFutureQbFile(draftYear) {
     const name = row.name || row.player || row.player_name;
     const key = clean(name);
     if (!key || seen.has(key)) continue;
+
+    const expectedYear = expectedQbDraftYear(name);
+
+    // Hard guard: known 2026 QBs must not leak into the 2027 board.
+    if (draftYear === 2027 && KNOWN_2026_QBS.has(key)) continue;
+
+    // If we have a manual class assignment, honor it exactly.
+    if (expectedYear != null && expectedYear !== draftYear) continue;
 
     const attempts = num(get(row, ['attempts']), 0);
     const dropbacks = num(get(row, ['dropbacks']), 0);
