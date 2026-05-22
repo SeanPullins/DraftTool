@@ -2147,6 +2147,35 @@ function ClassExplorer({ pool, history, pffProfiles, pffLookup, y1Data, careerSt
   const [sortDir, setSortDir] = useState<SortDir>('asc')
   const [expandedId, setExpandedId] = useState<string | null>(null)
   const [showScatter, setShowScatter] = useState(false)
+  const [v57AuditRows, setV57AuditRows] = useState<any[]>([])
+
+  useEffect(() => {
+    let cancelled = false
+    const base = import.meta.env.BASE_URL || './'
+    fetch(`${base}data/model/v57_current_prospect_audit.json`)
+      .then((r) => r.ok ? r.json() : null)
+      .then((payload) => {
+        if (!cancelled && payload?.allScored?.length) setV57AuditRows(payload.allScored)
+      })
+      .catch(() => {
+        if (!cancelled) setV57AuditRows([])
+      })
+    return () => { cancelled = true }
+  }, [])
+
+  const v57ScoreMap = useMemo(() => {
+    const out = new Map<string, any>()
+    for (const row of v57AuditRows) {
+      const key = `${clean(row.name)}|${String(row.pos || '').toUpperCase()}|${Number(row.year)}`
+      out.set(key, row)
+    }
+    return out
+  }, [v57AuditRows])
+
+  const getV57Row = (player: Historical) => {
+    const key = `${clean(player.name)}|${String(player.pos || '').toUpperCase()}|${Number(player.year)}`
+    return v57ScoreMap.get(key) ?? null
+  }
 
   // Persistent cache: avoids recomputing the same player on year revisits
   const projCache = useRef(new Map<string, { av: number; score: number }>())
@@ -2427,7 +2456,20 @@ function ClassExplorer({ pool, history, pffProfiles, pffLookup, y1Data, careerSt
                   {pffContextScore != null ? pffContextScore.toFixed(0) : '—'}
                 </td>
                 {useProjections ? <td>{projected ? projected.av.toFixed(1) : '-'}</td> : null}
-                {useProjections ? <td style={{ color: projected ? scoreColor(score) : undefined, fontWeight: projected ? 800 : undefined }}>{projected ? Math.round(projected.score) : '-'}</td> : null}
+                {useProjections ? (() => {
+                  const v57 = getV57Row(player)
+                  const displayScore = v57?.v57Percentile != null ? Number(v57.v57Percentile) : (projected ? projected.score : null)
+                  const delta = v57?.v57Delta != null ? Number(v57.v57Delta) : null
+                  const title = v57
+                    ? `V5.7P score${delta != null ? ` · Δ ${delta > 0 ? '+' : ''}${delta.toFixed(1)}` : ''}${v57.flag ? ` · ${v57.flag}` : ''}`
+                    : 'V4 fallback score'
+                  return <td
+                    title={title}
+                    style={{ color: displayScore != null ? scoreColor(displayScore) : undefined, fontWeight: displayScore != null ? 800 : undefined }}
+                  >
+                    {displayScore != null ? Math.round(displayScore) : '-'}
+                  </td>
+                })() : null}
                 <td>{player.proBowls || 0}</td>
                 <td>{player.allPros || 0}</td>
                 <td>
