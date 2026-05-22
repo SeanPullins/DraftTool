@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-05-21T23:45:44.882Z",
+  "generatedAt": "2026-05-22T00:28:45.221Z",
   "modelVersion": "V5.7 prospect sanity audit",
   "totalProspects": 753,
   "byGroup": {
@@ -9,7 +9,7 @@
       "avgAbsDelta": 0,
       "bigMoves": 0,
       "pffProfiles": 33,
-      "seasonPff": 0
+      "seasonPff": 183
     },
     "SKILL": {
       "n": 570,
@@ -1430,8 +1430,8 @@
       "rawCorrection": -15,
       "correction": 0,
       "pffProfile": false,
-      "seasonPffScore": null,
-      "flag": "NO_DATA_NO_MOVE",
+      "seasonPffScore": 73.95,
+      "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
     {
@@ -1447,7 +1447,7 @@
       "rawCorrection": -15,
       "correction": 0,
       "pffProfile": true,
-      "seasonPffScore": null,
+      "seasonPffScore": 83.63333333333333,
       "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
@@ -1464,7 +1464,7 @@
       "rawCorrection": -15,
       "correction": 0,
       "pffProfile": true,
-      "seasonPffScore": null,
+      "seasonPffScore": 78.16666666666667,
       "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
@@ -1481,8 +1481,8 @@
       "rawCorrection": -15,
       "correction": 0,
       "pffProfile": false,
-      "seasonPffScore": null,
-      "flag": "NO_DATA_NO_MOVE",
+      "seasonPffScore": 69.6,
+      "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
     {
@@ -1532,7 +1532,7 @@
       "rawCorrection": -15,
       "correction": 0,
       "pffProfile": true,
-      "seasonPffScore": null,
+      "seasonPffScore": 77.83333333333333,
       "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
@@ -1549,7 +1549,7 @@
       "rawCorrection": -15,
       "correction": 0,
       "pffProfile": true,
-      "seasonPffScore": null,
+      "seasonPffScore": 73.55999999999999,
       "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
@@ -1566,8 +1566,8 @@
       "rawCorrection": -15,
       "correction": 0,
       "pffProfile": false,
-      "seasonPffScore": null,
-      "flag": "NO_DATA_NO_MOVE",
+      "seasonPffScore": 68.66666666666667,
+      "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
     {
@@ -1583,8 +1583,8 @@
       "rawCorrection": -15,
       "correction": 0,
       "pffProfile": false,
-      "seasonPffScore": null,
-      "flag": "NO_DATA_NO_MOVE",
+      "seasonPffScore": 64.4,
+      "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
     {
@@ -1600,8 +1600,8 @@
       "rawCorrection": -15,
       "correction": 0,
       "pffProfile": false,
-      "seasonPffScore": null,
-      "flag": "NO_DATA_NO_MOVE",
+      "seasonPffScore": 70.2,
+      "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
     {
@@ -1668,7 +1668,7 @@
       "rawCorrection": -15,
       "correction": 0,
       "pffProfile": true,
-      "seasonPffScore": null,
+      "seasonPffScore": 72.025,
       "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
@@ -1685,8 +1685,8 @@
       "rawCorrection": -15,
       "correction": 0,
       "pffProfile": false,
-      "seasonPffScore": null,
-      "flag": "NO_DATA_NO_MOVE",
+      "seasonPffScore": 63.86666666666667,
+      "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
     {
@@ -1736,8 +1736,8 @@
       "rawCorrection": -15,
       "correction": 0,
       "pffProfile": false,
-      "seasonPffScore": null,
-      "flag": "NO_DATA_NO_MOVE",
+      "seasonPffScore": 83.7,
+      "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
     {
@@ -1753,8 +1753,8 @@
       "rawCorrection": -15,
       "correction": 0,
       "pffProfile": false,
-      "seasonPffScore": null,
-      "flag": "NO_DATA_NO_MOVE",
+      "seasonPffScore": 75.8,
+      "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
     {
@@ -1787,8 +1787,8 @@
       "rawCorrection": -15,
       "correction": 0,
       "pffProfile": false,
-      "seasonPffScore": null,
-      "flag": "NO_DATA_NO_MOVE",
+      "seasonPffScore": 76.73333333333333,
+      "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
     {
@@ -1804,7 +1804,7 @@
       "rawCorrection": -15,
       "correction": 0,
       "pffProfile": true,
-      "seasonPffScore": null,
+      "seasonPffScore": 66.26666666666667,
       "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
@@ -1821,7 +1821,7 @@
       "rawCorrection": -15,
       "correction": 0,
       "pffProfile": true,
-      "seasonPffScore": null,
+      "seasonPffScore": 62.28333333333334,
       "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
@@ -1838,8 +1838,8 @@
       "rawCorrection": -15,
       "correction": 0,
       "pffProfile": false,
-      "seasonPffScore": null,
-      "flag": "NO_DATA_NO_MOVE",
+      "seasonPffScore": 73.36666666666666,
+      "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
     {
@@ -1872,7 +1872,7 @@
       "rawCorrection": -15,
       "correction": 0,
       "pffProfile": true,
-      "seasonPffScore": null,
+      "seasonPffScore": 68.13333333333333,
       "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
@@ -1886,10 +1886,10 @@
       "v4Percentile": 62.9,
       "v57Percentile": 62.9,
       "v57Delta": 0,
-      "rawCorrection": -6.48,
+      "rawCorrection": -9.88,
       "correction": 0,
       "pffProfile": true,
-      "seasonPffScore": null,
+      "seasonPffScore": 72.275,
       "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
@@ -1906,8 +1906,8 @@
       "rawCorrection": -15,
       "correction": 0,
       "pffProfile": false,
-      "seasonPffScore": null,
-      "flag": "NO_DATA_NO_MOVE",
+      "seasonPffScore": 83.5,
+      "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
     {
@@ -1923,8 +1923,8 @@
       "rawCorrection": -15,
       "correction": 0,
       "pffProfile": false,
-      "seasonPffScore": null,
-      "flag": "NO_DATA_NO_MOVE",
+      "seasonPffScore": 80.77499999999999,
+      "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
     {
@@ -1940,8 +1940,8 @@
       "rawCorrection": -15,
       "correction": 0,
       "pffProfile": false,
-      "seasonPffScore": null,
-      "flag": "NO_DATA_NO_MOVE",
+      "seasonPffScore": 62.1,
+      "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
     {
@@ -2008,8 +2008,8 @@
       "rawCorrection": -15,
       "correction": 0,
       "pffProfile": false,
-      "seasonPffScore": null,
-      "flag": "NO_DATA_NO_MOVE",
+      "seasonPffScore": 83.2,
+      "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
     {
@@ -2025,8 +2025,8 @@
       "rawCorrection": -15,
       "correction": 0,
       "pffProfile": false,
-      "seasonPffScore": null,
-      "flag": "NO_DATA_NO_MOVE",
+      "seasonPffScore": 61.47500000000001,
+      "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
     {
@@ -2076,8 +2076,8 @@
       "rawCorrection": -15,
       "correction": 0,
       "pffProfile": false,
-      "seasonPffScore": null,
-      "flag": "NO_DATA_NO_MOVE",
+      "seasonPffScore": 73.75,
+      "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
     {
@@ -2093,8 +2093,8 @@
       "rawCorrection": -15,
       "correction": 0,
       "pffProfile": false,
-      "seasonPffScore": null,
-      "flag": "NO_DATA_NO_MOVE",
+      "seasonPffScore": 73.2,
+      "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
     {
@@ -2107,10 +2107,10 @@
       "v4Percentile": 63.03,
       "v57Percentile": 63.03,
       "v57Delta": 0,
-      "rawCorrection": -6.72,
+      "rawCorrection": -11.14,
       "correction": 0,
       "pffProfile": true,
-      "seasonPffScore": null,
+      "seasonPffScore": 68.25,
       "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
@@ -2127,7 +2127,7 @@
       "rawCorrection": -15,
       "correction": 0,
       "pffProfile": true,
-      "seasonPffScore": null,
+      "seasonPffScore": 73.4,
       "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
@@ -2161,8 +2161,8 @@
       "rawCorrection": -15,
       "correction": 0,
       "pffProfile": false,
-      "seasonPffScore": null,
-      "flag": "NO_DATA_NO_MOVE",
+      "seasonPffScore": 59.9,
+      "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
     {
@@ -2260,10 +2260,10 @@
       "v4Percentile": 76.73,
       "v57Percentile": 76.73,
       "v57Delta": 0,
-      "rawCorrection": -14.99,
+      "rawCorrection": -15,
       "correction": 0,
       "pffProfile": true,
-      "seasonPffScore": null,
+      "seasonPffScore": 65.2,
       "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
@@ -2314,8 +2314,8 @@
       "rawCorrection": -15,
       "correction": 0,
       "pffProfile": false,
-      "seasonPffScore": null,
-      "flag": "NO_DATA_NO_MOVE",
+      "seasonPffScore": 71,
+      "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
     {
@@ -2365,8 +2365,8 @@
       "rawCorrection": -15,
       "correction": 0,
       "pffProfile": false,
-      "seasonPffScore": null,
-      "flag": "NO_DATA_NO_MOVE",
+      "seasonPffScore": 63.349999999999994,
+      "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
     {
@@ -2382,8 +2382,8 @@
       "rawCorrection": -15,
       "correction": 0,
       "pffProfile": false,
-      "seasonPffScore": null,
-      "flag": "NO_DATA_NO_MOVE",
+      "seasonPffScore": 66.10000000000001,
+      "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
     {
@@ -2549,11 +2549,11 @@
       "v4Percentile": 71.81,
       "v57Percentile": 71.81,
       "v57Delta": 0,
-      "rawCorrection": -14.06,
+      "rawCorrection": -15,
       "correction": 0,
       "pffProfile": false,
-      "seasonPffScore": null,
-      "flag": "NO_DATA_NO_MOVE",
+      "seasonPffScore": 70.72500000000001,
+      "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
     {
@@ -2668,10 +2668,10 @@
       "v4Percentile": 39.36,
       "v57Percentile": 39.36,
       "v57Delta": 0,
-      "rawCorrection": 7.54,
+      "rawCorrection": 6.87,
       "correction": 0,
       "pffProfile": true,
-      "seasonPffScore": null,
+      "seasonPffScore": 83.1,
       "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
@@ -2685,11 +2685,11 @@
       "v4Percentile": 67.55,
       "v57Percentile": 67.55,
       "v57Delta": 0,
-      "rawCorrection": -11.47,
+      "rawCorrection": -15,
       "correction": 0,
       "pffProfile": false,
-      "seasonPffScore": null,
-      "flag": "NO_DATA_NO_MOVE",
+      "seasonPffScore": 59.349999999999994,
+      "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
     {
@@ -2753,11 +2753,11 @@
       "v4Percentile": 65.43,
       "v57Percentile": 65.43,
       "v57Delta": 0,
-      "rawCorrection": -10.18,
+      "rawCorrection": -15,
       "correction": 0,
       "pffProfile": false,
-      "seasonPffScore": null,
-      "flag": "NO_DATA_NO_MOVE",
+      "seasonPffScore": 63,
+      "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
     {
@@ -2770,11 +2770,11 @@
       "v4Percentile": 65.56,
       "v57Percentile": 65.56,
       "v57Delta": 0,
-      "rawCorrection": -10.26,
+      "rawCorrection": -12.14,
       "correction": 0,
       "pffProfile": false,
-      "seasonPffScore": null,
-      "flag": "NO_DATA_NO_MOVE",
+      "seasonPffScore": 78.325,
+      "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
     {
@@ -2787,11 +2787,11 @@
       "v4Percentile": 67.69,
       "v57Percentile": 67.69,
       "v57Delta": 0,
-      "rawCorrection": -11.56,
+      "rawCorrection": -14.55,
       "correction": 0,
       "pffProfile": false,
-      "seasonPffScore": null,
-      "flag": "NO_DATA_NO_MOVE",
+      "seasonPffScore": 73.9,
+      "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
     {
@@ -2804,11 +2804,11 @@
       "v4Percentile": 67.82,
       "v57Percentile": 67.82,
       "v57Delta": 0,
-      "rawCorrection": -11.64,
+      "rawCorrection": -15,
       "correction": 0,
       "pffProfile": false,
-      "seasonPffScore": null,
-      "flag": "NO_DATA_NO_MOVE",
+      "seasonPffScore": 53.46666666666667,
+      "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
     {
@@ -2821,11 +2821,11 @@
       "v4Percentile": 65.69,
       "v57Percentile": 65.69,
       "v57Delta": 0,
-      "rawCorrection": -10.35,
+      "rawCorrection": -11.58,
       "correction": 0,
       "pffProfile": false,
-      "seasonPffScore": null,
-      "flag": "NO_DATA_NO_MOVE",
+      "seasonPffScore": 80.9,
+      "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
     {
@@ -2838,11 +2838,11 @@
       "v4Percentile": 65.82,
       "v57Percentile": 65.82,
       "v57Delta": 0,
-      "rawCorrection": -10.44,
+      "rawCorrection": -15,
       "correction": 0,
       "pffProfile": false,
-      "seasonPffScore": null,
-      "flag": "NO_DATA_NO_MOVE",
+      "seasonPffScore": 64.7,
+      "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
     {
@@ -2855,11 +2855,11 @@
       "v4Percentile": 65.96,
       "v57Percentile": 65.96,
       "v57Delta": 0,
-      "rawCorrection": -10.52,
+      "rawCorrection": -14,
       "correction": 0,
       "pffProfile": false,
-      "seasonPffScore": null,
-      "flag": "NO_DATA_NO_MOVE",
+      "seasonPffScore": 72,
+      "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
     {
@@ -2957,11 +2957,11 @@
       "v4Percentile": 59.97,
       "v57Percentile": 59.97,
       "v57Delta": 0,
-      "rawCorrection": -6.81,
+      "rawCorrection": -9.13,
       "correction": 0,
       "pffProfile": false,
-      "seasonPffScore": null,
-      "flag": "NO_DATA_NO_MOVE",
+      "seasonPffScore": 76.56666666666666,
+      "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
     {
@@ -3008,11 +3008,11 @@
       "v4Percentile": 61.44,
       "v57Percentile": 61.44,
       "v57Delta": 0,
-      "rawCorrection": -7.67,
+      "rawCorrection": -9.28,
       "correction": 0,
       "pffProfile": false,
-      "seasonPffScore": null,
-      "flag": "NO_DATA_NO_MOVE",
+      "seasonPffScore": 79.4,
+      "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
     {
@@ -3042,10 +3042,10 @@
       "v4Percentile": 43.22,
       "v57Percentile": 43.22,
       "v57Delta": 0,
-      "rawCorrection": 5.43,
+      "rawCorrection": 0.53,
       "correction": 0,
       "pffProfile": true,
-      "seasonPffScore": null,
+      "seasonPffScore": 66.32,
       "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
@@ -3076,11 +3076,11 @@
       "v4Percentile": 54.39,
       "v57Percentile": 54.39,
       "v57Delta": 0,
-      "rawCorrection": -3.35,
+      "rawCorrection": -8.08,
       "correction": 0,
       "pffProfile": false,
-      "seasonPffScore": null,
-      "flag": "NO_DATA_NO_MOVE",
+      "seasonPffScore": 67,
+      "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
     {
@@ -3178,11 +3178,11 @@
       "v4Percentile": 51.2,
       "v57Percentile": 51.2,
       "v57Delta": 0,
-      "rawCorrection": -1.36,
+      "rawCorrection": -4.1,
       "correction": 0,
       "pffProfile": false,
-      "seasonPffScore": null,
-      "flag": "NO_DATA_NO_MOVE",
+      "seasonPffScore": 74.9,
+      "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
     {
@@ -3195,11 +3195,11 @@
       "v4Percentile": 51.33,
       "v57Percentile": 51.33,
       "v57Delta": 0,
-      "rawCorrection": -1.45,
+      "rawCorrection": -2.27,
       "correction": 0,
       "pffProfile": false,
-      "seasonPffScore": null,
-      "flag": "NO_DATA_NO_MOVE",
+      "seasonPffScore": 82.5,
+      "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
     {
@@ -3229,10 +3229,10 @@
       "v4Percentile": 32.71,
       "v57Percentile": 32.71,
       "v57Delta": 0,
-      "rawCorrection": 12.49,
+      "rawCorrection": 8.54,
       "correction": 0,
       "pffProfile": true,
-      "seasonPffScore": null,
+      "seasonPffScore": 70.08333333333333,
       "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
@@ -3263,11 +3263,11 @@
       "v4Percentile": 51.46,
       "v57Percentile": 51.46,
       "v57Delta": 0,
-      "rawCorrection": -1.53,
+      "rawCorrection": -6.08,
       "correction": 0,
       "pffProfile": false,
-      "seasonPffScore": null,
-      "flag": "NO_DATA_NO_MOVE",
+      "seasonPffScore": 67.74,
+      "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
     {
@@ -3280,10 +3280,10 @@
       "v4Percentile": 61.57,
       "v57Percentile": 61.57,
       "v57Delta": 0,
-      "rawCorrection": -6.22,
+      "rawCorrection": -9.46,
       "correction": 0,
       "pffProfile": true,
-      "seasonPffScore": null,
+      "seasonPffScore": 72.92500000000001,
       "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
@@ -3297,10 +3297,10 @@
       "v4Percentile": 73.4,
       "v57Percentile": 73.4,
       "v57Delta": 0,
-      "rawCorrection": -13.38,
+      "rawCorrection": -15,
       "correction": 0,
       "pffProfile": true,
-      "seasonPffScore": null,
+      "seasonPffScore": 74.46000000000001,
       "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
@@ -3314,10 +3314,10 @@
       "v4Percentile": 57.31,
       "v57Percentile": 57.31,
       "v57Delta": 0,
-      "rawCorrection": -3.24,
+      "rawCorrection": -6.47,
       "correction": 0,
       "pffProfile": true,
-      "seasonPffScore": null,
+      "seasonPffScore": 73,
       "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
@@ -3501,11 +3501,11 @@
       "v4Percentile": 49.2,
       "v57Percentile": 49.2,
       "v57Delta": 0,
-      "rawCorrection": -0.14,
+      "rawCorrection": -4.62,
       "correction": 0,
       "pffProfile": false,
-      "seasonPffScore": null,
-      "flag": "NO_DATA_NO_MOVE",
+      "seasonPffScore": 68.03333333333333,
+      "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
     {
@@ -3569,11 +3569,11 @@
       "v4Percentile": 47.34,
       "v57Percentile": 47.34,
       "v57Delta": 0,
-      "rawCorrection": 0.99,
+      "rawCorrection": -1.52,
       "correction": 0,
       "pffProfile": false,
-      "seasonPffScore": null,
-      "flag": "NO_DATA_NO_MOVE",
+      "seasonPffScore": 75.83333333333333,
+      "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
     {
@@ -3603,11 +3603,11 @@
       "v4Percentile": 37.1,
       "v57Percentile": 37.1,
       "v57Delta": 0,
-      "rawCorrection": 7.4,
+      "rawCorrection": 5.36,
       "correction": 0,
       "pffProfile": false,
-      "seasonPffScore": null,
-      "flag": "NO_DATA_NO_MOVE",
+      "seasonPffScore": 77.7,
+      "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
     {
@@ -3793,7 +3793,7 @@
       "rawCorrection": 15,
       "correction": 0,
       "pffProfile": true,
-      "seasonPffScore": null,
+      "seasonPffScore": 67.25,
       "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
@@ -3926,11 +3926,11 @@
       "v4Percentile": 37.23,
       "v57Percentile": 37.23,
       "v57Delta": 0,
-      "rawCorrection": 7.32,
+      "rawCorrection": 2.86,
       "correction": 0,
       "pffProfile": false,
-      "seasonPffScore": null,
-      "flag": "NO_DATA_NO_MOVE",
+      "seasonPffScore": 68.1,
+      "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
     {
@@ -3943,10 +3943,10 @@
       "v4Percentile": 54.52,
       "v57Percentile": 54.52,
       "v57Delta": 0,
-      "rawCorrection": -1.65,
+      "rawCorrection": -6.37,
       "correction": 0,
       "pffProfile": true,
-      "seasonPffScore": null,
+      "seasonPffScore": 67.05000000000001,
       "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
@@ -3960,11 +3960,11 @@
       "v4Percentile": 37.37,
       "v57Percentile": 37.37,
       "v57Delta": 0,
-      "rawCorrection": 7.23,
+      "rawCorrection": 3.19,
       "correction": 0,
       "pffProfile": false,
-      "seasonPffScore": null,
-      "flag": "NO_DATA_NO_MOVE",
+      "seasonPffScore": 69.73333333333333,
+      "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
     {
@@ -3977,11 +3977,11 @@
       "v4Percentile": 41.22,
       "v57Percentile": 41.22,
       "v57Delta": 0,
-      "rawCorrection": 4.8,
+      "rawCorrection": -3.7,
       "correction": 0,
       "pffProfile": false,
-      "seasonPffScore": null,
-      "flag": "NO_DATA_NO_MOVE",
+      "seasonPffScore": 52.04,
+      "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
     {
@@ -4133,7 +4133,7 @@
       "rawCorrection": 15,
       "correction": 0,
       "pffProfile": true,
-      "seasonPffScore": null,
+      "seasonPffScore": 80.63999999999999,
       "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
@@ -4147,11 +4147,11 @@
       "v4Percentile": 35.64,
       "v57Percentile": 35.64,
       "v57Delta": 0,
-      "rawCorrection": 8.28,
+      "rawCorrection": -0.79,
       "correction": 0,
       "pffProfile": false,
-      "seasonPffScore": null,
-      "flag": "NO_DATA_NO_MOVE",
+      "seasonPffScore": 49.79999999999999,
+      "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
     {
@@ -4181,11 +4181,11 @@
       "v4Percentile": 35.77,
       "v57Percentile": 35.77,
       "v57Delta": 0,
-      "rawCorrection": 8.19,
+      "rawCorrection": 3.6,
       "correction": 0,
       "pffProfile": false,
-      "seasonPffScore": null,
-      "flag": "NO_DATA_NO_MOVE",
+      "seasonPffScore": 67.55,
+      "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
     {
@@ -4198,11 +4198,11 @@
       "v4Percentile": 32.85,
       "v57Percentile": 32.85,
       "v57Delta": 0,
-      "rawCorrection": 10.02,
+      "rawCorrection": 4.96,
       "correction": 0,
       "pffProfile": false,
-      "seasonPffScore": null,
-      "flag": "NO_DATA_NO_MOVE",
+      "seasonPffScore": 65.7,
+      "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
     {
@@ -4300,11 +4300,11 @@
       "v4Percentile": 29.12,
       "v57Percentile": 29.12,
       "v57Delta": 0,
-      "rawCorrection": 12.29,
+      "rawCorrection": 8.64,
       "correction": 0,
       "pffProfile": false,
-      "seasonPffScore": null,
-      "flag": "NO_DATA_NO_MOVE",
+      "seasonPffScore": 71.3,
+      "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
     {
@@ -4538,11 +4538,11 @@
       "v4Percentile": 29.26,
       "v57Percentile": 29.26,
       "v57Delta": 0,
-      "rawCorrection": 12.2,
+      "rawCorrection": 8.58,
       "correction": 0,
       "pffProfile": false,
-      "seasonPffScore": null,
-      "flag": "NO_DATA_NO_MOVE",
+      "seasonPffScore": 71.4,
+      "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
     {
@@ -4555,10 +4555,10 @@
       "v4Percentile": 54.65,
       "v57Percentile": 54.65,
       "v57Delta": 0,
-      "rawCorrection": -2.17,
+      "rawCorrection": -5.62,
       "correction": 0,
       "pffProfile": true,
-      "seasonPffScore": null,
+      "seasonPffScore": 72.1,
       "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
@@ -4589,11 +4589,11 @@
       "v4Percentile": 31.38,
       "v57Percentile": 31.38,
       "v57Delta": 0,
-      "rawCorrection": 10.89,
+      "rawCorrection": 8.85,
       "correction": 0,
       "pffProfile": false,
-      "seasonPffScore": null,
-      "flag": "NO_DATA_NO_MOVE",
+      "seasonPffScore": 77.66666666666667,
+      "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
     {
@@ -4640,11 +4640,11 @@
       "v4Percentile": 29.39,
       "v57Percentile": 29.39,
       "v57Delta": 0,
-      "rawCorrection": 12.11,
+      "rawCorrection": 6.32,
       "correction": 0,
       "pffProfile": false,
-      "seasonPffScore": null,
-      "flag": "NO_DATA_NO_MOVE",
+      "seasonPffScore": 62.8,
+      "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
     {
@@ -4657,11 +4657,11 @@
       "v4Percentile": 29.52,
       "v57Percentile": 29.52,
       "v57Delta": 0,
-      "rawCorrection": 12.03,
+      "rawCorrection": 8.69,
       "correction": 0,
       "pffProfile": false,
-      "seasonPffScore": null,
-      "flag": "NO_DATA_NO_MOVE",
+      "seasonPffScore": 72.525,
+      "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
     {
@@ -4674,11 +4674,11 @@
       "v4Percentile": 29.65,
       "v57Percentile": 29.65,
       "v57Delta": 0,
-      "rawCorrection": 11.94,
+      "rawCorrection": 9.72,
       "correction": 0,
       "pffProfile": false,
-      "seasonPffScore": null,
-      "flag": "NO_DATA_NO_MOVE",
+      "seasonPffScore": 76.96000000000001,
+      "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
     {
@@ -4691,10 +4691,10 @@
       "v4Percentile": 24.07,
       "v57Percentile": 24.07,
       "v57Delta": 0,
-      "rawCorrection": 15,
+      "rawCorrection": 12.73,
       "correction": 0,
       "pffProfile": true,
-      "seasonPffScore": null,
+      "seasonPffScore": 68.8,
       "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
@@ -4708,11 +4708,11 @@
       "v4Percentile": 29.79,
       "v57Percentile": 29.79,
       "v57Delta": 0,
-      "rawCorrection": 11.86,
+      "rawCorrection": 7.99,
       "correction": 0,
       "pffProfile": false,
-      "seasonPffScore": null,
-      "flag": "NO_DATA_NO_MOVE",
+      "seasonPffScore": 70.43333333333334,
+      "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
     {
@@ -4827,11 +4827,11 @@
       "v4Percentile": 25.4,
       "v57Percentile": 25.4,
       "v57Delta": 0,
-      "rawCorrection": 14.56,
+      "rawCorrection": 10.94,
       "correction": 0,
       "pffProfile": false,
-      "seasonPffScore": null,
-      "flag": "NO_DATA_NO_MOVE",
+      "seasonPffScore": 71.4,
+      "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
     {
@@ -4844,10 +4844,10 @@
       "v4Percentile": 31.25,
       "v57Percentile": 31.25,
       "v57Delta": 0,
-      "rawCorrection": 12.69,
+      "rawCorrection": 6.98,
       "correction": 0,
       "pffProfile": true,
-      "seasonPffScore": null,
+      "seasonPffScore": 63.1,
       "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
@@ -5014,11 +5014,11 @@
       "v4Percentile": 22.21,
       "v57Percentile": 22.21,
       "v57Delta": 0,
-      "rawCorrection": 15,
+      "rawCorrection": 10.78,
       "correction": 0,
       "pffProfile": false,
-      "seasonPffScore": null,
-      "flag": "NO_DATA_NO_MOVE",
+      "seasonPffScore": 62.814285714285724,
+      "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
     {
@@ -5065,11 +5065,11 @@
       "v4Percentile": 25.53,
       "v57Percentile": 25.53,
       "v57Delta": 0,
-      "rawCorrection": 14.48,
+      "rawCorrection": 10.85,
       "correction": 0,
       "pffProfile": false,
-      "seasonPffScore": null,
-      "flag": "NO_DATA_NO_MOVE",
+      "seasonPffScore": 71.4,
+      "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
     {
@@ -5150,11 +5150,11 @@
       "v4Percentile": 22.34,
       "v57Percentile": 22.34,
       "v57Delta": 0,
-      "rawCorrection": 15,
+      "rawCorrection": 10.56,
       "correction": 0,
       "pffProfile": false,
-      "seasonPffScore": null,
-      "flag": "NO_DATA_NO_MOVE",
+      "seasonPffScore": 62.275,
+      "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
     {
@@ -5167,11 +5167,11 @@
       "v4Percentile": 25.66,
       "v57Percentile": 25.66,
       "v57Delta": 0,
-      "rawCorrection": 14.39,
+      "rawCorrection": 9.96,
       "correction": 0,
       "pffProfile": false,
-      "seasonPffScore": null,
-      "flag": "NO_DATA_NO_MOVE",
+      "seasonPffScore": 68.2,
+      "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
     {
@@ -5184,10 +5184,10 @@
       "v4Percentile": 25.93,
       "v57Percentile": 25.93,
       "v57Delta": 0,
-      "rawCorrection": 15,
+      "rawCorrection": 12.23,
       "correction": 0,
       "pffProfile": true,
-      "seasonPffScore": null,
+      "seasonPffScore": 72.725,
       "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
@@ -5201,11 +5201,11 @@
       "v4Percentile": 22.47,
       "v57Percentile": 22.47,
       "v57Delta": 0,
-      "rawCorrection": 15,
+      "rawCorrection": 13.2,
       "correction": 0,
       "pffProfile": false,
-      "seasonPffScore": null,
-      "flag": "NO_DATA_NO_MOVE",
+      "seasonPffScore": 73.13333333333334,
+      "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
     {
@@ -5476,8 +5476,8 @@
       "rawCorrection": 15,
       "correction": 0,
       "pffProfile": false,
-      "seasonPffScore": null,
-      "flag": "NO_DATA_NO_MOVE",
+      "seasonPffScore": 64.73333333333333,
+      "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
     {
@@ -5490,11 +5490,11 @@
       "v4Percentile": 17.82,
       "v57Percentile": 17.82,
       "v57Delta": 0,
-      "rawCorrection": 15,
+      "rawCorrection": 11.41,
       "correction": 0,
       "pffProfile": false,
-      "seasonPffScore": null,
-      "flag": "NO_DATA_NO_MOVE",
+      "seasonPffScore": 54.55,
+      "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
     {
@@ -5524,11 +5524,11 @@
       "v4Percentile": 20.48,
       "v57Percentile": 20.48,
       "v57Delta": 0,
-      "rawCorrection": 15,
+      "rawCorrection": 11.6,
       "correction": 0,
       "pffProfile": false,
-      "seasonPffScore": null,
-      "flag": "NO_DATA_NO_MOVE",
+      "seasonPffScore": 61.9,
+      "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
     {
@@ -5541,11 +5541,11 @@
       "v4Percentile": 20.61,
       "v57Percentile": 20.61,
       "v57Delta": 0,
-      "rawCorrection": 15,
+      "rawCorrection": 7.98,
       "correction": 0,
       "pffProfile": false,
-      "seasonPffScore": null,
-      "flag": "NO_DATA_NO_MOVE",
+      "seasonPffScore": 47.849999999999994,
+      "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
     {
@@ -5561,8 +5561,8 @@
       "rawCorrection": 15,
       "correction": 0,
       "pffProfile": false,
-      "seasonPffScore": null,
-      "flag": "NO_DATA_NO_MOVE",
+      "seasonPffScore": 73.4,
+      "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
     {
@@ -5575,11 +5575,11 @@
       "v4Percentile": 20.74,
       "v57Percentile": 20.74,
       "v57Delta": 0,
-      "rawCorrection": 15,
+      "rawCorrection": 12.86,
       "correction": 0,
       "pffProfile": false,
-      "seasonPffScore": null,
-      "flag": "NO_DATA_NO_MOVE",
+      "seasonPffScore": 67.6,
+      "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
     {
@@ -5592,11 +5592,11 @@
       "v4Percentile": 17.95,
       "v57Percentile": 17.95,
       "v57Delta": 0,
-      "rawCorrection": 15,
+      "rawCorrection": 12.59,
       "correction": 0,
       "pffProfile": false,
-      "seasonPffScore": null,
-      "flag": "NO_DATA_NO_MOVE",
+      "seasonPffScore": 59.574999999999996,
+      "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
     {
@@ -5609,11 +5609,11 @@
       "v4Percentile": 15.96,
       "v57Percentile": 15.96,
       "v57Delta": 0,
-      "rawCorrection": 15,
+      "rawCorrection": 11.1,
       "correction": 0,
       "pffProfile": false,
-      "seasonPffScore": null,
-      "flag": "NO_DATA_NO_MOVE",
+      "seasonPffScore": 48.8,
+      "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
     {
@@ -5867,7 +5867,7 @@
       "rawCorrection": 15,
       "correction": 0,
       "pffProfile": true,
-      "seasonPffScore": null,
+      "seasonPffScore": 64.725,
       "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
@@ -5901,7 +5901,7 @@
       "rawCorrection": 15,
       "correction": 0,
       "pffProfile": true,
-      "seasonPffScore": null,
+      "seasonPffScore": 56.82000000000001,
       "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
@@ -5918,8 +5918,8 @@
       "rawCorrection": 15,
       "correction": 0,
       "pffProfile": false,
-      "seasonPffScore": null,
-      "flag": "NO_DATA_NO_MOVE",
+      "seasonPffScore": 63.325,
+      "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
     {
@@ -5932,11 +5932,11 @@
       "v4Percentile": 13.56,
       "v57Percentile": 13.56,
       "v57Delta": 0,
-      "rawCorrection": 15,
+      "rawCorrection": 14.98,
       "correction": 0,
       "pffProfile": false,
-      "seasonPffScore": null,
-      "flag": "NO_DATA_NO_MOVE",
+      "seasonPffScore": 58.53333333333334,
+      "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
     {
@@ -5952,8 +5952,8 @@
       "rawCorrection": 15,
       "correction": 0,
       "pffProfile": false,
-      "seasonPffScore": null,
-      "flag": "NO_DATA_NO_MOVE",
+      "seasonPffScore": 65.45,
+      "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
     {
@@ -6003,8 +6003,8 @@
       "rawCorrection": 15,
       "correction": 0,
       "pffProfile": false,
-      "seasonPffScore": null,
-      "flag": "NO_DATA_NO_MOVE",
+      "seasonPffScore": 68.05,
+      "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
     {
@@ -6020,8 +6020,8 @@
       "rawCorrection": 15,
       "correction": 0,
       "pffProfile": false,
-      "seasonPffScore": null,
-      "flag": "NO_DATA_NO_MOVE",
+      "seasonPffScore": 67.35,
+      "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
     {
@@ -6139,7 +6139,7 @@
       "rawCorrection": 15,
       "correction": 0,
       "pffProfile": true,
-      "seasonPffScore": null,
+      "seasonPffScore": 76.1,
       "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
@@ -6292,8 +6292,8 @@
       "rawCorrection": 15,
       "correction": 0,
       "pffProfile": false,
-      "seasonPffScore": null,
-      "flag": "NO_DATA_NO_MOVE",
+      "seasonPffScore": 60.349999999999994,
+      "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
     {
@@ -6445,8 +6445,8 @@
       "rawCorrection": 15,
       "correction": 0,
       "pffProfile": false,
-      "seasonPffScore": null,
-      "flag": "NO_DATA_NO_MOVE",
+      "seasonPffScore": 66.2,
+      "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
     {
@@ -6496,8 +6496,8 @@
       "rawCorrection": 15,
       "correction": 0,
       "pffProfile": false,
-      "seasonPffScore": null,
-      "flag": "NO_DATA_NO_MOVE",
+      "seasonPffScore": 65.35,
+      "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
     {
@@ -6544,11 +6544,11 @@
       "v4Percentile": 13.03,
       "v57Percentile": 13.03,
       "v57Delta": 0,
-      "rawCorrection": 15,
+      "rawCorrection": 13.15,
       "correction": 0,
       "pffProfile": false,
-      "seasonPffScore": null,
-      "flag": "NO_DATA_NO_MOVE",
+      "seasonPffScore": 50.43333333333334,
+      "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
     {
@@ -6581,8 +6581,8 @@
       "rawCorrection": 15,
       "correction": 0,
       "pffProfile": false,
-      "seasonPffScore": null,
-      "flag": "NO_DATA_NO_MOVE",
+      "seasonPffScore": 67.44999999999999,
+      "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
     {
@@ -6666,8 +6666,8 @@
       "rawCorrection": 15,
       "correction": 0,
       "pffProfile": false,
-      "seasonPffScore": null,
-      "flag": "NO_DATA_NO_MOVE",
+      "seasonPffScore": 55.900000000000006,
+      "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
     {
@@ -6717,8 +6717,8 @@
       "rawCorrection": 15,
       "correction": 0,
       "pffProfile": false,
-      "seasonPffScore": null,
-      "flag": "NO_DATA_NO_MOVE",
+      "seasonPffScore": 57.425,
+      "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
     {
@@ -6819,8 +6819,8 @@
       "rawCorrection": 15,
       "correction": 0,
       "pffProfile": false,
-      "seasonPffScore": null,
-      "flag": "NO_DATA_NO_MOVE",
+      "seasonPffScore": 64.8,
+      "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
     {
@@ -6887,8 +6887,8 @@
       "rawCorrection": 15,
       "correction": 0,
       "pffProfile": false,
-      "seasonPffScore": null,
-      "flag": "NO_DATA_NO_MOVE",
+      "seasonPffScore": 64.62,
+      "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
     {
@@ -6904,8 +6904,8 @@
       "rawCorrection": 15,
       "correction": 0,
       "pffProfile": false,
-      "seasonPffScore": null,
-      "flag": "NO_DATA_NO_MOVE",
+      "seasonPffScore": 56.56666666666666,
+      "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
     {
@@ -6972,8 +6972,8 @@
       "rawCorrection": 15,
       "correction": 0,
       "pffProfile": false,
-      "seasonPffScore": null,
-      "flag": "NO_DATA_NO_MOVE",
+      "seasonPffScore": 64.45,
+      "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
     {
@@ -7074,8 +7074,8 @@
       "rawCorrection": 15,
       "correction": 0,
       "pffProfile": false,
-      "seasonPffScore": null,
-      "flag": "NO_DATA_NO_MOVE",
+      "seasonPffScore": 67.75,
+      "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
     {
@@ -7108,7 +7108,7 @@
       "rawCorrection": 15,
       "correction": 0,
       "pffProfile": true,
-      "seasonPffScore": null,
+      "seasonPffScore": 73.3,
       "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
@@ -7125,8 +7125,8 @@
       "rawCorrection": 15,
       "correction": 0,
       "pffProfile": false,
-      "seasonPffScore": null,
-      "flag": "NO_DATA_NO_MOVE",
+      "seasonPffScore": 67.175,
+      "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
     {
@@ -7156,11 +7156,11 @@
       "v4Percentile": 11.04,
       "v57Percentile": 11.04,
       "v57Delta": 0,
-      "rawCorrection": 15,
+      "rawCorrection": 14.13,
       "correction": 0,
       "pffProfile": false,
-      "seasonPffScore": null,
-      "flag": "NO_DATA_NO_MOVE",
+      "seasonPffScore": 50.18333333333333,
+      "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
     {
@@ -7176,7 +7176,7 @@
       "rawCorrection": 15,
       "correction": 0,
       "pffProfile": true,
-      "seasonPffScore": null,
+      "seasonPffScore": 66.92,
       "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
@@ -7193,8 +7193,8 @@
       "rawCorrection": 15,
       "correction": 0,
       "pffProfile": false,
-      "seasonPffScore": null,
-      "flag": "NO_DATA_NO_MOVE",
+      "seasonPffScore": 69.19999999999999,
+      "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
     {
@@ -7258,11 +7258,11 @@
       "v4Percentile": 11.84,
       "v57Percentile": 11.84,
       "v57Delta": 0,
-      "rawCorrection": 15,
+      "rawCorrection": 14.56,
       "correction": 0,
       "pffProfile": false,
-      "seasonPffScore": null,
-      "flag": "NO_DATA_NO_MOVE",
+      "seasonPffScore": 53.7,
+      "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
     {
@@ -7686,8 +7686,8 @@
       "rawCorrection": 15,
       "correction": 0,
       "pffProfile": false,
-      "seasonPffScore": null,
-      "flag": "NO_DATA_NO_MOVE",
+      "seasonPffScore": 63.625,
+      "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
     {
@@ -7703,8 +7703,8 @@
       "rawCorrection": 15,
       "correction": 0,
       "pffProfile": false,
-      "seasonPffScore": null,
-      "flag": "NO_DATA_NO_MOVE",
+      "seasonPffScore": 66.9,
+      "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
     {
@@ -7737,8 +7737,8 @@
       "rawCorrection": 15,
       "correction": 0,
       "pffProfile": false,
-      "seasonPffScore": null,
-      "flag": "NO_DATA_NO_MOVE",
+      "seasonPffScore": 66.8,
+      "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
     {
@@ -7788,8 +7788,8 @@
       "rawCorrection": 15,
       "correction": 0,
       "pffProfile": false,
-      "seasonPffScore": null,
-      "flag": "NO_DATA_NO_MOVE",
+      "seasonPffScore": 60.85,
+      "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
     {
@@ -7856,8 +7856,8 @@
       "rawCorrection": 15,
       "correction": 0,
       "pffProfile": false,
-      "seasonPffScore": null,
-      "flag": "NO_DATA_NO_MOVE",
+      "seasonPffScore": 57.7,
+      "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
     {
@@ -7890,8 +7890,8 @@
       "rawCorrection": 15,
       "correction": 0,
       "pffProfile": false,
-      "seasonPffScore": null,
-      "flag": "NO_DATA_NO_MOVE",
+      "seasonPffScore": 54.8,
+      "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
     {
@@ -7924,8 +7924,8 @@
       "rawCorrection": 15,
       "correction": 0,
       "pffProfile": false,
-      "seasonPffScore": null,
-      "flag": "NO_DATA_NO_MOVE",
+      "seasonPffScore": 67.75,
+      "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
     {
@@ -7941,8 +7941,8 @@
       "rawCorrection": 15,
       "correction": 0,
       "pffProfile": false,
-      "seasonPffScore": null,
-      "flag": "NO_DATA_NO_MOVE",
+      "seasonPffScore": 59.8,
+      "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
     {
@@ -7958,8 +7958,8 @@
       "rawCorrection": 15,
       "correction": 0,
       "pffProfile": false,
-      "seasonPffScore": null,
-      "flag": "NO_DATA_NO_MOVE",
+      "seasonPffScore": 75.35,
+      "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
     {
@@ -8026,8 +8026,8 @@
       "rawCorrection": 15,
       "correction": 0,
       "pffProfile": false,
-      "seasonPffScore": null,
-      "flag": "NO_DATA_NO_MOVE",
+      "seasonPffScore": 53.866666666666674,
+      "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
     {
@@ -8074,11 +8074,11 @@
       "v4Percentile": 10.51,
       "v57Percentile": 10.51,
       "v57Delta": 0,
-      "rawCorrection": 15,
+      "rawCorrection": 12.94,
       "correction": 0,
       "pffProfile": false,
-      "seasonPffScore": null,
-      "flag": "NO_DATA_NO_MOVE",
+      "seasonPffScore": 44.3,
+      "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
     {
@@ -8485,8 +8485,8 @@
       "rawCorrection": 15,
       "correction": 0,
       "pffProfile": false,
-      "seasonPffScore": null,
-      "flag": "NO_DATA_NO_MOVE",
+      "seasonPffScore": 58.73333333333333,
+      "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
     {
@@ -8536,8 +8536,8 @@
       "rawCorrection": 15,
       "correction": 0,
       "pffProfile": false,
-      "seasonPffScore": null,
-      "flag": "NO_DATA_NO_MOVE",
+      "seasonPffScore": 59.9,
+      "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
     {
@@ -8570,8 +8570,8 @@
       "rawCorrection": 15,
       "correction": 0,
       "pffProfile": false,
-      "seasonPffScore": null,
-      "flag": "NO_DATA_NO_MOVE",
+      "seasonPffScore": 59.2,
+      "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
     {
@@ -8757,8 +8757,8 @@
       "rawCorrection": 15,
       "correction": 0,
       "pffProfile": false,
-      "seasonPffScore": null,
-      "flag": "NO_DATA_NO_MOVE",
+      "seasonPffScore": 59.3,
+      "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
     {
@@ -8893,8 +8893,8 @@
       "rawCorrection": 15,
       "correction": 0,
       "pffProfile": false,
-      "seasonPffScore": null,
-      "flag": "NO_DATA_NO_MOVE",
+      "seasonPffScore": 65.76666666666667,
+      "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
     {
@@ -8978,8 +8978,8 @@
       "rawCorrection": 15,
       "correction": 0,
       "pffProfile": false,
-      "seasonPffScore": null,
-      "flag": "NO_DATA_NO_MOVE",
+      "seasonPffScore": 58.85,
+      "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
     {
@@ -9097,8 +9097,8 @@
       "rawCorrection": 15,
       "correction": 0,
       "pffProfile": false,
-      "seasonPffScore": null,
-      "flag": "NO_DATA_NO_MOVE",
+      "seasonPffScore": 65.93333333333332,
+      "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
     {
@@ -9114,8 +9114,8 @@
       "rawCorrection": 15,
       "correction": 0,
       "pffProfile": false,
-      "seasonPffScore": null,
-      "flag": "NO_DATA_NO_MOVE",
+      "seasonPffScore": 51.5,
+      "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
     {
@@ -9182,8 +9182,8 @@
       "rawCorrection": 15,
       "correction": 0,
       "pffProfile": false,
-      "seasonPffScore": null,
-      "flag": "NO_DATA_NO_MOVE",
+      "seasonPffScore": 52.324999999999996,
+      "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
     {
@@ -9199,8 +9199,8 @@
       "rawCorrection": 15,
       "correction": 0,
       "pffProfile": false,
-      "seasonPffScore": null,
-      "flag": "NO_DATA_NO_MOVE",
+      "seasonPffScore": 57.5,
+      "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
     {
@@ -9505,8 +9505,8 @@
       "rawCorrection": 15,
       "correction": 0,
       "pffProfile": false,
-      "seasonPffScore": null,
-      "flag": "NO_DATA_NO_MOVE",
+      "seasonPffScore": 63.77499999999999,
+      "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
     {
@@ -9539,8 +9539,8 @@
       "rawCorrection": 15,
       "correction": 0,
       "pffProfile": false,
-      "seasonPffScore": null,
-      "flag": "NO_DATA_NO_MOVE",
+      "seasonPffScore": 66.51666666666667,
+      "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
     {
@@ -9590,8 +9590,8 @@
       "rawCorrection": 15,
       "correction": 0,
       "pffProfile": false,
-      "seasonPffScore": null,
-      "flag": "NO_DATA_NO_MOVE",
+      "seasonPffScore": 63.2,
+      "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
     {
@@ -9675,7 +9675,7 @@
       "rawCorrection": 15,
       "correction": 0,
       "pffProfile": true,
-      "seasonPffScore": null,
+      "seasonPffScore": 70.89999999999999,
       "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
@@ -10287,8 +10287,8 @@
       "rawCorrection": 15,
       "correction": 0,
       "pffProfile": false,
-      "seasonPffScore": null,
-      "flag": "NO_DATA_NO_MOVE",
+      "seasonPffScore": 62.4,
+      "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
     {
@@ -10304,7 +10304,7 @@
       "rawCorrection": 15,
       "correction": 0,
       "pffProfile": true,
-      "seasonPffScore": null,
+      "seasonPffScore": 61.9,
       "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
@@ -10389,8 +10389,8 @@
       "rawCorrection": 15,
       "correction": 0,
       "pffProfile": false,
-      "seasonPffScore": null,
-      "flag": "NO_DATA_NO_MOVE",
+      "seasonPffScore": 55.040000000000006,
+      "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
     {
@@ -10525,8 +10525,8 @@
       "rawCorrection": 15,
       "correction": 0,
       "pffProfile": false,
-      "seasonPffScore": null,
-      "flag": "NO_DATA_NO_MOVE",
+      "seasonPffScore": 64.85,
+      "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
     {
@@ -10661,8 +10661,8 @@
       "rawCorrection": 15,
       "correction": 0,
       "pffProfile": false,
-      "seasonPffScore": null,
-      "flag": "NO_DATA_NO_MOVE",
+      "seasonPffScore": 67.35,
+      "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
     {
@@ -11069,8 +11069,8 @@
       "rawCorrection": 15,
       "correction": 0,
       "pffProfile": false,
-      "seasonPffScore": null,
-      "flag": "NO_DATA_NO_MOVE",
+      "seasonPffScore": 57.550000000000004,
+      "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
     {
@@ -11086,8 +11086,8 @@
       "rawCorrection": 15,
       "correction": 0,
       "pffProfile": false,
-      "seasonPffScore": null,
-      "flag": "NO_DATA_NO_MOVE",
+      "seasonPffScore": 62,
+      "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
     {
@@ -11154,8 +11154,8 @@
       "rawCorrection": 15,
       "correction": 0,
       "pffProfile": false,
-      "seasonPffScore": null,
-      "flag": "NO_DATA_NO_MOVE",
+      "seasonPffScore": 60.05,
+      "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
     {
@@ -11443,8 +11443,8 @@
       "rawCorrection": 15,
       "correction": 0,
       "pffProfile": false,
-      "seasonPffScore": null,
-      "flag": "NO_DATA_NO_MOVE",
+      "seasonPffScore": 56.7,
+      "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
     {
@@ -11460,8 +11460,8 @@
       "rawCorrection": 15,
       "correction": 0,
       "pffProfile": false,
-      "seasonPffScore": null,
-      "flag": "NO_DATA_NO_MOVE",
+      "seasonPffScore": 62.05,
+      "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
     {
@@ -11613,8 +11613,8 @@
       "rawCorrection": 15,
       "correction": 0,
       "pffProfile": false,
-      "seasonPffScore": null,
-      "flag": "NO_DATA_NO_MOVE",
+      "seasonPffScore": 58.23333333333333,
+      "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
     {
@@ -11715,8 +11715,8 @@
       "rawCorrection": 15,
       "correction": 0,
       "pffProfile": false,
-      "seasonPffScore": null,
-      "flag": "NO_DATA_NO_MOVE",
+      "seasonPffScore": 57.3,
+      "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
     {
@@ -11749,8 +11749,8 @@
       "rawCorrection": 15,
       "correction": 0,
       "pffProfile": false,
-      "seasonPffScore": null,
-      "flag": "NO_DATA_NO_MOVE",
+      "seasonPffScore": 56.720000000000006,
+      "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
     {
@@ -11936,8 +11936,8 @@
       "rawCorrection": 15,
       "correction": 0,
       "pffProfile": false,
-      "seasonPffScore": null,
-      "flag": "NO_DATA_NO_MOVE",
+      "seasonPffScore": 60.76666666666667,
+      "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
     {
@@ -12055,8 +12055,8 @@
       "rawCorrection": 15,
       "correction": 0,
       "pffProfile": false,
-      "seasonPffScore": null,
-      "flag": "NO_DATA_NO_MOVE",
+      "seasonPffScore": 55.11666666666667,
+      "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
     {
@@ -12089,8 +12089,8 @@
       "rawCorrection": 15,
       "correction": 0,
       "pffProfile": false,
-      "seasonPffScore": null,
-      "flag": "NO_DATA_NO_MOVE",
+      "seasonPffScore": 54.05,
+      "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
     {
@@ -12106,8 +12106,8 @@
       "rawCorrection": 15,
       "correction": 0,
       "pffProfile": false,
-      "seasonPffScore": null,
-      "flag": "NO_DATA_NO_MOVE",
+      "seasonPffScore": 66.3,
+      "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
     {
@@ -12157,8 +12157,8 @@
       "rawCorrection": 15,
       "correction": 0,
       "pffProfile": false,
-      "seasonPffScore": null,
-      "flag": "NO_DATA_NO_MOVE",
+      "seasonPffScore": 57.3,
+      "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
     {
@@ -12191,8 +12191,8 @@
       "rawCorrection": 15,
       "correction": 0,
       "pffProfile": false,
-      "seasonPffScore": null,
-      "flag": "NO_DATA_NO_MOVE",
+      "seasonPffScore": 53.4,
+      "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
     {
@@ -12259,8 +12259,8 @@
       "rawCorrection": 15,
       "correction": 0,
       "pffProfile": false,
-      "seasonPffScore": null,
-      "flag": "NO_DATA_NO_MOVE",
+      "seasonPffScore": 62,
+      "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
     {
@@ -12276,8 +12276,8 @@
       "rawCorrection": 15,
       "correction": 0,
       "pffProfile": false,
-      "seasonPffScore": null,
-      "flag": "NO_DATA_NO_MOVE",
+      "seasonPffScore": 64.6,
+      "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
     {
@@ -12327,8 +12327,8 @@
       "rawCorrection": 15,
       "correction": 0,
       "pffProfile": false,
-      "seasonPffScore": null,
-      "flag": "NO_DATA_NO_MOVE",
+      "seasonPffScore": 55.45,
+      "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
     {
@@ -12463,8 +12463,8 @@
       "rawCorrection": 15,
       "correction": 0,
       "pffProfile": false,
-      "seasonPffScore": null,
-      "flag": "NO_DATA_NO_MOVE",
+      "seasonPffScore": 63.166666666666664,
+      "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
     {
@@ -12548,8 +12548,8 @@
       "rawCorrection": 15,
       "correction": 0,
       "pffProfile": false,
-      "seasonPffScore": null,
-      "flag": "NO_DATA_NO_MOVE",
+      "seasonPffScore": 57.5,
+      "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
     {
@@ -12582,8 +12582,8 @@
       "rawCorrection": 15,
       "correction": 0,
       "pffProfile": false,
-      "seasonPffScore": null,
-      "flag": "NO_DATA_NO_MOVE",
+      "seasonPffScore": 54.1,
+      "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
     {
@@ -12616,8 +12616,8 @@
       "rawCorrection": 15,
       "correction": 0,
       "pffProfile": false,
-      "seasonPffScore": null,
-      "flag": "NO_DATA_NO_MOVE",
+      "seasonPffScore": 51,
+      "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
     {
@@ -12701,7 +12701,7 @@
       "rawCorrection": 15,
       "correction": 0,
       "pffProfile": true,
-      "seasonPffScore": null,
+      "seasonPffScore": 62.825,
       "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
@@ -12854,8 +12854,8 @@
       "rawCorrection": 15,
       "correction": 0,
       "pffProfile": false,
-      "seasonPffScore": null,
-      "flag": "NO_DATA_NO_MOVE",
+      "seasonPffScore": 67.36666666666666,
+      "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
     {
@@ -12905,8 +12905,8 @@
       "rawCorrection": 15,
       "correction": 0,
       "pffProfile": false,
-      "seasonPffScore": null,
-      "flag": "NO_DATA_NO_MOVE",
+      "seasonPffScore": 59.25,
+      "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
     {
@@ -13007,8 +13007,8 @@
       "rawCorrection": 15,
       "correction": 0,
       "pffProfile": false,
-      "seasonPffScore": null,
-      "flag": "NO_DATA_NO_MOVE",
+      "seasonPffScore": 52.599999999999994,
+      "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
     {
@@ -13041,8 +13041,8 @@
       "rawCorrection": 15,
       "correction": 0,
       "pffProfile": false,
-      "seasonPffScore": null,
-      "flag": "NO_DATA_NO_MOVE",
+      "seasonPffScore": 54,
+      "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
     {
@@ -13075,8 +13075,8 @@
       "rawCorrection": 15,
       "correction": 0,
       "pffProfile": false,
-      "seasonPffScore": null,
-      "flag": "NO_DATA_NO_MOVE",
+      "seasonPffScore": 62.6,
+      "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
     {
@@ -13143,8 +13143,8 @@
       "rawCorrection": 15,
       "correction": 0,
       "pffProfile": false,
-      "seasonPffScore": null,
-      "flag": "NO_DATA_NO_MOVE",
+      "seasonPffScore": 47.6,
+      "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
     {
@@ -13211,8 +13211,8 @@
       "rawCorrection": 15,
       "correction": 0,
       "pffProfile": false,
-      "seasonPffScore": null,
-      "flag": "NO_DATA_NO_MOVE",
+      "seasonPffScore": 49.7,
+      "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
     {
@@ -13534,8 +13534,8 @@
       "rawCorrection": 15,
       "correction": 0,
       "pffProfile": false,
-      "seasonPffScore": null,
-      "flag": "NO_DATA_NO_MOVE",
+      "seasonPffScore": 61.699999999999996,
+      "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
     {
@@ -13585,8 +13585,8 @@
       "rawCorrection": 15,
       "correction": 0,
       "pffProfile": false,
-      "seasonPffScore": null,
-      "flag": "NO_DATA_NO_MOVE",
+      "seasonPffScore": 65.6,
+      "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
     {
@@ -13670,8 +13670,8 @@
       "rawCorrection": 15,
       "correction": 0,
       "pffProfile": false,
-      "seasonPffScore": null,
-      "flag": "NO_DATA_NO_MOVE",
+      "seasonPffScore": 54.9,
+      "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
     {
@@ -13891,8 +13891,8 @@
       "rawCorrection": 15,
       "correction": 0,
       "pffProfile": false,
-      "seasonPffScore": null,
-      "flag": "NO_DATA_NO_MOVE",
+      "seasonPffScore": 55.79999999999999,
+      "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
     {
@@ -13908,8 +13908,8 @@
       "rawCorrection": 15,
       "correction": 0,
       "pffProfile": false,
-      "seasonPffScore": null,
-      "flag": "NO_DATA_NO_MOVE",
+      "seasonPffScore": 54.55,
+      "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
     {
@@ -13993,8 +13993,8 @@
       "rawCorrection": 15,
       "correction": 0,
       "pffProfile": false,
-      "seasonPffScore": null,
-      "flag": "NO_DATA_NO_MOVE",
+      "seasonPffScore": 55.2,
+      "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
     {
@@ -14027,8 +14027,8 @@
       "rawCorrection": 15,
       "correction": 0,
       "pffProfile": false,
-      "seasonPffScore": null,
-      "flag": "NO_DATA_NO_MOVE",
+      "seasonPffScore": 57.76666666666667,
+      "flag": "QB_HELD_UNTIL_PFF_LINK",
       "sourceFile": "public/data/prospects_2027_all.json"
     },
     {
