@@ -186,6 +186,7 @@ export default function App() {
   const [qbPffSeasons, setQbPffSeasons] = useState<QbPffSeason[]>([])
   const [wrPffSeasons, setWrPffSeasons] = useState<WrPffSeason[]>([])
   const [tePffSeasons, setTePffSeasons] = useState<any[]>([])
+  const [rbPffSeasons, setRbPffSeasons] = useState<any[]>([])
   const [wrSeasons, setWrSeasons] = useState<WrSeason[]>([])
   const [rbSeasons, setRbSeasons] = useState<RbSeason[]>([])
   const [careerStats, setCareerStats] = useState<CareerStatMap>({})
@@ -358,7 +359,7 @@ export default function App() {
   useEffect(() => {
     async function load() {
       try {
-        const [combineCsv, draftCsv, pffPayload, extraData, consensusData, scoutData, injuryData, qbSeasonData, qbPffSeasonData, wrPffSeasonData, tePffSeasonData, wrSeasonData, rbSeasonData, careerStatsData, prospectsQbData, prospectsTeData, prospectsRbData, rasCsv] = await Promise.all([
+        const [combineCsv, draftCsv, pffPayload, extraData, consensusData, scoutData, injuryData, qbSeasonData, qbPffSeasonData, wrPffSeasonData, tePffSeasonData, rbPffSeasonData, wrSeasonData, rbSeasonData, careerStatsData, prospectsQbData, prospectsTeData, prospectsRbData, rasCsv] = await Promise.all([
           fetch(`${assetBase}data/combine.csv`).then((r) => r.text()),
           fetch(`${assetBase}data/draft_picks.csv`).then((r) => r.text()),
           loadPffPayload(),
@@ -370,6 +371,7 @@ export default function App() {
           fetch(`${assetBase}data/qb_pff_seasons.json`).then((r) => r.json()).catch(() => null),
           fetch(`${assetBase}data/wr_pff_seasons.json`).then((r) => r.json()).catch(() => null),
           fetch(`${assetBase}data/te_pff_seasons.json`).then((r) => r.json()).catch(() => null),
+          fetch(`${assetBase}data/rb_pff_seasons.json`).then((r) => r.json()).catch(() => null),
           fetch(`${assetBase}data/wr_seasons.json`).then((r) => r.json()).catch(() => null),
           fetch(`${assetBase}data/rb_seasons.json`).then((r) => r.json()).catch(() => null),
           fetch(`${assetBase}data/career_stats.json`).then((r) => r.json()).catch(() => null),
@@ -395,6 +397,7 @@ export default function App() {
         if (qbPffSeasonData?.records?.length) setQbPffSeasons(qbPffSeasonData.records)
         if (wrPffSeasonData?.records?.length) setWrPffSeasons(wrPffSeasonData.records)
         if (tePffSeasonData?.records?.length) setTePffSeasons(tePffSeasonData.records)
+        if (rbPffSeasonData?.records?.length) setRbPffSeasons(rbPffSeasonData.records)
         if (wrSeasonData?.records?.length) setWrSeasons(wrSeasonData.records)
         if (rbSeasonData?.records?.length) setRbSeasons(rbSeasonData.records)
         if (careerStatsData && typeof careerStatsData === 'object') setCareerStats(careerStatsData as CareerStatMap)
@@ -2233,6 +2236,56 @@ function buildPlayerExplanation(player: any, ctx: any) {
     badges.push('QB data linked')
   }
 
+
+  const rb = ctx?.rbContext
+
+  if (pos === 'RB' && rb) {
+    const runGrade = safeNum(getAny(rb, ['run_grade', 'grades_run']))
+    const offGrade = safeNum(getAny(rb, ['offense_grade', 'grades_offense']))
+    const yards = safeNum(getAny(rb, ['yards']))
+    const attempts = safeNum(getAny(rb, ['attempts']))
+    const ypa = safeNum(getAny(rb, ['ypa']))
+    const yco = safeNum(getAny(rb, ['yco_attempt']))
+    const elusive = safeNum(getAny(rb, ['elusive_rating']))
+    const avoided = safeNum(getAny(rb, ['avoided_tackles']))
+    const breakaway = safeNum(getAny(rb, ['breakaway_percent']))
+    const targets = safeNum(getAny(rb, ['targets']))
+    const recYards = safeNum(getAny(rb, ['rec_yards']))
+    const routeGrade = safeNum(getAny(rb, ['route_grade', 'grades_pass_route']))
+    const passBlock = safeNum(getAny(rb, ['pass_block_grade', 'grades_pass_block']))
+    const fumbles = safeNum(getAny(rb, ['fumbles']))
+
+    drivers.push('Season PFF data linked.')
+    if (runGrade != null) drivers.push(`Run grade: ${runGrade.toFixed(1)}`)
+    if (offGrade != null) drivers.push(`Offense grade: ${offGrade.toFixed(1)}`)
+    if (yards != null) drivers.push(`Rushing yards: ${yards.toFixed(0)}`)
+    if (attempts != null) drivers.push(`Attempts: ${attempts.toFixed(0)}`)
+    if (ypa != null) drivers.push(`YPA: ${ypa.toFixed(2)}`)
+    if (yco != null) drivers.push(`YCO/attempt: ${yco.toFixed(2)}`)
+    if (elusive != null) drivers.push(`Elusive rating: ${elusive.toFixed(1)}`)
+    if (avoided != null) drivers.push(`Avoided tackles: ${avoided.toFixed(0)}`)
+    if (breakaway != null) drivers.push(`Breakaway %: ${breakaway.toFixed(1)}`)
+    if (targets != null) drivers.push(`Targets: ${targets.toFixed(0)}`)
+    if (recYards != null) drivers.push(`Receiving yards: ${recYards.toFixed(0)}`)
+    if (routeGrade != null) drivers.push(`Route grade: ${routeGrade.toFixed(1)}`)
+    if (passBlock != null) drivers.push(`Pass-block grade: ${passBlock.toFixed(1)}`)
+
+    if (runGrade != null && runGrade >= 85) strengths.push('High-end rushing grade.')
+    if (yco != null && yco >= 3.2) strengths.push('Strong yards-after-contact profile.')
+    if (elusive != null && elusive >= 90) strengths.push('Strong tackle-breaking / elusive profile.')
+    if (targets != null && targets >= 25) strengths.push('Useful receiving workload.')
+    if (routeGrade != null && routeGrade >= 65) strengths.push('Viable receiving/route profile for a RB.')
+    if (passBlock != null && passBlock >= 65) strengths.push('Usable pass-protection profile.')
+
+    if (runGrade != null && runGrade < 70) risks.push('Run grade is below ideal prospect threshold.')
+    if (yco != null && yco < 2.4 && attempts != null && attempts >= 120) risks.push('Yards-after-contact profile is modest for workload.')
+    if (fumbles != null && fumbles >= 4) risks.push('Fumble count is a ball-security concern.')
+    if (targets != null && targets < 10) risks.push('Limited receiving sample.')
+
+    badges.push('RB data linked')
+  }
+
+
   if ((pos === 'WR' || pos === 'TE') && wr) {
     const routeGrade = safeNum(getAny(wr, ['route_grade', 'grades_pass_route']))
     const offGrade = safeNum(getAny(wr, ['offense_grade', 'grades_offense']))
@@ -2274,7 +2327,7 @@ function buildPlayerExplanation(player: any, ctx: any) {
           : 'Fair-value range: model score and draft slot are broadly aligned.'
       : 'Value read is limited because pick or score data is missing.'
 
-  const seasonPffLinked = Boolean(ctx?.qbContext || ctx?.wrContext || ctx?.teContext)
+  const seasonPffLinked = Boolean(ctx?.qbContext || ctx?.wrContext || ctx?.teContext || ctx?.rbContext)
 
   const cleanedDrivers = drivers.filter((item) => {
     if (seasonPffLinked && /^No PFF match/i.test(String(item))) return false
@@ -2418,6 +2471,8 @@ function ClassExplorer({ pool, history, pffProfiles, pffLookup, y1Data, careerSt
 
   const latestQbPffMap = useMemo(() => buildLatestPffSeasonMap(qbPffSeasons), [qbPffSeasons])
   const latestWrPffMap = useMemo(() => buildLatestPffSeasonMap(wrPffSeasons), [wrPffSeasons])
+  const latestTePffMap = useMemo(() => buildLatestPffSeasonMap(tePffSeasons), [tePffSeasons])
+  const latestRbPffMap = useMemo(() => buildLatestPffSeasonMap(rbPffSeasons), [rbPffSeasons])
 
   // Persistent cache: avoids recomputing the same player on year revisits
   const projCache = useRef(new Map<string, { av: number; score: number }>())
@@ -2700,7 +2755,9 @@ function ClassExplorer({ pool, history, pffProfiles, pffLookup, y1Data, careerSt
                         pffContextScore,
                         pffContextLabel,
                         qbContext: player.pos === 'QB' ? latestQbPffMap.get(pffKey) : null,
-                        wrContext: player.pos === 'WR' || player.pos === 'TE' ? latestWrPffMap.get(pffKey) : null,
+                        wrContext: player.pos === 'WR' ? latestWrPffMap.get(pffKey) : null,
+                        teContext: player.pos === 'TE' ? latestTePffMap.get(pffKey) : null,
+                        rbContext: player.pos === 'RB' ? latestRbPffMap.get(pffKey) : null,
                       }))
                     }}
                   >
