@@ -359,7 +359,7 @@ export default function App() {
   useEffect(() => {
     async function load() {
       try {
-        const [combineCsv, draftCsv, pffPayload, extraData, consensusData, scoutData, injuryData, qbSeasonData, qbPffSeasonData, wrPffSeasonData, tePffSeasonData, rbPffSeasonData, wrSeasonData, rbSeasonData, careerStatsData, prospectsQbData, prospectsTeData, prospectsRbData, rasCsv] = await Promise.all([
+        const [combineCsv, draftCsv, pffPayload, extraData, consensusData, scoutData, injuryData, qbSeasonData, qbPffSeasonData, wrPffSeasonData, tePffSeasonData, rbPffSeasonData, wrSeasonData, rbSeasonData, careerStatsData, prospectsQbData, prospectsTeData, prospectsRbData, projectionFilesData, rasCsv] = await Promise.all([
           fetch(`${assetBase}data/combine.csv`).then((r) => r.text()),
           fetch(`${assetBase}data/draft_picks.csv`).then((r) => r.text()),
           loadPffPayload(),
@@ -378,12 +378,40 @@ export default function App() {
           fetch(`${assetBase}data/prospects_2027_qb.json`).then((r) => r.json()).catch(() => null),
           fetch(`${assetBase}data/prospects_2027_te.json`).then((r) => r.json()).catch(() => null),
           fetch(`${assetBase}data/prospects_2027_rb.json`).then((r) => r.json()).catch(() => null),
+          Promise.all([
+            'prospects_2024_qb.json',
+            'prospects_2025_qb.json',
+            'prospects_2026_qb.json',
+            'prospects_2027_qb.json',
+
+            'prospects_2024_wr.json',
+            'prospects_2025_wr.json',
+            'prospects_2026_wr.json',
+            'prospects_2027_wr.json',
+
+            'prospects_2024_te.json',
+            'prospects_2025_te.json',
+            'prospects_2026_te.json',
+            'prospects_2027_te.json',
+
+            'prospects_2025_rb.json',
+            'prospects_2026_rb.json',
+            'prospects_2027_rb.json',
+          ].map((file) => fetch(`${assetBase}data/${file}`).then((r) => r.json()).catch(() => null))),
           fetch(`${assetBase}data/ras_main_table.csv`).then((r) => r.text()).catch(() => ''),
         ])
         const allProspects = buildProspectPool(parseCsv(combineCsv), parseCsv(draftCsv))
         const extraProspects = buildExtraProspects(extraData)
+        const generatedProjectionProspects = buildGeneratedProjectionProspects(projectionFilesData)
+        const supplementalProspects = [...extraProspects, ...generatedProjectionProspects]
         const existingKeys = new Set(allProspects.map((p) => `${p.year}-${clean(p.name)}`))
-        const uniqueExtras = extraProspects.filter((p) => !existingKeys.has(`${p.year}-${clean(p.name)}`))
+        const seenSupplemental = new Set<string>()
+        const uniqueExtras = supplementalProspects.filter((p) => {
+          const key = `${p.year}-${clean(p.name)}`
+          if (existingKeys.has(key) || seenSupplemental.has(key)) return false
+          seenSupplemental.add(key)
+          return true
+        })
         setLookupPool([...allProspects, ...uniqueExtras])
         setProspects(allProspects.filter((p) => p.year >= 2000 && p.year <= 2022 && p.pick < 260 && (p.year > 2020 || p.games >= 16)))
         if (pffPayload?.profiles?.length) {
@@ -4030,6 +4058,93 @@ function normalizePffProfiles(profiles: RawPffProfile[]): PffProfile[] {
     }
   }).filter((profile) => profile.name && positions.includes(profile.position))
 }
+
+
+function buildGeneratedProjectionProspects(data: unknown): Historical[] {
+  if (!Array.isArray(data)) return []
+
+  const out: Historical[] = []
+
+  data.forEach((payload, payloadIndex) => {
+    if (!payload || typeof payload !== 'object') return
+    const records = (payload as { records?: unknown[] }).records
+    if (!Array.isArray(records)) return
+
+    records.forEach((entry, i) => {
+      const r = asRecord(entry)
+      if (!r) return
+
+      const name = stringField(r, 'name', '')
+      if (!name) return
+
+      const year = numberField(r, 'year', numberField(r, 'draftYear', 0))
+      if (!year) return
+
+      const pos = norm(stringField(r, 'pos', stringField(r, 'position', '')))
+      if (!positions.includes(pos)) return
+
+      const forecast = asRecord(r.forecast)
+      const pff = asRecord(r.pff)
+
+      const syntheticPick =
+        numberField(r, 'pick', 0) ||
+        numberField(r, 'projectedPick', 0) ||
+        numberField(r, 'rank', 260) ||
+        260
+
+      const modelGrade =
+        numberField(r, 'grade', 0) ||
+        numberField(r, 'score', 0) ||
+        (forecast ? numberField(forecast, 'final', 0) : 0)
+
+      out.push({
+        id: `generated-${year}-${pos}-${clean(name)}-${payloadIndex}-${i}`,
+        name,
+        school: stringField(r, 'school', stringField(r, 'team', '')),
+        year,
+        pos,
+        pick: syntheticPick,
+        age: null,
+        height: null,
+        weight: null,
+        forty: null,
+        vertical: null,
+        broad: null,
+        cone: null,
+        shuttle: null,
+        bench: null,
+
+        // Keep NFL outcome fields neutral for generated/future model boards.
+        games: 0,
+        av: Math.max(0, Math.round(modelGrade * 0.5)),
+        starts: 0,
+        proBowls: 0,
+        allPros: 0,
+
+        // Category is display-only here; generated prospects are projections, not final outcomes.
+        category: modelGrade >= 85 ? 'Star' as Category
+          : modelGrade >= 72 ? 'Starter' as Category
+          : modelGrade >= 60 ? 'Backup' as Category
+          : 'Bust' as Category,
+
+        // Use model grade to give the existing projection engine something useful.
+        pffComposite: modelGrade || null,
+        pffGrade: modelGrade || null,
+        pffProduction: forecast ? numberField(forecast, 'production', modelGrade) : modelGrade,
+        pffEfficiency: forecast ? numberField(forecast, 'efficiency', modelGrade) : modelGrade,
+        pffClean: forecast ? numberField(forecast, 'pff', modelGrade) : modelGrade,
+
+        // Helpful raw fields for future explain/overlay work.
+        modelScore: modelGrade,
+        modelSource: stringField(r, 'source', 'generated_projection'),
+        modelPffSeason: pff ? numberField(pff, 'season_used', 0) : 0,
+      } as Historical)
+    })
+  })
+
+  return out
+}
+
 
 function buildExtraProspects(data: unknown): Historical[] {
   if (!data || typeof data !== 'object') return []
