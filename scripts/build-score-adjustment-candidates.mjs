@@ -154,7 +154,7 @@ function isQuantumScoreReady(pos, trait) {
   if (num(trait.historicalMatches, 0) < 10) return false;
 
   if (pos === 'RB') {
-    return ['contact_creator', 'three_down_viability', 'volume_efficiency'].includes(trait.traitKey);
+    return ['explosive_contact_creator', 'three_down_plus', 'volume_efficiency_plus'].includes(trait.traitKey);
   }
 
   if (pos === 'QB') {

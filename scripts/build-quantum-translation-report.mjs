@@ -241,27 +241,52 @@ const quantumTraits = {
 
   RB: [
     {
-      key: 'contact_creator',
-      label: 'Contact creator',
-      definition: 'YCO >= 3.4 and elusive >= 90',
-      test: r => val(r, ['yco', 'yco_attempt', 'yards_after_contact_per_attempt'], 0) >= 3.4 && val(r, ['elusive', 'elusive_rating'], 0) >= 90,
+      key: 'explosive_contact_creator',
+      label: 'Explosive contact creator',
+      definition: 'YCO >= 3.4, elusive >= 90, breakaway% >= 30, attempts >= 120',
+      adjustment: 0.65,
+      test: r => val(r, ['yco', 'yco_attempt', 'yards_after_contact_per_attempt'], 0) >= 3.4 &&
+                 val(r, ['elusive', 'elusive_rating'], 0) >= 90 &&
+                 val(r, ['breakaway_percent', 'breakawayPercent'], 0) >= 30 &&
+                 val(r, ['attempts', 'carries'], 0) >= 120,
     },
     {
-      key: 'three_down_viability',
-      label: 'Three-down viability',
-      definition: 'Run grade >= 80, receiving grade >= 65, pass pro >= 60',
+      key: 'three_down_plus',
+      label: 'Three-down plus',
+      definition: 'Run grade >= 80, receiving grade >= 65, pass pro >= 60, targets >= 15',
+      adjustment: 0.95,
       test: r => val(r, ['run_grade', 'grades_run'], 0) >= 80 &&
                  val(r, ['receiving_grade', 'route_grade', 'grades_pass_route'], 0) >= 65 &&
-                 val(r, ['pass_block_grade', 'grades_pass_block'], 0) >= 60,
+                 val(r, ['pass_block_grade', 'grades_pass_block'], 0) >= 60 &&
+                 val(r, ['targets'], 0) >= 15,
     },
     {
-      key: 'volume_efficiency',
-      label: 'Volume efficiency',
-      definition: 'Rushing yards >= 1000 and YCO >= 3.0',
-      test: r => val(r, ['yards', 'rushing_yards'], 0) >= 1000 && val(r, ['yco', 'yco_attempt', 'yards_after_contact_per_attempt'], 0) >= 3.0,
+      key: 'volume_efficiency_plus',
+      label: 'Volume efficiency plus',
+      definition: 'Rushing yards >= 1000, YCO >= 3.0, breakaway% >= 25, attempts >= 150',
+      adjustment: 0.65,
+      test: r => val(r, ['yards', 'rushing_yards'], 0) >= 1000 &&
+                 val(r, ['yco', 'yco_attempt', 'yards_after_contact_per_attempt'], 0) >= 3.0 &&
+                 val(r, ['breakaway_percent', 'breakawayPercent'], 0) >= 25 &&
+                 val(r, ['attempts', 'carries'], 0) >= 150,
+    },
+    {
+      key: 'fumble_risk',
+      label: 'Fumble risk',
+      definition: 'Fumbles >= 4',
+      adjustment: -0.35,
+      test: r => val(r, ['fumbles'], 0) >= 4,
+    },
+    {
+      key: 'workload_inefficiency_risk',
+      label: 'Workload inefficiency risk',
+      definition: 'Attempts >= 180, YCO < 2.8, elusive < 70',
+      adjustment: -0.45,
+      test: r => val(r, ['attempts', 'carries'], 0) >= 180 &&
+                 val(r, ['yco', 'yco_attempt', 'yards_after_contact_per_attempt'], 99) < 2.8 &&
+                 val(r, ['elusive', 'elusive_rating'], 999) < 70,
     },
   ],
-
   TE: [
     {
       key: 'receiving_plus_blocking',
