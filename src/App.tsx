@@ -68,6 +68,18 @@ type PositionCompSignal = {
   projectionComps: Array<{ name: string; year: number; pick: number; delta: number; weight?: number; dist?: number }>
   styleComps: Array<{ name: string; year: number; pick: number; delta: number; weight?: number; dist?: number }>
 }
+
+type RbScoreReadySignal = {
+  recommendedAdjustment: number
+  reasons: string[]
+  quantumTraits: Array<{
+    traitKey: string
+    label: string
+    recommendedAdjustment?: number
+    confidence?: string
+    scoreReady?: boolean
+  }>
+}
 type LoaderMessage = { tone: 'good' | 'warn'; text: string } | null
 type MobileTab = 'edit' | 'results' | 'board'
 type Page = 'workbench' | 'class' | 'players' | 'compare' | 'trade' | 'rankings' | 'guide' | 'prospects'
@@ -213,6 +225,7 @@ export default function App() {
   const [prospectsRb2027, setProspectsRb2027] = useState<any[]>([])
   const [projectionOverlay, setProjectionOverlay] = useState<Map<string, PositionProjectionOverlay>>(new Map())
   const [compSignalMap, setCompSignalMap] = useState<Map<string, PositionCompSignal>>(new Map())
+  const [rbScoreReadyMap, setRbScoreReadyMap] = useState<Map<string, RbScoreReadySignal>>(new Map())
   const [rasLookup, setRasLookup] = useState<AppRasLookup | null>(null)
   const [boardView, setBoardView] = useState<'list' | 'grid'>('list')
   const [boardOrder, setBoardOrder] = useState<string[]>([])
@@ -483,6 +496,22 @@ export default function App() {
       })
       .catch(() => {
         if (!cancelled) setCompSignalMap(new Map())
+      })
+
+    return () => { cancelled = true }
+  }, [])
+
+  useEffect(() => {
+    let cancelled = false
+    const base = import.meta.env.BASE_URL || './'
+
+    fetch(`${base}data/model/score_adjustment_candidates.json`)
+      .then((r) => r.ok ? r.json() : null)
+      .then((payload) => {
+        if (!cancelled) setRbScoreReadyMap(buildRbScoreReadyMap(payload))
+      })
+      .catch(() => {
+        if (!cancelled) setRbScoreReadyMap(new Map())
       })
 
     return () => { cancelled = true }
@@ -777,7 +806,7 @@ export default function App() {
     </div>
 
     {error ? <section className="panel empty">{error}</section> : page === 'class' ? <div className="classPage">
-      <ClassExplorer pool={lookupPool} history={prospects} pffProfiles={pffProfiles} pffLookup={pffLookup} y1Data={y1Data} careerStats={careerStats} histFlagMap={histFlagMap} currentName={input.name} currentYear={input.draftSeason} saved={saved} projectionOverlay={projectionOverlay} compSignalMap={compSignalMap} qbPffSeasons={qbPffSeasons} wrPffSeasons={wrPffSeasons} tePffSeasons={tePffSeasons} rbPffSeasons={rbPffSeasons} />
+      <ClassExplorer pool={lookupPool} history={prospects} pffProfiles={pffProfiles} pffLookup={pffLookup} y1Data={y1Data} careerStats={careerStats} histFlagMap={histFlagMap} currentName={input.name} currentYear={input.draftSeason} saved={saved} projectionOverlay={projectionOverlay} compSignalMap={compSignalMap} rbScoreReadyMap={rbScoreReadyMap} qbPffSeasons={qbPffSeasons} wrPffSeasons={wrPffSeasons} tePffSeasons={tePffSeasons} rbPffSeasons={rbPffSeasons} />
     </div> : page === 'players' ? <div className="classPage">
       <PlayerBrowser pool={lookupPool} history={prospects} histFlagMap={histFlagMap} onOpenModal={openModal} onCompare={handleCompare} />
     </div> : page === 'compare' ? <div className="classPage">
@@ -2414,6 +2443,9 @@ function buildPlayerExplanation(player: any, ctx: any) {
     cleanedDrivers.unshift('Season PFF data linked.')
   }
 
+  const rbScoreReadySignal = ctx?.rbScoreReadySignal || null
+  const rbScoreReadyAdjustment = safeNum(rbScoreReadySignal?.recommendedAdjustment)
+
   const compSignal = ctx?.compSignal || null
   const compAdjustment = safeNum(compSignal?.compAdjustment)
   const compConfidence = safeNum(compSignal?.confidence)
@@ -2425,6 +2457,11 @@ function buildPlayerExplanation(player: any, ctx: any) {
     if (!compSignal.realDraftPrior) drivers.push('Comp signal context only: no real draft prior yet.')
   }
 
+  if (rbScoreReadySignal && rbScoreReadyAdjustment != null && rbScoreReadyAdjustment !== 0) {
+    badges.push('RB score-ready signal')
+    drivers.push(`RB score-ready signal: ${rbScoreReadyAdjustment >= 0 ? '+' : ''}${rbScoreReadyAdjustment.toFixed(2)}`)
+  }
+
   return {
     player,
     summary,
@@ -2434,6 +2471,7 @@ function buildPlayerExplanation(player: any, ctx: any) {
     risks,
     drivers: cleanedDrivers,
     compSignal,
+    rbScoreReadySignal,
   }
 }
 
@@ -2472,6 +2510,32 @@ function PlayerExplanationModal({ explanation, onClose }: { explanation: any; on
           <h3>Model drivers</h3>
           <ul>{explanation.drivers.map((item: string) => <li key={item}>{item}</li>)}</ul>
         </section>
+
+        {explanation.rbScoreReadySignal ? <section>
+          <h3>RB score-ready signal</h3>
+          <p>
+            Adjustment candidate: <strong>{Number(explanation.rbScoreReadySignal.recommendedAdjustment || 0) >= 0 ? '+' : ''}{Number(explanation.rbScoreReadySignal.recommendedAdjustment || 0).toFixed(2)}</strong>
+            {' · '}Status: read-only / not applied to ranking
+          </p>
+          {explanation.rbScoreReadySignal.quantumTraits?.length ? <>
+            <h4>Validated RB traits</h4>
+            <ul>
+              {explanation.rbScoreReadySignal.quantumTraits
+                .filter((t: any) => t.scoreReady)
+                .map((t: any) => (
+                  <li key={`rb-signal-${t.traitKey}`}>{t.label}</li>
+                ))}
+            </ul>
+          </> : null}
+          {explanation.rbScoreReadySignal.reasons?.length ? <>
+            <h4>Reason</h4>
+            <ul>
+              {explanation.rbScoreReadySignal.reasons.map((r: string, i: number) => (
+                <li key={`rb-signal-reason-${i}`}>{r}</li>
+              ))}
+            </ul>
+          </> : null}
+        </section> : null}
 
         {explanation.compSignal ? <section>
           <h3>Historical comp signal</h3>
@@ -2536,7 +2600,7 @@ function buildLatestPffSeasonMap(seasons: any[]) {
 }
 
 
-function ClassExplorer({ pool, history, pffProfiles, pffLookup, y1Data, careerStats, histFlagMap, currentName, currentYear, saved, projectionOverlay, compSignalMap, qbPffSeasons, wrPffSeasons, tePffSeasons, rbPffSeasons }: { pool: Historical[]; history: Historical[]; pffProfiles: PffProfile[]; pffLookup: Map<string, PffProfile>; y1Data?: Y1Data; careerStats?: CareerStatMap; histFlagMap: Map<string, HistoricalOutcomeFlag>; currentName: string; currentYear: number; saved: SavedProspect[]; projectionOverlay: Map<string, PositionProjectionOverlay>; compSignalMap: Map<string, PositionCompSignal>; qbPffSeasons: QbPffSeason[]; wrPffSeasons: WrPffSeason[]; tePffSeasons: any[]; rbPffSeasons: any[]; }) {
+function ClassExplorer({ pool, history, pffProfiles, pffLookup, y1Data, careerStats, histFlagMap, currentName, currentYear, saved, projectionOverlay, compSignalMap, rbScoreReadyMap, qbPffSeasons, wrPffSeasons, tePffSeasons, rbPffSeasons }: { pool: Historical[]; history: Historical[]; pffProfiles: PffProfile[]; pffLookup: Map<string, PffProfile>; y1Data?: Y1Data; careerStats?: CareerStatMap; histFlagMap: Map<string, HistoricalOutcomeFlag>; currentName: string; currentYear: number; saved: SavedProspect[]; projectionOverlay: Map<string, PositionProjectionOverlay>; compSignalMap: Map<string, PositionCompSignal>; rbScoreReadyMap: Map<string, RbScoreReadySignal>; qbPffSeasons: QbPffSeason[]; wrPffSeasons: WrPffSeason[]; tePffSeasons: any[]; rbPffSeasons: any[]; }) {
   const years = useMemo(() => {
     const set = new Set<number>()
     for (const player of pool) set.add(player.year)
@@ -2872,6 +2936,7 @@ function ClassExplorer({ pool, history, pffProfiles, pffLookup, y1Data, careerSt
                         teContext: player.pos === 'TE' ? latestTePffMap.get(pffKey) : null,
                         rbContext: player.pos === 'RB' ? latestRbPffMap.get(pffKey) : null,
                         compSignal: compSignalMap.get(projectionOverlayKey(player.year, player.pos, player.name)) ?? null,
+                        rbScoreReadySignal: rbScoreReadyMap.get(projectionOverlayKey(player.year, player.pos, player.name)) ?? null,
                       }))
                     }}
                   >
@@ -4168,6 +4233,61 @@ function normalizeCompList(value: unknown): PositionCompSignal['projectionComps'
     }
   }).filter(Boolean) as PositionCompSignal['projectionComps']
 }
+
+
+function normalizeRbQuantumTraits(value: unknown): RbScoreReadySignal['quantumTraits'] {
+  if (!Array.isArray(value)) return []
+
+  return value.map((item) => {
+    const r = asRecord(item)
+    if (!r) return null
+
+    return {
+      traitKey: stringField(r, 'traitKey', ''),
+      label: stringField(r, 'label', ''),
+      recommendedAdjustment: numberField(r, 'recommendedAdjustment', 0),
+      confidence: stringField(r, 'confidence', ''),
+      scoreReady: Boolean(r.scoreReady),
+    }
+  }).filter(Boolean) as RbScoreReadySignal['quantumTraits']
+}
+
+function buildRbScoreReadyMap(payload: unknown): Map<string, RbScoreReadySignal> {
+  const map = new Map<string, RbScoreReadySignal>()
+  const root = asRecord(payload)
+  const scoreReady = asRecord(root?.scoreReady)
+  const rows: unknown[] = Array.isArray(scoreReady?.topMovers)
+    ? scoreReady.topMovers
+    : Array.isArray(root?.topMovers)
+      ? root.topMovers
+      : []
+
+  for (const item of rows) {
+    const r = asRecord(item)
+    if (!r) continue
+
+    const pos = norm(stringField(r, 'pos', ''))
+    if (pos !== 'RB') continue
+
+    const year = numberField(r, 'year', 0)
+    const name = stringField(r, 'name', '')
+    if (!year || !name) continue
+
+    const reasonsRaw = r.reasons
+    const reasons = Array.isArray(reasonsRaw)
+      ? reasonsRaw.map((x) => String(x))
+      : []
+
+    map.set(projectionOverlayKey(year, pos, name), {
+      recommendedAdjustment: numberField(r, 'recommendedAdjustment', 0),
+      reasons,
+      quantumTraits: normalizeRbQuantumTraits(r.quantumTraits),
+    })
+  }
+
+  return map
+}
+
 
 function buildCompSignalMap(payload: unknown): Map<string, PositionCompSignal> {
   const map = new Map<string, PositionCompSignal>()
