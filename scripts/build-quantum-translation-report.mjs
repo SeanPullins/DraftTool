@@ -192,32 +192,45 @@ function val(row, keys, fallback = null) {
 const quantumTraits = {
   QB: [
     {
-      key: 'creation_without_chaos',
-      label: 'Creation without chaos',
-      definition: 'BTT% >= 6.0 and TWP% <= 2.5',
-      test: r => val(r, ['btt_rate', 'btt_pct'], 0) >= 6.0 && val(r, ['twp_rate', 'twp_pct'], 99) <= 2.5,
+      key: 'elite_creation_without_chaos',
+      label: 'Elite creation without chaos',
+      definition: 'BTT% >= 6.5, TWP% <= 2.2, pass grade >= 85, adjusted accuracy >= 70',
+      adjustment: 0.18,
+      test: r => val(r, ['btt_rate', 'btt_pct'], 0) >= 6.5 &&
+                 val(r, ['twp_rate', 'twp_pct'], 99) <= 2.2 &&
+                 val(r, ['pass_grade', 'grades_pass'], 0) >= 85 &&
+                 val(r, ['adjusted_completion_percent', 'accuracy_percent'], 0) >= 70,
     },
     {
-      key: 'accurate_aggressive',
-      label: 'Accurate aggressive passer',
-      definition: 'Adjusted completion >= 72 and ADOT >= 8.5',
-      test: r => val(r, ['adjusted_completion_percent', 'accuracy_percent'], 0) >= 72 && val(r, ['adot', 'avg_depth_of_target'], 0) >= 8.5,
+      key: 'nfl_timing_translator',
+      label: 'NFL timing translator',
+      definition: 'TTT <= 2.85, ADOT >= 8.0, adjusted accuracy >= 72, P2S <= 18',
+      adjustment: 0.18,
+      test: r => val(r, ['time_to_throw', 'avg_time_to_throw', 'ttt'], 99) <= 2.85 &&
+                 val(r, ['adot', 'avg_depth_of_target'], 0) >= 8.0 &&
+                 val(r, ['adjusted_completion_percent', 'accuracy_percent'], 0) >= 72 &&
+                 val(r, ['pressure_to_sack_rate', 'pressure_to_sack_pct'], 99) <= 18,
     },
     {
-      key: 'pressure_translator',
-      label: 'Pressure translator',
-      definition: 'Pass grade >= 85 and pressure-to-sack <= 15',
-      test: r => val(r, ['pass_grade', 'grades_pass'], 0) >= 85 && val(r, ['pressure_to_sack_rate', 'pressure_to_sack_pct'], 99) <= 15,
+      key: 'pressure_creation_combo',
+      label: 'Pressure + creation combo',
+      definition: 'Pass grade >= 85, BTT% >= 5.5, P2S <= 16',
+      adjustment: 0.12,
+      test: r => val(r, ['pass_grade', 'grades_pass'], 0) >= 85 &&
+                 val(r, ['btt_rate', 'btt_pct'], 0) >= 5.5 &&
+                 val(r, ['pressure_to_sack_rate', 'pressure_to_sack_pct'], 99) <= 16,
     },
     {
-      key: 'danger_profile',
-      label: 'QB danger profile',
-      definition: 'TWP% >= 4.0 or pressure-to-sack >= 22',
-      test: r => val(r, ['twp_rate', 'twp_pct'], 0) >= 4.0 && val(r, ['pressure_to_sack_rate', 'pressure_to_sack_pct'], 0) >= 20 && val(r, ['adjusted_completion_percent', 'accuracy_percent'], 100) < 70,
+      key: 'true_danger_profile',
+      label: 'True QB danger profile',
+      definition: 'TWP% >= 4.0, P2S >= 20, adjusted accuracy < 70',
+      adjustment: -0.18,
       inverse: true,
+      test: r => val(r, ['twp_rate', 'twp_pct'], 0) >= 4.0 &&
+                 val(r, ['pressure_to_sack_rate', 'pressure_to_sack_pct'], 0) >= 20 &&
+                 val(r, ['adjusted_completion_percent', 'accuracy_percent'], 100) < 70,
     },
   ],
-
   WR: [
     {
       key: 'route_yprr_combo',

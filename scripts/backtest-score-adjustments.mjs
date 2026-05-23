@@ -126,30 +126,18 @@ function posCap(pos) {
 
 const quantumTraits = {
   QB: [
-    {
-      key: 'creation_without_chaos',
-      label: 'Creation without chaos',
-      adjustment: 0.11,
-      test: r => val(r, ['btt_rate', 'btt_pct'], 0) >= 6.0 && val(r, ['twp_rate', 'twp_pct'], 99) <= 2.5,
-    },
-    {
-      key: 'pressure_translator',
-      label: 'Pressure translator',
-      adjustment: 0.11,
-      test: r => val(r, ['pass_grade', 'grades_pass'], 0) >= 85 && val(r, ['pressure_to_sack_rate', 'pressure_to_sack_pct'], 99) <= 15,
-    },
-    {
-      key: 'danger_profile',
-      label: 'QB danger profile',
-      adjustment: -0.11,
-      test: r => val(r, ['twp_rate', 'twp_pct'], 0) >= 4.0 && val(r, ['pressure_to_sack_rate', 'pressure_to_sack_pct'], 0) >= 20 && val(r, ['adjusted_completion_percent', 'accuracy_percent'], 100) < 70,
-    },
+    // QB traits are read-only/context-only for now.
+    // The QB v2 backtest still slightly hurt pairwise/Spearman, so no QB scoring.
   ],
+
+  WR: [
+    // WR remains read-only until age/share/alignment/size data is added.
+  ],
+
   RB: [
     {
       key: 'explosive_contact_creator',
       label: 'Explosive contact creator',
-      definition: 'YCO >= 3.4, elusive >= 90, breakaway% >= 30, attempts >= 120',
       adjustment: 0.65,
       test: r => val(r, ['yco', 'yco_attempt', 'yards_after_contact_per_attempt'], 0) >= 3.4 &&
                  val(r, ['elusive', 'elusive_rating'], 0) >= 90 &&
@@ -159,7 +147,6 @@ const quantumTraits = {
     {
       key: 'three_down_plus',
       label: 'Three-down plus',
-      definition: 'Run grade >= 80, receiving grade >= 65, pass pro >= 60, targets >= 15',
       adjustment: 0.95,
       test: r => val(r, ['run_grade', 'grades_run'], 0) >= 80 &&
                  val(r, ['receiving_grade', 'route_grade', 'grades_pass_route'], 0) >= 65 &&
@@ -169,39 +156,16 @@ const quantumTraits = {
     {
       key: 'volume_efficiency_plus',
       label: 'Volume efficiency plus',
-      definition: 'Rushing yards >= 1000, YCO >= 3.0, breakaway% >= 25, attempts >= 150',
       adjustment: 0.65,
       test: r => val(r, ['yards', 'rushing_yards'], 0) >= 1000 &&
                  val(r, ['yco', 'yco_attempt', 'yards_after_contact_per_attempt'], 0) >= 3.0 &&
                  val(r, ['breakaway_percent', 'breakawayPercent'], 0) >= 25 &&
                  val(r, ['attempts', 'carries'], 0) >= 150,
     },
-    {
-      key: 'workload_inefficiency_risk',
-      label: 'Workload inefficiency risk',
-      definition: 'Attempts >= 180, YCO < 2.8, elusive < 70',
-      adjustment: -0.45,
-      test: r => val(r, ['attempts', 'carries'], 0) >= 180 &&
-                 val(r, ['yco', 'yco_attempt', 'yards_after_contact_per_attempt'], 99) < 2.8 &&
-                 val(r, ['elusive', 'elusive_rating'], 999) < 70,
-    },
   ],
+
   TE: [
-    {
-      key: 'inline_survivor',
-      label: 'Inline survivor',
-      adjustment: 0.15,
-      test: r => {
-        const block = Math.max(
-          val(r, ['run_block_grade', 'grades_run_block'], 0),
-          val(r, ['pass_block_grade', 'grades_pass_block'], 0)
-        );
-        return block >= 70 && val(r, ['route_grade', 'grades_pass_route'], 0) >= 60;
-      },
-    },
-  ],
-  WR: [
-    // WR quantum traits are not score-ready yet; intentionally blank.
+    // TE remains read-only until role/archetype logic improves.
   ],
 };
 

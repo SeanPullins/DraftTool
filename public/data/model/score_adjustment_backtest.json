@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-05-23T00:19:32.353Z",
+  "generatedAt": "2026-05-23T00:33:06.969Z",
   "note": "True historical quantum trait backtest. Applies the same score-ready trait logic to historical players with PFF rows.",
   "all": {
     "n": 409,
@@ -40,32 +40,32 @@
       "starters": 20,
       "busts": 0,
       "names": [
-        "Kyler Murray 2019 #1",
-        "Joe Burrow 2020 #1",
         "Jared Goff 2016 #1",
         "Baker Mayfield 2018 #1",
+        "Kyler Murray 2019 #1",
+        "Joe Burrow 2020 #1",
         "Trevor Lawrence 2021 #1",
         "Saquon Barkley 2018 #2",
         "Sam Darnold 2018 #3",
         "Ezekiel Elliott 2016 #4",
         "Leonard Fournette 2017 #4",
         "Kyle Pitts 2021 #4",
-        "Tua Tagovailoa 2020 #5",
         "Corey Davis 2017 #5",
+        "Tua Tagovailoa 2020 #5",
         "Ja'Marr Chase 2021 #5",
-        "Justin Herbert 2020 #6",
-        "Jaylen Waddle 2021 #6"
+        "Daniel Jones 2019 #6",
+        "Justin Herbert 2020 #6"
       ]
     }
   },
   "byPosition": {
     "QB": {
       "n": 64,
-      "adjustedCount": 16,
+      "adjustedCount": 0,
       "baseSpearman": 0.7161,
-      "adjustedSpearman": 0.7156,
+      "adjustedSpearman": 0.7161,
       "basePairwise": 0.7987,
-      "adjustedPairwise": 0.7965,
+      "adjustedPairwise": 0.7987,
       "baseTop20": {
         "n": 20,
         "avgActual": 79.78,
@@ -99,204 +99,25 @@
         "starters": 16,
         "busts": 3,
         "names": [
-          "Kyler Murray 2019 #1",
-          "Joe Burrow 2020 #1",
           "Jared Goff 2016 #1",
           "Baker Mayfield 2018 #1",
+          "Kyler Murray 2019 #1",
+          "Joe Burrow 2020 #1",
           "Trevor Lawrence 2021 #1",
           "Sam Darnold 2018 #3",
           "Tua Tagovailoa 2020 #5",
-          "Justin Herbert 2020 #6",
           "Daniel Jones 2019 #6",
+          "Justin Herbert 2020 #6",
           "Josh Allen 2018 #7",
           "Patrick Mahomes 2017 #10",
           "Josh Rosen 2018 #10",
           "Justin Fields 2021 #11",
           "Deshaun Watson 2017 #12",
-          "Mac Jones 2021 #15"
+          "Dwayne Haskins 2019 #15"
         ]
       },
-      "biggestPositive": [
-        {
-          "name": "Mac Jones",
-          "year": 2021,
-          "pick": 15,
-          "adjustment": 0.22,
-          "traits": [
-            "Creation without chaos",
-            "Pressure translator"
-          ],
-          "actual": 45.6,
-          "delta": -4.9
-        },
-        {
-          "name": "Paxton Lynch",
-          "year": 2016,
-          "pick": 26,
-          "adjustment": 0.11,
-          "traits": [
-            "Pressure translator"
-          ],
-          "actual": 2,
-          "delta": -39.4
-        },
-        {
-          "name": "Patrick Mahomes",
-          "year": 2017,
-          "pick": 10,
-          "adjustment": 0.11,
-          "traits": [
-            "Pressure translator"
-          ],
-          "actual": 196.6,
-          "delta": 141.3
-        },
-        {
-          "name": "Deshaun Watson",
-          "year": 2017,
-          "pick": 12,
-          "adjustment": 0.11,
-          "traits": [
-            "Pressure translator"
-          ],
-          "actual": 86.8,
-          "delta": 33.5
-        },
-        {
-          "name": "Kyler Murray",
-          "year": 2019,
-          "pick": 1,
-          "adjustment": 0.11,
-          "traits": [
-            "Creation without chaos"
-          ],
-          "actual": 93,
-          "delta": 28
-        },
-        {
-          "name": "Drew Lock",
-          "year": 2019,
-          "pick": 42,
-          "adjustment": 0.11,
-          "traits": [
-            "Creation without chaos"
-          ],
-          "actual": 15.2,
-          "delta": -15.9
-        },
-        {
-          "name": "Joe Burrow",
-          "year": 2020,
-          "pick": 1,
-          "adjustment": 0.11,
-          "traits": [
-            "Creation without chaos"
-          ],
-          "actual": 93,
-          "delta": 28
-        },
-        {
-          "name": "Tua Tagovailoa",
-          "year": 2020,
-          "pick": 5,
-          "adjustment": 0.11,
-          "traits": [
-            "Pressure translator"
-          ],
-          "actual": 67.2,
-          "delta": 6.7
-        },
-        {
-          "name": "Justin Fields",
-          "year": 2021,
-          "pick": 11,
-          "adjustment": 0.11,
-          "traits": [
-            "Creation without chaos"
-          ],
-          "actual": 48.8,
-          "delta": -5.5
-        },
-        {
-          "name": "Ryan Finley",
-          "year": 2019,
-          "pick": 104,
-          "adjustment": 0.07,
-          "traits": [
-            "Pressure translator"
-          ],
-          "actual": 2,
-          "delta": -8.2
-        },
-        {
-          "name": "Brandon Allen",
-          "year": 2016,
-          "pick": 201,
-          "adjustment": 0.06,
-          "traits": [
-            "Pressure translator"
-          ],
-          "actual": 5,
-          "delta": 2
-        },
-        {
-          "name": "Brandon Doughty",
-          "year": 2016,
-          "pick": 223,
-          "adjustment": 0.06,
-          "traits": [
-            "Pressure translator"
-          ],
-          "actual": 0,
-          "delta": -3
-        },
-        {
-          "name": "Logan Woodside",
-          "year": 2018,
-          "pick": 249,
-          "adjustment": 0.06,
-          "traits": [
-            "Pressure translator"
-          ],
-          "actual": 0,
-          "delta": -3
-        },
-        {
-          "name": "Nate Stanley",
-          "year": 2020,
-          "pick": 244,
-          "adjustment": 0.06,
-          "traits": [
-            "Creation without chaos"
-          ],
-          "actual": 0,
-          "delta": -3
-        },
-        {
-          "name": "Sam Ehlinger",
-          "year": 2021,
-          "pick": 218,
-          "adjustment": 0.06,
-          "traits": [
-            "Creation without chaos"
-          ],
-          "actual": 2,
-          "delta": -1
-        }
-      ],
-      "biggestNegative": [
-        {
-          "name": "Daniel Jones",
-          "year": 2019,
-          "pick": 6,
-          "adjustment": -0.11,
-          "traits": [
-            "QB danger profile"
-          ],
-          "actual": 59.2,
-          "delta": -0.2
-        }
-      ]
+      "biggestPositive": [],
+      "biggestNegative": []
     },
     "WR": {
       "n": 172,
@@ -360,11 +181,11 @@
     },
     "RB": {
       "n": 107,
-      "adjustedCount": 67,
+      "adjustedCount": 61,
       "baseSpearman": 0.6808,
-      "adjustedSpearman": 0.6862,
+      "adjustedSpearman": 0.6861,
       "basePairwise": 0.7578,
-      "adjustedPairwise": 0.7601,
+      "adjustedPairwise": 0.7597,
       "baseTop20": {
         "n": 20,
         "avgActual": 65.72,
@@ -661,80 +482,13 @@
           "delta": -8.8
         }
       ],
-      "biggestNegative": [
-        {
-          "name": "Christian McCaffrey",
-          "year": 2017,
-          "pick": 8,
-          "adjustment": -0.45,
-          "traits": [
-            "Workload inefficiency risk"
-          ],
-          "actual": 161.2,
-          "delta": 103.9
-        },
-        {
-          "name": "J.K. Dobbins",
-          "year": 2020,
-          "pick": 55,
-          "adjustment": -0.45,
-          "traits": [
-            "Workload inefficiency risk"
-          ],
-          "actual": 24.4,
-          "delta": -0.2
-        },
-        {
-          "name": "Tyler Ervin",
-          "year": 2016,
-          "pick": 119,
-          "adjustment": -0.29,
-          "traits": [
-            "Workload inefficiency risk"
-          ],
-          "actual": 2,
-          "delta": -5.8
-        },
-        {
-          "name": "Wendell Smallwood",
-          "year": 2016,
-          "pick": 153,
-          "adjustment": -0.29,
-          "traits": [
-            "Workload inefficiency risk"
-          ],
-          "actual": 11.2,
-          "delta": 7
-        },
-        {
-          "name": "Kelvin Taylor",
-          "year": 2016,
-          "pick": 211,
-          "adjustment": -0.23,
-          "traits": [
-            "Workload inefficiency risk"
-          ],
-          "actual": 0,
-          "delta": -3
-        },
-        {
-          "name": "Darius Jackson",
-          "year": 2016,
-          "pick": 216,
-          "adjustment": -0.23,
-          "traits": [
-            "Workload inefficiency risk"
-          ],
-          "actual": 0,
-          "delta": -3
-        }
-      ]
+      "biggestNegative": []
     },
     "TE": {
       "n": 66,
-      "adjustedCount": 29,
+      "adjustedCount": 0,
       "baseSpearman": 0.5593,
-      "adjustedSpearman": 0.5597,
+      "adjustedSpearman": 0.5593,
       "basePairwise": 0.7122,
       "adjustedPairwise": 0.7122,
       "baseTop20": {
@@ -787,228 +541,7 @@
           "Josh Oliver 2019 #69"
         ]
       },
-      "biggestPositive": [
-        {
-          "name": "Hunter Henry",
-          "year": 2016,
-          "pick": 35,
-          "adjustment": 0.15,
-          "traits": [
-            "Inline survivor"
-          ],
-          "actual": 46.6,
-          "delta": 11.4
-        },
-        {
-          "name": "O.J. Howard",
-          "year": 2017,
-          "pick": 19,
-          "adjustment": 0.15,
-          "traits": [
-            "Inline survivor"
-          ],
-          "actual": 17.8,
-          "delta": -29.2
-        },
-        {
-          "name": "David Njoku",
-          "year": 2017,
-          "pick": 29,
-          "adjustment": 0.15,
-          "traits": [
-            "Inline survivor"
-          ],
-          "actual": 42.2,
-          "delta": 2.9
-        },
-        {
-          "name": "Mike Gesicki",
-          "year": 2018,
-          "pick": 42,
-          "adjustment": 0.15,
-          "traits": [
-            "Inline survivor"
-          ],
-          "actual": 30.4,
-          "delta": -0.7
-        },
-        {
-          "name": "Noah Fant",
-          "year": 2019,
-          "pick": 20,
-          "adjustment": 0.15,
-          "traits": [
-            "Inline survivor"
-          ],
-          "actual": 32,
-          "delta": -14.2
-        },
-        {
-          "name": "Cole Kmet",
-          "year": 2020,
-          "pick": 43,
-          "adjustment": 0.15,
-          "traits": [
-            "Inline survivor"
-          ],
-          "actual": 32.2,
-          "delta": 1.7
-        },
-        {
-          "name": "Jonnu Smith",
-          "year": 2017,
-          "pick": 100,
-          "adjustment": 0.12,
-          "traits": [
-            "Inline survivor"
-          ],
-          "actual": 43,
-          "delta": 32.1
-        },
-        {
-          "name": "Mark Andrews",
-          "year": 2018,
-          "pick": 86,
-          "adjustment": 0.12,
-          "traits": [
-            "Inline survivor"
-          ],
-          "actual": 91.8,
-          "delta": 77.7
-        },
-        {
-          "name": "Jordan Akins",
-          "year": 2018,
-          "pick": 98,
-          "adjustment": 0.12,
-          "traits": [
-            "Inline survivor"
-          ],
-          "actual": 17.2,
-          "delta": 5.9
-        },
-        {
-          "name": "Kahale Warring",
-          "year": 2019,
-          "pick": 86,
-          "adjustment": 0.12,
-          "traits": [
-            "Inline survivor"
-          ],
-          "actual": 0,
-          "delta": -14.1
-        },
-        {
-          "name": "Dawson Knox",
-          "year": 2019,
-          "pick": 96,
-          "adjustment": 0.12,
-          "traits": [
-            "Inline survivor"
-          ],
-          "actual": 41.4,
-          "delta": 29.6
-        },
-        {
-          "name": "Devin Asiasi",
-          "year": 2020,
-          "pick": 91,
-          "adjustment": 0.12,
-          "traits": [
-            "Inline survivor"
-          ],
-          "actual": 0,
-          "delta": -12.9
-        },
-        {
-          "name": "Tommy Tremble",
-          "year": 2021,
-          "pick": 83,
-          "adjustment": 0.12,
-          "traits": [
-            "Inline survivor"
-          ],
-          "actual": 9.4,
-          "delta": -5.5
-        },
-        {
-          "name": "Tyler Higbee",
-          "year": 2016,
-          "pick": 110,
-          "adjustment": 0.1,
-          "traits": [
-            "Inline survivor"
-          ],
-          "actual": 40.6,
-          "delta": 31.5
-        },
-        {
-          "name": "Michael Roberts",
-          "year": 2017,
-          "pick": 127,
-          "adjustment": 0.1,
-          "traits": [
-            "Inline survivor"
-          ],
-          "actual": 1,
-          "delta": -5.7
-        },
-        {
-          "name": "George Kittle",
-          "year": 2017,
-          "pick": 146,
-          "adjustment": 0.1,
-          "traits": [
-            "Inline survivor"
-          ],
-          "actual": 149.6,
-          "delta": 144.8
-        },
-        {
-          "name": "Chris Herndon",
-          "year": 2018,
-          "pick": 107,
-          "adjustment": 0.1,
-          "traits": [
-            "Inline survivor"
-          ],
-          "actual": 8.4,
-          "delta": -1.2
-        },
-        {
-          "name": "Will Dissly",
-          "year": 2018,
-          "pick": 120,
-          "adjustment": 0.1,
-          "traits": [
-            "Inline survivor"
-          ],
-          "actual": 22,
-          "delta": 14.4
-        },
-        {
-          "name": "Tyler Conklin",
-          "year": 2018,
-          "pick": 157,
-          "adjustment": 0.1,
-          "traits": [
-            "Inline survivor"
-          ],
-          "actual": 24.8,
-          "delta": 20.9
-        },
-        {
-          "name": "Kaden Smith",
-          "year": 2019,
-          "pick": 176,
-          "adjustment": 0.1,
-          "traits": [
-            "Inline survivor"
-          ],
-          "actual": 4.2,
-          "delta": 1.2
-        }
-      ],
+      "biggestPositive": [],
       "biggestNegative": []
     }
   }

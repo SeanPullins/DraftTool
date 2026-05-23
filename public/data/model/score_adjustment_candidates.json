@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-05-23T00:17:46.448Z",
+  "generatedAt": "2026-05-23T00:31:38.094Z",
   "notes": [
     "Offline report only. Does not change site scores.",
     "scoreReady contains only RB real-draft-prior players with nonzero recommended adjustment. QB/WR/TE remain read-only context.",
@@ -16,9 +16,9 @@
     "TE": 1.5
   },
   "counts": {
-    "all": 336,
+    "all": 342,
     "scoreReady": 17,
-    "contextOnly": 319
+    "contextOnly": 325
   },
   "scoreReady": {
     "byPosition": {
@@ -1370,34 +1370,22 @@
           "compConfidence": 1,
           "quantumTraits": [
             {
-              "traitKey": "creation_without_chaos",
-              "label": "Creation without chaos",
-              "recommendedAdjustment": 0.2,
+              "traitKey": "pressure_creation_combo",
+              "label": "Pressure + creation combo",
+              "recommendedAdjustment": 0.8,
               "confidence": "medium",
-              "avgDeltaVsExpected": 2.2,
-              "starterRate": 0.5,
-              "starRate": 0.4,
-              "bustRate": 0.2,
-              "scoreReady": true
-            },
-            {
-              "traitKey": "accurate_aggressive",
-              "label": "Accurate aggressive passer",
-              "recommendedAdjustment": 0.2,
-              "confidence": "high",
-              "avgDeltaVsExpected": 1.5,
-              "starterRate": 0.28,
-              "starRate": 0.24,
-              "bustRate": 0.58,
+              "avgDeltaVsExpected": 7.8,
+              "starterRate": 0.55,
+              "starRate": 0.36,
+              "bustRate": 0.45,
               "scoreReady": false
             }
           ],
           "compComponent": 0.63,
-          "quantumComponent": 0.11,
-          "recommendedAdjustment": 0.74,
+          "quantumComponent": 0,
+          "recommendedAdjustment": 0.63,
           "reasons": [
-            "Comp signal +1.4 at confidence 1.00",
-            "Creation without chaos: +0.1"
+            "Comp signal +1.4 at confidence 1.00"
           ]
         },
         {
@@ -1414,34 +1402,22 @@
           "compConfidence": 1,
           "quantumTraits": [
             {
-              "traitKey": "creation_without_chaos",
-              "label": "Creation without chaos",
-              "recommendedAdjustment": 0.2,
-              "confidence": "medium",
-              "avgDeltaVsExpected": 2.2,
-              "starterRate": 0.5,
-              "starRate": 0.4,
-              "bustRate": 0.2,
-              "scoreReady": true
-            },
-            {
-              "traitKey": "accurate_aggressive",
-              "label": "Accurate aggressive passer",
-              "recommendedAdjustment": 0.2,
-              "confidence": "high",
-              "avgDeltaVsExpected": 1.5,
-              "starterRate": 0.28,
-              "starRate": 0.24,
-              "bustRate": 0.58,
+              "traitKey": "elite_creation_without_chaos",
+              "label": "Elite creation without chaos",
+              "recommendedAdjustment": 0,
+              "confidence": "context-only",
+              "avgDeltaVsExpected": 21.7,
+              "starterRate": 0.67,
+              "starRate": 0.67,
+              "bustRate": 0,
               "scoreReady": false
             }
           ],
           "compComponent": 0.63,
-          "quantumComponent": 0.11,
-          "recommendedAdjustment": 0.74,
+          "quantumComponent": 0,
+          "recommendedAdjustment": 0.63,
           "reasons": [
-            "Comp signal +1.4 at confidence 1.00",
-            "Creation without chaos: +0.1"
+            "Comp signal +1.4 at confidence 1.00"
           ]
         },
         {
@@ -1456,36 +1432,12 @@
           "realDraftPrior": true,
           "compAdjustment": 1.9,
           "compConfidence": 1,
-          "quantumTraits": [
-            {
-              "traitKey": "creation_without_chaos",
-              "label": "Creation without chaos",
-              "recommendedAdjustment": 0.2,
-              "confidence": "medium",
-              "avgDeltaVsExpected": 2.2,
-              "starterRate": 0.5,
-              "starRate": 0.4,
-              "bustRate": 0.2,
-              "scoreReady": true
-            },
-            {
-              "traitKey": "accurate_aggressive",
-              "label": "Accurate aggressive passer",
-              "recommendedAdjustment": 0.2,
-              "confidence": "high",
-              "avgDeltaVsExpected": 1.5,
-              "starterRate": 0.28,
-              "starRate": 0.24,
-              "bustRate": 0.58,
-              "scoreReady": false
-            }
-          ],
+          "quantumTraits": [],
           "compComponent": 0.85,
-          "quantumComponent": 0.11,
-          "recommendedAdjustment": 0.96,
+          "quantumComponent": 0,
+          "recommendedAdjustment": 0.85,
           "reasons": [
-            "Comp signal +1.9 at confidence 1.00",
-            "Creation without chaos: +0.1"
+            "Comp signal +1.9 at confidence 1.00"
           ]
         },
         {
@@ -1502,14 +1454,14 @@
           "compConfidence": 1,
           "quantumTraits": [
             {
-              "traitKey": "accurate_aggressive",
-              "label": "Accurate aggressive passer",
+              "traitKey": "nfl_timing_translator",
+              "label": "NFL timing translator",
               "recommendedAdjustment": 0.2,
               "confidence": "high",
-              "avgDeltaVsExpected": 1.5,
-              "starterRate": 0.28,
-              "starRate": 0.24,
-              "bustRate": 0.58,
+              "avgDeltaVsExpected": 1.7,
+              "starterRate": 0.32,
+              "starRate": 0.25,
+              "bustRate": 0.57,
               "scoreReady": false
             }
           ],
@@ -1532,25 +1484,12 @@
           "realDraftPrior": true,
           "compAdjustment": 0.9,
           "compConfidence": 1,
-          "quantumTraits": [
-            {
-              "traitKey": "pressure_translator",
-              "label": "Pressure translator",
-              "recommendedAdjustment": 0.2,
-              "confidence": "medium",
-              "avgDeltaVsExpected": 2.3,
-              "starterRate": 0.45,
-              "starRate": 0.36,
-              "bustRate": 0.55,
-              "scoreReady": true
-            }
-          ],
+          "quantumTraits": [],
           "compComponent": 0.41,
-          "quantumComponent": 0.11,
-          "recommendedAdjustment": 0.52,
+          "quantumComponent": 0,
+          "recommendedAdjustment": 0.41,
           "reasons": [
-            "Comp signal +0.9 at confidence 1.00",
-            "Pressure translator: +0.1"
+            "Comp signal +0.9 at confidence 1.00"
           ]
         },
         {
@@ -1567,46 +1506,44 @@
           "compConfidence": 0.8,
           "quantumTraits": [
             {
-              "traitKey": "creation_without_chaos",
-              "label": "Creation without chaos",
-              "recommendedAdjustment": 0.2,
-              "confidence": "medium",
-              "avgDeltaVsExpected": 2.2,
-              "starterRate": 0.5,
-              "starRate": 0.4,
-              "bustRate": 0.2,
-              "scoreReady": true
-            },
-            {
-              "traitKey": "accurate_aggressive",
-              "label": "Accurate aggressive passer",
-              "recommendedAdjustment": 0.2,
-              "confidence": "high",
-              "avgDeltaVsExpected": 1.5,
-              "starterRate": 0.28,
-              "starRate": 0.24,
-              "bustRate": 0.58,
+              "traitKey": "elite_creation_without_chaos",
+              "label": "Elite creation without chaos",
+              "recommendedAdjustment": 0,
+              "confidence": "context-only",
+              "avgDeltaVsExpected": 21.7,
+              "starterRate": 0.67,
+              "starRate": 0.67,
+              "bustRate": 0,
               "scoreReady": false
             },
             {
-              "traitKey": "pressure_translator",
-              "label": "Pressure translator",
+              "traitKey": "nfl_timing_translator",
+              "label": "NFL timing translator",
               "recommendedAdjustment": 0.2,
+              "confidence": "high",
+              "avgDeltaVsExpected": 1.7,
+              "starterRate": 0.32,
+              "starRate": 0.25,
+              "bustRate": 0.57,
+              "scoreReady": false
+            },
+            {
+              "traitKey": "pressure_creation_combo",
+              "label": "Pressure + creation combo",
+              "recommendedAdjustment": 0.8,
               "confidence": "medium",
-              "avgDeltaVsExpected": 2.3,
-              "starterRate": 0.45,
+              "avgDeltaVsExpected": 7.8,
+              "starterRate": 0.55,
               "starRate": 0.36,
-              "bustRate": 0.55,
-              "scoreReady": true
+              "bustRate": 0.45,
+              "scoreReady": false
             }
           ],
           "compComponent": -0.09,
-          "quantumComponent": 0.14,
-          "recommendedAdjustment": 0.05,
+          "quantumComponent": 0,
+          "recommendedAdjustment": -0.09,
           "reasons": [
             "Comp signal -0.4 at confidence 0.80",
-            "Creation without chaos: +0.1",
-            "Pressure translator: +0.1",
             "Draft capital damping: x0.65"
           ]
         },
@@ -1642,19 +1579,7 @@
           "realDraftPrior": true,
           "compAdjustment": -0.2,
           "compConfidence": 1,
-          "quantumTraits": [
-            {
-              "traitKey": "accurate_aggressive",
-              "label": "Accurate aggressive passer",
-              "recommendedAdjustment": 0.2,
-              "confidence": "high",
-              "avgDeltaVsExpected": 1.5,
-              "starterRate": 0.28,
-              "starRate": 0.24,
-              "bustRate": 0.58,
-              "scoreReady": false
-            }
-          ],
+          "quantumTraits": [],
           "compComponent": -0.04,
           "quantumComponent": 0,
           "recommendedAdjustment": -0.04,
@@ -1698,14 +1623,14 @@
           "compConfidence": 1,
           "quantumTraits": [
             {
-              "traitKey": "accurate_aggressive",
-              "label": "Accurate aggressive passer",
-              "recommendedAdjustment": 0.2,
-              "confidence": "high",
-              "avgDeltaVsExpected": 1.5,
-              "starterRate": 0.28,
-              "starRate": 0.24,
-              "bustRate": 0.58,
+              "traitKey": "pressure_creation_combo",
+              "label": "Pressure + creation combo",
+              "recommendedAdjustment": 0.8,
+              "confidence": "medium",
+              "avgDeltaVsExpected": 7.8,
+              "starterRate": 0.55,
+              "starRate": 0.36,
+              "bustRate": 0.45,
               "scoreReady": false
             }
           ],
@@ -1730,34 +1655,22 @@
           "compConfidence": 1,
           "quantumTraits": [
             {
-              "traitKey": "creation_without_chaos",
-              "label": "Creation without chaos",
-              "recommendedAdjustment": 0.2,
-              "confidence": "medium",
-              "avgDeltaVsExpected": 2.2,
-              "starterRate": 0.5,
-              "starRate": 0.4,
-              "bustRate": 0.2,
-              "scoreReady": true
-            },
-            {
-              "traitKey": "accurate_aggressive",
-              "label": "Accurate aggressive passer",
-              "recommendedAdjustment": 0.2,
-              "confidence": "high",
-              "avgDeltaVsExpected": 1.5,
-              "starterRate": 0.28,
-              "starRate": 0.24,
-              "bustRate": 0.58,
+              "traitKey": "elite_creation_without_chaos",
+              "label": "Elite creation without chaos",
+              "recommendedAdjustment": 0,
+              "confidence": "context-only",
+              "avgDeltaVsExpected": 21.7,
+              "starterRate": 0.67,
+              "starRate": 0.67,
+              "bustRate": 0,
               "scoreReady": false
             }
           ],
           "compComponent": 0.54,
-          "quantumComponent": 0.11,
-          "recommendedAdjustment": 0.65,
+          "quantumComponent": 0,
+          "recommendedAdjustment": 0.54,
           "reasons": [
-            "Comp signal +1.2 at confidence 1.00",
-            "Creation without chaos: +0.1"
+            "Comp signal +1.2 at confidence 1.00"
           ]
         },
         {
@@ -1772,36 +1685,12 @@
           "realDraftPrior": true,
           "compAdjustment": -0.5,
           "compConfidence": 1,
-          "quantumTraits": [
-            {
-              "traitKey": "accurate_aggressive",
-              "label": "Accurate aggressive passer",
-              "recommendedAdjustment": 0.2,
-              "confidence": "high",
-              "avgDeltaVsExpected": 1.5,
-              "starterRate": 0.28,
-              "starRate": 0.24,
-              "bustRate": 0.58,
-              "scoreReady": false
-            },
-            {
-              "traitKey": "pressure_translator",
-              "label": "Pressure translator",
-              "recommendedAdjustment": 0.2,
-              "confidence": "medium",
-              "avgDeltaVsExpected": 2.3,
-              "starterRate": 0.45,
-              "starRate": 0.36,
-              "bustRate": 0.55,
-              "scoreReady": true
-            }
-          ],
+          "quantumTraits": [],
           "compComponent": -0.23,
-          "quantumComponent": 0.11,
-          "recommendedAdjustment": -0.11,
+          "quantumComponent": 0,
+          "recommendedAdjustment": -0.23,
           "reasons": [
-            "Comp signal -0.5 at confidence 1.00",
-            "Pressure translator: +0.1"
+            "Comp signal -0.5 at confidence 1.00"
           ]
         },
         {
@@ -1816,25 +1705,12 @@
           "realDraftPrior": true,
           "compAdjustment": -0.6,
           "compConfidence": 1,
-          "quantumTraits": [
-            {
-              "traitKey": "pressure_translator",
-              "label": "Pressure translator",
-              "recommendedAdjustment": 0.2,
-              "confidence": "medium",
-              "avgDeltaVsExpected": 2.3,
-              "starterRate": 0.45,
-              "starRate": 0.36,
-              "bustRate": 0.55,
-              "scoreReady": true
-            }
-          ],
+          "quantumTraits": [],
           "compComponent": -0.22,
-          "quantumComponent": 0.09,
-          "recommendedAdjustment": -0.13,
+          "quantumComponent": 0,
+          "recommendedAdjustment": -0.22,
           "reasons": [
             "Comp signal -0.6 at confidence 1.00",
-            "Pressure translator: +0.1",
             "Draft capital damping: x0.80"
           ]
         },
@@ -1850,19 +1726,7 @@
           "realDraftPrior": true,
           "compAdjustment": -0.6,
           "compConfidence": 1,
-          "quantumTraits": [
-            {
-              "traitKey": "accurate_aggressive",
-              "label": "Accurate aggressive passer",
-              "recommendedAdjustment": 0.2,
-              "confidence": "high",
-              "avgDeltaVsExpected": 1.5,
-              "starterRate": 0.28,
-              "starRate": 0.24,
-              "bustRate": 0.58,
-              "scoreReady": false
-            }
-          ],
+          "quantumTraits": [],
           "compComponent": -0.22,
           "quantumComponent": 0,
           "recommendedAdjustment": -0.22,
@@ -1906,34 +1770,22 @@
           "compConfidence": 0.8,
           "quantumTraits": [
             {
-              "traitKey": "accurate_aggressive",
-              "label": "Accurate aggressive passer",
+              "traitKey": "nfl_timing_translator",
+              "label": "NFL timing translator",
               "recommendedAdjustment": 0.2,
               "confidence": "high",
-              "avgDeltaVsExpected": 1.5,
-              "starterRate": 0.28,
-              "starRate": 0.24,
-              "bustRate": 0.58,
+              "avgDeltaVsExpected": 1.7,
+              "starterRate": 0.32,
+              "starRate": 0.25,
+              "bustRate": 0.57,
               "scoreReady": false
-            },
-            {
-              "traitKey": "pressure_translator",
-              "label": "Pressure translator",
-              "recommendedAdjustment": 0.2,
-              "confidence": "medium",
-              "avgDeltaVsExpected": 2.3,
-              "starterRate": 0.45,
-              "starRate": 0.36,
-              "bustRate": 0.55,
-              "scoreReady": true
             }
           ],
           "compComponent": -0.04,
-          "quantumComponent": 0.06,
-          "recommendedAdjustment": 0.02,
+          "quantumComponent": 0,
+          "recommendedAdjustment": -0.04,
           "reasons": [
             "Comp signal -0.2 at confidence 0.80",
-            "Pressure translator: +0.1",
             "Draft capital damping: x0.50"
           ]
         },
@@ -1951,14 +1803,14 @@
           "compConfidence": 0.8,
           "quantumTraits": [
             {
-              "traitKey": "accurate_aggressive",
-              "label": "Accurate aggressive passer",
+              "traitKey": "nfl_timing_translator",
+              "label": "NFL timing translator",
               "recommendedAdjustment": 0.2,
               "confidence": "high",
-              "avgDeltaVsExpected": 1.5,
-              "starterRate": 0.28,
-              "starRate": 0.24,
-              "bustRate": 0.58,
+              "avgDeltaVsExpected": 1.7,
+              "starterRate": 0.32,
+              "starRate": 0.25,
+              "bustRate": 0.57,
               "scoreReady": false
             }
           ],
@@ -2024,19 +1876,7 @@
           "realDraftPrior": true,
           "compAdjustment": -0.1,
           "compConfidence": 0.8,
-          "quantumTraits": [
-            {
-              "traitKey": "accurate_aggressive",
-              "label": "Accurate aggressive passer",
-              "recommendedAdjustment": 0.2,
-              "confidence": "high",
-              "avgDeltaVsExpected": 1.5,
-              "starterRate": 0.28,
-              "starRate": 0.24,
-              "bustRate": 0.58,
-              "scoreReady": false
-            }
-          ],
+          "quantumTraits": [],
           "compComponent": -0.02,
           "quantumComponent": 0,
           "recommendedAdjustment": -0.02,
@@ -2077,19 +1917,7 @@
           "realDraftPrior": false,
           "compAdjustment": 0,
           "compConfidence": 0,
-          "quantumTraits": [
-            {
-              "traitKey": "accurate_aggressive",
-              "label": "Accurate aggressive passer",
-              "recommendedAdjustment": 0.2,
-              "confidence": "high",
-              "avgDeltaVsExpected": 1.5,
-              "starterRate": 0.28,
-              "starRate": 0.24,
-              "bustRate": 0.58,
-              "scoreReady": false
-            }
-          ],
+          "quantumTraits": [],
           "compComponent": 0,
           "quantumComponent": 0,
           "recommendedAdjustment": 0,
@@ -2111,46 +1939,22 @@
           "compConfidence": 0,
           "quantumTraits": [
             {
-              "traitKey": "creation_without_chaos",
-              "label": "Creation without chaos",
-              "recommendedAdjustment": 0.2,
+              "traitKey": "pressure_creation_combo",
+              "label": "Pressure + creation combo",
+              "recommendedAdjustment": 0.8,
               "confidence": "medium",
-              "avgDeltaVsExpected": 2.2,
-              "starterRate": 0.5,
-              "starRate": 0.4,
-              "bustRate": 0.2,
-              "scoreReady": true
-            },
-            {
-              "traitKey": "accurate_aggressive",
-              "label": "Accurate aggressive passer",
-              "recommendedAdjustment": 0.2,
-              "confidence": "high",
-              "avgDeltaVsExpected": 1.5,
-              "starterRate": 0.28,
-              "starRate": 0.24,
-              "bustRate": 0.58,
-              "scoreReady": false
-            },
-            {
-              "traitKey": "pressure_translator",
-              "label": "Pressure translator",
-              "recommendedAdjustment": 0.2,
-              "confidence": "medium",
-              "avgDeltaVsExpected": 2.3,
-              "starterRate": 0.45,
+              "avgDeltaVsExpected": 7.8,
+              "starterRate": 0.55,
               "starRate": 0.36,
-              "bustRate": 0.55,
-              "scoreReady": true
+              "bustRate": 0.45,
+              "scoreReady": false
             }
           ],
           "compComponent": 0,
           "quantumComponent": 0,
           "recommendedAdjustment": 0,
           "reasons": [
-            "Comp signal context-only: no real draft prior",
-            "Creation without chaos: context-only",
-            "Pressure translator: context-only"
+            "Comp signal context-only: no real draft prior"
           ]
         },
         {
@@ -2167,35 +1971,22 @@
           "compConfidence": 0,
           "quantumTraits": [
             {
-              "traitKey": "creation_without_chaos",
-              "label": "Creation without chaos",
-              "recommendedAdjustment": 0.2,
+              "traitKey": "pressure_creation_combo",
+              "label": "Pressure + creation combo",
+              "recommendedAdjustment": 0.8,
               "confidence": "medium",
-              "avgDeltaVsExpected": 2.2,
-              "starterRate": 0.5,
-              "starRate": 0.4,
-              "bustRate": 0.2,
-              "scoreReady": true
-            },
-            {
-              "traitKey": "pressure_translator",
-              "label": "Pressure translator",
-              "recommendedAdjustment": 0.2,
-              "confidence": "medium",
-              "avgDeltaVsExpected": 2.3,
-              "starterRate": 0.45,
+              "avgDeltaVsExpected": 7.8,
+              "starterRate": 0.55,
               "starRate": 0.36,
-              "bustRate": 0.55,
-              "scoreReady": true
+              "bustRate": 0.45,
+              "scoreReady": false
             }
           ],
           "compComponent": 0,
           "quantumComponent": 0,
           "recommendedAdjustment": 0,
           "reasons": [
-            "Comp signal context-only: no real draft prior",
-            "Creation without chaos: context-only",
-            "Pressure translator: context-only"
+            "Comp signal context-only: no real draft prior"
           ]
         },
         {
@@ -2212,34 +2003,22 @@
           "compConfidence": 0,
           "quantumTraits": [
             {
-              "traitKey": "accurate_aggressive",
-              "label": "Accurate aggressive passer",
+              "traitKey": "nfl_timing_translator",
+              "label": "NFL timing translator",
               "recommendedAdjustment": 0.2,
               "confidence": "high",
-              "avgDeltaVsExpected": 1.5,
-              "starterRate": 0.28,
-              "starRate": 0.24,
-              "bustRate": 0.58,
+              "avgDeltaVsExpected": 1.7,
+              "starterRate": 0.32,
+              "starRate": 0.25,
+              "bustRate": 0.57,
               "scoreReady": false
-            },
-            {
-              "traitKey": "pressure_translator",
-              "label": "Pressure translator",
-              "recommendedAdjustment": 0.2,
-              "confidence": "medium",
-              "avgDeltaVsExpected": 2.3,
-              "starterRate": 0.45,
-              "starRate": 0.36,
-              "bustRate": 0.55,
-              "scoreReady": true
             }
           ],
           "compComponent": 0,
           "quantumComponent": 0,
           "recommendedAdjustment": 0,
           "reasons": [
-            "Comp signal context-only: no real draft prior",
-            "Pressure translator: context-only"
+            "Comp signal context-only: no real draft prior"
           ]
         },
         {
@@ -2274,7 +2053,19 @@
           "realDraftPrior": false,
           "compAdjustment": 0,
           "compConfidence": 0,
-          "quantumTraits": [],
+          "quantumTraits": [
+            {
+              "traitKey": "nfl_timing_translator",
+              "label": "NFL timing translator",
+              "recommendedAdjustment": 0.2,
+              "confidence": "high",
+              "avgDeltaVsExpected": 1.7,
+              "starterRate": 0.32,
+              "starRate": 0.25,
+              "bustRate": 0.57,
+              "scoreReady": false
+            }
+          ],
           "compComponent": 0,
           "quantumComponent": 0,
           "recommendedAdjustment": 0,
@@ -2296,35 +2087,22 @@
           "compConfidence": 0,
           "quantumTraits": [
             {
-              "traitKey": "creation_without_chaos",
-              "label": "Creation without chaos",
-              "recommendedAdjustment": 0.2,
+              "traitKey": "pressure_creation_combo",
+              "label": "Pressure + creation combo",
+              "recommendedAdjustment": 0.8,
               "confidence": "medium",
-              "avgDeltaVsExpected": 2.2,
-              "starterRate": 0.5,
-              "starRate": 0.4,
-              "bustRate": 0.2,
-              "scoreReady": true
-            },
-            {
-              "traitKey": "pressure_translator",
-              "label": "Pressure translator",
-              "recommendedAdjustment": 0.2,
-              "confidence": "medium",
-              "avgDeltaVsExpected": 2.3,
-              "starterRate": 0.45,
+              "avgDeltaVsExpected": 7.8,
+              "starterRate": 0.55,
               "starRate": 0.36,
-              "bustRate": 0.55,
-              "scoreReady": true
+              "bustRate": 0.45,
+              "scoreReady": false
             }
           ],
           "compComponent": 0,
           "quantumComponent": 0,
           "recommendedAdjustment": 0,
           "reasons": [
-            "Comp signal context-only: no real draft prior",
-            "Creation without chaos: context-only",
-            "Pressure translator: context-only"
+            "Comp signal context-only: no real draft prior"
           ]
         },
         {
@@ -2341,25 +2119,14 @@
           "compConfidence": 0,
           "quantumTraits": [
             {
-              "traitKey": "creation_without_chaos",
-              "label": "Creation without chaos",
-              "recommendedAdjustment": 0.2,
-              "confidence": "medium",
-              "avgDeltaVsExpected": 2.2,
-              "starterRate": 0.5,
-              "starRate": 0.4,
-              "bustRate": 0.2,
-              "scoreReady": true
-            },
-            {
-              "traitKey": "accurate_aggressive",
-              "label": "Accurate aggressive passer",
+              "traitKey": "nfl_timing_translator",
+              "label": "NFL timing translator",
               "recommendedAdjustment": 0.2,
               "confidence": "high",
-              "avgDeltaVsExpected": 1.5,
-              "starterRate": 0.28,
-              "starRate": 0.24,
-              "bustRate": 0.58,
+              "avgDeltaVsExpected": 1.7,
+              "starterRate": 0.32,
+              "starRate": 0.25,
+              "bustRate": 0.57,
               "scoreReady": false
             }
           ],
@@ -2367,8 +2134,7 @@
           "quantumComponent": 0,
           "recommendedAdjustment": 0,
           "reasons": [
-            "Comp signal context-only: no real draft prior",
-            "Creation without chaos: context-only"
+            "Comp signal context-only: no real draft prior"
           ]
         },
         {
@@ -2385,34 +2151,22 @@
           "compConfidence": 0,
           "quantumTraits": [
             {
-              "traitKey": "accurate_aggressive",
-              "label": "Accurate aggressive passer",
+              "traitKey": "nfl_timing_translator",
+              "label": "NFL timing translator",
               "recommendedAdjustment": 0.2,
               "confidence": "high",
-              "avgDeltaVsExpected": 1.5,
-              "starterRate": 0.28,
-              "starRate": 0.24,
-              "bustRate": 0.58,
+              "avgDeltaVsExpected": 1.7,
+              "starterRate": 0.32,
+              "starRate": 0.25,
+              "bustRate": 0.57,
               "scoreReady": false
-            },
-            {
-              "traitKey": "pressure_translator",
-              "label": "Pressure translator",
-              "recommendedAdjustment": 0.2,
-              "confidence": "medium",
-              "avgDeltaVsExpected": 2.3,
-              "starterRate": 0.45,
-              "starRate": 0.36,
-              "bustRate": 0.55,
-              "scoreReady": true
             }
           ],
           "compComponent": 0,
           "quantumComponent": 0,
           "recommendedAdjustment": 0,
           "reasons": [
-            "Comp signal context-only: no real draft prior",
-            "Pressure translator: context-only"
+            "Comp signal context-only: no real draft prior"
           ]
         },
         {
@@ -2429,34 +2183,22 @@
           "compConfidence": 0,
           "quantumTraits": [
             {
-              "traitKey": "accurate_aggressive",
-              "label": "Accurate aggressive passer",
-              "recommendedAdjustment": 0.2,
-              "confidence": "high",
-              "avgDeltaVsExpected": 1.5,
-              "starterRate": 0.28,
-              "starRate": 0.24,
-              "bustRate": 0.58,
-              "scoreReady": false
-            },
-            {
-              "traitKey": "pressure_translator",
-              "label": "Pressure translator",
-              "recommendedAdjustment": 0.2,
+              "traitKey": "pressure_creation_combo",
+              "label": "Pressure + creation combo",
+              "recommendedAdjustment": 0.8,
               "confidence": "medium",
-              "avgDeltaVsExpected": 2.3,
-              "starterRate": 0.45,
+              "avgDeltaVsExpected": 7.8,
+              "starterRate": 0.55,
               "starRate": 0.36,
-              "bustRate": 0.55,
-              "scoreReady": true
+              "bustRate": 0.45,
+              "scoreReady": false
             }
           ],
           "compComponent": 0,
           "quantumComponent": 0,
           "recommendedAdjustment": 0,
           "reasons": [
-            "Comp signal context-only: no real draft prior",
-            "Pressure translator: context-only"
+            "Comp signal context-only: no real draft prior"
           ]
         },
         {
@@ -2491,19 +2233,7 @@
           "realDraftPrior": true,
           "compAdjustment": 0,
           "compConfidence": 0,
-          "quantumTraits": [
-            {
-              "traitKey": "accurate_aggressive",
-              "label": "Accurate aggressive passer",
-              "recommendedAdjustment": 0.2,
-              "confidence": "high",
-              "avgDeltaVsExpected": 1.5,
-              "starterRate": 0.28,
-              "starRate": 0.24,
-              "bustRate": 0.58,
-              "scoreReady": false
-            }
-          ],
+          "quantumTraits": [],
           "compComponent": 0,
           "quantumComponent": 0,
           "recommendedAdjustment": 0,
@@ -2523,23 +2253,22 @@
           "compConfidence": 0,
           "quantumTraits": [
             {
-              "traitKey": "pressure_translator",
-              "label": "Pressure translator",
+              "traitKey": "nfl_timing_translator",
+              "label": "NFL timing translator",
               "recommendedAdjustment": 0.2,
-              "confidence": "medium",
-              "avgDeltaVsExpected": 2.3,
-              "starterRate": 0.45,
-              "starRate": 0.36,
-              "bustRate": 0.55,
-              "scoreReady": true
+              "confidence": "high",
+              "avgDeltaVsExpected": 1.7,
+              "starterRate": 0.32,
+              "starRate": 0.25,
+              "bustRate": 0.57,
+              "scoreReady": false
             }
           ],
           "compComponent": 0,
           "quantumComponent": 0,
           "recommendedAdjustment": 0,
           "reasons": [
-            "Comp signal context-only: no real draft prior",
-            "Pressure translator: context-only"
+            "Comp signal context-only: no real draft prior"
           ]
         },
         {
@@ -2554,19 +2283,7 @@
           "realDraftPrior": false,
           "compAdjustment": 0,
           "compConfidence": 0,
-          "quantumTraits": [
-            {
-              "traitKey": "accurate_aggressive",
-              "label": "Accurate aggressive passer",
-              "recommendedAdjustment": 0.2,
-              "confidence": "high",
-              "avgDeltaVsExpected": 1.5,
-              "starterRate": 0.28,
-              "starRate": 0.24,
-              "bustRate": 0.58,
-              "scoreReady": false
-            }
-          ],
+          "quantumTraits": [],
           "compComponent": 0,
           "quantumComponent": 0,
           "recommendedAdjustment": 0,
@@ -2588,14 +2305,14 @@
           "compConfidence": 0,
           "quantumTraits": [
             {
-              "traitKey": "accurate_aggressive",
-              "label": "Accurate aggressive passer",
+              "traitKey": "nfl_timing_translator",
+              "label": "NFL timing translator",
               "recommendedAdjustment": 0.2,
               "confidence": "high",
-              "avgDeltaVsExpected": 1.5,
-              "starterRate": 0.28,
-              "starRate": 0.24,
-              "bustRate": 0.58,
+              "avgDeltaVsExpected": 1.7,
+              "starterRate": 0.32,
+              "starRate": 0.25,
+              "bustRate": 0.57,
               "scoreReady": false
             }
           ],
@@ -2618,19 +2335,7 @@
           "realDraftPrior": false,
           "compAdjustment": 0,
           "compConfidence": 0,
-          "quantumTraits": [
-            {
-              "traitKey": "accurate_aggressive",
-              "label": "Accurate aggressive passer",
-              "recommendedAdjustment": 0.2,
-              "confidence": "high",
-              "avgDeltaVsExpected": 1.5,
-              "starterRate": 0.28,
-              "starRate": 0.24,
-              "bustRate": 0.58,
-              "scoreReady": false
-            }
-          ],
+          "quantumTraits": [],
           "compComponent": 0,
           "quantumComponent": 0,
           "recommendedAdjustment": 0,
@@ -2672,14 +2377,14 @@
           "compConfidence": 0,
           "quantumTraits": [
             {
-              "traitKey": "accurate_aggressive",
-              "label": "Accurate aggressive passer",
+              "traitKey": "nfl_timing_translator",
+              "label": "NFL timing translator",
               "recommendedAdjustment": 0.2,
               "confidence": "high",
-              "avgDeltaVsExpected": 1.5,
-              "starterRate": 0.28,
-              "starRate": 0.24,
-              "bustRate": 0.58,
+              "avgDeltaVsExpected": 1.7,
+              "starterRate": 0.32,
+              "starRate": 0.25,
+              "bustRate": 0.57,
               "scoreReady": false
             }
           ],
@@ -2704,14 +2409,14 @@
           "compConfidence": 0,
           "quantumTraits": [
             {
-              "traitKey": "accurate_aggressive",
-              "label": "Accurate aggressive passer",
+              "traitKey": "nfl_timing_translator",
+              "label": "NFL timing translator",
               "recommendedAdjustment": 0.2,
               "confidence": "high",
-              "avgDeltaVsExpected": 1.5,
-              "starterRate": 0.28,
-              "starRate": 0.24,
-              "bustRate": 0.58,
+              "avgDeltaVsExpected": 1.7,
+              "starterRate": 0.32,
+              "starRate": 0.25,
+              "bustRate": 0.57,
               "scoreReady": false
             }
           ],
@@ -2720,6 +2425,68 @@
           "recommendedAdjustment": 0,
           "reasons": [
             "Comp signal context-only: no real draft prior"
+          ]
+        },
+        {
+          "year": 2026,
+          "pos": "QB",
+          "name": "Cameran Brown",
+          "school": "GA STATE",
+          "pick": 20,
+          "rawGeneratedScore": 68,
+          "source": "qb_future_pff_forecast",
+          "actualDraftPick": null,
+          "realDraftPrior": false,
+          "compAdjustment": 0,
+          "compConfidence": 0,
+          "quantumTraits": [
+            {
+              "traitKey": "nfl_timing_translator",
+              "label": "NFL timing translator",
+              "recommendedAdjustment": 0.2,
+              "confidence": "high",
+              "avgDeltaVsExpected": 1.7,
+              "starterRate": 0.32,
+              "starRate": 0.25,
+              "bustRate": 0.57,
+              "scoreReady": false
+            }
+          ],
+          "compComponent": 0,
+          "quantumComponent": 0,
+          "recommendedAdjustment": 0,
+          "reasons": []
+        },
+        {
+          "year": 2026,
+          "pos": "QB",
+          "name": "Cade Klubnik",
+          "school": "CLEMSON",
+          "pick": 110,
+          "rawGeneratedScore": 66,
+          "source": "qb_future_pff_forecast",
+          "actualDraftPick": 110,
+          "realDraftPrior": true,
+          "compAdjustment": 0,
+          "compConfidence": 0,
+          "quantumTraits": [
+            {
+              "traitKey": "nfl_timing_translator",
+              "label": "NFL timing translator",
+              "recommendedAdjustment": 0.2,
+              "confidence": "high",
+              "avgDeltaVsExpected": 1.7,
+              "starterRate": 0.32,
+              "starRate": 0.25,
+              "bustRate": 0.57,
+              "scoreReady": false
+            }
+          ],
+          "compComponent": 0,
+          "quantumComponent": 0,
+          "recommendedAdjustment": 0,
+          "reasons": [
+            "Draft capital damping: x0.65"
           ]
         },
         {
@@ -2736,14 +2503,14 @@
           "compConfidence": 0,
           "quantumTraits": [
             {
-              "traitKey": "accurate_aggressive",
-              "label": "Accurate aggressive passer",
+              "traitKey": "nfl_timing_translator",
+              "label": "NFL timing translator",
               "recommendedAdjustment": 0.2,
               "confidence": "high",
-              "avgDeltaVsExpected": 1.5,
-              "starterRate": 0.28,
-              "starRate": 0.24,
-              "bustRate": 0.58,
+              "avgDeltaVsExpected": 1.7,
+              "starterRate": 0.32,
+              "starRate": 0.25,
+              "bustRate": 0.57,
               "scoreReady": false
             }
           ],
@@ -2755,69 +2522,9 @@
         {
           "year": 2026,
           "pos": "QB",
-          "name": "Demond Williams Jr.",
-          "school": "WASHINGTON",
-          "pick": 24,
-          "rawGeneratedScore": 66,
-          "source": "qb_future_pff_forecast",
-          "actualDraftPick": null,
-          "realDraftPrior": false,
-          "compAdjustment": 0,
-          "compConfidence": 0,
-          "quantumTraits": [
-            {
-              "traitKey": "accurate_aggressive",
-              "label": "Accurate aggressive passer",
-              "recommendedAdjustment": 0.2,
-              "confidence": "high",
-              "avgDeltaVsExpected": 1.5,
-              "starterRate": 0.28,
-              "starRate": 0.24,
-              "bustRate": 0.58,
-              "scoreReady": false
-            }
-          ],
-          "compComponent": 0,
-          "quantumComponent": 0,
-          "recommendedAdjustment": 0,
-          "reasons": []
-        },
-        {
-          "year": 2026,
-          "pos": "QB",
-          "name": "Brad Jackson",
-          "school": "TEXAS ST",
-          "pick": 25,
-          "rawGeneratedScore": 66,
-          "source": "qb_future_pff_forecast",
-          "actualDraftPick": null,
-          "realDraftPrior": false,
-          "compAdjustment": 0,
-          "compConfidence": 0,
-          "quantumTraits": [
-            {
-              "traitKey": "accurate_aggressive",
-              "label": "Accurate aggressive passer",
-              "recommendedAdjustment": 0.2,
-              "confidence": "high",
-              "avgDeltaVsExpected": 1.5,
-              "starterRate": 0.28,
-              "starRate": 0.24,
-              "bustRate": 0.58,
-              "scoreReady": false
-            }
-          ],
-          "compComponent": 0,
-          "quantumComponent": 0,
-          "recommendedAdjustment": 0,
-          "reasons": []
-        },
-        {
-          "year": 2026,
-          "pos": "QB",
-          "name": "Darian Mensah",
-          "school": "DUKE",
-          "pick": 26,
+          "name": "Broc Lowry",
+          "school": "W MICHIGAN",
+          "pick": 28,
           "rawGeneratedScore": 65,
           "source": "qb_future_pff_forecast",
           "actualDraftPick": null,
@@ -2826,169 +2533,14 @@
           "compConfidence": 0,
           "quantumTraits": [
             {
-              "traitKey": "accurate_aggressive",
-              "label": "Accurate aggressive passer",
+              "traitKey": "nfl_timing_translator",
+              "label": "NFL timing translator",
               "recommendedAdjustment": 0.2,
               "confidence": "high",
-              "avgDeltaVsExpected": 1.5,
-              "starterRate": 0.28,
-              "starRate": 0.24,
-              "bustRate": 0.58,
-              "scoreReady": false
-            }
-          ],
-          "compComponent": 0,
-          "quantumComponent": 0,
-          "recommendedAdjustment": 0,
-          "reasons": []
-        },
-        {
-          "year": 2026,
-          "pos": "QB",
-          "name": "Athan Kaliakmanis",
-          "school": "RUTGERS",
-          "pick": 223,
-          "rawGeneratedScore": 64,
-          "source": "qb_future_pff_forecast",
-          "actualDraftPick": 223,
-          "realDraftPrior": true,
-          "compAdjustment": 0,
-          "compConfidence": 0,
-          "quantumTraits": [
-            {
-              "traitKey": "creation_without_chaos",
-              "label": "Creation without chaos",
-              "recommendedAdjustment": 0.2,
-              "confidence": "medium",
-              "avgDeltaVsExpected": 2.2,
-              "starterRate": 0.5,
-              "starRate": 0.4,
-              "bustRate": 0.2,
-              "scoreReady": true
-            }
-          ],
-          "compComponent": 0,
-          "quantumComponent": 0.06,
-          "recommendedAdjustment": 0.06,
-          "reasons": [
-            "Creation without chaos: +0.1",
-            "Draft capital damping: x0.50"
-          ]
-        },
-        {
-          "year": 2026,
-          "pos": "QB",
-          "name": "Ty Simpson",
-          "school": "ALABAMA",
-          "pick": 13,
-          "rawGeneratedScore": 64,
-          "source": "qb_future_pff_forecast",
-          "actualDraftPick": 13,
-          "realDraftPrior": true,
-          "compAdjustment": 0,
-          "compConfidence": 0,
-          "quantumTraits": [
-            {
-              "traitKey": "accurate_aggressive",
-              "label": "Accurate aggressive passer",
-              "recommendedAdjustment": 0.2,
-              "confidence": "high",
-              "avgDeltaVsExpected": 1.5,
-              "starterRate": 0.28,
-              "starRate": 0.24,
-              "bustRate": 0.58,
-              "scoreReady": false
-            }
-          ],
-          "compComponent": 0,
-          "quantumComponent": 0,
-          "recommendedAdjustment": 0,
-          "reasons": []
-        },
-        {
-          "year": 2026,
-          "pos": "QB",
-          "name": "Roman Gagliano",
-          "school": "MIDDLE TN",
-          "pick": 32,
-          "rawGeneratedScore": 62,
-          "source": "qb_future_pff_forecast",
-          "actualDraftPick": null,
-          "realDraftPrior": false,
-          "compAdjustment": 0,
-          "compConfidence": 0,
-          "quantumTraits": [
-            {
-              "traitKey": "creation_without_chaos",
-              "label": "Creation without chaos",
-              "recommendedAdjustment": 0.2,
-              "confidence": "medium",
-              "avgDeltaVsExpected": 2.2,
-              "starterRate": 0.5,
-              "starRate": 0.4,
-              "bustRate": 0.2,
-              "scoreReady": true
-            }
-          ],
-          "compComponent": 0,
-          "quantumComponent": 0,
-          "recommendedAdjustment": 0,
-          "reasons": [
-            "Creation without chaos: context-only"
-          ]
-        },
-        {
-          "year": 2026,
-          "pos": "QB",
-          "name": "Arch Manning",
-          "school": "TEXAS",
-          "pick": 34,
-          "rawGeneratedScore": 61,
-          "source": "qb_future_pff_forecast",
-          "actualDraftPick": null,
-          "realDraftPrior": false,
-          "compAdjustment": 0,
-          "compConfidence": 0,
-          "quantumTraits": [
-            {
-              "traitKey": "accurate_aggressive",
-              "label": "Accurate aggressive passer",
-              "recommendedAdjustment": 0.2,
-              "confidence": "high",
-              "avgDeltaVsExpected": 1.5,
-              "starterRate": 0.28,
-              "starRate": 0.24,
-              "bustRate": 0.58,
-              "scoreReady": false
-            }
-          ],
-          "compComponent": 0,
-          "quantumComponent": 0,
-          "recommendedAdjustment": 0,
-          "reasons": []
-        },
-        {
-          "year": 2026,
-          "pos": "QB",
-          "name": "Jayden Maiava",
-          "school": "USC",
-          "pick": 35,
-          "rawGeneratedScore": 61,
-          "source": "qb_future_pff_forecast",
-          "actualDraftPick": null,
-          "realDraftPrior": false,
-          "compAdjustment": 0,
-          "compConfidence": 0,
-          "quantumTraits": [
-            {
-              "traitKey": "accurate_aggressive",
-              "label": "Accurate aggressive passer",
-              "recommendedAdjustment": 0.2,
-              "confidence": "high",
-              "avgDeltaVsExpected": 1.5,
-              "starterRate": 0.28,
-              "starRate": 0.24,
-              "bustRate": 0.58,
+              "avgDeltaVsExpected": 1.7,
+              "starterRate": 0.32,
+              "starRate": 0.25,
+              "bustRate": 0.57,
               "scoreReady": false
             }
           ],
@@ -3011,74 +2563,14 @@
           "compConfidence": 0,
           "quantumTraits": [
             {
-              "traitKey": "accurate_aggressive",
-              "label": "Accurate aggressive passer",
+              "traitKey": "nfl_timing_translator",
+              "label": "NFL timing translator",
               "recommendedAdjustment": 0.2,
               "confidence": "high",
-              "avgDeltaVsExpected": 1.5,
-              "starterRate": 0.28,
-              "starRate": 0.24,
-              "bustRate": 0.58,
-              "scoreReady": false
-            }
-          ],
-          "compComponent": 0,
-          "quantumComponent": 0,
-          "recommendedAdjustment": 0,
-          "reasons": []
-        },
-        {
-          "year": 2026,
-          "pos": "QB",
-          "name": "Steve Angeli",
-          "school": "SYRACUSE",
-          "pick": 40,
-          "rawGeneratedScore": 60,
-          "source": "qb_future_pff_forecast",
-          "actualDraftPick": null,
-          "realDraftPrior": false,
-          "compAdjustment": 0,
-          "compConfidence": 0,
-          "quantumTraits": [
-            {
-              "traitKey": "accurate_aggressive",
-              "label": "Accurate aggressive passer",
-              "recommendedAdjustment": 0.2,
-              "confidence": "high",
-              "avgDeltaVsExpected": 1.5,
-              "starterRate": 0.28,
-              "starRate": 0.24,
-              "bustRate": 0.58,
-              "scoreReady": false
-            }
-          ],
-          "compComponent": 0,
-          "quantumComponent": 0,
-          "recommendedAdjustment": 0,
-          "reasons": []
-        },
-        {
-          "year": 2026,
-          "pos": "QB",
-          "name": "Brendon Lewis",
-          "school": "MEMPHIS",
-          "pick": 41,
-          "rawGeneratedScore": 59,
-          "source": "qb_future_pff_forecast",
-          "actualDraftPick": null,
-          "realDraftPrior": false,
-          "compAdjustment": 0,
-          "compConfidence": 0,
-          "quantumTraits": [
-            {
-              "traitKey": "accurate_aggressive",
-              "label": "Accurate aggressive passer",
-              "recommendedAdjustment": 0.2,
-              "confidence": "high",
-              "avgDeltaVsExpected": 1.5,
-              "starterRate": 0.28,
-              "starRate": 0.24,
-              "bustRate": 0.58,
+              "avgDeltaVsExpected": 1.7,
+              "starterRate": 0.32,
+              "starRate": 0.25,
+              "bustRate": 0.57,
               "scoreReady": false
             }
           ],
@@ -3101,44 +2593,14 @@
           "compConfidence": 0,
           "quantumTraits": [
             {
-              "traitKey": "accurate_aggressive",
-              "label": "Accurate aggressive passer",
+              "traitKey": "nfl_timing_translator",
+              "label": "NFL timing translator",
               "recommendedAdjustment": 0.2,
               "confidence": "high",
-              "avgDeltaVsExpected": 1.5,
-              "starterRate": 0.28,
-              "starRate": 0.24,
-              "bustRate": 0.58,
-              "scoreReady": false
-            }
-          ],
-          "compComponent": 0,
-          "quantumComponent": 0,
-          "recommendedAdjustment": 0,
-          "reasons": []
-        },
-        {
-          "year": 2026,
-          "pos": "QB",
-          "name": "Jacob Clark",
-          "school": "MO STATE",
-          "pick": 43,
-          "rawGeneratedScore": 58,
-          "source": "qb_future_pff_forecast",
-          "actualDraftPick": null,
-          "realDraftPrior": false,
-          "compAdjustment": 0,
-          "compConfidence": 0,
-          "quantumTraits": [
-            {
-              "traitKey": "accurate_aggressive",
-              "label": "Accurate aggressive passer",
-              "recommendedAdjustment": 0.2,
-              "confidence": "high",
-              "avgDeltaVsExpected": 1.5,
-              "starterRate": 0.28,
-              "starRate": 0.24,
-              "bustRate": 0.58,
+              "avgDeltaVsExpected": 1.7,
+              "starterRate": 0.32,
+              "starRate": 0.25,
+              "bustRate": 0.57,
               "scoreReady": false
             }
           ],
@@ -3161,14 +2623,14 @@
           "compConfidence": 0,
           "quantumTraits": [
             {
-              "traitKey": "accurate_aggressive",
-              "label": "Accurate aggressive passer",
+              "traitKey": "nfl_timing_translator",
+              "label": "NFL timing translator",
               "recommendedAdjustment": 0.2,
               "confidence": "high",
-              "avgDeltaVsExpected": 1.5,
-              "starterRate": 0.28,
-              "starRate": 0.24,
-              "bustRate": 0.58,
+              "avgDeltaVsExpected": 1.7,
+              "starterRate": 0.32,
+              "starRate": 0.25,
+              "bustRate": 0.57,
               "scoreReady": false
             }
           ],
@@ -3180,10 +2642,10 @@
         {
           "year": 2026,
           "pos": "QB",
-          "name": "Gio Lopez",
-          "school": "N CAROLINA",
-          "pick": 47,
-          "rawGeneratedScore": 57,
+          "name": "CJ Bailey",
+          "school": "NC STATE",
+          "pick": 57,
+          "rawGeneratedScore": 54,
           "source": "qb_future_pff_forecast",
           "actualDraftPick": null,
           "realDraftPrior": false,
@@ -3191,14 +2653,14 @@
           "compConfidence": 0,
           "quantumTraits": [
             {
-              "traitKey": "accurate_aggressive",
-              "label": "Accurate aggressive passer",
+              "traitKey": "nfl_timing_translator",
+              "label": "NFL timing translator",
               "recommendedAdjustment": 0.2,
               "confidence": "high",
-              "avgDeltaVsExpected": 1.5,
-              "starterRate": 0.28,
-              "starRate": 0.24,
-              "bustRate": 0.58,
+              "avgDeltaVsExpected": 1.7,
+              "starterRate": 0.32,
+              "starRate": 0.25,
+              "bustRate": 0.57,
               "scoreReady": false
             }
           ],
@@ -3210,10 +2672,42 @@
         {
           "year": 2026,
           "pos": "QB",
-          "name": "Jack Layne",
-          "school": "NEW MEXICO",
-          "pick": 49,
-          "rawGeneratedScore": 56,
+          "name": "Drew Allar",
+          "school": "PENN STATE",
+          "pick": 76,
+          "rawGeneratedScore": 53,
+          "source": "qb_future_pff_forecast",
+          "actualDraftPick": 76,
+          "realDraftPrior": true,
+          "compAdjustment": 0,
+          "compConfidence": 0,
+          "quantumTraits": [
+            {
+              "traitKey": "nfl_timing_translator",
+              "label": "NFL timing translator",
+              "recommendedAdjustment": 0.2,
+              "confidence": "high",
+              "avgDeltaVsExpected": 1.7,
+              "starterRate": 0.32,
+              "starRate": 0.25,
+              "bustRate": 0.57,
+              "scoreReady": false
+            }
+          ],
+          "compComponent": 0,
+          "quantumComponent": 0,
+          "recommendedAdjustment": 0,
+          "reasons": [
+            "Draft capital damping: x0.80"
+          ]
+        },
+        {
+          "year": 2026,
+          "pos": "QB",
+          "name": "Blake Baker",
+          "school": "LA TECH",
+          "pick": 63,
+          "rawGeneratedScore": 53,
           "source": "qb_future_pff_forecast",
           "actualDraftPick": null,
           "realDraftPrior": false,
@@ -3221,14 +2715,194 @@
           "compConfidence": 0,
           "quantumTraits": [
             {
-              "traitKey": "accurate_aggressive",
-              "label": "Accurate aggressive passer",
+              "traitKey": "nfl_timing_translator",
+              "label": "NFL timing translator",
               "recommendedAdjustment": 0.2,
               "confidence": "high",
-              "avgDeltaVsExpected": 1.5,
-              "starterRate": 0.28,
-              "starRate": 0.24,
-              "bustRate": 0.58,
+              "avgDeltaVsExpected": 1.7,
+              "starterRate": 0.32,
+              "starRate": 0.25,
+              "bustRate": 0.57,
+              "scoreReady": false
+            }
+          ],
+          "compComponent": 0,
+          "quantumComponent": 0,
+          "recommendedAdjustment": 0,
+          "reasons": []
+        },
+        {
+          "year": 2026,
+          "pos": "QB",
+          "name": "JJ Kohl",
+          "school": "APP STATE",
+          "pick": 71,
+          "rawGeneratedScore": 51,
+          "source": "qb_future_pff_forecast",
+          "actualDraftPick": null,
+          "realDraftPrior": false,
+          "compAdjustment": 0,
+          "compConfidence": 0,
+          "quantumTraits": [
+            {
+              "traitKey": "nfl_timing_translator",
+              "label": "NFL timing translator",
+              "recommendedAdjustment": 0.2,
+              "confidence": "high",
+              "avgDeltaVsExpected": 1.7,
+              "starterRate": 0.32,
+              "starRate": 0.25,
+              "bustRate": 0.57,
+              "scoreReady": false
+            }
+          ],
+          "compComponent": 0,
+          "quantumComponent": 0,
+          "recommendedAdjustment": 0,
+          "reasons": []
+        },
+        {
+          "year": 2026,
+          "pos": "QB",
+          "name": "Jake Retzlaff",
+          "school": "TULANE",
+          "pick": 74,
+          "rawGeneratedScore": 50,
+          "source": "qb_future_pff_forecast",
+          "actualDraftPick": null,
+          "realDraftPrior": false,
+          "compAdjustment": 0,
+          "compConfidence": 0,
+          "quantumTraits": [
+            {
+              "traitKey": "nfl_timing_translator",
+              "label": "NFL timing translator",
+              "recommendedAdjustment": 0.2,
+              "confidence": "high",
+              "avgDeltaVsExpected": 1.7,
+              "starterRate": 0.32,
+              "starRate": 0.25,
+              "bustRate": 0.57,
+              "scoreReady": false
+            }
+          ],
+          "compComponent": 0,
+          "quantumComponent": 0,
+          "recommendedAdjustment": 0,
+          "reasons": []
+        },
+        {
+          "year": 2026,
+          "pos": "QB",
+          "name": "Avery Johnson",
+          "school": "KANSAS ST",
+          "pick": 75,
+          "rawGeneratedScore": 50,
+          "source": "qb_future_pff_forecast",
+          "actualDraftPick": null,
+          "realDraftPrior": false,
+          "compAdjustment": 0,
+          "compConfidence": 0,
+          "quantumTraits": [
+            {
+              "traitKey": "nfl_timing_translator",
+              "label": "NFL timing translator",
+              "recommendedAdjustment": 0.2,
+              "confidence": "high",
+              "avgDeltaVsExpected": 1.7,
+              "starterRate": 0.32,
+              "starRate": 0.25,
+              "bustRate": 0.57,
+              "scoreReady": false
+            }
+          ],
+          "compComponent": 0,
+          "quantumComponent": 0,
+          "recommendedAdjustment": 0,
+          "reasons": []
+        },
+        {
+          "year": 2026,
+          "pos": "QB",
+          "name": "Conner Weigman",
+          "school": "HOUSTON",
+          "pick": 79,
+          "rawGeneratedScore": 50,
+          "source": "qb_future_pff_forecast",
+          "actualDraftPick": null,
+          "realDraftPrior": false,
+          "compAdjustment": 0,
+          "compConfidence": 0,
+          "quantumTraits": [
+            {
+              "traitKey": "nfl_timing_translator",
+              "label": "NFL timing translator",
+              "recommendedAdjustment": 0.2,
+              "confidence": "high",
+              "avgDeltaVsExpected": 1.7,
+              "starterRate": 0.32,
+              "starRate": 0.25,
+              "bustRate": 0.57,
+              "scoreReady": false
+            }
+          ],
+          "compComponent": 0,
+          "quantumComponent": 0,
+          "recommendedAdjustment": 0,
+          "reasons": []
+        },
+        {
+          "year": 2026,
+          "pos": "QB",
+          "name": "Bear Bachmeier",
+          "school": "BYU",
+          "pick": 85,
+          "rawGeneratedScore": 47,
+          "source": "qb_future_pff_forecast",
+          "actualDraftPick": null,
+          "realDraftPrior": false,
+          "compAdjustment": 0,
+          "compConfidence": 0,
+          "quantumTraits": [
+            {
+              "traitKey": "nfl_timing_translator",
+              "label": "NFL timing translator",
+              "recommendedAdjustment": 0.2,
+              "confidence": "high",
+              "avgDeltaVsExpected": 1.7,
+              "starterRate": 0.32,
+              "starRate": 0.25,
+              "bustRate": 0.57,
+              "scoreReady": false
+            }
+          ],
+          "compComponent": 0,
+          "quantumComponent": 0,
+          "recommendedAdjustment": 0,
+          "reasons": []
+        },
+        {
+          "year": 2026,
+          "pos": "QB",
+          "name": "AJ Swann",
+          "school": "APP STATE",
+          "pick": 110,
+          "rawGeneratedScore": 41,
+          "source": "qb_future_pff_forecast",
+          "actualDraftPick": null,
+          "realDraftPrior": false,
+          "compAdjustment": 0,
+          "compConfidence": 0,
+          "quantumTraits": [
+            {
+              "traitKey": "nfl_timing_translator",
+              "label": "NFL timing translator",
+              "recommendedAdjustment": 0.2,
+              "confidence": "high",
+              "avgDeltaVsExpected": 1.7,
+              "starterRate": 0.32,
+              "starRate": 0.25,
+              "bustRate": 0.57,
               "scoreReady": false
             }
           ],
@@ -3251,8 +2925,8 @@
           "compConfidence": 0,
           "quantumTraits": [
             {
-              "traitKey": "danger_profile",
-              "label": "QB danger profile",
+              "traitKey": "true_danger_profile",
+              "label": "True QB danger profile",
               "recommendedAdjustment": 0,
               "confidence": "context-only",
               "avgDeltaVsExpected": -0.2,
@@ -3281,14 +2955,44 @@
           "compConfidence": 0,
           "quantumTraits": [
             {
-              "traitKey": "danger_profile",
-              "label": "QB danger profile",
+              "traitKey": "true_danger_profile",
+              "label": "True QB danger profile",
               "recommendedAdjustment": 0,
               "confidence": "context-only",
               "avgDeltaVsExpected": -0.2,
               "starterRate": 1,
               "starRate": 1,
               "bustRate": 0,
+              "scoreReady": false
+            }
+          ],
+          "compComponent": 0,
+          "quantumComponent": 0,
+          "recommendedAdjustment": 0,
+          "reasons": []
+        },
+        {
+          "year": 2026,
+          "pos": "QB",
+          "name": "Jalen Kitna",
+          "school": "UAB",
+          "pick": 130,
+          "rawGeneratedScore": 36,
+          "source": "qb_future_pff_forecast",
+          "actualDraftPick": null,
+          "realDraftPrior": false,
+          "compAdjustment": 0,
+          "compConfidence": 0,
+          "quantumTraits": [
+            {
+              "traitKey": "nfl_timing_translator",
+              "label": "NFL timing translator",
+              "recommendedAdjustment": 0.2,
+              "confidence": "high",
+              "avgDeltaVsExpected": 1.7,
+              "starterRate": 0.32,
+              "starRate": 0.25,
+              "bustRate": 0.57,
               "scoreReady": false
             }
           ],
@@ -3311,8 +3015,8 @@
           "compConfidence": 0,
           "quantumTraits": [
             {
-              "traitKey": "danger_profile",
-              "label": "QB danger profile",
+              "traitKey": "true_danger_profile",
+              "label": "True QB danger profile",
               "recommendedAdjustment": 0,
               "confidence": "context-only",
               "avgDeltaVsExpected": -0.2,
@@ -3341,8 +3045,8 @@
           "compConfidence": 0,
           "quantumTraits": [
             {
-              "traitKey": "danger_profile",
-              "label": "QB danger profile",
+              "traitKey": "true_danger_profile",
+              "label": "True QB danger profile",
               "recommendedAdjustment": 0,
               "confidence": "context-only",
               "avgDeltaVsExpected": -0.2,
@@ -3371,8 +3075,8 @@
           "compConfidence": 0,
           "quantumTraits": [
             {
-              "traitKey": "danger_profile",
-              "label": "QB danger profile",
+              "traitKey": "true_danger_profile",
+              "label": "True QB danger profile",
               "recommendedAdjustment": 0,
               "confidence": "context-only",
               "avgDeltaVsExpected": -0.2,
@@ -3401,8 +3105,8 @@
           "compConfidence": 0,
           "quantumTraits": [
             {
-              "traitKey": "danger_profile",
-              "label": "QB danger profile",
+              "traitKey": "true_danger_profile",
+              "label": "True QB danger profile",
               "recommendedAdjustment": 0,
               "confidence": "context-only",
               "avgDeltaVsExpected": -0.2,
@@ -3431,8 +3135,8 @@
           "compConfidence": 0,
           "quantumTraits": [
             {
-              "traitKey": "danger_profile",
-              "label": "QB danger profile",
+              "traitKey": "true_danger_profile",
+              "label": "True QB danger profile",
               "recommendedAdjustment": 0,
               "confidence": "context-only",
               "avgDeltaVsExpected": -0.2,
@@ -3461,8 +3165,8 @@
           "compConfidence": 0,
           "quantumTraits": [
             {
-              "traitKey": "danger_profile",
-              "label": "QB danger profile",
+              "traitKey": "true_danger_profile",
+              "label": "True QB danger profile",
               "recommendedAdjustment": 0,
               "confidence": "context-only",
               "avgDeltaVsExpected": -0.2,
@@ -3491,35 +3195,51 @@
           "compConfidence": 0,
           "quantumTraits": [
             {
-              "traitKey": "creation_without_chaos",
-              "label": "Creation without chaos",
-              "recommendedAdjustment": 0.2,
+              "traitKey": "pressure_creation_combo",
+              "label": "Pressure + creation combo",
+              "recommendedAdjustment": 0.8,
               "confidence": "medium",
-              "avgDeltaVsExpected": 2.2,
-              "starterRate": 0.5,
-              "starRate": 0.4,
-              "bustRate": 0.2,
-              "scoreReady": true
-            },
-            {
-              "traitKey": "pressure_translator",
-              "label": "Pressure translator",
-              "recommendedAdjustment": 0.2,
-              "confidence": "medium",
-              "avgDeltaVsExpected": 2.3,
-              "starterRate": 0.45,
+              "avgDeltaVsExpected": 7.8,
+              "starterRate": 0.55,
               "starRate": 0.36,
-              "bustRate": 0.55,
-              "scoreReady": true
+              "bustRate": 0.45,
+              "scoreReady": false
             }
           ],
           "compComponent": 0,
           "quantumComponent": 0,
           "recommendedAdjustment": 0,
-          "reasons": [
-            "Creation without chaos: context-only",
-            "Pressure translator: context-only"
-          ]
+          "reasons": []
+        },
+        {
+          "year": 2027,
+          "pos": "QB",
+          "name": "Dante Moore",
+          "school": "OREGON",
+          "pick": 3,
+          "rawGeneratedScore": 76,
+          "source": "qb_future_pff_forecast",
+          "actualDraftPick": null,
+          "realDraftPrior": false,
+          "compAdjustment": 0,
+          "compConfidence": 0,
+          "quantumTraits": [
+            {
+              "traitKey": "nfl_timing_translator",
+              "label": "NFL timing translator",
+              "recommendedAdjustment": 0.2,
+              "confidence": "high",
+              "avgDeltaVsExpected": 1.7,
+              "starterRate": 0.32,
+              "starRate": 0.25,
+              "bustRate": 0.57,
+              "scoreReady": false
+            }
+          ],
+          "compComponent": 0,
+          "quantumComponent": 0,
+          "recommendedAdjustment": 0,
+          "reasons": []
         },
         {
           "year": 2027,
@@ -3535,35 +3255,21 @@
           "compConfidence": 0,
           "quantumTraits": [
             {
-              "traitKey": "creation_without_chaos",
-              "label": "Creation without chaos",
-              "recommendedAdjustment": 0.2,
+              "traitKey": "pressure_creation_combo",
+              "label": "Pressure + creation combo",
+              "recommendedAdjustment": 0.8,
               "confidence": "medium",
-              "avgDeltaVsExpected": 2.2,
-              "starterRate": 0.5,
-              "starRate": 0.4,
-              "bustRate": 0.2,
-              "scoreReady": true
-            },
-            {
-              "traitKey": "pressure_translator",
-              "label": "Pressure translator",
-              "recommendedAdjustment": 0.2,
-              "confidence": "medium",
-              "avgDeltaVsExpected": 2.3,
-              "starterRate": 0.45,
+              "avgDeltaVsExpected": 7.8,
+              "starterRate": 0.55,
               "starRate": 0.36,
-              "bustRate": 0.55,
-              "scoreReady": true
+              "bustRate": 0.45,
+              "scoreReady": false
             }
           ],
           "compComponent": 0,
           "quantumComponent": 0,
           "recommendedAdjustment": 0,
-          "reasons": [
-            "Creation without chaos: context-only",
-            "Pressure translator: context-only"
-          ]
+          "reasons": []
         },
         {
           "year": 2027,
@@ -3579,23 +3285,21 @@
           "compConfidence": 0,
           "quantumTraits": [
             {
-              "traitKey": "creation_without_chaos",
-              "label": "Creation without chaos",
+              "traitKey": "nfl_timing_translator",
+              "label": "NFL timing translator",
               "recommendedAdjustment": 0.2,
-              "confidence": "medium",
-              "avgDeltaVsExpected": 2.2,
-              "starterRate": 0.5,
-              "starRate": 0.4,
-              "bustRate": 0.2,
-              "scoreReady": true
+              "confidence": "high",
+              "avgDeltaVsExpected": 1.7,
+              "starterRate": 0.32,
+              "starRate": 0.25,
+              "bustRate": 0.57,
+              "scoreReady": false
             }
           ],
           "compComponent": 0,
           "quantumComponent": 0,
           "recommendedAdjustment": 0,
-          "reasons": [
-            "Creation without chaos: context-only"
-          ]
+          "reasons": []
         },
         {
           "year": 2027,
@@ -3611,23 +3315,21 @@
           "compConfidence": 0,
           "quantumTraits": [
             {
-              "traitKey": "pressure_translator",
-              "label": "Pressure translator",
+              "traitKey": "nfl_timing_translator",
+              "label": "NFL timing translator",
               "recommendedAdjustment": 0.2,
-              "confidence": "medium",
-              "avgDeltaVsExpected": 2.3,
-              "starterRate": 0.45,
-              "starRate": 0.36,
-              "bustRate": 0.55,
-              "scoreReady": true
+              "confidence": "high",
+              "avgDeltaVsExpected": 1.7,
+              "starterRate": 0.32,
+              "starRate": 0.25,
+              "bustRate": 0.57,
+              "scoreReady": false
             }
           ],
           "compComponent": 0,
           "quantumComponent": 0,
           "recommendedAdjustment": 0,
-          "reasons": [
-            "Pressure translator: context-only"
-          ]
+          "reasons": []
         },
         {
           "year": 2027,
@@ -3643,23 +3345,21 @@
           "compConfidence": 0,
           "quantumTraits": [
             {
-              "traitKey": "pressure_translator",
-              "label": "Pressure translator",
-              "recommendedAdjustment": 0.2,
+              "traitKey": "pressure_creation_combo",
+              "label": "Pressure + creation combo",
+              "recommendedAdjustment": 0.8,
               "confidence": "medium",
-              "avgDeltaVsExpected": 2.3,
-              "starterRate": 0.45,
+              "avgDeltaVsExpected": 7.8,
+              "starterRate": 0.55,
               "starRate": 0.36,
-              "bustRate": 0.55,
-              "scoreReady": true
+              "bustRate": 0.45,
+              "scoreReady": false
             }
           ],
           "compComponent": 0,
           "quantumComponent": 0,
           "recommendedAdjustment": 0,
-          "reasons": [
-            "Pressure translator: context-only"
-          ]
+          "reasons": []
         },
         {
           "year": 2027,
@@ -3675,31 +3375,29 @@
           "compConfidence": 0,
           "quantumTraits": [
             {
-              "traitKey": "pressure_translator",
-              "label": "Pressure translator",
+              "traitKey": "nfl_timing_translator",
+              "label": "NFL timing translator",
               "recommendedAdjustment": 0.2,
-              "confidence": "medium",
-              "avgDeltaVsExpected": 2.3,
-              "starterRate": 0.45,
-              "starRate": 0.36,
-              "bustRate": 0.55,
-              "scoreReady": true
+              "confidence": "high",
+              "avgDeltaVsExpected": 1.7,
+              "starterRate": 0.32,
+              "starRate": 0.25,
+              "bustRate": 0.57,
+              "scoreReady": false
             }
           ],
           "compComponent": 0,
           "quantumComponent": 0,
           "recommendedAdjustment": 0,
-          "reasons": [
-            "Pressure translator: context-only"
-          ]
+          "reasons": []
         },
         {
           "year": 2027,
           "pos": "QB",
-          "name": "Roman Gagliano",
-          "school": "MIDDLE TN",
-          "pick": 27,
-          "rawGeneratedScore": 62,
+          "name": "CJ Carr",
+          "school": "NOTRE DAME",
+          "pick": 11,
+          "rawGeneratedScore": 71,
           "source": "qb_future_pff_forecast",
           "actualDraftPick": null,
           "realDraftPrior": false,
@@ -3707,23 +3405,171 @@
           "compConfidence": 0,
           "quantumTraits": [
             {
-              "traitKey": "creation_without_chaos",
-              "label": "Creation without chaos",
+              "traitKey": "nfl_timing_translator",
+              "label": "NFL timing translator",
               "recommendedAdjustment": 0.2,
-              "confidence": "medium",
-              "avgDeltaVsExpected": 2.2,
-              "starterRate": 0.5,
-              "starRate": 0.4,
-              "bustRate": 0.2,
-              "scoreReady": true
+              "confidence": "high",
+              "avgDeltaVsExpected": 1.7,
+              "starterRate": 0.32,
+              "starRate": 0.25,
+              "bustRate": 0.57,
+              "scoreReady": false
             }
           ],
           "compComponent": 0,
           "quantumComponent": 0,
           "recommendedAdjustment": 0,
-          "reasons": [
-            "Creation without chaos: context-only"
-          ]
+          "reasons": []
+        },
+        {
+          "year": 2027,
+          "pos": "QB",
+          "name": "Micah Alejado",
+          "school": "HAWAII",
+          "pick": 13,
+          "rawGeneratedScore": 70,
+          "source": "qb_future_pff_forecast",
+          "actualDraftPick": null,
+          "realDraftPrior": false,
+          "compAdjustment": 0,
+          "compConfidence": 0,
+          "quantumTraits": [
+            {
+              "traitKey": "nfl_timing_translator",
+              "label": "NFL timing translator",
+              "recommendedAdjustment": 0.2,
+              "confidence": "high",
+              "avgDeltaVsExpected": 1.7,
+              "starterRate": 0.32,
+              "starRate": 0.25,
+              "bustRate": 0.57,
+              "scoreReady": false
+            }
+          ],
+          "compComponent": 0,
+          "quantumComponent": 0,
+          "recommendedAdjustment": 0,
+          "reasons": []
+        },
+        {
+          "year": 2027,
+          "pos": "QB",
+          "name": "Katin Houser",
+          "school": "E CAROLINA",
+          "pick": 14,
+          "rawGeneratedScore": 68,
+          "source": "qb_future_pff_forecast",
+          "actualDraftPick": null,
+          "realDraftPrior": false,
+          "compAdjustment": 0,
+          "compConfidence": 0,
+          "quantumTraits": [
+            {
+              "traitKey": "nfl_timing_translator",
+              "label": "NFL timing translator",
+              "recommendedAdjustment": 0.2,
+              "confidence": "high",
+              "avgDeltaVsExpected": 1.7,
+              "starterRate": 0.32,
+              "starRate": 0.25,
+              "bustRate": 0.57,
+              "scoreReady": false
+            }
+          ],
+          "compComponent": 0,
+          "quantumComponent": 0,
+          "recommendedAdjustment": 0,
+          "reasons": []
+        },
+        {
+          "year": 2027,
+          "pos": "QB",
+          "name": "Cameran Brown",
+          "school": "GA STATE",
+          "pick": 15,
+          "rawGeneratedScore": 68,
+          "source": "qb_future_pff_forecast",
+          "actualDraftPick": null,
+          "realDraftPrior": false,
+          "compAdjustment": 0,
+          "compConfidence": 0,
+          "quantumTraits": [
+            {
+              "traitKey": "nfl_timing_translator",
+              "label": "NFL timing translator",
+              "recommendedAdjustment": 0.2,
+              "confidence": "high",
+              "avgDeltaVsExpected": 1.7,
+              "starterRate": 0.32,
+              "starRate": 0.25,
+              "bustRate": 0.57,
+              "scoreReady": false
+            }
+          ],
+          "compComponent": 0,
+          "quantumComponent": 0,
+          "recommendedAdjustment": 0,
+          "reasons": []
+        },
+        {
+          "year": 2027,
+          "pos": "QB",
+          "name": "Braylon Braxton",
+          "school": "SO MISS",
+          "pick": 18,
+          "rawGeneratedScore": 66,
+          "source": "qb_future_pff_forecast",
+          "actualDraftPick": null,
+          "realDraftPrior": false,
+          "compAdjustment": 0,
+          "compConfidence": 0,
+          "quantumTraits": [
+            {
+              "traitKey": "nfl_timing_translator",
+              "label": "NFL timing translator",
+              "recommendedAdjustment": 0.2,
+              "confidence": "high",
+              "avgDeltaVsExpected": 1.7,
+              "starterRate": 0.32,
+              "starRate": 0.25,
+              "bustRate": 0.57,
+              "scoreReady": false
+            }
+          ],
+          "compComponent": 0,
+          "quantumComponent": 0,
+          "recommendedAdjustment": 0,
+          "reasons": []
+        },
+        {
+          "year": 2027,
+          "pos": "QB",
+          "name": "Broc Lowry",
+          "school": "W MICHIGAN",
+          "pick": 23,
+          "rawGeneratedScore": 65,
+          "source": "qb_future_pff_forecast",
+          "actualDraftPick": null,
+          "realDraftPrior": false,
+          "compAdjustment": 0,
+          "compConfidence": 0,
+          "quantumTraits": [
+            {
+              "traitKey": "nfl_timing_translator",
+              "label": "NFL timing translator",
+              "recommendedAdjustment": 0.2,
+              "confidence": "high",
+              "avgDeltaVsExpected": 1.7,
+              "starterRate": 0.32,
+              "starRate": 0.25,
+              "bustRate": 0.57,
+              "scoreReady": false
+            }
+          ],
+          "compComponent": 0,
+          "quantumComponent": 0,
+          "recommendedAdjustment": 0,
+          "reasons": []
         },
         {
           "year": 2027,
@@ -3739,8 +3585,8 @@
           "compConfidence": 0,
           "quantumTraits": [
             {
-              "traitKey": "danger_profile",
-              "label": "QB danger profile",
+              "traitKey": "true_danger_profile",
+              "label": "True QB danger profile",
               "recommendedAdjustment": 0,
               "confidence": "context-only",
               "avgDeltaVsExpected": -0.2,
@@ -3769,188 +3615,8 @@
           "compConfidence": 0,
           "quantumTraits": [
             {
-              "traitKey": "danger_profile",
-              "label": "QB danger profile",
-              "recommendedAdjustment": 0,
-              "confidence": "context-only",
-              "avgDeltaVsExpected": -0.2,
-              "starterRate": 1,
-              "starRate": 1,
-              "bustRate": 0,
-              "scoreReady": false
-            }
-          ],
-          "compComponent": 0,
-          "quantumComponent": 0,
-          "recommendedAdjustment": 0,
-          "reasons": []
-        },
-        {
-          "year": 2027,
-          "pos": "QB",
-          "name": "Grayson Loftis",
-          "school": "CHARLOTTE",
-          "pick": 126,
-          "rawGeneratedScore": 36,
-          "source": "qb_future_pff_forecast",
-          "actualDraftPick": null,
-          "realDraftPrior": false,
-          "compAdjustment": 0,
-          "compConfidence": 0,
-          "quantumTraits": [
-            {
-              "traitKey": "danger_profile",
-              "label": "QB danger profile",
-              "recommendedAdjustment": 0,
-              "confidence": "context-only",
-              "avgDeltaVsExpected": -0.2,
-              "starterRate": 1,
-              "starRate": 1,
-              "bustRate": 0,
-              "scoreReady": false
-            }
-          ],
-          "compComponent": 0,
-          "quantumComponent": 0,
-          "recommendedAdjustment": 0,
-          "reasons": []
-        },
-        {
-          "year": 2027,
-          "pos": "QB",
-          "name": "Logan Fife",
-          "school": "NEW MEX ST",
-          "pick": 139,
-          "rawGeneratedScore": 30,
-          "source": "qb_future_pff_forecast",
-          "actualDraftPick": null,
-          "realDraftPrior": false,
-          "compAdjustment": 0,
-          "compConfidence": 0,
-          "quantumTraits": [
-            {
-              "traitKey": "danger_profile",
-              "label": "QB danger profile",
-              "recommendedAdjustment": 0,
-              "confidence": "context-only",
-              "avgDeltaVsExpected": -0.2,
-              "starterRate": 1,
-              "starRate": 1,
-              "bustRate": 0,
-              "scoreReady": false
-            }
-          ],
-          "compComponent": 0,
-          "quantumComponent": 0,
-          "recommendedAdjustment": 0,
-          "reasons": []
-        },
-        {
-          "year": 2027,
-          "pos": "QB",
-          "name": "Ben Finley",
-          "school": "AKRON",
-          "pick": 140,
-          "rawGeneratedScore": 29,
-          "source": "qb_future_pff_forecast",
-          "actualDraftPick": null,
-          "realDraftPrior": false,
-          "compAdjustment": 0,
-          "compConfidence": 0,
-          "quantumTraits": [
-            {
-              "traitKey": "danger_profile",
-              "label": "QB danger profile",
-              "recommendedAdjustment": 0,
-              "confidence": "context-only",
-              "avgDeltaVsExpected": -0.2,
-              "starterRate": 1,
-              "starRate": 1,
-              "bustRate": 0,
-              "scoreReady": false
-            }
-          ],
-          "compComponent": 0,
-          "quantumComponent": 0,
-          "recommendedAdjustment": 0,
-          "reasons": []
-        },
-        {
-          "year": 2027,
-          "pos": "QB",
-          "name": "Elijah Brown",
-          "school": "STANFORD",
-          "pick": 142,
-          "rawGeneratedScore": 27,
-          "source": "qb_future_pff_forecast",
-          "actualDraftPick": null,
-          "realDraftPrior": false,
-          "compAdjustment": 0,
-          "compConfidence": 0,
-          "quantumTraits": [
-            {
-              "traitKey": "danger_profile",
-              "label": "QB danger profile",
-              "recommendedAdjustment": 0,
-              "confidence": "context-only",
-              "avgDeltaVsExpected": -0.2,
-              "starterRate": 1,
-              "starRate": 1,
-              "bustRate": 0,
-              "scoreReady": false
-            }
-          ],
-          "compComponent": 0,
-          "quantumComponent": 0,
-          "recommendedAdjustment": 0,
-          "reasons": []
-        },
-        {
-          "year": 2027,
-          "pos": "QB",
-          "name": "Ben Gulbranson",
-          "school": "STANFORD",
-          "pick": 143,
-          "rawGeneratedScore": 25,
-          "source": "qb_future_pff_forecast",
-          "actualDraftPick": null,
-          "realDraftPrior": false,
-          "compAdjustment": 0,
-          "compConfidence": 0,
-          "quantumTraits": [
-            {
-              "traitKey": "danger_profile",
-              "label": "QB danger profile",
-              "recommendedAdjustment": 0,
-              "confidence": "context-only",
-              "avgDeltaVsExpected": -0.2,
-              "starterRate": 1,
-              "starRate": 1,
-              "bustRate": 0,
-              "scoreReady": false
-            }
-          ],
-          "compComponent": 0,
-          "quantumComponent": 0,
-          "recommendedAdjustment": 0,
-          "reasons": []
-        },
-        {
-          "year": 2027,
-          "pos": "QB",
-          "name": "Grayson James",
-          "school": "BOSTON COL",
-          "pick": 144,
-          "rawGeneratedScore": 24,
-          "source": "qb_future_pff_forecast",
-          "actualDraftPick": null,
-          "realDraftPrior": false,
-          "compAdjustment": 0,
-          "compConfidence": 0,
-          "quantumTraits": [
-            {
-              "traitKey": "danger_profile",
-              "label": "QB danger profile",
+              "traitKey": "true_danger_profile",
+              "label": "True QB danger profile",
               "recommendedAdjustment": 0,
               "confidence": "context-only",
               "avgDeltaVsExpected": -0.2,
@@ -11355,34 +11021,22 @@
         "compConfidence": 1,
         "quantumTraits": [
           {
-            "traitKey": "creation_without_chaos",
-            "label": "Creation without chaos",
-            "recommendedAdjustment": 0.2,
+            "traitKey": "pressure_creation_combo",
+            "label": "Pressure + creation combo",
+            "recommendedAdjustment": 0.8,
             "confidence": "medium",
-            "avgDeltaVsExpected": 2.2,
-            "starterRate": 0.5,
-            "starRate": 0.4,
-            "bustRate": 0.2,
-            "scoreReady": true
-          },
-          {
-            "traitKey": "accurate_aggressive",
-            "label": "Accurate aggressive passer",
-            "recommendedAdjustment": 0.2,
-            "confidence": "high",
-            "avgDeltaVsExpected": 1.5,
-            "starterRate": 0.28,
-            "starRate": 0.24,
-            "bustRate": 0.58,
+            "avgDeltaVsExpected": 7.8,
+            "starterRate": 0.55,
+            "starRate": 0.36,
+            "bustRate": 0.45,
             "scoreReady": false
           }
         ],
         "compComponent": 0.63,
-        "quantumComponent": 0.11,
-        "recommendedAdjustment": 0.74,
+        "quantumComponent": 0,
+        "recommendedAdjustment": 0.63,
         "reasons": [
-          "Comp signal +1.4 at confidence 1.00",
-          "Creation without chaos: +0.1"
+          "Comp signal +1.4 at confidence 1.00"
         ]
       },
       {
@@ -11399,34 +11053,22 @@
         "compConfidence": 1,
         "quantumTraits": [
           {
-            "traitKey": "creation_without_chaos",
-            "label": "Creation without chaos",
-            "recommendedAdjustment": 0.2,
-            "confidence": "medium",
-            "avgDeltaVsExpected": 2.2,
-            "starterRate": 0.5,
-            "starRate": 0.4,
-            "bustRate": 0.2,
-            "scoreReady": true
-          },
-          {
-            "traitKey": "accurate_aggressive",
-            "label": "Accurate aggressive passer",
-            "recommendedAdjustment": 0.2,
-            "confidence": "high",
-            "avgDeltaVsExpected": 1.5,
-            "starterRate": 0.28,
-            "starRate": 0.24,
-            "bustRate": 0.58,
+            "traitKey": "elite_creation_without_chaos",
+            "label": "Elite creation without chaos",
+            "recommendedAdjustment": 0,
+            "confidence": "context-only",
+            "avgDeltaVsExpected": 21.7,
+            "starterRate": 0.67,
+            "starRate": 0.67,
+            "bustRate": 0,
             "scoreReady": false
           }
         ],
         "compComponent": 0.63,
-        "quantumComponent": 0.11,
-        "recommendedAdjustment": 0.74,
+        "quantumComponent": 0,
+        "recommendedAdjustment": 0.63,
         "reasons": [
-          "Comp signal +1.4 at confidence 1.00",
-          "Creation without chaos: +0.1"
+          "Comp signal +1.4 at confidence 1.00"
         ]
       },
       {
@@ -11441,36 +11083,12 @@
         "realDraftPrior": true,
         "compAdjustment": 1.9,
         "compConfidence": 1,
-        "quantumTraits": [
-          {
-            "traitKey": "creation_without_chaos",
-            "label": "Creation without chaos",
-            "recommendedAdjustment": 0.2,
-            "confidence": "medium",
-            "avgDeltaVsExpected": 2.2,
-            "starterRate": 0.5,
-            "starRate": 0.4,
-            "bustRate": 0.2,
-            "scoreReady": true
-          },
-          {
-            "traitKey": "accurate_aggressive",
-            "label": "Accurate aggressive passer",
-            "recommendedAdjustment": 0.2,
-            "confidence": "high",
-            "avgDeltaVsExpected": 1.5,
-            "starterRate": 0.28,
-            "starRate": 0.24,
-            "bustRate": 0.58,
-            "scoreReady": false
-          }
-        ],
+        "quantumTraits": [],
         "compComponent": 0.85,
-        "quantumComponent": 0.11,
-        "recommendedAdjustment": 0.96,
+        "quantumComponent": 0,
+        "recommendedAdjustment": 0.85,
         "reasons": [
-          "Comp signal +1.9 at confidence 1.00",
-          "Creation without chaos: +0.1"
+          "Comp signal +1.9 at confidence 1.00"
         ]
       },
       {
@@ -11487,14 +11105,14 @@
         "compConfidence": 1,
         "quantumTraits": [
           {
-            "traitKey": "accurate_aggressive",
-            "label": "Accurate aggressive passer",
+            "traitKey": "nfl_timing_translator",
+            "label": "NFL timing translator",
             "recommendedAdjustment": 0.2,
             "confidence": "high",
-            "avgDeltaVsExpected": 1.5,
-            "starterRate": 0.28,
-            "starRate": 0.24,
-            "bustRate": 0.58,
+            "avgDeltaVsExpected": 1.7,
+            "starterRate": 0.32,
+            "starRate": 0.25,
+            "bustRate": 0.57,
             "scoreReady": false
           }
         ],
@@ -11517,25 +11135,12 @@
         "realDraftPrior": true,
         "compAdjustment": 0.9,
         "compConfidence": 1,
-        "quantumTraits": [
-          {
-            "traitKey": "pressure_translator",
-            "label": "Pressure translator",
-            "recommendedAdjustment": 0.2,
-            "confidence": "medium",
-            "avgDeltaVsExpected": 2.3,
-            "starterRate": 0.45,
-            "starRate": 0.36,
-            "bustRate": 0.55,
-            "scoreReady": true
-          }
-        ],
+        "quantumTraits": [],
         "compComponent": 0.41,
-        "quantumComponent": 0.11,
-        "recommendedAdjustment": 0.52,
+        "quantumComponent": 0,
+        "recommendedAdjustment": 0.41,
         "reasons": [
-          "Comp signal +0.9 at confidence 1.00",
-          "Pressure translator: +0.1"
+          "Comp signal +0.9 at confidence 1.00"
         ]
       },
       {
@@ -11552,46 +11157,44 @@
         "compConfidence": 0.8,
         "quantumTraits": [
           {
-            "traitKey": "creation_without_chaos",
-            "label": "Creation without chaos",
-            "recommendedAdjustment": 0.2,
-            "confidence": "medium",
-            "avgDeltaVsExpected": 2.2,
-            "starterRate": 0.5,
-            "starRate": 0.4,
-            "bustRate": 0.2,
-            "scoreReady": true
-          },
-          {
-            "traitKey": "accurate_aggressive",
-            "label": "Accurate aggressive passer",
-            "recommendedAdjustment": 0.2,
-            "confidence": "high",
-            "avgDeltaVsExpected": 1.5,
-            "starterRate": 0.28,
-            "starRate": 0.24,
-            "bustRate": 0.58,
+            "traitKey": "elite_creation_without_chaos",
+            "label": "Elite creation without chaos",
+            "recommendedAdjustment": 0,
+            "confidence": "context-only",
+            "avgDeltaVsExpected": 21.7,
+            "starterRate": 0.67,
+            "starRate": 0.67,
+            "bustRate": 0,
             "scoreReady": false
           },
           {
-            "traitKey": "pressure_translator",
-            "label": "Pressure translator",
+            "traitKey": "nfl_timing_translator",
+            "label": "NFL timing translator",
             "recommendedAdjustment": 0.2,
+            "confidence": "high",
+            "avgDeltaVsExpected": 1.7,
+            "starterRate": 0.32,
+            "starRate": 0.25,
+            "bustRate": 0.57,
+            "scoreReady": false
+          },
+          {
+            "traitKey": "pressure_creation_combo",
+            "label": "Pressure + creation combo",
+            "recommendedAdjustment": 0.8,
             "confidence": "medium",
-            "avgDeltaVsExpected": 2.3,
-            "starterRate": 0.45,
+            "avgDeltaVsExpected": 7.8,
+            "starterRate": 0.55,
             "starRate": 0.36,
-            "bustRate": 0.55,
-            "scoreReady": true
+            "bustRate": 0.45,
+            "scoreReady": false
           }
         ],
         "compComponent": -0.09,
-        "quantumComponent": 0.14,
-        "recommendedAdjustment": 0.05,
+        "quantumComponent": 0,
+        "recommendedAdjustment": -0.09,
         "reasons": [
           "Comp signal -0.4 at confidence 0.80",
-          "Creation without chaos: +0.1",
-          "Pressure translator: +0.1",
           "Draft capital damping: x0.65"
         ]
       },
@@ -11627,19 +11230,7 @@
         "realDraftPrior": true,
         "compAdjustment": -0.2,
         "compConfidence": 1,
-        "quantumTraits": [
-          {
-            "traitKey": "accurate_aggressive",
-            "label": "Accurate aggressive passer",
-            "recommendedAdjustment": 0.2,
-            "confidence": "high",
-            "avgDeltaVsExpected": 1.5,
-            "starterRate": 0.28,
-            "starRate": 0.24,
-            "bustRate": 0.58,
-            "scoreReady": false
-          }
-        ],
+        "quantumTraits": [],
         "compComponent": -0.04,
         "quantumComponent": 0,
         "recommendedAdjustment": -0.04,
@@ -13138,14 +12729,14 @@
         "compConfidence": 1,
         "quantumTraits": [
           {
-            "traitKey": "accurate_aggressive",
-            "label": "Accurate aggressive passer",
-            "recommendedAdjustment": 0.2,
-            "confidence": "high",
-            "avgDeltaVsExpected": 1.5,
-            "starterRate": 0.28,
-            "starRate": 0.24,
-            "bustRate": 0.58,
+            "traitKey": "pressure_creation_combo",
+            "label": "Pressure + creation combo",
+            "recommendedAdjustment": 0.8,
+            "confidence": "medium",
+            "avgDeltaVsExpected": 7.8,
+            "starterRate": 0.55,
+            "starRate": 0.36,
+            "bustRate": 0.45,
             "scoreReady": false
           }
         ],
@@ -13170,34 +12761,22 @@
         "compConfidence": 1,
         "quantumTraits": [
           {
-            "traitKey": "creation_without_chaos",
-            "label": "Creation without chaos",
-            "recommendedAdjustment": 0.2,
-            "confidence": "medium",
-            "avgDeltaVsExpected": 2.2,
-            "starterRate": 0.5,
-            "starRate": 0.4,
-            "bustRate": 0.2,
-            "scoreReady": true
-          },
-          {
-            "traitKey": "accurate_aggressive",
-            "label": "Accurate aggressive passer",
-            "recommendedAdjustment": 0.2,
-            "confidence": "high",
-            "avgDeltaVsExpected": 1.5,
-            "starterRate": 0.28,
-            "starRate": 0.24,
-            "bustRate": 0.58,
+            "traitKey": "elite_creation_without_chaos",
+            "label": "Elite creation without chaos",
+            "recommendedAdjustment": 0,
+            "confidence": "context-only",
+            "avgDeltaVsExpected": 21.7,
+            "starterRate": 0.67,
+            "starRate": 0.67,
+            "bustRate": 0,
             "scoreReady": false
           }
         ],
         "compComponent": 0.54,
-        "quantumComponent": 0.11,
-        "recommendedAdjustment": 0.65,
+        "quantumComponent": 0,
+        "recommendedAdjustment": 0.54,
         "reasons": [
-          "Comp signal +1.2 at confidence 1.00",
-          "Creation without chaos: +0.1"
+          "Comp signal +1.2 at confidence 1.00"
         ]
       },
       {
@@ -13212,36 +12791,12 @@
         "realDraftPrior": true,
         "compAdjustment": -0.5,
         "compConfidence": 1,
-        "quantumTraits": [
-          {
-            "traitKey": "accurate_aggressive",
-            "label": "Accurate aggressive passer",
-            "recommendedAdjustment": 0.2,
-            "confidence": "high",
-            "avgDeltaVsExpected": 1.5,
-            "starterRate": 0.28,
-            "starRate": 0.24,
-            "bustRate": 0.58,
-            "scoreReady": false
-          },
-          {
-            "traitKey": "pressure_translator",
-            "label": "Pressure translator",
-            "recommendedAdjustment": 0.2,
-            "confidence": "medium",
-            "avgDeltaVsExpected": 2.3,
-            "starterRate": 0.45,
-            "starRate": 0.36,
-            "bustRate": 0.55,
-            "scoreReady": true
-          }
-        ],
+        "quantumTraits": [],
         "compComponent": -0.23,
-        "quantumComponent": 0.11,
-        "recommendedAdjustment": -0.11,
+        "quantumComponent": 0,
+        "recommendedAdjustment": -0.23,
         "reasons": [
-          "Comp signal -0.5 at confidence 1.00",
-          "Pressure translator: +0.1"
+          "Comp signal -0.5 at confidence 1.00"
         ]
       },
       {
@@ -13256,25 +12811,12 @@
         "realDraftPrior": true,
         "compAdjustment": -0.6,
         "compConfidence": 1,
-        "quantumTraits": [
-          {
-            "traitKey": "pressure_translator",
-            "label": "Pressure translator",
-            "recommendedAdjustment": 0.2,
-            "confidence": "medium",
-            "avgDeltaVsExpected": 2.3,
-            "starterRate": 0.45,
-            "starRate": 0.36,
-            "bustRate": 0.55,
-            "scoreReady": true
-          }
-        ],
+        "quantumTraits": [],
         "compComponent": -0.22,
-        "quantumComponent": 0.09,
-        "recommendedAdjustment": -0.13,
+        "quantumComponent": 0,
+        "recommendedAdjustment": -0.22,
         "reasons": [
           "Comp signal -0.6 at confidence 1.00",
-          "Pressure translator: +0.1",
           "Draft capital damping: x0.80"
         ]
       },
@@ -13290,19 +12832,7 @@
         "realDraftPrior": true,
         "compAdjustment": -0.6,
         "compConfidence": 1,
-        "quantumTraits": [
-          {
-            "traitKey": "accurate_aggressive",
-            "label": "Accurate aggressive passer",
-            "recommendedAdjustment": 0.2,
-            "confidence": "high",
-            "avgDeltaVsExpected": 1.5,
-            "starterRate": 0.28,
-            "starRate": 0.24,
-            "bustRate": 0.58,
-            "scoreReady": false
-          }
-        ],
+        "quantumTraits": [],
         "compComponent": -0.22,
         "quantumComponent": 0,
         "recommendedAdjustment": -0.22,
@@ -13346,34 +12876,22 @@
         "compConfidence": 0.8,
         "quantumTraits": [
           {
-            "traitKey": "accurate_aggressive",
-            "label": "Accurate aggressive passer",
+            "traitKey": "nfl_timing_translator",
+            "label": "NFL timing translator",
             "recommendedAdjustment": 0.2,
             "confidence": "high",
-            "avgDeltaVsExpected": 1.5,
-            "starterRate": 0.28,
-            "starRate": 0.24,
-            "bustRate": 0.58,
+            "avgDeltaVsExpected": 1.7,
+            "starterRate": 0.32,
+            "starRate": 0.25,
+            "bustRate": 0.57,
             "scoreReady": false
-          },
-          {
-            "traitKey": "pressure_translator",
-            "label": "Pressure translator",
-            "recommendedAdjustment": 0.2,
-            "confidence": "medium",
-            "avgDeltaVsExpected": 2.3,
-            "starterRate": 0.45,
-            "starRate": 0.36,
-            "bustRate": 0.55,
-            "scoreReady": true
           }
         ],
         "compComponent": -0.04,
-        "quantumComponent": 0.06,
-        "recommendedAdjustment": 0.02,
+        "quantumComponent": 0,
+        "recommendedAdjustment": -0.04,
         "reasons": [
           "Comp signal -0.2 at confidence 0.80",
-          "Pressure translator: +0.1",
           "Draft capital damping: x0.50"
         ]
       },
@@ -13391,14 +12909,14 @@
         "compConfidence": 0.8,
         "quantumTraits": [
           {
-            "traitKey": "accurate_aggressive",
-            "label": "Accurate aggressive passer",
+            "traitKey": "nfl_timing_translator",
+            "label": "NFL timing translator",
             "recommendedAdjustment": 0.2,
             "confidence": "high",
-            "avgDeltaVsExpected": 1.5,
-            "starterRate": 0.28,
-            "starRate": 0.24,
-            "bustRate": 0.58,
+            "avgDeltaVsExpected": 1.7,
+            "starterRate": 0.32,
+            "starRate": 0.25,
+            "bustRate": 0.57,
             "scoreReady": false
           }
         ],
@@ -13464,19 +12982,7 @@
         "realDraftPrior": true,
         "compAdjustment": -0.1,
         "compConfidence": 0.8,
-        "quantumTraits": [
-          {
-            "traitKey": "accurate_aggressive",
-            "label": "Accurate aggressive passer",
-            "recommendedAdjustment": 0.2,
-            "confidence": "high",
-            "avgDeltaVsExpected": 1.5,
-            "starterRate": 0.28,
-            "starRate": 0.24,
-            "bustRate": 0.58,
-            "scoreReady": false
-          }
-        ],
+        "quantumTraits": [],
         "compComponent": -0.02,
         "quantumComponent": 0,
         "recommendedAdjustment": -0.02,
