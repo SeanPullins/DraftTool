@@ -213,7 +213,7 @@ const quantumTraits = {
       key: 'danger_profile',
       label: 'QB danger profile',
       definition: 'TWP% >= 4.0 or pressure-to-sack >= 22',
-      test: r => val(r, ['twp_rate', 'twp_pct'], 0) >= 4.0 || val(r, ['pressure_to_sack_rate', 'pressure_to_sack_pct'], 0) >= 22,
+      test: r => val(r, ['twp_rate', 'twp_pct'], 0) >= 4.0 && val(r, ['pressure_to_sack_rate', 'pressure_to_sack_pct'], 0) >= 20 && val(r, ['adjusted_completion_percent', 'accuracy_percent'], 100) < 70,
       inverse: true,
     },
   ],

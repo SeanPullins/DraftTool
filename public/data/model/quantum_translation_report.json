@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-05-22T23:39:22.349Z",
+  "generatedAt": "2026-05-23T00:07:59.052Z",
   "notes": [
     "Read-only quantum trait translation report.",
     "Does not change site scores.",
@@ -744,352 +744,149 @@
           "label": "QB danger profile",
           "definition": "TWP% >= 4.0 or pressure-to-sack >= 22",
           "inverse": true,
-          "historicalMatches": 29,
-          "effectiveN": 25.75,
-          "avgDeltaVsExpected": -2.1,
-          "starterRate": 0.21,
-          "starRate": 0.21,
-          "bustRate": 0.62,
-          "recommendedAdjustment": -0.2,
-          "confidence": "high",
+          "historicalMatches": 1,
+          "effectiveN": 1,
+          "avgDeltaVsExpected": -0.2,
+          "starterRate": 1,
+          "starRate": 1,
+          "bustRate": 0,
+          "recommendedAdjustment": 0,
+          "confidence": "context-only",
           "examples": [
             {
-              "name": "Dak Prescott",
-              "year": 2016,
-              "pick": 135,
-              "delta": 45,
-              "weight": 1
-            },
-            {
-              "name": "Jacoby Brissett",
-              "year": 2016,
-              "pick": 91,
-              "delta": 33.9,
-              "weight": 1
-            },
-            {
-              "name": "Sam Darnold",
-              "year": 2018,
-              "pick": 3,
-              "delta": 9.5,
-              "weight": 1
-            },
-            {
-              "name": "Sam Howell",
-              "year": 2022,
-              "pick": 144,
-              "delta": 8.2,
-              "weight": 0.5
-            },
-            {
-              "name": "Aidan O'Connell",
-              "year": 2023,
-              "pick": 135,
-              "delta": 5.4,
-              "weight": 0.25
-            },
-            {
-              "name": "Jordan Love",
-              "year": 2020,
-              "pick": 26,
-              "delta": 4.2,
-              "weight": 1
-            },
-            {
-              "name": "Joshua Dobbs",
-              "year": 2017,
-              "pick": 135,
-              "delta": 3.2,
-              "weight": 1
-            },
-            {
-              "name": "Mike White",
-              "year": 2018,
-              "pick": 171,
-              "delta": 2,
+              "name": "Daniel Jones",
+              "year": 2019,
+              "pick": 6,
+              "delta": -0.2,
               "weight": 1
             }
           ],
           "currentMatches": [
             {
-              "name": "Michael Pratt",
-              "year": 2024,
-              "pick": 245,
-              "source": "qb_drafted_projection_75_20_5",
-              "rawGeneratedScore": 18
+              "name": "Goose Crowder",
+              "year": 2026,
+              "pick": 116,
+              "source": "qb_future_pff_forecast",
+              "rawGeneratedScore": 39
             },
             {
-              "name": "Devin Leary",
-              "year": 2024,
-              "pick": 218,
-              "source": "qb_drafted_projection_75_20_5",
-              "rawGeneratedScore": 14
+              "name": "Aidan Armenta",
+              "year": 2026,
+              "pick": 126,
+              "source": "qb_future_pff_forecast",
+              "rawGeneratedScore": 37
             },
             {
-              "name": "Jalen Milroe",
-              "year": 2025,
-              "pick": 92,
-              "source": "qb_drafted_projection_75_20_5",
+              "name": "Grayson Loftis",
+              "year": 2026,
+              "pick": 131,
+              "source": "qb_future_pff_forecast",
+              "rawGeneratedScore": 36
+            },
+            {
+              "name": "Logan Fife",
+              "year": 2026,
+              "pick": 144,
+              "source": "qb_future_pff_forecast",
               "rawGeneratedScore": 30
             },
             {
-              "name": "Graham Mertz",
-              "year": 2025,
-              "pick": 197,
-              "source": "qb_drafted_projection_75_20_5",
-              "rawGeneratedScore": 20
-            },
-            {
-              "name": "Kurtis Rourke",
-              "year": 2025,
-              "pick": 227,
-              "source": "qb_drafted_projection_75_20_5",
-              "rawGeneratedScore": 18
-            },
-            {
-              "name": "Quinn Ewers",
-              "year": 2025,
-              "pick": 231,
-              "source": "qb_drafted_projection_75_20_5",
-              "rawGeneratedScore": 18
-            },
-            {
-              "name": "Brad Jackson",
+              "name": "Ben Finley",
               "year": 2026,
-              "pick": 25,
+              "pick": 145,
               "source": "qb_future_pff_forecast",
-              "rawGeneratedScore": 66
+              "rawGeneratedScore": 29
             },
             {
-              "name": "Athan Kaliakmanis",
+              "name": "Elijah Brown",
               "year": 2026,
-              "pick": 29,
+              "pick": 147,
               "source": "qb_future_pff_forecast",
-              "rawGeneratedScore": 64
+              "rawGeneratedScore": 27
             },
             {
-              "name": "Jayden Maiava",
+              "name": "Ben Gulbranson",
               "year": 2026,
-              "pick": 35,
+              "pick": 148,
               "source": "qb_future_pff_forecast",
-              "rawGeneratedScore": 61
+              "rawGeneratedScore": 25
             },
             {
-              "name": "Steve Angeli",
+              "name": "Grayson James",
               "year": 2026,
-              "pick": 40,
+              "pick": 149,
               "source": "qb_future_pff_forecast",
-              "rawGeneratedScore": 60
+              "rawGeneratedScore": 24
             },
             {
-              "name": "Jacob Clark",
-              "year": 2026,
-              "pick": 43,
-              "source": "qb_future_pff_forecast",
-              "rawGeneratedScore": 58
-            },
-            {
-              "name": "Rocco Becht",
-              "year": 2026,
-              "pick": 45,
-              "source": "qb_future_pff_forecast",
-              "rawGeneratedScore": 57
-            },
-            {
-              "name": "Blake Shapen",
-              "year": 2026,
-              "pick": 52,
-              "source": "qb_future_pff_forecast",
-              "rawGeneratedScore": 55
-            },
-            {
-              "name": "Walker Eget",
-              "year": 2026,
-              "pick": 53,
-              "source": "qb_future_pff_forecast",
-              "rawGeneratedScore": 55
-            },
-            {
-              "name": "Liam Szarka",
-              "year": 2026,
-              "pick": 60,
-              "source": "qb_future_pff_forecast",
-              "rawGeneratedScore": 53
-            },
-            {
-              "name": "Caden Veltkamp",
-              "year": 2026,
-              "pick": 66,
-              "source": "qb_future_pff_forecast",
-              "rawGeneratedScore": 51
-            },
-            {
-              "name": "JJ Kohl",
-              "year": 2026,
-              "pick": 71,
-              "source": "qb_future_pff_forecast",
-              "rawGeneratedScore": 51
-            },
-            {
-              "name": "Josh Hoover",
-              "year": 2026,
-              "pick": 73,
-              "source": "qb_future_pff_forecast",
-              "rawGeneratedScore": 50
-            },
-            {
-              "name": "Jake Retzlaff",
-              "year": 2026,
-              "pick": 74,
-              "source": "qb_future_pff_forecast",
-              "rawGeneratedScore": 50
-            },
-            {
-              "name": "Avery Johnson",
-              "year": 2026,
-              "pick": 75,
-              "source": "qb_future_pff_forecast",
-              "rawGeneratedScore": 50
-            },
-            {
-              "name": "Amari Odom",
-              "year": 2026,
-              "pick": 76,
-              "source": "qb_future_pff_forecast",
-              "rawGeneratedScore": 50
-            },
-            {
-              "name": "Robby Ashford",
-              "year": 2026,
-              "pick": 77,
-              "source": "qb_future_pff_forecast",
-              "rawGeneratedScore": 50
-            },
-            {
-              "name": "Behren Morton",
-              "year": 2026,
-              "pick": 80,
-              "source": "qb_future_pff_forecast",
-              "rawGeneratedScore": 49
-            },
-            {
-              "name": "Bear Bachmeier",
-              "year": 2026,
-              "pick": 85,
-              "source": "qb_future_pff_forecast",
-              "rawGeneratedScore": 47
-            },
-            {
-              "name": "Sam Leavitt",
-              "year": 2026,
-              "pick": 86,
-              "source": "qb_future_pff_forecast",
-              "rawGeneratedScore": 47
-            },
-            {
-              "name": "Marcel Reed",
-              "year": 2026,
-              "pick": 87,
-              "source": "qb_future_pff_forecast",
-              "rawGeneratedScore": 47
-            },
-            {
-              "name": "Beau Pribula",
-              "year": 2026,
-              "pick": 88,
-              "source": "qb_future_pff_forecast",
-              "rawGeneratedScore": 46
-            },
-            {
-              "name": "LaNorris Sellers",
-              "year": 2026,
-              "pick": 91,
-              "source": "qb_future_pff_forecast",
-              "rawGeneratedScore": 46
-            },
-            {
-              "name": "Joe Labas",
-              "year": 2026,
-              "pick": 94,
-              "source": "qb_future_pff_forecast",
-              "rawGeneratedScore": 45
-            },
-            {
-              "name": "Dru DeShields",
-              "year": 2026,
-              "pick": 95,
-              "source": "qb_future_pff_forecast",
-              "rawGeneratedScore": 45
-            },
-            {
-              "name": "Dylan Raiola",
-              "year": 2026,
-              "pick": 99,
-              "source": "qb_future_pff_forecast",
-              "rawGeneratedScore": 44
-            },
-            {
-              "name": "Tucker Kilcrease",
-              "year": 2026,
-              "pick": 100,
-              "source": "qb_future_pff_forecast",
-              "rawGeneratedScore": 44
-            },
-            {
-              "name": "Parker Navarro",
-              "year": 2026,
-              "pick": 101,
-              "source": "qb_future_pff_forecast",
-              "rawGeneratedScore": 44
-            },
-            {
-              "name": "Maddux Madsen",
-              "year": 2026,
-              "pick": 102,
-              "source": "qb_future_pff_forecast",
-              "rawGeneratedScore": 43
-            },
-            {
-              "name": "Michael Van Buren Jr.",
-              "year": 2026,
-              "pick": 106,
-              "source": "qb_future_pff_forecast",
-              "rawGeneratedScore": 42
-            },
-            {
-              "name": "Ryan Browne",
-              "year": 2026,
-              "pick": 107,
-              "source": "qb_future_pff_forecast",
-              "rawGeneratedScore": 42
-            },
-            {
-              "name": "Miller Moss",
-              "year": 2026,
-              "pick": 108,
-              "source": "qb_future_pff_forecast",
-              "rawGeneratedScore": 42
-            },
-            {
-              "name": "AJ Swann",
-              "year": 2026,
+              "name": "Goose Crowder",
+              "year": 2027,
               "pick": 110,
               "source": "qb_future_pff_forecast",
-              "rawGeneratedScore": 41
+              "rawGeneratedScore": 39
             },
             {
-              "name": "Preston Stone",
-              "year": 2026,
-              "pick": 112,
+              "name": "Aidan Armenta",
+              "year": 2027,
+              "pick": 120,
               "source": "qb_future_pff_forecast",
-              "rawGeneratedScore": 40
+              "rawGeneratedScore": 37
             },
             {
-              "name": "Hunter Watson",
-              "year": 2026,
-              "pick": 113,
+              "name": "Grayson Loftis",
+              "year": 2027,
+              "pick": 126,
               "source": "qb_future_pff_forecast",
-              "rawGeneratedScore": 40
+              "rawGeneratedScore": 36
+            },
+            {
+              "name": "Logan Fife",
+              "year": 2027,
+              "pick": 139,
+              "source": "qb_future_pff_forecast",
+              "rawGeneratedScore": 30
+            },
+            {
+              "name": "Ben Finley",
+              "year": 2027,
+              "pick": 140,
+              "source": "qb_future_pff_forecast",
+              "rawGeneratedScore": 29
+            },
+            {
+              "name": "Elijah Brown",
+              "year": 2027,
+              "pick": 142,
+              "source": "qb_future_pff_forecast",
+              "rawGeneratedScore": 27
+            },
+            {
+              "name": "Ben Gulbranson",
+              "year": 2027,
+              "pick": 143,
+              "source": "qb_future_pff_forecast",
+              "rawGeneratedScore": 25
+            },
+            {
+              "name": "Grayson James",
+              "year": 2027,
+              "pick": 144,
+              "source": "qb_future_pff_forecast",
+              "rawGeneratedScore": 24
+            },
+            {
+              "name": "Kiael Kelly",
+              "year": 2027,
+              "pick": 147,
+              "source": "qb_future_pff_forecast",
+              "rawGeneratedScore": 22
+            },
+            {
+              "name": "Carter Jones",
+              "year": 2027,
+              "pick": 148,
+              "source": "qb_future_pff_forecast",
+              "rawGeneratedScore": 21
             }
           ]
         }

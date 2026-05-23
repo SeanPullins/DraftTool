@@ -1,10 +1,10 @@
 {
-  "generatedAt": "2026-05-22T23:59:23.603Z",
+  "generatedAt": "2026-05-23T00:07:59.297Z",
   "note": "True historical quantum trait backtest. Applies the same score-ready trait logic to historical players with PFF rows.",
   "all": {
     "n": 409,
     "baseSpearman": 0.6283,
-    "adjustedSpearman": 0.6311,
+    "adjustedSpearman": 0.6309,
     "basePairwise": 0.7369,
     "adjustedPairwise": 0.738,
     "baseTop20": {
@@ -61,11 +61,11 @@
   "byPosition": {
     "QB": {
       "n": 64,
-      "adjustedCount": 37,
+      "adjustedCount": 16,
       "baseSpearman": 0.7161,
       "adjustedSpearman": 0.7156,
       "basePairwise": 0.7987,
-      "adjustedPairwise": 0.7961,
+      "adjustedPairwise": 0.7965,
       "baseTop20": {
         "n": 20,
         "avgActual": 79.78,
@@ -207,6 +207,17 @@
           "delta": 6.7
         },
         {
+          "name": "Justin Fields",
+          "year": 2021,
+          "pick": 11,
+          "adjustment": 0.11,
+          "traits": [
+            "Creation without chaos"
+          ],
+          "actual": 48.8,
+          "delta": -5.5
+        },
+        {
           "name": "Ryan Finley",
           "year": 2019,
           "pick": 104,
@@ -275,50 +286,6 @@
       ],
       "biggestNegative": [
         {
-          "name": "Christian Hackenberg",
-          "year": 2016,
-          "pick": 51,
-          "adjustment": -0.11,
-          "traits": [
-            "QB danger profile"
-          ],
-          "actual": 0,
-          "delta": -26.4
-        },
-        {
-          "name": "DeShone Kizer",
-          "year": 2017,
-          "pick": 52,
-          "adjustment": -0.11,
-          "traits": [
-            "QB danger profile"
-          ],
-          "actual": 7.2,
-          "delta": -18.8
-        },
-        {
-          "name": "Sam Darnold",
-          "year": 2018,
-          "pick": 3,
-          "adjustment": -0.11,
-          "traits": [
-            "QB danger profile"
-          ],
-          "actual": 72.2,
-          "delta": 9.5
-        },
-        {
-          "name": "Josh Rosen",
-          "year": 2018,
-          "pick": 10,
-          "adjustment": -0.11,
-          "traits": [
-            "QB danger profile"
-          ],
-          "actual": 4.2,
-          "delta": -51.1
-        },
-        {
           "name": "Daniel Jones",
           "year": 2019,
           "pick": 6,
@@ -328,171 +295,6 @@
           ],
           "actual": 59.2,
           "delta": -0.2
-        },
-        {
-          "name": "Jordan Love",
-          "year": 2020,
-          "pick": 26,
-          "adjustment": -0.11,
-          "traits": [
-            "QB danger profile"
-          ],
-          "actual": 45.6,
-          "delta": 4.2
-        },
-        {
-          "name": "Jacoby Brissett",
-          "year": 2016,
-          "pick": 91,
-          "adjustment": -0.09,
-          "traits": [
-            "QB danger profile"
-          ],
-          "actual": 46.8,
-          "delta": 33.9
-        },
-        {
-          "name": "Davis Webb",
-          "year": 2017,
-          "pick": 87,
-          "adjustment": -0.09,
-          "traits": [
-            "QB danger profile"
-          ],
-          "actual": 1,
-          "delta": -12.8
-        },
-        {
-          "name": "Will Grier",
-          "year": 2019,
-          "pick": 100,
-          "adjustment": -0.09,
-          "traits": [
-            "QB danger profile"
-          ],
-          "actual": 1,
-          "delta": -9.9
-        },
-        {
-          "name": "Dak Prescott",
-          "year": 2016,
-          "pick": 135,
-          "adjustment": -0.07,
-          "traits": [
-            "QB danger profile"
-          ],
-          "actual": 145.6,
-          "delta": 139.8
-        },
-        {
-          "name": "Cardale Jones",
-          "year": 2016,
-          "pick": 139,
-          "adjustment": -0.07,
-          "traits": [
-            "QB danger profile"
-          ],
-          "actual": 0,
-          "delta": -5.4
-        },
-        {
-          "name": "Kevin Hogan",
-          "year": 2016,
-          "pick": 162,
-          "adjustment": -0.07,
-          "traits": [
-            "QB danger profile"
-          ],
-          "actual": 2,
-          "delta": -1.6
-        },
-        {
-          "name": "Joshua Dobbs",
-          "year": 2017,
-          "pick": 135,
-          "adjustment": -0.07,
-          "traits": [
-            "QB danger profile"
-          ],
-          "actual": 9,
-          "delta": 3.2
-        },
-        {
-          "name": "Nathan Peterman",
-          "year": 2017,
-          "pick": 171,
-          "adjustment": -0.07,
-          "traits": [
-            "QB danger profile"
-          ],
-          "actual": 3,
-          "delta": 0
-        },
-        {
-          "name": "Mike White",
-          "year": 2018,
-          "pick": 171,
-          "adjustment": -0.07,
-          "traits": [
-            "QB danger profile"
-          ],
-          "actual": 5,
-          "delta": 2
-        },
-        {
-          "name": "James Morgan",
-          "year": 2020,
-          "pick": 125,
-          "adjustment": -0.07,
-          "traits": [
-            "QB danger profile"
-          ],
-          "actual": 0,
-          "delta": -7
-        },
-        {
-          "name": "Nate Sudfeld",
-          "year": 2016,
-          "pick": 187,
-          "adjustment": -0.06,
-          "traits": [
-            "QB danger profile"
-          ],
-          "actual": 1,
-          "delta": -2
-        },
-        {
-          "name": "Brad Kaaya",
-          "year": 2017,
-          "pick": 215,
-          "adjustment": -0.06,
-          "traits": [
-            "QB danger profile"
-          ],
-          "actual": 0,
-          "delta": -3
-        },
-        {
-          "name": "Luke Falk",
-          "year": 2018,
-          "pick": 199,
-          "adjustment": -0.06,
-          "traits": [
-            "QB danger profile"
-          ],
-          "actual": 1,
-          "delta": -2
-        },
-        {
-          "name": "Tanner Lee",
-          "year": 2018,
-          "pick": 203,
-          "adjustment": -0.06,
-          "traits": [
-            "QB danger profile"
-          ],
-          "actual": 0,
-          "delta": -3
         }
       ]
     },

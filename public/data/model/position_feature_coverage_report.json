@@ -1,0 +1,885 @@
+{
+  "generatedAt": "2026-05-23T00:07:39.878Z",
+  "byPosition": {
+    "QB": {
+      "file": "public/data/qb_pff_seasons.json",
+      "rows": 4009,
+      "availableKeys": [
+        "accuracypercent",
+        "adjustedcompletionpercent",
+        "adot",
+        "aimedpasses",
+        "attempts",
+        "avgdepthoftarget",
+        "avgtimetothrow",
+        "bats",
+        "bigtimethrows",
+        "btt",
+        "bttpct",
+        "bttrate",
+        "cleanname",
+        "completionpercent",
+        "completions",
+        "defgenpressures",
+        "dropbacks",
+        "droprate",
+        "drops",
+        "epa",
+        "firstdowns",
+        "fumblegrade",
+        "gradeshandsfumble",
+        "gradesoffense",
+        "gradespass",
+        "gradesrun",
+        "interceptions",
+        "name",
+        "offensegrade",
+        "passgrade",
+        "penalties",
+        "player",
+        "playergamecount",
+        "playerid",
+        "pos",
+        "position",
+        "positiveepapercent",
+        "pressuretosackpct",
+        "pressuretosackrate",
+        "qbrating",
+        "rungrade",
+        "sackpct",
+        "sackpercent",
+        "sacks",
+        "scrambles",
+        "season",
+        "sourcefile",
+        "spikes",
+        "team",
+        "teamname",
+        "thrownaways",
+        "timetothrow",
+        "touchdowns",
+        "turnoverworthyplays",
+        "twp",
+        "twppct",
+        "twprate",
+        "yards",
+        "ypa"
+      ],
+      "wantedCoverage": [
+        {
+          "field": "pass_grade",
+          "present": true,
+          "count": 4009,
+          "rate": 1
+        },
+        {
+          "field": "grades_pass",
+          "present": true,
+          "count": 4009,
+          "rate": 1
+        },
+        {
+          "field": "offense_grade",
+          "present": true,
+          "count": 4009,
+          "rate": 1
+        },
+        {
+          "field": "grades_offense",
+          "present": true,
+          "count": 4009,
+          "rate": 1
+        },
+        {
+          "field": "btt_rate",
+          "present": true,
+          "count": 4009,
+          "rate": 1
+        },
+        {
+          "field": "btt_pct",
+          "present": true,
+          "count": 4009,
+          "rate": 1
+        },
+        {
+          "field": "twp_rate",
+          "present": true,
+          "count": 4009,
+          "rate": 1
+        },
+        {
+          "field": "twp_pct",
+          "present": true,
+          "count": 4009,
+          "rate": 1
+        },
+        {
+          "field": "adjusted_completion_percent",
+          "present": true,
+          "count": 3992,
+          "rate": 0.996
+        },
+        {
+          "field": "accuracy_percent",
+          "present": true,
+          "count": 3992,
+          "rate": 0.996
+        },
+        {
+          "field": "adot",
+          "present": true,
+          "count": 3992,
+          "rate": 0.996
+        },
+        {
+          "field": "avg_depth_of_target",
+          "present": true,
+          "count": 3992,
+          "rate": 0.996
+        },
+        {
+          "field": "time_to_throw",
+          "present": true,
+          "count": 4009,
+          "rate": 1
+        },
+        {
+          "field": "avg_time_to_throw",
+          "present": true,
+          "count": 4009,
+          "rate": 1
+        },
+        {
+          "field": "pressure_to_sack_rate",
+          "present": true,
+          "count": 3683,
+          "rate": 0.919
+        },
+        {
+          "field": "pressure_to_sack_pct",
+          "present": true,
+          "count": 3683,
+          "rate": 0.919
+        },
+        {
+          "field": "epa",
+          "present": true,
+          "count": 4009,
+          "rate": 1
+        },
+        {
+          "field": "attempts",
+          "present": true,
+          "count": 4009,
+          "rate": 1
+        },
+        {
+          "field": "dropbacks",
+          "present": true,
+          "count": 4009,
+          "rate": 1
+        }
+      ],
+      "missingOrSparse": []
+    },
+    "WR": {
+      "file": "public/data/wr_pff_seasons.json",
+      "rows": 21634,
+      "availableKeys": [
+        "adot",
+        "avoidedtackles",
+        "catchrate",
+        "contestedcatchrate",
+        "contestedreceptions",
+        "contestedtargets",
+        "droprate",
+        "drops",
+        "epa",
+        "firstdowns",
+        "fumbles",
+        "games",
+        "gradespassblock",
+        "handsdropgrade",
+        "handsfumblegrade",
+        "inlinerate",
+        "inlinesnaps",
+        "longest",
+        "name",
+        "offensegrade",
+        "passblockrate",
+        "passblocks",
+        "passplays",
+        "penalties",
+        "playerid",
+        "position",
+        "positiveepapercent",
+        "receptions",
+        "routegrade",
+        "routerate",
+        "routes",
+        "season",
+        "slotrate",
+        "slotsnaps",
+        "sourcefile",
+        "targetedqbrating",
+        "targets",
+        "team",
+        "touchdowns",
+        "widerate",
+        "widesnaps",
+        "yards",
+        "yardsaftercatch",
+        "yardsaftercatchperreception",
+        "yardsperreception",
+        "yprr"
+      ],
+      "wantedCoverage": [
+        {
+          "field": "route_grade",
+          "present": true,
+          "count": 21580,
+          "rate": 0.998
+        },
+        {
+          "field": "grades_pass_route",
+          "present": false,
+          "count": 0,
+          "rate": 0
+        },
+        {
+          "field": "yprr",
+          "present": true,
+          "count": 21513,
+          "rate": 0.994
+        },
+        {
+          "field": "yards_per_route_run",
+          "present": false,
+          "count": 0,
+          "rate": 0
+        },
+        {
+          "field": "targets",
+          "present": true,
+          "count": 21634,
+          "rate": 1
+        },
+        {
+          "field": "yards",
+          "present": true,
+          "count": 21634,
+          "rate": 1
+        },
+        {
+          "field": "receiving_yards",
+          "present": false,
+          "count": 0,
+          "rate": 0
+        },
+        {
+          "field": "adot",
+          "present": true,
+          "count": 21634,
+          "rate": 1
+        },
+        {
+          "field": "avg_depth_of_target",
+          "present": false,
+          "count": 0,
+          "rate": 0
+        },
+        {
+          "field": "drop_rate",
+          "present": true,
+          "count": 20535,
+          "rate": 0.949
+        },
+        {
+          "field": "target_share",
+          "present": false,
+          "count": 0,
+          "rate": 0
+        },
+        {
+          "field": "yard_share",
+          "present": false,
+          "count": 0,
+          "rate": 0
+        },
+        {
+          "field": "breakout_age",
+          "present": false,
+          "count": 0,
+          "rate": 0
+        },
+        {
+          "field": "age",
+          "present": false,
+          "count": 0,
+          "rate": 0
+        },
+        {
+          "field": "slot_rate",
+          "present": true,
+          "count": 21634,
+          "rate": 1
+        },
+        {
+          "field": "outside_rate",
+          "present": false,
+          "count": 0,
+          "rate": 0
+        },
+        {
+          "field": "height",
+          "present": false,
+          "count": 0,
+          "rate": 0
+        },
+        {
+          "field": "weight",
+          "present": false,
+          "count": 0,
+          "rate": 0
+        },
+        {
+          "field": "ras",
+          "present": false,
+          "count": 0,
+          "rate": 0
+        }
+      ],
+      "missingOrSparse": [
+        {
+          "field": "grades_pass_route",
+          "present": false,
+          "count": 0,
+          "rate": 0
+        },
+        {
+          "field": "yards_per_route_run",
+          "present": false,
+          "count": 0,
+          "rate": 0
+        },
+        {
+          "field": "receiving_yards",
+          "present": false,
+          "count": 0,
+          "rate": 0
+        },
+        {
+          "field": "avg_depth_of_target",
+          "present": false,
+          "count": 0,
+          "rate": 0
+        },
+        {
+          "field": "target_share",
+          "present": false,
+          "count": 0,
+          "rate": 0
+        },
+        {
+          "field": "yard_share",
+          "present": false,
+          "count": 0,
+          "rate": 0
+        },
+        {
+          "field": "breakout_age",
+          "present": false,
+          "count": 0,
+          "rate": 0
+        },
+        {
+          "field": "age",
+          "present": false,
+          "count": 0,
+          "rate": 0
+        },
+        {
+          "field": "outside_rate",
+          "present": false,
+          "count": 0,
+          "rate": 0
+        },
+        {
+          "field": "height",
+          "present": false,
+          "count": 0,
+          "rate": 0
+        },
+        {
+          "field": "weight",
+          "present": false,
+          "count": 0,
+          "rate": 0
+        },
+        {
+          "field": "ras",
+          "present": false,
+          "count": 0,
+          "rate": 0
+        }
+      ]
+    },
+    "RB": {
+      "file": "public/data/rb_pff_seasons.json",
+      "rows": 7870,
+      "availableKeys": [
+        "attempts",
+        "avoidedtackles",
+        "breakawayattempts",
+        "breakawaypercent",
+        "breakawayyards",
+        "cleanname",
+        "declinedpenalties",
+        "designedyards",
+        "drops",
+        "elurecvmtf",
+        "elurushmtf",
+        "elusiverating",
+        "eluyco",
+        "explosive",
+        "firstdowns",
+        "fumblegrade",
+        "fumbles",
+        "gapattempts",
+        "gradeshandsfumble",
+        "gradesoffense",
+        "gradespassblock",
+        "gradespassroute",
+        "gradesrun",
+        "gradesrunblock",
+        "longest",
+        "name",
+        "offensegrade",
+        "passblockgrade",
+        "penalties",
+        "player",
+        "playergamecount",
+        "playerid",
+        "pos",
+        "position",
+        "receptions",
+        "recyards",
+        "routegrade",
+        "routes",
+        "runblockgrade",
+        "rungrade",
+        "runplays",
+        "season",
+        "sourcefile",
+        "targets",
+        "team",
+        "teamname",
+        "totaltouches",
+        "touchdowns",
+        "yards",
+        "yardsaftercontact",
+        "ycoattempt",
+        "ypa",
+        "yprr",
+        "zoneattempts"
+      ],
+      "wantedCoverage": [
+        {
+          "field": "run_grade",
+          "present": true,
+          "count": 7870,
+          "rate": 1
+        },
+        {
+          "field": "grades_run",
+          "present": true,
+          "count": 7870,
+          "rate": 1
+        },
+        {
+          "field": "receiving_grade",
+          "present": false,
+          "count": 0,
+          "rate": 0
+        },
+        {
+          "field": "route_grade",
+          "present": true,
+          "count": 7181,
+          "rate": 0.912
+        },
+        {
+          "field": "grades_pass_route",
+          "present": true,
+          "count": 7181,
+          "rate": 0.912
+        },
+        {
+          "field": "pass_block_grade",
+          "present": true,
+          "count": 6685,
+          "rate": 0.849
+        },
+        {
+          "field": "grades_pass_block",
+          "present": true,
+          "count": 6685,
+          "rate": 0.849
+        },
+        {
+          "field": "yco",
+          "present": false,
+          "count": 0,
+          "rate": 0
+        },
+        {
+          "field": "yco_attempt",
+          "present": true,
+          "count": 7870,
+          "rate": 1
+        },
+        {
+          "field": "yards_after_contact_per_attempt",
+          "present": false,
+          "count": 0,
+          "rate": 0
+        },
+        {
+          "field": "elusive",
+          "present": false,
+          "count": 0,
+          "rate": 0
+        },
+        {
+          "field": "elusive_rating",
+          "present": true,
+          "count": 7870,
+          "rate": 1
+        },
+        {
+          "field": "breakaway_percent",
+          "present": true,
+          "count": 7828,
+          "rate": 0.995
+        },
+        {
+          "field": "avoided_tackles",
+          "present": true,
+          "count": 7870,
+          "rate": 1
+        },
+        {
+          "field": "targets",
+          "present": true,
+          "count": 7870,
+          "rate": 1
+        },
+        {
+          "field": "rec_yards",
+          "present": true,
+          "count": 7870,
+          "rate": 1
+        },
+        {
+          "field": "yards",
+          "present": true,
+          "count": 7870,
+          "rate": 1
+        },
+        {
+          "field": "rushing_yards",
+          "present": false,
+          "count": 0,
+          "rate": 0
+        },
+        {
+          "field": "attempts",
+          "present": true,
+          "count": 7870,
+          "rate": 1
+        },
+        {
+          "field": "carries",
+          "present": false,
+          "count": 0,
+          "rate": 0
+        },
+        {
+          "field": "fumbles",
+          "present": true,
+          "count": 7870,
+          "rate": 1
+        },
+        {
+          "field": "ras",
+          "present": false,
+          "count": 0,
+          "rate": 0
+        }
+      ],
+      "missingOrSparse": [
+        {
+          "field": "receiving_grade",
+          "present": false,
+          "count": 0,
+          "rate": 0
+        },
+        {
+          "field": "yco",
+          "present": false,
+          "count": 0,
+          "rate": 0
+        },
+        {
+          "field": "yards_after_contact_per_attempt",
+          "present": false,
+          "count": 0,
+          "rate": 0
+        },
+        {
+          "field": "elusive",
+          "present": false,
+          "count": 0,
+          "rate": 0
+        },
+        {
+          "field": "rushing_yards",
+          "present": false,
+          "count": 0,
+          "rate": 0
+        },
+        {
+          "field": "carries",
+          "present": false,
+          "count": 0,
+          "rate": 0
+        },
+        {
+          "field": "ras",
+          "present": false,
+          "count": 0,
+          "rate": 0
+        }
+      ]
+    },
+    "TE": {
+      "file": "public/data/te_pff_seasons.json",
+      "rows": 4589,
+      "availableKeys": [
+        "adot",
+        "avgdepthoftarget",
+        "avoidedtackles",
+        "caughtpercent",
+        "cleanname",
+        "contestedcatchrate",
+        "contestedreceptions",
+        "contestedtargets",
+        "droprate",
+        "drops",
+        "epa",
+        "firstdowns",
+        "fumbles",
+        "gradeshandsdrop",
+        "gradeshandsfumble",
+        "gradesoffense",
+        "gradespassblock",
+        "gradespassroute",
+        "inlinerate",
+        "inlinesnaps",
+        "name",
+        "offensegrade",
+        "passblockgrade",
+        "passblockrate",
+        "passblocks",
+        "passplays",
+        "player",
+        "playergamecount",
+        "playerid",
+        "pos",
+        "position",
+        "positiveepapercent",
+        "receptions",
+        "routegrade",
+        "routerate",
+        "routes",
+        "season",
+        "slotrate",
+        "slotsnaps",
+        "sourcefile",
+        "targetedqbrating",
+        "targets",
+        "team",
+        "teamname",
+        "touchdowns",
+        "widerate",
+        "widesnaps",
+        "yards",
+        "yardsaftercatch",
+        "yardsaftercatchperreception",
+        "yardsperreception",
+        "yprr"
+      ],
+      "wantedCoverage": [
+        {
+          "field": "route_grade",
+          "present": true,
+          "count": 4589,
+          "rate": 1
+        },
+        {
+          "field": "grades_pass_route",
+          "present": true,
+          "count": 4589,
+          "rate": 1
+        },
+        {
+          "field": "receiving_grade",
+          "present": false,
+          "count": 0,
+          "rate": 0
+        },
+        {
+          "field": "yprr",
+          "present": true,
+          "count": 4589,
+          "rate": 1
+        },
+        {
+          "field": "yards_per_route_run",
+          "present": false,
+          "count": 0,
+          "rate": 0
+        },
+        {
+          "field": "targets",
+          "present": true,
+          "count": 4589,
+          "rate": 1
+        },
+        {
+          "field": "yards",
+          "present": true,
+          "count": 4589,
+          "rate": 1
+        },
+        {
+          "field": "run_block_grade",
+          "present": false,
+          "count": 0,
+          "rate": 0
+        },
+        {
+          "field": "grades_run_block",
+          "present": false,
+          "count": 0,
+          "rate": 0
+        },
+        {
+          "field": "pass_block_grade",
+          "present": true,
+          "count": 4286,
+          "rate": 0.934
+        },
+        {
+          "field": "grades_pass_block",
+          "present": true,
+          "count": 4286,
+          "rate": 0.934
+        },
+        {
+          "field": "inline_rate",
+          "present": true,
+          "count": 4589,
+          "rate": 1
+        },
+        {
+          "field": "slot_rate",
+          "present": true,
+          "count": 4589,
+          "rate": 1
+        },
+        {
+          "field": "wide_rate",
+          "present": true,
+          "count": 4589,
+          "rate": 1
+        },
+        {
+          "field": "route_participation",
+          "present": false,
+          "count": 0,
+          "rate": 0
+        },
+        {
+          "field": "height",
+          "present": false,
+          "count": 0,
+          "rate": 0
+        },
+        {
+          "field": "weight",
+          "present": false,
+          "count": 0,
+          "rate": 0
+        },
+        {
+          "field": "ras",
+          "present": false,
+          "count": 0,
+          "rate": 0
+        }
+      ],
+      "missingOrSparse": [
+        {
+          "field": "receiving_grade",
+          "present": false,
+          "count": 0,
+          "rate": 0
+        },
+        {
+          "field": "yards_per_route_run",
+          "present": false,
+          "count": 0,
+          "rate": 0
+        },
+        {
+          "field": "run_block_grade",
+          "present": false,
+          "count": 0,
+          "rate": 0
+        },
+        {
+          "field": "grades_run_block",
+          "present": false,
+          "count": 0,
+          "rate": 0
+        },
+        {
+          "field": "route_participation",
+          "present": false,
+          "count": 0,
+          "rate": 0
+        },
+        {
+          "field": "height",
+          "present": false,
+          "count": 0,
+          "rate": 0
+        },
+        {
+          "field": "weight",
+          "present": false,
+          "count": 0,
+          "rate": 0
+        },
+        {
+          "field": "ras",
+          "present": false,
+          "count": 0,
+          "rate": 0
+        }
+      ]
+    }
+  }
+}
