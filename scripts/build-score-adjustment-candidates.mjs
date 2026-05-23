@@ -368,7 +368,10 @@ function dedupeCandidates(rows) {
 const dedupedCandidates = dedupeCandidates(candidates);
 
 function isScoreReady(row) {
+  // True historical backtest supports RB score movement only right now.
+  // QB/WR/TE remain read-only context until their trait logic improves.
   return Boolean(
+    row.pos === 'RB' &&
     row.realDraftPrior &&
     Math.abs(Number(row.recommendedAdjustment || 0)) > 0.01
   );
@@ -391,7 +394,7 @@ const report = {
   generatedAt: new Date().toISOString(),
   notes: [
     'Offline report only. Does not change site scores.',
-    'scoreReady contains only real-draft-prior players with nonzero recommended adjustment.',
+    'scoreReady contains only RB real-draft-prior players with nonzero recommended adjustment. QB/WR/TE remain read-only context.',
     'contextOnly contains future/no-draft or zero-adjustment players for scouting context only.',
     'Recommended adjustment is capped and uses only conservative comp + score-ready quantum traits.',
     'Actual drafted rows are preferred over generated/rank-based rows.',
