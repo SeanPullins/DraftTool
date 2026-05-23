@@ -172,6 +172,130 @@ function qbSignal(prospect, pff) {
 const pffRows = loadJson('public/data/qb_pff_seasons.json');
 const pffMap = buildPffNameMap(pffRows);
 
+const qbHistoricalComps = [
+  {
+    name: 'Lamar Jackson',
+    archetype: 'Elite scramble creator',
+    pick: 32,
+    pass: 75.3,
+    run: 86.8,
+    scrambles: 51,
+    btt: 4.0,
+    acc: 71.7,
+    adot: 11.4,
+    epa: 0.22,
+  },
+  {
+    name: 'Jalen Hurts',
+    archetype: 'Developmental creator',
+    pick: 53,
+    pass: 90.1,
+    run: 79.8,
+    scrambles: 59,
+    btt: 5.1,
+    acc: 76.9,
+    adot: 11.3,
+    epa: 0.43,
+  },
+  {
+    name: 'Kyler Murray',
+    archetype: 'Explosive top-pick creator',
+    pick: 1,
+    pass: 93.7,
+    run: 84.4,
+    scrambles: 40,
+    btt: 7.3,
+    acc: 78.9,
+    adot: 11.7,
+    epa: 0.63,
+  },
+  {
+    name: 'Joe Burrow',
+    archetype: 'Elite processor creator',
+    pick: 1,
+    pass: 94.1,
+    run: 78.7,
+    scrambles: 47,
+    btt: 7.5,
+    acc: 81.9,
+    adot: 9.6,
+    epa: 0.50,
+  },
+  {
+    name: 'Patrick Mahomes',
+    archetype: 'Top-32 creation plus',
+    pick: 10,
+    pass: 87.0,
+    run: 70.5,
+    scrambles: 49,
+    btt: 6.6,
+    acc: 75.5,
+    adot: 9.3,
+    epa: 0.31,
+  },
+  {
+    name: 'Dwayne Haskins',
+    archetype: 'High-capital low-creation risk',
+    pick: 15,
+    pass: 84.9,
+    run: 58.1,
+    scrambles: 30,
+    btt: 4.2,
+    acc: 77.1,
+    adot: 8.6,
+    epa: 0.32,
+  },
+  {
+    name: 'Paxton Lynch',
+    archetype: 'Safe-limited low-creation risk',
+    pick: 26,
+    pass: 85.2,
+    run: 67.9,
+    scrambles: 20,
+    btt: 3.8,
+    acc: 77.1,
+    adot: 7.9,
+    epa: 0.28,
+  },
+  {
+    name: 'Christian Hackenberg',
+    archetype: 'Day-2 low pass/accuracy risk',
+    pick: 51,
+    pass: 61.0,
+    run: 54.4,
+    scrambles: 21,
+    btt: 3.2,
+    acc: 64.0,
+    adot: 9.3,
+    epa: -0.13,
+  },
+];
+
+function primaryQbComp(inputs) {
+  let best = null;
+
+  for (const comp of qbHistoricalComps) {
+    const distance =
+      Math.abs((inputs.pass || 0) - comp.pass) / 12 +
+      Math.abs((inputs.run || 0) - comp.run) / 12 +
+      Math.abs((inputs.scrambles || 0) - comp.scrambles) / 15 +
+      Math.abs((inputs.btt || 0) - comp.btt) / 8 +
+      Math.abs((inputs.acc || 0) - comp.acc) / 8 +
+      Math.abs((inputs.adot || 0) - comp.adot) / 4 +
+      Math.abs((inputs.epa || 0) - comp.epa) / 0.35;
+
+    if (!best || distance < best.distance) {
+      best = {
+        name: comp.name,
+        archetype: comp.archetype,
+        distance: Number(distance.toFixed(2)),
+      };
+    }
+  }
+
+  return best;
+}
+
 const files = [
   [2024, 'public/data/prospects_2024_qb.json'],
   [2025, 'public/data/prospects_2025_qb.json'],
@@ -208,6 +332,7 @@ for (const [year, path] of files) {
       adjustment: signal.adjustment,
       traits: signal.traits,
       inputs: signal.inputs,
+      primaryComp: year === 2027 ? primaryQbComp(signal.inputs) : null,
       status: 'read-only / not applied to ranking',
       source: path,
     });
@@ -240,6 +365,7 @@ console.log(JSON.stringify({
     school: c.school,
     adj: c.adjustment,
     traits: c.traits.map(t => t.label).join(', '),
+    primaryComp: c.primaryComp,
     inputs: c.inputs,
   })),
   skipped: skipped.slice(0, 20),

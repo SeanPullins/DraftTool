@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-05-23T01:26:59.069Z",
+  "generatedAt": "2026-05-23T01:40:12.425Z",
   "note": "Current/future QB Translation Signal v1 candidates. Read-only; not applied to rankings.",
   "counts": {
     "pffRows": 4009,
@@ -41,6 +41,7 @@
         "epa": 0.57,
         "pffSeason": 2023
       },
+      "primaryComp": null,
       "status": "read-only / not applied to ranking",
       "source": "public/data/prospects_2024_qb.json"
     },
@@ -70,6 +71,7 @@
         "epa": 0.18,
         "pffSeason": 2023
       },
+      "primaryComp": null,
       "status": "read-only / not applied to ranking",
       "source": "public/data/prospects_2024_qb.json"
     },
@@ -99,6 +101,7 @@
         "epa": 0.33,
         "pffSeason": 2024
       },
+      "primaryComp": null,
       "status": "read-only / not applied to ranking",
       "source": "public/data/prospects_2025_qb.json"
     },
@@ -133,6 +136,7 @@
         "epa": 0.43,
         "pffSeason": 2024
       },
+      "primaryComp": null,
       "status": "read-only / not applied to ranking",
       "source": "public/data/prospects_2025_qb.json"
     },
@@ -167,6 +171,7 @@
         "epa": 0.37,
         "pffSeason": 2025
       },
+      "primaryComp": null,
       "status": "read-only / not applied to ranking",
       "source": "public/data/prospects_2026_qb.json"
     },
@@ -196,6 +201,7 @@
         "epa": 0.24,
         "pffSeason": 2025
       },
+      "primaryComp": null,
       "status": "read-only / not applied to ranking",
       "source": "public/data/prospects_2026_qb.json"
     },
@@ -230,6 +236,7 @@
         "epa": 0.26,
         "pffSeason": 2025
       },
+      "primaryComp": null,
       "status": "read-only / not applied to ranking",
       "source": "public/data/prospects_2026_qb.json"
     },
@@ -259,6 +266,7 @@
         "epa": 0.39,
         "pffSeason": 2025
       },
+      "primaryComp": null,
       "status": "read-only / not applied to ranking",
       "source": "public/data/prospects_2026_qb.json"
     },
@@ -288,6 +296,7 @@
         "epa": 0.13,
         "pffSeason": 2025
       },
+      "primaryComp": null,
       "status": "read-only / not applied to ranking",
       "source": "public/data/prospects_2026_qb.json"
     },
@@ -317,6 +326,7 @@
         "epa": 0.2,
         "pffSeason": 2025
       },
+      "primaryComp": null,
       "status": "read-only / not applied to ranking",
       "source": "public/data/prospects_2026_qb.json"
     },
@@ -346,6 +356,7 @@
         "epa": 0.11,
         "pffSeason": 2025
       },
+      "primaryComp": null,
       "status": "read-only / not applied to ranking",
       "source": "public/data/prospects_2026_qb.json"
     },
@@ -375,6 +386,7 @@
         "epa": 0.06,
         "pffSeason": 2025
       },
+      "primaryComp": null,
       "status": "read-only / not applied to ranking",
       "source": "public/data/prospects_2026_qb.json"
     },
@@ -404,6 +416,7 @@
         "epa": 0.24,
         "pffSeason": 2025
       },
+      "primaryComp": null,
       "status": "read-only / not applied to ranking",
       "source": "public/data/prospects_2026_qb.json"
     },
@@ -433,6 +446,7 @@
         "epa": 0.11,
         "pffSeason": 2025
       },
+      "primaryComp": null,
       "status": "read-only / not applied to ranking",
       "source": "public/data/prospects_2026_qb.json"
     },
@@ -461,6 +475,7 @@
         "epa": 0.1,
         "pffSeason": 2025
       },
+      "primaryComp": null,
       "status": "read-only / not applied to ranking",
       "source": "public/data/prospects_2026_qb.json"
     },
@@ -489,6 +504,7 @@
         "epa": 0.02,
         "pffSeason": 2025
       },
+      "primaryComp": null,
       "status": "read-only / not applied to ranking",
       "source": "public/data/prospects_2026_qb.json"
     },
@@ -517,6 +533,7 @@
         "epa": 0.36,
         "pffSeason": 2025
       },
+      "primaryComp": null,
       "status": "read-only / not applied to ranking",
       "source": "public/data/prospects_2026_qb.json"
     },
@@ -545,6 +562,7 @@
         "epa": 0.02,
         "pffSeason": 2025
       },
+      "primaryComp": null,
       "status": "read-only / not applied to ranking",
       "source": "public/data/prospects_2026_qb.json"
     },
@@ -573,6 +591,7 @@
         "epa": 0.06,
         "pffSeason": 2025
       },
+      "primaryComp": null,
       "status": "read-only / not applied to ranking",
       "source": "public/data/prospects_2026_qb.json"
     },
@@ -601,6 +620,7 @@
         "epa": 0.03,
         "pffSeason": 2025
       },
+      "primaryComp": null,
       "status": "read-only / not applied to ranking",
       "source": "public/data/prospects_2026_qb.json"
     },
@@ -629,6 +649,7 @@
         "epa": -0.06,
         "pffSeason": 2025
       },
+      "primaryComp": null,
       "status": "read-only / not applied to ranking",
       "source": "public/data/prospects_2026_qb.json"
     },
@@ -657,6 +678,7 @@
         "epa": 0.01,
         "pffSeason": 2025
       },
+      "primaryComp": null,
       "status": "read-only / not applied to ranking",
       "source": "public/data/prospects_2026_qb.json"
     },
@@ -685,6 +707,7 @@
         "epa": 0.07,
         "pffSeason": 2025
       },
+      "primaryComp": null,
       "status": "read-only / not applied to ranking",
       "source": "public/data/prospects_2026_qb.json"
     },
@@ -713,6 +736,7 @@
         "epa": -0.06,
         "pffSeason": 2025
       },
+      "primaryComp": null,
       "status": "read-only / not applied to ranking",
       "source": "public/data/prospects_2026_qb.json"
     },
@@ -741,6 +765,7 @@
         "epa": 0.03,
         "pffSeason": 2025
       },
+      "primaryComp": null,
       "status": "read-only / not applied to ranking",
       "source": "public/data/prospects_2026_qb.json"
     },
@@ -769,6 +794,7 @@
         "epa": -0.11,
         "pffSeason": 2025
       },
+      "primaryComp": null,
       "status": "read-only / not applied to ranking",
       "source": "public/data/prospects_2026_qb.json"
     },
@@ -797,6 +823,7 @@
         "epa": 0.04,
         "pffSeason": 2025
       },
+      "primaryComp": null,
       "status": "read-only / not applied to ranking",
       "source": "public/data/prospects_2026_qb.json"
     },
@@ -825,6 +852,7 @@
         "epa": 0,
         "pffSeason": 2025
       },
+      "primaryComp": null,
       "status": "read-only / not applied to ranking",
       "source": "public/data/prospects_2026_qb.json"
     },
@@ -853,6 +881,7 @@
         "epa": 0.09,
         "pffSeason": 2025
       },
+      "primaryComp": null,
       "status": "read-only / not applied to ranking",
       "source": "public/data/prospects_2026_qb.json"
     },
@@ -881,6 +910,7 @@
         "epa": 0.17,
         "pffSeason": 2025
       },
+      "primaryComp": null,
       "status": "read-only / not applied to ranking",
       "source": "public/data/prospects_2026_qb.json"
     },
@@ -909,6 +939,11 @@
         "adot": 10.6,
         "epa": 0.24,
         "pffSeason": 2025
+      },
+      "primaryComp": {
+        "name": "Patrick Mahomes",
+        "archetype": "Top-32 creation plus",
+        "distance": 4.73
       },
       "status": "read-only / not applied to ranking",
       "source": "public/data/prospects_2027_qb.json"
@@ -944,6 +979,11 @@
         "epa": 0.26,
         "pffSeason": 2025
       },
+      "primaryComp": {
+        "name": "Patrick Mahomes",
+        "archetype": "Top-32 creation plus",
+        "distance": 3.67
+      },
       "status": "read-only / not applied to ranking",
       "source": "public/data/prospects_2027_qb.json"
     },
@@ -972,6 +1012,11 @@
         "adot": 10.2,
         "epa": 0.13,
         "pffSeason": 2025
+      },
+      "primaryComp": {
+        "name": "Patrick Mahomes",
+        "archetype": "Top-32 creation plus",
+        "distance": 4.73
       },
       "status": "read-only / not applied to ranking",
       "source": "public/data/prospects_2027_qb.json"
@@ -1002,6 +1047,11 @@
         "epa": 0.2,
         "pffSeason": 2025
       },
+      "primaryComp": {
+        "name": "Patrick Mahomes",
+        "archetype": "Top-32 creation plus",
+        "distance": 5.41
+      },
       "status": "read-only / not applied to ranking",
       "source": "public/data/prospects_2027_qb.json"
     },
@@ -1030,6 +1080,11 @@
         "adot": 9.4,
         "epa": 0.11,
         "pffSeason": 2025
+      },
+      "primaryComp": {
+        "name": "Dwayne Haskins",
+        "archetype": "High-capital low-creation risk",
+        "distance": 4.97
       },
       "status": "read-only / not applied to ranking",
       "source": "public/data/prospects_2027_qb.json"
@@ -1060,6 +1115,11 @@
         "epa": 0.06,
         "pffSeason": 2025
       },
+      "primaryComp": {
+        "name": "Dwayne Haskins",
+        "archetype": "High-capital low-creation risk",
+        "distance": 5.83
+      },
       "status": "read-only / not applied to ranking",
       "source": "public/data/prospects_2027_qb.json"
     },
@@ -1088,6 +1148,11 @@
         "adot": 9,
         "epa": 0.24,
         "pffSeason": 2025
+      },
+      "primaryComp": {
+        "name": "Patrick Mahomes",
+        "archetype": "Top-32 creation plus",
+        "distance": 3.69
       },
       "status": "read-only / not applied to ranking",
       "source": "public/data/prospects_2027_qb.json"
@@ -1118,6 +1183,11 @@
         "epa": 0.11,
         "pffSeason": 2025
       },
+      "primaryComp": {
+        "name": "Dwayne Haskins",
+        "archetype": "High-capital low-creation risk",
+        "distance": 5.65
+      },
       "status": "read-only / not applied to ranking",
       "source": "public/data/prospects_2027_qb.json"
     },
@@ -1147,6 +1217,11 @@
         "epa": 0.14,
         "pffSeason": 2025
       },
+      "primaryComp": {
+        "name": "Lamar Jackson",
+        "archetype": "Elite scramble creator",
+        "distance": 4.91
+      },
       "status": "read-only / not applied to ranking",
       "source": "public/data/prospects_2027_qb.json"
     },
@@ -1174,6 +1249,11 @@
         "adot": 9,
         "epa": 0.1,
         "pffSeason": 2025
+      },
+      "primaryComp": {
+        "name": "Lamar Jackson",
+        "archetype": "Elite scramble creator",
+        "distance": 3.98
       },
       "status": "read-only / not applied to ranking",
       "source": "public/data/prospects_2027_qb.json"
@@ -1203,6 +1283,11 @@
         "epa": 0.02,
         "pffSeason": 2025
       },
+      "primaryComp": {
+        "name": "Christian Hackenberg",
+        "archetype": "Day-2 low pass/accuracy risk",
+        "distance": 6
+      },
       "status": "read-only / not applied to ranking",
       "source": "public/data/prospects_2027_qb.json"
     },
@@ -1230,6 +1315,11 @@
         "adot": 12,
         "epa": 0.36,
         "pffSeason": 2025
+      },
+      "primaryComp": {
+        "name": "Paxton Lynch",
+        "archetype": "Safe-limited low-creation risk",
+        "distance": 5.57
       },
       "status": "read-only / not applied to ranking",
       "source": "public/data/prospects_2027_qb.json"
@@ -1259,6 +1349,11 @@
         "epa": 0.02,
         "pffSeason": 2025
       },
+      "primaryComp": {
+        "name": "Lamar Jackson",
+        "archetype": "Elite scramble creator",
+        "distance": 4.18
+      },
       "status": "read-only / not applied to ranking",
       "source": "public/data/prospects_2027_qb.json"
     },
@@ -1286,6 +1381,11 @@
         "adot": 8.1,
         "epa": 0.06,
         "pffSeason": 2025
+      },
+      "primaryComp": {
+        "name": "Paxton Lynch",
+        "archetype": "Safe-limited low-creation risk",
+        "distance": 3.5
       },
       "status": "read-only / not applied to ranking",
       "source": "public/data/prospects_2027_qb.json"
@@ -1315,6 +1415,11 @@
         "epa": 0.03,
         "pffSeason": 2025
       },
+      "primaryComp": {
+        "name": "Paxton Lynch",
+        "archetype": "Safe-limited low-creation risk",
+        "distance": 3.16
+      },
       "status": "read-only / not applied to ranking",
       "source": "public/data/prospects_2027_qb.json"
     },
@@ -1342,6 +1447,11 @@
         "adot": 7.2,
         "epa": 0.11,
         "pffSeason": 2025
+      },
+      "primaryComp": {
+        "name": "Paxton Lynch",
+        "archetype": "Safe-limited low-creation risk",
+        "distance": 3.76
       },
       "status": "read-only / not applied to ranking",
       "source": "public/data/prospects_2027_qb.json"
@@ -1371,6 +1481,11 @@
         "epa": -0.06,
         "pffSeason": 2025
       },
+      "primaryComp": {
+        "name": "Christian Hackenberg",
+        "archetype": "Day-2 low pass/accuracy risk",
+        "distance": 3.83
+      },
       "status": "read-only / not applied to ranking",
       "source": "public/data/prospects_2027_qb.json"
     },
@@ -1398,6 +1513,11 @@
         "adot": 9.9,
         "epa": 0.01,
         "pffSeason": 2025
+      },
+      "primaryComp": {
+        "name": "Christian Hackenberg",
+        "archetype": "Day-2 low pass/accuracy risk",
+        "distance": 5.69
       },
       "status": "read-only / not applied to ranking",
       "source": "public/data/prospects_2027_qb.json"
@@ -1427,6 +1547,11 @@
         "epa": -0.06,
         "pffSeason": 2025
       },
+      "primaryComp": {
+        "name": "Lamar Jackson",
+        "archetype": "Elite scramble creator",
+        "distance": 4.35
+      },
       "status": "read-only / not applied to ranking",
       "source": "public/data/prospects_2027_qb.json"
     },
@@ -1454,6 +1579,11 @@
         "adot": 7.7,
         "epa": 0.07,
         "pffSeason": 2025
+      },
+      "primaryComp": {
+        "name": "Patrick Mahomes",
+        "archetype": "Top-32 creation plus",
+        "distance": 6.04
       },
       "status": "read-only / not applied to ranking",
       "source": "public/data/prospects_2027_qb.json"
@@ -1483,6 +1613,11 @@
         "epa": 0.03,
         "pffSeason": 2025
       },
+      "primaryComp": {
+        "name": "Christian Hackenberg",
+        "archetype": "Day-2 low pass/accuracy risk",
+        "distance": 4.58
+      },
       "status": "read-only / not applied to ranking",
       "source": "public/data/prospects_2027_qb.json"
     },
@@ -1510,6 +1645,11 @@
         "adot": 10.7,
         "epa": -0.11,
         "pffSeason": 2025
+      },
+      "primaryComp": {
+        "name": "Christian Hackenberg",
+        "archetype": "Day-2 low pass/accuracy risk",
+        "distance": 5.22
       },
       "status": "read-only / not applied to ranking",
       "source": "public/data/prospects_2027_qb.json"
@@ -1539,6 +1679,11 @@
         "epa": 0.04,
         "pffSeason": 2025
       },
+      "primaryComp": {
+        "name": "Lamar Jackson",
+        "archetype": "Elite scramble creator",
+        "distance": 5.76
+      },
       "status": "read-only / not applied to ranking",
       "source": "public/data/prospects_2027_qb.json"
     },
@@ -1566,6 +1711,11 @@
         "adot": 10.9,
         "epa": 0,
         "pffSeason": 2025
+      },
+      "primaryComp": {
+        "name": "Christian Hackenberg",
+        "archetype": "Day-2 low pass/accuracy risk",
+        "distance": 2.58
       },
       "status": "read-only / not applied to ranking",
       "source": "public/data/prospects_2027_qb.json"
@@ -1595,6 +1745,11 @@
         "epa": 0.09,
         "pffSeason": 2025
       },
+      "primaryComp": {
+        "name": "Christian Hackenberg",
+        "archetype": "Day-2 low pass/accuracy risk",
+        "distance": 4.46
+      },
       "status": "read-only / not applied to ranking",
       "source": "public/data/prospects_2027_qb.json"
     },
@@ -1622,6 +1777,11 @@
         "adot": 13.3,
         "epa": 0.17,
         "pffSeason": 2025
+      },
+      "primaryComp": {
+        "name": "Lamar Jackson",
+        "archetype": "Elite scramble creator",
+        "distance": 5.92
       },
       "status": "read-only / not applied to ranking",
       "source": "public/data/prospects_2027_qb.json"
@@ -1651,6 +1811,11 @@
         "epa": 0.06,
         "pffSeason": 2025
       },
+      "primaryComp": {
+        "name": "Lamar Jackson",
+        "archetype": "Elite scramble creator",
+        "distance": 4.34
+      },
       "status": "read-only / not applied to ranking",
       "source": "public/data/prospects_2027_qb.json"
     },
@@ -1679,6 +1844,11 @@
         "epa": -0.32,
         "pffSeason": 2025
       },
+      "primaryComp": {
+        "name": "Christian Hackenberg",
+        "archetype": "Day-2 low pass/accuracy risk",
+        "distance": 1.46
+      },
       "status": "read-only / not applied to ranking",
       "source": "public/data/prospects_2027_qb.json"
     },
@@ -1706,6 +1876,11 @@
         "adot": 7.9,
         "epa": -0.32,
         "pffSeason": 2025
+      },
+      "primaryComp": {
+        "name": "Christian Hackenberg",
+        "archetype": "Day-2 low pass/accuracy risk",
+        "distance": 3.16
       },
       "status": "read-only / not applied to ranking",
       "source": "public/data/prospects_2027_qb.json"
