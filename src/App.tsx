@@ -2546,6 +2546,14 @@ function PlayerExplanationModal({ explanation, onClose }: { explanation: any; on
             Signal: <strong>{Number(explanation.qbTranslationSignal.adjustment || 0) >= 0 ? '+' : ''}{Number(explanation.qbTranslationSignal.adjustment || 0).toFixed(2)}</strong>
             {' · '}Status: read-only / not applied to ranking
           </p>
+          {explanation.qbTranslationSignal.primaryComp?.name ? <>
+            <h4>Primary 2027 QB comp</h4>
+            <p>
+              <strong>{explanation.qbTranslationSignal.primaryComp.name}</strong>
+              {explanation.qbTranslationSignal.primaryComp.archetype ? <> · {explanation.qbTranslationSignal.primaryComp.archetype}</> : null}
+              {Number(explanation.qbTranslationSignal.primaryComp.distance || 0) > 0 ? <> · Distance: {Number(explanation.qbTranslationSignal.primaryComp.distance || 0).toFixed(2)}</> : null}
+            </p>
+          </> : null}
           {explanation.qbTranslationSignal.traits?.length ? <>
             <h4>Traits</h4>
             <ul>
@@ -4320,6 +4328,11 @@ type QbTranslationSignal = {
   acc?: number
   adot?: number
   epa?: number
+  primaryComp?: {
+    name: string
+    archetype?: string
+    distance?: number
+  } | null
 }
 
 
@@ -4345,6 +4358,7 @@ function buildQbTranslationCandidateMap(payload: unknown): Map<string, QbTransla
       : []
 
     const inputs = asRecord(r.inputs) ?? {}
+    const primaryCompRaw = asRecord(r.primaryComp)
 
     map.set(projectionOverlayKey(year, 'QB', name), {
       adjustment: numberField(r, 'adjustment', 0),
@@ -4356,6 +4370,11 @@ function buildQbTranslationCandidateMap(payload: unknown): Map<string, QbTransla
       acc: numberField(inputs, 'acc', 0),
       adot: numberField(inputs, 'adot', 0),
       epa: numberField(inputs, 'epa', 0),
+      primaryComp: primaryCompRaw ? {
+        name: stringField(primaryCompRaw, 'name', ''),
+        archetype: stringField(primaryCompRaw, 'archetype', ''),
+        distance: numberField(primaryCompRaw, 'distance', 0),
+      } : null,
     })
   }
 
