@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-05-23T00:07:39.878Z",
+  "generatedAt": "2026-05-23T00:12:04.724Z",
   "byPosition": {
     "QB": {
       "file": "public/data/qb_pff_seasons.json",
@@ -67,121 +67,231 @@
       ],
       "wantedCoverage": [
         {
-          "field": "pass_grade",
-          "present": true,
+          "feature": "pass_grade",
+          "aliases": [
+            "pass_grade",
+            "grades_pass",
+            "passGrade"
+          ],
           "count": 4009,
-          "rate": 1
+          "rate": 1,
+          "present": true
         },
         {
-          "field": "grades_pass",
-          "present": true,
+          "feature": "offense_grade",
+          "aliases": [
+            "offense_grade",
+            "grades_offense",
+            "offenseGrade"
+          ],
           "count": 4009,
-          "rate": 1
+          "rate": 1,
+          "present": true
         },
         {
-          "field": "offense_grade",
-          "present": true,
+          "feature": "btt_rate",
+          "aliases": [
+            "btt_rate",
+            "btt_pct",
+            "btt",
+            "big_time_throw_rate"
+          ],
           "count": 4009,
-          "rate": 1
+          "rate": 1,
+          "present": true
         },
         {
-          "field": "grades_offense",
-          "present": true,
+          "feature": "twp_rate",
+          "aliases": [
+            "twp_rate",
+            "twp_pct",
+            "twp",
+            "turnover_worthy_play_rate"
+          ],
           "count": 4009,
-          "rate": 1
+          "rate": 1,
+          "present": true
         },
         {
-          "field": "btt_rate",
-          "present": true,
-          "count": 4009,
-          "rate": 1
-        },
-        {
-          "field": "btt_pct",
-          "present": true,
-          "count": 4009,
-          "rate": 1
-        },
-        {
-          "field": "twp_rate",
-          "present": true,
-          "count": 4009,
-          "rate": 1
-        },
-        {
-          "field": "twp_pct",
-          "present": true,
-          "count": 4009,
-          "rate": 1
-        },
-        {
-          "field": "adjusted_completion_percent",
-          "present": true,
+          "feature": "adjusted_accuracy",
+          "aliases": [
+            "adjusted_completion_percent",
+            "accuracy_percent",
+            "adjustedAccuracy",
+            "adj_comp_pct"
+          ],
           "count": 3992,
-          "rate": 0.996
+          "rate": 0.996,
+          "present": true
         },
         {
-          "field": "accuracy_percent",
-          "present": true,
+          "feature": "adot",
+          "aliases": [
+            "adot",
+            "avg_depth_of_target",
+            "average_depth_of_target"
+          ],
           "count": 3992,
-          "rate": 0.996
+          "rate": 0.996,
+          "present": true
         },
         {
-          "field": "adot",
-          "present": true,
-          "count": 3992,
-          "rate": 0.996
-        },
-        {
-          "field": "avg_depth_of_target",
-          "present": true,
-          "count": 3992,
-          "rate": 0.996
-        },
-        {
-          "field": "time_to_throw",
-          "present": true,
+          "feature": "time_to_throw",
+          "aliases": [
+            "time_to_throw",
+            "avg_time_to_throw",
+            "ttt"
+          ],
           "count": 4009,
-          "rate": 1
+          "rate": 1,
+          "present": true
         },
         {
-          "field": "avg_time_to_throw",
-          "present": true,
-          "count": 4009,
-          "rate": 1
-        },
-        {
-          "field": "pressure_to_sack_rate",
-          "present": true,
+          "feature": "pressure_to_sack",
+          "aliases": [
+            "pressure_to_sack_rate",
+            "pressure_to_sack_pct",
+            "p2s"
+          ],
           "count": 3683,
-          "rate": 0.919
+          "rate": 0.919,
+          "present": true
         },
         {
-          "field": "pressure_to_sack_pct",
-          "present": true,
-          "count": 3683,
-          "rate": 0.919
-        },
-        {
-          "field": "epa",
-          "present": true,
+          "feature": "epa",
+          "aliases": [
+            "epa",
+            "epa_per_play"
+          ],
           "count": 4009,
-          "rate": 1
+          "rate": 1,
+          "present": true
         },
         {
-          "field": "attempts",
-          "present": true,
+          "feature": "attempts",
+          "aliases": [
+            "attempts",
+            "dropbacks"
+          ],
           "count": 4009,
-          "rate": 1
-        },
-        {
-          "field": "dropbacks",
-          "present": true,
-          "count": 4009,
-          "rate": 1
+          "rate": 1,
+          "present": true
         }
       ],
-      "missingOrSparse": []
+      "missingOrSparse": [],
+      "strongCoverage": [
+        {
+          "feature": "pass_grade",
+          "aliases": [
+            "pass_grade",
+            "grades_pass",
+            "passGrade"
+          ],
+          "count": 4009,
+          "rate": 1,
+          "present": true
+        },
+        {
+          "feature": "offense_grade",
+          "aliases": [
+            "offense_grade",
+            "grades_offense",
+            "offenseGrade"
+          ],
+          "count": 4009,
+          "rate": 1,
+          "present": true
+        },
+        {
+          "feature": "btt_rate",
+          "aliases": [
+            "btt_rate",
+            "btt_pct",
+            "btt",
+            "big_time_throw_rate"
+          ],
+          "count": 4009,
+          "rate": 1,
+          "present": true
+        },
+        {
+          "feature": "twp_rate",
+          "aliases": [
+            "twp_rate",
+            "twp_pct",
+            "twp",
+            "turnover_worthy_play_rate"
+          ],
+          "count": 4009,
+          "rate": 1,
+          "present": true
+        },
+        {
+          "feature": "adjusted_accuracy",
+          "aliases": [
+            "adjusted_completion_percent",
+            "accuracy_percent",
+            "adjustedAccuracy",
+            "adj_comp_pct"
+          ],
+          "count": 3992,
+          "rate": 0.996,
+          "present": true
+        },
+        {
+          "feature": "adot",
+          "aliases": [
+            "adot",
+            "avg_depth_of_target",
+            "average_depth_of_target"
+          ],
+          "count": 3992,
+          "rate": 0.996,
+          "present": true
+        },
+        {
+          "feature": "time_to_throw",
+          "aliases": [
+            "time_to_throw",
+            "avg_time_to_throw",
+            "ttt"
+          ],
+          "count": 4009,
+          "rate": 1,
+          "present": true
+        },
+        {
+          "feature": "pressure_to_sack",
+          "aliases": [
+            "pressure_to_sack_rate",
+            "pressure_to_sack_pct",
+            "p2s"
+          ],
+          "count": 3683,
+          "rate": 0.919,
+          "present": true
+        },
+        {
+          "feature": "epa",
+          "aliases": [
+            "epa",
+            "epa_per_play"
+          ],
+          "count": 4009,
+          "rate": 1,
+          "present": true
+        },
+        {
+          "feature": "attempts",
+          "aliases": [
+            "attempts",
+            "dropbacks"
+          ],
+          "count": 4009,
+          "rate": 1,
+          "present": true
+        }
+      ]
     },
     "WR": {
       "file": "public/data/wr_pff_seasons.json",
@@ -236,192 +346,316 @@
       ],
       "wantedCoverage": [
         {
-          "field": "route_grade",
-          "present": true,
+          "feature": "route_grade",
+          "aliases": [
+            "route_grade",
+            "grades_pass_route",
+            "routeGrade",
+            "receiving"
+          ],
           "count": 21580,
-          "rate": 0.998
+          "rate": 0.998,
+          "present": true
         },
         {
-          "field": "grades_pass_route",
-          "present": false,
-          "count": 0,
-          "rate": 0
-        },
-        {
-          "field": "yprr",
-          "present": true,
+          "feature": "yprr",
+          "aliases": [
+            "yprr",
+            "yards_per_route_run",
+            "yardsPerRouteRun"
+          ],
           "count": 21513,
-          "rate": 0.994
+          "rate": 0.994,
+          "present": true
         },
         {
-          "field": "yards_per_route_run",
-          "present": false,
-          "count": 0,
-          "rate": 0
-        },
-        {
-          "field": "targets",
-          "present": true,
+          "feature": "targets",
+          "aliases": [
+            "targets"
+          ],
           "count": 21634,
-          "rate": 1
+          "rate": 1,
+          "present": true
         },
         {
-          "field": "yards",
-          "present": true,
+          "feature": "yards",
+          "aliases": [
+            "yards",
+            "receiving_yards",
+            "recYards"
+          ],
           "count": 21634,
-          "rate": 1
+          "rate": 1,
+          "present": true
         },
         {
-          "field": "receiving_yards",
-          "present": false,
-          "count": 0,
-          "rate": 0
-        },
-        {
-          "field": "adot",
-          "present": true,
+          "feature": "adot",
+          "aliases": [
+            "adot",
+            "avg_depth_of_target",
+            "average_depth_of_target"
+          ],
           "count": 21634,
-          "rate": 1
+          "rate": 1,
+          "present": true
         },
         {
-          "field": "avg_depth_of_target",
-          "present": false,
-          "count": 0,
-          "rate": 0
-        },
-        {
-          "field": "drop_rate",
-          "present": true,
+          "feature": "drop_rate",
+          "aliases": [
+            "drop_rate",
+            "dropRate"
+          ],
           "count": 20535,
-          "rate": 0.949
+          "rate": 0.949,
+          "present": true
         },
         {
-          "field": "target_share",
-          "present": false,
+          "feature": "target_share",
+          "aliases": [
+            "target_share",
+            "targetShare"
+          ],
           "count": 0,
-          "rate": 0
+          "rate": 0,
+          "present": false
         },
         {
-          "field": "yard_share",
-          "present": false,
+          "feature": "yard_share",
+          "aliases": [
+            "yard_share",
+            "yardShare",
+            "receivingYardShare"
+          ],
           "count": 0,
-          "rate": 0
+          "rate": 0,
+          "present": false
         },
         {
-          "field": "breakout_age",
-          "present": false,
+          "feature": "breakout_age",
+          "aliases": [
+            "breakout_age",
+            "breakoutAge"
+          ],
           "count": 0,
-          "rate": 0
+          "rate": 0,
+          "present": false
         },
         {
-          "field": "age",
-          "present": false,
+          "feature": "age",
+          "aliases": [
+            "age"
+          ],
           "count": 0,
-          "rate": 0
+          "rate": 0,
+          "present": false
         },
         {
-          "field": "slot_rate",
-          "present": true,
+          "feature": "slot_rate",
+          "aliases": [
+            "slot_rate",
+            "slotRate"
+          ],
           "count": 21634,
-          "rate": 1
+          "rate": 1,
+          "present": true
         },
         {
-          "field": "outside_rate",
-          "present": false,
+          "feature": "outside_rate",
+          "aliases": [
+            "outside_rate",
+            "outsideRate"
+          ],
           "count": 0,
-          "rate": 0
+          "rate": 0,
+          "present": false
         },
         {
-          "field": "height",
-          "present": false,
+          "feature": "height",
+          "aliases": [
+            "height"
+          ],
           "count": 0,
-          "rate": 0
+          "rate": 0,
+          "present": false
         },
         {
-          "field": "weight",
-          "present": false,
+          "feature": "weight",
+          "aliases": [
+            "weight"
+          ],
           "count": 0,
-          "rate": 0
+          "rate": 0,
+          "present": false
         },
         {
-          "field": "ras",
-          "present": false,
+          "feature": "ras",
+          "aliases": [
+            "ras",
+            "officialRAS",
+            "officialRas",
+            "alltime_ras"
+          ],
           "count": 0,
-          "rate": 0
+          "rate": 0,
+          "present": false
         }
       ],
       "missingOrSparse": [
         {
-          "field": "grades_pass_route",
-          "present": false,
+          "feature": "target_share",
+          "aliases": [
+            "target_share",
+            "targetShare"
+          ],
           "count": 0,
-          "rate": 0
+          "rate": 0,
+          "present": false
         },
         {
-          "field": "yards_per_route_run",
-          "present": false,
+          "feature": "yard_share",
+          "aliases": [
+            "yard_share",
+            "yardShare",
+            "receivingYardShare"
+          ],
           "count": 0,
-          "rate": 0
+          "rate": 0,
+          "present": false
         },
         {
-          "field": "receiving_yards",
-          "present": false,
+          "feature": "breakout_age",
+          "aliases": [
+            "breakout_age",
+            "breakoutAge"
+          ],
           "count": 0,
-          "rate": 0
+          "rate": 0,
+          "present": false
         },
         {
-          "field": "avg_depth_of_target",
-          "present": false,
+          "feature": "age",
+          "aliases": [
+            "age"
+          ],
           "count": 0,
-          "rate": 0
+          "rate": 0,
+          "present": false
         },
         {
-          "field": "target_share",
-          "present": false,
+          "feature": "outside_rate",
+          "aliases": [
+            "outside_rate",
+            "outsideRate"
+          ],
           "count": 0,
-          "rate": 0
+          "rate": 0,
+          "present": false
         },
         {
-          "field": "yard_share",
-          "present": false,
+          "feature": "height",
+          "aliases": [
+            "height"
+          ],
           "count": 0,
-          "rate": 0
+          "rate": 0,
+          "present": false
         },
         {
-          "field": "breakout_age",
-          "present": false,
+          "feature": "weight",
+          "aliases": [
+            "weight"
+          ],
           "count": 0,
-          "rate": 0
+          "rate": 0,
+          "present": false
         },
         {
-          "field": "age",
-          "present": false,
+          "feature": "ras",
+          "aliases": [
+            "ras",
+            "officialRAS",
+            "officialRas",
+            "alltime_ras"
+          ],
           "count": 0,
-          "rate": 0
+          "rate": 0,
+          "present": false
+        }
+      ],
+      "strongCoverage": [
+        {
+          "feature": "route_grade",
+          "aliases": [
+            "route_grade",
+            "grades_pass_route",
+            "routeGrade",
+            "receiving"
+          ],
+          "count": 21580,
+          "rate": 0.998,
+          "present": true
         },
         {
-          "field": "outside_rate",
-          "present": false,
-          "count": 0,
-          "rate": 0
+          "feature": "yprr",
+          "aliases": [
+            "yprr",
+            "yards_per_route_run",
+            "yardsPerRouteRun"
+          ],
+          "count": 21513,
+          "rate": 0.994,
+          "present": true
         },
         {
-          "field": "height",
-          "present": false,
-          "count": 0,
-          "rate": 0
+          "feature": "targets",
+          "aliases": [
+            "targets"
+          ],
+          "count": 21634,
+          "rate": 1,
+          "present": true
         },
         {
-          "field": "weight",
-          "present": false,
-          "count": 0,
-          "rate": 0
+          "feature": "yards",
+          "aliases": [
+            "yards",
+            "receiving_yards",
+            "recYards"
+          ],
+          "count": 21634,
+          "rate": 1,
+          "present": true
         },
         {
-          "field": "ras",
-          "present": false,
-          "count": 0,
-          "rate": 0
+          "feature": "adot",
+          "aliases": [
+            "adot",
+            "avg_depth_of_target",
+            "average_depth_of_target"
+          ],
+          "count": 21634,
+          "rate": 1,
+          "present": true
+        },
+        {
+          "feature": "drop_rate",
+          "aliases": [
+            "drop_rate",
+            "dropRate"
+          ],
+          "count": 20535,
+          "rate": 0.949,
+          "present": true
+        },
+        {
+          "feature": "slot_rate",
+          "aliases": [
+            "slot_rate",
+            "slotRate"
+          ],
+          "count": 21634,
+          "rate": 1,
+          "present": true
         }
       ]
     },
@@ -486,180 +720,272 @@
       ],
       "wantedCoverage": [
         {
-          "field": "run_grade",
-          "present": true,
+          "feature": "run_grade",
+          "aliases": [
+            "run_grade",
+            "grades_run",
+            "runGrade",
+            "rushing"
+          ],
           "count": 7870,
-          "rate": 1
+          "rate": 1,
+          "present": true
         },
         {
-          "field": "grades_run",
-          "present": true,
-          "count": 7870,
-          "rate": 1
-        },
-        {
-          "field": "receiving_grade",
-          "present": false,
-          "count": 0,
-          "rate": 0
-        },
-        {
-          "field": "route_grade",
-          "present": true,
+          "feature": "receiving_grade",
+          "aliases": [
+            "receiving_grade",
+            "route_grade",
+            "grades_pass_route",
+            "receiving"
+          ],
           "count": 7181,
-          "rate": 0.912
+          "rate": 0.912,
+          "present": true
         },
         {
-          "field": "grades_pass_route",
-          "present": true,
-          "count": 7181,
-          "rate": 0.912
-        },
-        {
-          "field": "pass_block_grade",
-          "present": true,
+          "feature": "pass_pro",
+          "aliases": [
+            "pass_block_grade",
+            "grades_pass_block",
+            "passPro",
+            "pass_pro"
+          ],
           "count": 6685,
-          "rate": 0.849
+          "rate": 0.849,
+          "present": true
         },
         {
-          "field": "grades_pass_block",
-          "present": true,
-          "count": 6685,
-          "rate": 0.849
-        },
-        {
-          "field": "yco",
-          "present": false,
-          "count": 0,
-          "rate": 0
-        },
-        {
-          "field": "yco_attempt",
-          "present": true,
+          "feature": "yco",
+          "aliases": [
+            "yco",
+            "yco_attempt",
+            "yards_after_contact_per_attempt",
+            "yardsAfterContactPerAttempt"
+          ],
           "count": 7870,
-          "rate": 1
+          "rate": 1,
+          "present": true
         },
         {
-          "field": "yards_after_contact_per_attempt",
-          "present": false,
-          "count": 0,
-          "rate": 0
-        },
-        {
-          "field": "elusive",
-          "present": false,
-          "count": 0,
-          "rate": 0
-        },
-        {
-          "field": "elusive_rating",
-          "present": true,
+          "feature": "elusive",
+          "aliases": [
+            "elusive",
+            "elusive_rating",
+            "elusiveRating"
+          ],
           "count": 7870,
-          "rate": 1
+          "rate": 1,
+          "present": true
         },
         {
-          "field": "breakaway_percent",
-          "present": true,
+          "feature": "breakaway_percent",
+          "aliases": [
+            "breakaway_percent",
+            "breakawayPercent"
+          ],
           "count": 7828,
-          "rate": 0.995
+          "rate": 0.995,
+          "present": true
         },
         {
-          "field": "avoided_tackles",
-          "present": true,
+          "feature": "avoided_tackles",
+          "aliases": [
+            "avoided_tackles",
+            "missed_tackles_forced",
+            "mtf"
+          ],
           "count": 7870,
-          "rate": 1
+          "rate": 1,
+          "present": true
         },
         {
-          "field": "targets",
-          "present": true,
+          "feature": "targets",
+          "aliases": [
+            "targets"
+          ],
           "count": 7870,
-          "rate": 1
+          "rate": 1,
+          "present": true
         },
         {
-          "field": "rec_yards",
-          "present": true,
+          "feature": "yards",
+          "aliases": [
+            "yards",
+            "rushing_yards",
+            "rushYards"
+          ],
           "count": 7870,
-          "rate": 1
+          "rate": 1,
+          "present": true
         },
         {
-          "field": "yards",
-          "present": true,
+          "feature": "attempts",
+          "aliases": [
+            "attempts",
+            "carries",
+            "usage"
+          ],
           "count": 7870,
-          "rate": 1
+          "rate": 1,
+          "present": true
         },
         {
-          "field": "rushing_yards",
-          "present": false,
+          "feature": "fumbles",
+          "aliases": [
+            "fumbles"
+          ],
+          "count": 7870,
+          "rate": 1,
+          "present": true
+        },
+        {
+          "feature": "ras",
+          "aliases": [
+            "ras",
+            "officialRAS",
+            "officialRas",
+            "alltime_ras"
+          ],
           "count": 0,
-          "rate": 0
-        },
-        {
-          "field": "attempts",
-          "present": true,
-          "count": 7870,
-          "rate": 1
-        },
-        {
-          "field": "carries",
-          "present": false,
-          "count": 0,
-          "rate": 0
-        },
-        {
-          "field": "fumbles",
-          "present": true,
-          "count": 7870,
-          "rate": 1
-        },
-        {
-          "field": "ras",
-          "present": false,
-          "count": 0,
-          "rate": 0
+          "rate": 0,
+          "present": false
         }
       ],
       "missingOrSparse": [
         {
-          "field": "receiving_grade",
-          "present": false,
+          "feature": "ras",
+          "aliases": [
+            "ras",
+            "officialRAS",
+            "officialRas",
+            "alltime_ras"
+          ],
           "count": 0,
-          "rate": 0
+          "rate": 0,
+          "present": false
+        }
+      ],
+      "strongCoverage": [
+        {
+          "feature": "run_grade",
+          "aliases": [
+            "run_grade",
+            "grades_run",
+            "runGrade",
+            "rushing"
+          ],
+          "count": 7870,
+          "rate": 1,
+          "present": true
         },
         {
-          "field": "yco",
-          "present": false,
-          "count": 0,
-          "rate": 0
+          "feature": "receiving_grade",
+          "aliases": [
+            "receiving_grade",
+            "route_grade",
+            "grades_pass_route",
+            "receiving"
+          ],
+          "count": 7181,
+          "rate": 0.912,
+          "present": true
         },
         {
-          "field": "yards_after_contact_per_attempt",
-          "present": false,
-          "count": 0,
-          "rate": 0
+          "feature": "pass_pro",
+          "aliases": [
+            "pass_block_grade",
+            "grades_pass_block",
+            "passPro",
+            "pass_pro"
+          ],
+          "count": 6685,
+          "rate": 0.849,
+          "present": true
         },
         {
-          "field": "elusive",
-          "present": false,
-          "count": 0,
-          "rate": 0
+          "feature": "yco",
+          "aliases": [
+            "yco",
+            "yco_attempt",
+            "yards_after_contact_per_attempt",
+            "yardsAfterContactPerAttempt"
+          ],
+          "count": 7870,
+          "rate": 1,
+          "present": true
         },
         {
-          "field": "rushing_yards",
-          "present": false,
-          "count": 0,
-          "rate": 0
+          "feature": "elusive",
+          "aliases": [
+            "elusive",
+            "elusive_rating",
+            "elusiveRating"
+          ],
+          "count": 7870,
+          "rate": 1,
+          "present": true
         },
         {
-          "field": "carries",
-          "present": false,
-          "count": 0,
-          "rate": 0
+          "feature": "breakaway_percent",
+          "aliases": [
+            "breakaway_percent",
+            "breakawayPercent"
+          ],
+          "count": 7828,
+          "rate": 0.995,
+          "present": true
         },
         {
-          "field": "ras",
-          "present": false,
-          "count": 0,
-          "rate": 0
+          "feature": "avoided_tackles",
+          "aliases": [
+            "avoided_tackles",
+            "missed_tackles_forced",
+            "mtf"
+          ],
+          "count": 7870,
+          "rate": 1,
+          "present": true
+        },
+        {
+          "feature": "targets",
+          "aliases": [
+            "targets"
+          ],
+          "count": 7870,
+          "rate": 1,
+          "present": true
+        },
+        {
+          "feature": "yards",
+          "aliases": [
+            "yards",
+            "rushing_yards",
+            "rushYards"
+          ],
+          "count": 7870,
+          "rate": 1,
+          "present": true
+        },
+        {
+          "feature": "attempts",
+          "aliases": [
+            "attempts",
+            "carries",
+            "usage"
+          ],
+          "count": 7870,
+          "rate": 1,
+          "present": true
+        },
+        {
+          "feature": "fumbles",
+          "aliases": [
+            "fumbles"
+          ],
+          "count": 7870,
+          "rate": 1,
+          "present": true
         }
       ]
     },
@@ -722,162 +1048,306 @@
       ],
       "wantedCoverage": [
         {
-          "field": "route_grade",
-          "present": true,
+          "feature": "route_grade",
+          "aliases": [
+            "route_grade",
+            "grades_pass_route",
+            "routeGrade",
+            "receiving"
+          ],
           "count": 4589,
-          "rate": 1
+          "rate": 1,
+          "present": true
         },
         {
-          "field": "grades_pass_route",
-          "present": true,
+          "feature": "receiving_grade",
+          "aliases": [
+            "receiving_grade",
+            "receiving",
+            "route_grade",
+            "grades_pass_route"
+          ],
           "count": 4589,
-          "rate": 1
+          "rate": 1,
+          "present": true
         },
         {
-          "field": "receiving_grade",
-          "present": false,
+          "feature": "yprr",
+          "aliases": [
+            "yprr",
+            "yards_per_route_run",
+            "yardsPerRouteRun"
+          ],
+          "count": 4589,
+          "rate": 1,
+          "present": true
+        },
+        {
+          "feature": "targets",
+          "aliases": [
+            "targets"
+          ],
+          "count": 4589,
+          "rate": 1,
+          "present": true
+        },
+        {
+          "feature": "yards",
+          "aliases": [
+            "yards",
+            "receiving_yards",
+            "recYards"
+          ],
+          "count": 4589,
+          "rate": 1,
+          "present": true
+        },
+        {
+          "feature": "run_block",
+          "aliases": [
+            "run_block_grade",
+            "grades_run_block",
+            "runBlock",
+            "runGrade"
+          ],
           "count": 0,
-          "rate": 0
+          "rate": 0,
+          "present": false
         },
         {
-          "field": "yprr",
-          "present": true,
-          "count": 4589,
-          "rate": 1
-        },
-        {
-          "field": "yards_per_route_run",
-          "present": false,
-          "count": 0,
-          "rate": 0
-        },
-        {
-          "field": "targets",
-          "present": true,
-          "count": 4589,
-          "rate": 1
-        },
-        {
-          "field": "yards",
-          "present": true,
-          "count": 4589,
-          "rate": 1
-        },
-        {
-          "field": "run_block_grade",
-          "present": false,
-          "count": 0,
-          "rate": 0
-        },
-        {
-          "field": "grades_run_block",
-          "present": false,
-          "count": 0,
-          "rate": 0
-        },
-        {
-          "field": "pass_block_grade",
-          "present": true,
+          "feature": "pass_block",
+          "aliases": [
+            "pass_block_grade",
+            "grades_pass_block",
+            "passBlock",
+            "passPro"
+          ],
           "count": 4286,
-          "rate": 0.934
+          "rate": 0.934,
+          "present": true
         },
         {
-          "field": "grades_pass_block",
-          "present": true,
-          "count": 4286,
-          "rate": 0.934
-        },
-        {
-          "field": "inline_rate",
-          "present": true,
+          "feature": "inline_rate",
+          "aliases": [
+            "inline_rate",
+            "inlineRate"
+          ],
           "count": 4589,
-          "rate": 1
+          "rate": 1,
+          "present": true
         },
         {
-          "field": "slot_rate",
-          "present": true,
+          "feature": "slot_rate",
+          "aliases": [
+            "slot_rate",
+            "slotRate"
+          ],
           "count": 4589,
-          "rate": 1
+          "rate": 1,
+          "present": true
         },
         {
-          "field": "wide_rate",
-          "present": true,
+          "feature": "wide_rate",
+          "aliases": [
+            "wide_rate",
+            "wideRate"
+          ],
           "count": 4589,
-          "rate": 1
+          "rate": 1,
+          "present": true
         },
         {
-          "field": "route_participation",
-          "present": false,
+          "feature": "route_participation",
+          "aliases": [
+            "route_participation",
+            "routeParticipation"
+          ],
           "count": 0,
-          "rate": 0
+          "rate": 0,
+          "present": false
         },
         {
-          "field": "height",
-          "present": false,
+          "feature": "height",
+          "aliases": [
+            "height"
+          ],
           "count": 0,
-          "rate": 0
+          "rate": 0,
+          "present": false
         },
         {
-          "field": "weight",
-          "present": false,
+          "feature": "weight",
+          "aliases": [
+            "weight"
+          ],
           "count": 0,
-          "rate": 0
+          "rate": 0,
+          "present": false
         },
         {
-          "field": "ras",
-          "present": false,
+          "feature": "ras",
+          "aliases": [
+            "ras",
+            "officialRAS",
+            "officialRas",
+            "alltime_ras"
+          ],
           "count": 0,
-          "rate": 0
+          "rate": 0,
+          "present": false
         }
       ],
       "missingOrSparse": [
         {
-          "field": "receiving_grade",
-          "present": false,
+          "feature": "run_block",
+          "aliases": [
+            "run_block_grade",
+            "grades_run_block",
+            "runBlock",
+            "runGrade"
+          ],
           "count": 0,
-          "rate": 0
+          "rate": 0,
+          "present": false
         },
         {
-          "field": "yards_per_route_run",
-          "present": false,
+          "feature": "route_participation",
+          "aliases": [
+            "route_participation",
+            "routeParticipation"
+          ],
           "count": 0,
-          "rate": 0
+          "rate": 0,
+          "present": false
         },
         {
-          "field": "run_block_grade",
-          "present": false,
+          "feature": "height",
+          "aliases": [
+            "height"
+          ],
           "count": 0,
-          "rate": 0
+          "rate": 0,
+          "present": false
         },
         {
-          "field": "grades_run_block",
-          "present": false,
+          "feature": "weight",
+          "aliases": [
+            "weight"
+          ],
           "count": 0,
-          "rate": 0
+          "rate": 0,
+          "present": false
         },
         {
-          "field": "route_participation",
-          "present": false,
+          "feature": "ras",
+          "aliases": [
+            "ras",
+            "officialRAS",
+            "officialRas",
+            "alltime_ras"
+          ],
           "count": 0,
-          "rate": 0
+          "rate": 0,
+          "present": false
+        }
+      ],
+      "strongCoverage": [
+        {
+          "feature": "route_grade",
+          "aliases": [
+            "route_grade",
+            "grades_pass_route",
+            "routeGrade",
+            "receiving"
+          ],
+          "count": 4589,
+          "rate": 1,
+          "present": true
         },
         {
-          "field": "height",
-          "present": false,
-          "count": 0,
-          "rate": 0
+          "feature": "receiving_grade",
+          "aliases": [
+            "receiving_grade",
+            "receiving",
+            "route_grade",
+            "grades_pass_route"
+          ],
+          "count": 4589,
+          "rate": 1,
+          "present": true
         },
         {
-          "field": "weight",
-          "present": false,
-          "count": 0,
-          "rate": 0
+          "feature": "yprr",
+          "aliases": [
+            "yprr",
+            "yards_per_route_run",
+            "yardsPerRouteRun"
+          ],
+          "count": 4589,
+          "rate": 1,
+          "present": true
         },
         {
-          "field": "ras",
-          "present": false,
-          "count": 0,
-          "rate": 0
+          "feature": "targets",
+          "aliases": [
+            "targets"
+          ],
+          "count": 4589,
+          "rate": 1,
+          "present": true
+        },
+        {
+          "feature": "yards",
+          "aliases": [
+            "yards",
+            "receiving_yards",
+            "recYards"
+          ],
+          "count": 4589,
+          "rate": 1,
+          "present": true
+        },
+        {
+          "feature": "pass_block",
+          "aliases": [
+            "pass_block_grade",
+            "grades_pass_block",
+            "passBlock",
+            "passPro"
+          ],
+          "count": 4286,
+          "rate": 0.934,
+          "present": true
+        },
+        {
+          "feature": "inline_rate",
+          "aliases": [
+            "inline_rate",
+            "inlineRate"
+          ],
+          "count": 4589,
+          "rate": 1,
+          "present": true
+        },
+        {
+          "feature": "slot_rate",
+          "aliases": [
+            "slot_rate",
+            "slotRate"
+          ],
+          "count": 4589,
+          "rate": 1,
+          "present": true
+        },
+        {
+          "feature": "wide_rate",
+          "aliases": [
+            "wide_rate",
+            "wideRate"
+          ],
+          "count": 4589,
+          "rate": 1,
+          "present": true
         }
       ]
     }
