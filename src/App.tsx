@@ -235,6 +235,7 @@ export default function App() {
   const [page, setPage] = useState<Page>(() => readPageFromHash())
   const [openPanels, setOpenPanels] = useState<Record<string, boolean>>({ loader: true, card: false, measurables: false, pff: false })
   const [modalPlayer, setModalPlayer] = useState<Historical | null>(null)
+  const [qbTranslationMap, setQbTranslationMap] = useState<Map<string, QbTranslationSignal>>(new Map())
   const [theme, setTheme] = useState<'dark' | 'light'>(() => (localStorage.getItem('draftlens.theme') as 'dark' | 'light') ?? 'dark')
 
   useEffect(() => {
@@ -390,6 +391,26 @@ export default function App() {
   }, [])
 
   useEffect(() => {
+    let cancelled = false
+    const base = import.meta.env.BASE_URL || './'
+
+    fetch(`${base}data/model/qb_translation_signal_candidates.json`)
+      .then((r) => r.ok ? r.json() : null)
+      .then((payload) => {
+        if (cancelled) return
+        const candidateMap = buildQbTranslationCandidateMap(payload)
+        setQbTranslationMap((prev: Map<string, QbTranslationSignal>) => {
+          const merged = new Map(prev)
+          for (const [key, value] of candidateMap) merged.set(key, value)
+          return merged
+        })
+      })
+      .catch(() => {})
+
+    return () => { cancelled = true }
+  }, [])
+
+  useEffect(() => {
     async function load() {
       try {
         const [combineCsv, draftCsv, pffPayload, extraData, consensusData, scoutData, injuryData, qbSeasonData, qbPffSeasonData, wrPffSeasonData, tePffSeasonData, rbPffSeasonData, wrSeasonData, rbSeasonData, careerStatsData, prospectsQbData, prospectsTeData, prospectsRbData, rasCsv] = await Promise.all([
@@ -516,7 +537,6 @@ export default function App() {
 
     return () => { cancelled = true }
   }, [])
-
   useEffect(() => {
     function onKey(e: KeyboardEvent) {
       if ((e.metaKey || e.ctrlKey) && e.key === 's') {
@@ -4301,6 +4321,47 @@ type QbTranslationSignal = {
   adot?: number
   epa?: number
 }
+
+
+function buildQbTranslationCandidateMap(payload: unknown): Map<string, QbTranslationSignal> {
+  const map = new Map<string, QbTranslationSignal>()
+  const root = asRecord(payload)
+  const rows: unknown[] = Array.isArray(root?.candidates) ? root.candidates : []
+
+  for (const item of rows) {
+    const r = asRecord(item)
+    if (!r) continue
+
+    const year = numberField(r, 'year', 0)
+    const name = stringField(r, 'name', '')
+    if (!year || !name) continue
+
+    const traitsRaw = r.traits
+    const traits = Array.isArray(traitsRaw)
+      ? traitsRaw.map((x) => {
+          const trait = asRecord(x)
+          return trait ? stringField(trait, 'label', '') : String(x)
+        }).filter(Boolean)
+      : []
+
+    const inputs = asRecord(r.inputs) ?? {}
+
+    map.set(projectionOverlayKey(year, 'QB', name), {
+      adjustment: numberField(r, 'adjustment', 0),
+      traits,
+      pass: numberField(inputs, 'pass', 0),
+      run: numberField(inputs, 'run', 0),
+      scrambles: numberField(inputs, 'scrambles', 0),
+      btt: numberField(inputs, 'btt', 0),
+      acc: numberField(inputs, 'acc', 0),
+      adot: numberField(inputs, 'adot', 0),
+      epa: numberField(inputs, 'epa', 0),
+    })
+  }
+
+  return map
+}
+
 
 function buildQbTranslationMap(payload: unknown): Map<string, QbTranslationSignal> {
   const map = new Map<string, QbTranslationSignal>()

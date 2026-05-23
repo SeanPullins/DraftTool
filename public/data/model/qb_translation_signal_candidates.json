@@ -1,0 +1,1715 @@
+{
+  "generatedAt": "2026-05-23T01:26:59.069Z",
+  "note": "Current/future QB Translation Signal v1 candidates. Read-only; not applied to rankings.",
+  "counts": {
+    "pffRows": 4009,
+    "candidates": 59,
+    "positive": 12,
+    "negative": 29,
+    "contextOnly": 18,
+    "skipped": 0
+  },
+  "candidates": [
+    {
+      "year": 2024,
+      "pos": "QB",
+      "name": "Jayden Daniels",
+      "school": "LSU",
+      "adjustment": 0.35,
+      "traits": [
+        {
+          "label": "Elite scramble creation",
+          "scoreImpact": true,
+          "direction": "positive"
+        },
+        {
+          "label": "Top-32 creation plus",
+          "scoreImpact": false,
+          "direction": "positive",
+          "contextOnly": true
+        }
+      ],
+      "inputs": {
+        "pick": 2,
+        "pass": 92,
+        "run": 92.4,
+        "scrambles": 55,
+        "btt": 29,
+        "twp": 7,
+        "acc": 79.6,
+        "adot": 10.5,
+        "epa": 0.57,
+        "pffSeason": 2023
+      },
+      "status": "read-only / not applied to ranking",
+      "source": "public/data/prospects_2024_qb.json"
+    },
+    {
+      "year": 2024,
+      "pos": "QB",
+      "name": "Drake Maye",
+      "school": "N CAROLINA",
+      "adjustment": 0,
+      "traits": [
+        {
+          "label": "Top-32 creation plus",
+          "scoreImpact": false,
+          "direction": "positive",
+          "contextOnly": true
+        }
+      ],
+      "inputs": {
+        "pick": 3,
+        "pass": 89.8,
+        "run": 73.8,
+        "scrambles": 51,
+        "btt": 35,
+        "twp": 9,
+        "acc": 75.3,
+        "adot": 11,
+        "epa": 0.18,
+        "pffSeason": 2023
+      },
+      "status": "read-only / not applied to ranking",
+      "source": "public/data/prospects_2024_qb.json"
+    },
+    {
+      "year": 2025,
+      "pos": "QB",
+      "name": "Cam Ward",
+      "school": "MIAMI FL",
+      "adjustment": 0,
+      "traits": [
+        {
+          "label": "Top-32 creation plus",
+          "scoreImpact": false,
+          "direction": "positive",
+          "contextOnly": true
+        }
+      ],
+      "inputs": {
+        "pick": 1,
+        "pass": 91.7,
+        "run": 77.8,
+        "scrambles": 32,
+        "btt": 31,
+        "twp": 18,
+        "acc": 76.5,
+        "adot": 9.8,
+        "epa": 0.33,
+        "pffSeason": 2024
+      },
+      "status": "read-only / not applied to ranking",
+      "source": "public/data/prospects_2025_qb.json"
+    },
+    {
+      "year": 2025,
+      "pos": "QB",
+      "name": "Jaxson Dart",
+      "school": "OLE MISS",
+      "adjustment": 0.35,
+      "traits": [
+        {
+          "label": "Elite scramble creation",
+          "scoreImpact": true,
+          "direction": "positive"
+        },
+        {
+          "label": "Top-32 creation plus",
+          "scoreImpact": false,
+          "direction": "positive",
+          "contextOnly": true
+        }
+      ],
+      "inputs": {
+        "pick": 25,
+        "pass": 91.9,
+        "run": 75.3,
+        "scrambles": 45,
+        "btt": 30,
+        "twp": 11,
+        "acc": 77.7,
+        "adot": 11.9,
+        "epa": 0.43,
+        "pffSeason": 2024
+      },
+      "status": "read-only / not applied to ranking",
+      "source": "public/data/prospects_2025_qb.json"
+    },
+    {
+      "year": 2026,
+      "pos": "QB",
+      "name": "Diego Pavia",
+      "school": "VANDERBILT",
+      "adjustment": 0.35,
+      "traits": [
+        {
+          "label": "Elite scramble creation",
+          "scoreImpact": true,
+          "direction": "positive"
+        },
+        {
+          "label": "Top-32 creation plus",
+          "scoreImpact": false,
+          "direction": "positive",
+          "contextOnly": true
+        }
+      ],
+      "inputs": {
+        "pick": 2,
+        "pass": 90.7,
+        "run": 82.1,
+        "scrambles": 51,
+        "btt": 30,
+        "twp": 12,
+        "acc": 79.2,
+        "adot": 9.8,
+        "epa": 0.37,
+        "pffSeason": 2025
+      },
+      "status": "read-only / not applied to ranking",
+      "source": "public/data/prospects_2026_qb.json"
+    },
+    {
+      "year": 2026,
+      "pos": "QB",
+      "name": "Brendan Sorsby",
+      "school": "CINCINNATI",
+      "adjustment": 0,
+      "traits": [
+        {
+          "label": "Top-32 creation plus",
+          "scoreImpact": false,
+          "direction": "positive",
+          "contextOnly": true
+        }
+      ],
+      "inputs": {
+        "pick": 3,
+        "pass": 86.3,
+        "run": 76.9,
+        "scrambles": 34,
+        "btt": 23,
+        "twp": 7,
+        "acc": 71,
+        "adot": 10.6,
+        "epa": 0.24,
+        "pffSeason": 2025
+      },
+      "status": "read-only / not applied to ranking",
+      "source": "public/data/prospects_2026_qb.json"
+    },
+    {
+      "year": 2026,
+      "pos": "QB",
+      "name": "Byrum Brown",
+      "school": "USF",
+      "adjustment": 0.35,
+      "traits": [
+        {
+          "label": "Elite scramble creation",
+          "scoreImpact": true,
+          "direction": "positive"
+        },
+        {
+          "label": "Top-32 creation plus",
+          "scoreImpact": false,
+          "direction": "positive",
+          "contextOnly": true
+        }
+      ],
+      "inputs": {
+        "pick": 10,
+        "pass": 85.7,
+        "run": 86.2,
+        "scrambles": 46,
+        "btt": 21,
+        "twp": 11,
+        "acc": 75.6,
+        "adot": 9.7,
+        "epa": 0.26,
+        "pffSeason": 2025
+      },
+      "status": "read-only / not applied to ranking",
+      "source": "public/data/prospects_2026_qb.json"
+    },
+    {
+      "year": 2026,
+      "pos": "QB",
+      "name": "Fernando Mendoza",
+      "school": "INDIANA",
+      "adjustment": 0,
+      "traits": [
+        {
+          "label": "Top-32 creation plus",
+          "scoreImpact": false,
+          "direction": "positive",
+          "contextOnly": true
+        }
+      ],
+      "inputs": {
+        "pick": 12,
+        "pass": 90.7,
+        "run": 74,
+        "scrambles": 34,
+        "btt": 23,
+        "twp": 12,
+        "acc": 79,
+        "adot": 9.8,
+        "epa": 0.39,
+        "pffSeason": 2025
+      },
+      "status": "read-only / not applied to ranking",
+      "source": "public/data/prospects_2026_qb.json"
+    },
+    {
+      "year": 2026,
+      "pos": "QB",
+      "name": "Noah Fifita",
+      "school": "ARIZONA",
+      "adjustment": 0,
+      "traits": [
+        {
+          "label": "Top-32 creation plus",
+          "scoreImpact": false,
+          "direction": "positive",
+          "contextOnly": true
+        }
+      ],
+      "inputs": {
+        "pick": 14,
+        "pass": 83.3,
+        "run": 66.9,
+        "scrambles": 35,
+        "btt": 26,
+        "twp": 10,
+        "acc": 75.3,
+        "adot": 10.2,
+        "epa": 0.13,
+        "pffSeason": 2025
+      },
+      "status": "read-only / not applied to ranking",
+      "source": "public/data/prospects_2026_qb.json"
+    },
+    {
+      "year": 2026,
+      "pos": "QB",
+      "name": "Anthony Colandrea",
+      "school": "UNLV",
+      "adjustment": 0,
+      "traits": [
+        {
+          "label": "Top-32 creation plus",
+          "scoreImpact": false,
+          "direction": "positive",
+          "contextOnly": true
+        }
+      ],
+      "inputs": {
+        "pick": 16,
+        "pass": 82.7,
+        "run": 82.7,
+        "scrambles": 38,
+        "btt": 28,
+        "twp": 15,
+        "acc": 74.4,
+        "adot": 10,
+        "epa": 0.2,
+        "pffSeason": 2025
+      },
+      "status": "read-only / not applied to ranking",
+      "source": "public/data/prospects_2026_qb.json"
+    },
+    {
+      "year": 2026,
+      "pos": "QB",
+      "name": "Micah Alejado",
+      "school": "HAWAII",
+      "adjustment": 0,
+      "traits": [
+        {
+          "label": "Top-32 creation plus",
+          "scoreImpact": false,
+          "direction": "positive",
+          "contextOnly": true
+        }
+      ],
+      "inputs": {
+        "pick": 18,
+        "pass": 78.6,
+        "run": 54.2,
+        "scrambles": 35,
+        "btt": 28,
+        "twp": 13,
+        "acc": 77,
+        "adot": 9.4,
+        "epa": 0.11,
+        "pffSeason": 2025
+      },
+      "status": "read-only / not applied to ranking",
+      "source": "public/data/prospects_2026_qb.json"
+    },
+    {
+      "year": 2026,
+      "pos": "QB",
+      "name": "Braylon Braxton",
+      "school": "SO MISS",
+      "adjustment": 0,
+      "traits": [
+        {
+          "label": "Top-32 creation plus",
+          "scoreImpact": false,
+          "direction": "positive",
+          "contextOnly": true
+        }
+      ],
+      "inputs": {
+        "pick": 23,
+        "pass": 76.1,
+        "run": 56.4,
+        "scrambles": 37,
+        "btt": 25,
+        "twp": 12,
+        "acc": 72.1,
+        "adot": 10.7,
+        "epa": 0.06,
+        "pffSeason": 2025
+      },
+      "status": "read-only / not applied to ranking",
+      "source": "public/data/prospects_2026_qb.json"
+    },
+    {
+      "year": 2026,
+      "pos": "QB",
+      "name": "Demond Williams Jr.",
+      "school": "WASHINGTON",
+      "adjustment": 0,
+      "traits": [
+        {
+          "label": "Top-32 creation plus",
+          "scoreImpact": false,
+          "direction": "positive",
+          "contextOnly": true
+        }
+      ],
+      "inputs": {
+        "pick": 24,
+        "pass": 74.7,
+        "run": 72.4,
+        "scrambles": 65,
+        "btt": 14,
+        "twp": 10,
+        "acc": 77.4,
+        "adot": 9,
+        "epa": 0.24,
+        "pffSeason": 2025
+      },
+      "status": "read-only / not applied to ranking",
+      "source": "public/data/prospects_2026_qb.json"
+    },
+    {
+      "year": 2026,
+      "pos": "QB",
+      "name": "Athan Kaliakmanis",
+      "school": "RUTGERS",
+      "adjustment": 0,
+      "traits": [
+        {
+          "label": "Top-32 creation plus",
+          "scoreImpact": false,
+          "direction": "positive",
+          "contextOnly": true
+        }
+      ],
+      "inputs": {
+        "pick": 29,
+        "pass": 87.6,
+        "run": 64.4,
+        "scrambles": 32,
+        "btt": 26,
+        "twp": 11,
+        "acc": 70.8,
+        "adot": 11.2,
+        "epa": 0.11,
+        "pffSeason": 2025
+      },
+      "status": "read-only / not applied to ranking",
+      "source": "public/data/prospects_2026_qb.json"
+    },
+    {
+      "year": 2026,
+      "pos": "QB",
+      "name": "Brendon Lewis",
+      "school": "MEMPHIS",
+      "adjustment": 0.35,
+      "traits": [
+        {
+          "label": "Elite scramble creation",
+          "scoreImpact": true,
+          "direction": "positive"
+        }
+      ],
+      "inputs": {
+        "pick": 41,
+        "pass": 75.4,
+        "run": 85.9,
+        "scrambles": 49,
+        "btt": 16,
+        "twp": 14,
+        "acc": 82.3,
+        "adot": 9,
+        "epa": 0.1,
+        "pffSeason": 2025
+      },
+      "status": "read-only / not applied to ranking",
+      "source": "public/data/prospects_2026_qb.json"
+    },
+    {
+      "year": 2026,
+      "pos": "QB",
+      "name": "Walker Eget",
+      "school": "S JOSE ST",
+      "adjustment": -0.35,
+      "traits": [
+        {
+          "label": "Day-2 low pass/accuracy risk",
+          "scoreImpact": true,
+          "direction": "negative"
+        }
+      ],
+      "inputs": {
+        "pick": 53,
+        "pass": 66.7,
+        "run": 57.8,
+        "scrambles": 18,
+        "btt": 29,
+        "twp": 19,
+        "acc": 69.1,
+        "adot": 12.3,
+        "epa": 0.02,
+        "pffSeason": 2025
+      },
+      "status": "read-only / not applied to ranking",
+      "source": "public/data/prospects_2026_qb.json"
+    },
+    {
+      "year": 2026,
+      "pos": "QB",
+      "name": "Liam Szarka",
+      "school": "AIR FORCE",
+      "adjustment": -0.35,
+      "traits": [
+        {
+          "label": "Day-2 low pass/accuracy risk",
+          "scoreImpact": true,
+          "direction": "negative"
+        }
+      ],
+      "inputs": {
+        "pick": 60,
+        "pass": 71,
+        "run": 74.9,
+        "scrambles": 6,
+        "btt": 9,
+        "twp": 9,
+        "acc": 69.4,
+        "adot": 12,
+        "epa": 0.36,
+        "pffSeason": 2025
+      },
+      "status": "read-only / not applied to ranking",
+      "source": "public/data/prospects_2026_qb.json"
+    },
+    {
+      "year": 2026,
+      "pos": "QB",
+      "name": "Bryson Barnes",
+      "school": "UTAH ST",
+      "adjustment": 0.35,
+      "traits": [
+        {
+          "label": "Elite scramble creation",
+          "scoreImpact": true,
+          "direction": "positive"
+        }
+      ],
+      "inputs": {
+        "pick": 61,
+        "pass": 68.5,
+        "run": 76,
+        "scrambles": 49,
+        "btt": 18,
+        "twp": 13,
+        "acc": 70,
+        "adot": 11.2,
+        "epa": 0.02,
+        "pffSeason": 2025
+      },
+      "status": "read-only / not applied to ranking",
+      "source": "public/data/prospects_2026_qb.json"
+    },
+    {
+      "year": 2026,
+      "pos": "QB",
+      "name": "Drew Allar",
+      "school": "PENN STATE",
+      "adjustment": -0.25,
+      "traits": [
+        {
+          "label": "High-capital low-creation risk",
+          "scoreImpact": true,
+          "direction": "negative"
+        }
+      ],
+      "inputs": {
+        "pick": 62,
+        "pass": 66.1,
+        "run": 75.7,
+        "scrambles": 20,
+        "btt": 4,
+        "twp": 5,
+        "acc": 72.7,
+        "adot": 8.1,
+        "epa": 0.06,
+        "pffSeason": 2025
+      },
+      "status": "read-only / not applied to ranking",
+      "source": "public/data/prospects_2026_qb.json"
+    },
+    {
+      "year": 2026,
+      "pos": "QB",
+      "name": "Blake Baker",
+      "school": "LA TECH",
+      "adjustment": -0.25,
+      "traits": [
+        {
+          "label": "High-capital low-creation risk",
+          "scoreImpact": true,
+          "direction": "negative"
+        }
+      ],
+      "inputs": {
+        "pick": 63,
+        "pass": 65.7,
+        "run": 74.8,
+        "scrambles": 22,
+        "btt": 4,
+        "twp": 6,
+        "acc": 76.6,
+        "adot": 8,
+        "epa": 0.03,
+        "pffSeason": 2025
+      },
+      "status": "read-only / not applied to ranking",
+      "source": "public/data/prospects_2026_qb.json"
+    },
+    {
+      "year": 2026,
+      "pos": "QB",
+      "name": "Joe Pesansky",
+      "school": "FIU",
+      "adjustment": -0.35,
+      "traits": [
+        {
+          "label": "Day-2 low pass/accuracy risk",
+          "scoreImpact": true,
+          "direction": "negative"
+        }
+      ],
+      "inputs": {
+        "pick": 68,
+        "pass": 68.8,
+        "run": 71.7,
+        "scrambles": 18,
+        "btt": 8,
+        "twp": 7,
+        "acc": 67.1,
+        "adot": 10.7,
+        "epa": -0.06,
+        "pffSeason": 2025
+      },
+      "status": "read-only / not applied to ranking",
+      "source": "public/data/prospects_2026_qb.json"
+    },
+    {
+      "year": 2026,
+      "pos": "QB",
+      "name": "Sawyer Robertson",
+      "school": "BAYLOR",
+      "adjustment": -0.35,
+      "traits": [
+        {
+          "label": "Day-2 low pass/accuracy risk",
+          "scoreImpact": true,
+          "direction": "negative"
+        }
+      ],
+      "inputs": {
+        "pick": 69,
+        "pass": 67.2,
+        "run": 68.4,
+        "scrambles": 16,
+        "btt": 25,
+        "twp": 21,
+        "acc": 67.2,
+        "adot": 9.9,
+        "epa": 0.01,
+        "pffSeason": 2025
+      },
+      "status": "read-only / not applied to ranking",
+      "source": "public/data/prospects_2026_qb.json"
+    },
+    {
+      "year": 2026,
+      "pos": "QB",
+      "name": "Robby Ashford",
+      "school": "WAKE",
+      "adjustment": -0.35,
+      "traits": [
+        {
+          "label": "Day-2 low pass/accuracy risk",
+          "scoreImpact": true,
+          "direction": "negative"
+        }
+      ],
+      "inputs": {
+        "pick": 77,
+        "pass": 64.8,
+        "run": 68.8,
+        "scrambles": 41,
+        "btt": 19,
+        "twp": 17,
+        "acc": 68.5,
+        "adot": 7.7,
+        "epa": 0.07,
+        "pffSeason": 2025
+      },
+      "status": "read-only / not applied to ranking",
+      "source": "public/data/prospects_2026_qb.json"
+    },
+    {
+      "year": 2026,
+      "pos": "QB",
+      "name": "Nico Iamaleava",
+      "school": "UCLA",
+      "adjustment": 0.35,
+      "traits": [
+        {
+          "label": "Elite scramble creation",
+          "scoreImpact": true,
+          "direction": "positive"
+        }
+      ],
+      "inputs": {
+        "pick": 78,
+        "pass": 64.1,
+        "run": 78,
+        "scrambles": 49,
+        "btt": 9,
+        "twp": 10,
+        "acc": 73.7,
+        "adot": 7.9,
+        "epa": -0.06,
+        "pffSeason": 2025
+      },
+      "status": "read-only / not applied to ranking",
+      "source": "public/data/prospects_2026_qb.json"
+    },
+    {
+      "year": 2026,
+      "pos": "QB",
+      "name": "Dequan Finn",
+      "school": "MIAMI OH",
+      "adjustment": -0.35,
+      "traits": [
+        {
+          "label": "Day-2 low pass/accuracy risk",
+          "scoreImpact": true,
+          "direction": "negative"
+        }
+      ],
+      "inputs": {
+        "pick": 83,
+        "pass": 67.4,
+        "run": 69.7,
+        "scrambles": 20,
+        "btt": 10,
+        "twp": 9,
+        "acc": 69.8,
+        "adot": 12,
+        "epa": 0.03,
+        "pffSeason": 2025
+      },
+      "status": "read-only / not applied to ranking",
+      "source": "public/data/prospects_2026_qb.json"
+    },
+    {
+      "year": 2026,
+      "pos": "QB",
+      "name": "Skyler Locklear",
+      "school": "UTEP",
+      "adjustment": -0.35,
+      "traits": [
+        {
+          "label": "Day-2 low pass/accuracy risk",
+          "scoreImpact": true,
+          "direction": "negative"
+        }
+      ],
+      "inputs": {
+        "pick": 84,
+        "pass": 52,
+        "run": 78,
+        "scrambles": 27,
+        "btt": 11,
+        "twp": 10,
+        "acc": 69.8,
+        "adot": 10.7,
+        "epa": -0.11,
+        "pffSeason": 2025
+      },
+      "status": "read-only / not applied to ranking",
+      "source": "public/data/prospects_2026_qb.json"
+    },
+    {
+      "year": 2026,
+      "pos": "QB",
+      "name": "Sam Leavitt",
+      "school": "ARIZONA ST",
+      "adjustment": -0.35,
+      "traits": [
+        {
+          "label": "Day-2 low pass/accuracy risk",
+          "scoreImpact": true,
+          "direction": "negative"
+        }
+      ],
+      "inputs": {
+        "pick": 86,
+        "pass": 67.4,
+        "run": 83.2,
+        "scrambles": 28,
+        "btt": 18,
+        "twp": 12,
+        "acc": 68.3,
+        "adot": 9.1,
+        "epa": 0.04,
+        "pffSeason": 2025
+      },
+      "status": "read-only / not applied to ranking",
+      "source": "public/data/prospects_2026_qb.json"
+    },
+    {
+      "year": 2026,
+      "pos": "QB",
+      "name": "Dru DeShields",
+      "school": "KENT STATE",
+      "adjustment": -0.35,
+      "traits": [
+        {
+          "label": "Day-2 low pass/accuracy risk",
+          "scoreImpact": true,
+          "direction": "negative"
+        }
+      ],
+      "inputs": {
+        "pick": 95,
+        "pass": 62,
+        "run": 54.4,
+        "scrambles": 22,
+        "btt": 15,
+        "twp": 12,
+        "acc": 65.5,
+        "adot": 10.9,
+        "epa": 0,
+        "pffSeason": 2025
+      },
+      "status": "read-only / not applied to ranking",
+      "source": "public/data/prospects_2026_qb.json"
+    },
+    {
+      "year": 2026,
+      "pos": "QB",
+      "name": "Lunch Winfield",
+      "school": "LA LAFAYET",
+      "adjustment": -0.35,
+      "traits": [
+        {
+          "label": "Day-2 low pass/accuracy risk",
+          "scoreImpact": true,
+          "direction": "negative"
+        }
+      ],
+      "inputs": {
+        "pick": 97,
+        "pass": 57.3,
+        "run": 71.8,
+        "scrambles": 29,
+        "btt": 7,
+        "twp": 10,
+        "acc": 68.3,
+        "adot": 11.4,
+        "epa": 0.09,
+        "pffSeason": 2025
+      },
+      "status": "read-only / not applied to ranking",
+      "source": "public/data/prospects_2026_qb.json"
+    },
+    {
+      "year": 2026,
+      "pos": "QB",
+      "name": "Colton Joseph",
+      "school": "DOMINION",
+      "adjustment": -0.35,
+      "traits": [
+        {
+          "label": "Day-2 low pass/accuracy risk",
+          "scoreImpact": true,
+          "direction": "negative"
+        }
+      ],
+      "inputs": {
+        "pick": 98,
+        "pass": 71.4,
+        "run": 75,
+        "scrambles": 26,
+        "btt": 16,
+        "twp": 13,
+        "acc": 65.1,
+        "adot": 13.3,
+        "epa": 0.17,
+        "pffSeason": 2025
+      },
+      "status": "read-only / not applied to ranking",
+      "source": "public/data/prospects_2026_qb.json"
+    },
+    {
+      "year": 2027,
+      "pos": "QB",
+      "name": "Brendan Sorsby",
+      "school": "CINCINNATI",
+      "adjustment": 0,
+      "traits": [
+        {
+          "label": "Top-32 creation plus",
+          "scoreImpact": false,
+          "direction": "positive",
+          "contextOnly": true
+        }
+      ],
+      "inputs": {
+        "pick": 2,
+        "pass": 86.3,
+        "run": 76.9,
+        "scrambles": 34,
+        "btt": 23,
+        "twp": 7,
+        "acc": 71,
+        "adot": 10.6,
+        "epa": 0.24,
+        "pffSeason": 2025
+      },
+      "status": "read-only / not applied to ranking",
+      "source": "public/data/prospects_2027_qb.json"
+    },
+    {
+      "year": 2027,
+      "pos": "QB",
+      "name": "Byrum Brown",
+      "school": "USF",
+      "adjustment": 0.35,
+      "traits": [
+        {
+          "label": "Elite scramble creation",
+          "scoreImpact": true,
+          "direction": "positive"
+        },
+        {
+          "label": "Top-32 creation plus",
+          "scoreImpact": false,
+          "direction": "positive",
+          "contextOnly": true
+        }
+      ],
+      "inputs": {
+        "pick": 7,
+        "pass": 85.7,
+        "run": 86.2,
+        "scrambles": 46,
+        "btt": 21,
+        "twp": 11,
+        "acc": 75.6,
+        "adot": 9.7,
+        "epa": 0.26,
+        "pffSeason": 2025
+      },
+      "status": "read-only / not applied to ranking",
+      "source": "public/data/prospects_2027_qb.json"
+    },
+    {
+      "year": 2027,
+      "pos": "QB",
+      "name": "Noah Fifita",
+      "school": "ARIZONA",
+      "adjustment": 0,
+      "traits": [
+        {
+          "label": "Top-32 creation plus",
+          "scoreImpact": false,
+          "direction": "positive",
+          "contextOnly": true
+        }
+      ],
+      "inputs": {
+        "pick": 10,
+        "pass": 83.3,
+        "run": 66.9,
+        "scrambles": 35,
+        "btt": 26,
+        "twp": 10,
+        "acc": 75.3,
+        "adot": 10.2,
+        "epa": 0.13,
+        "pffSeason": 2025
+      },
+      "status": "read-only / not applied to ranking",
+      "source": "public/data/prospects_2027_qb.json"
+    },
+    {
+      "year": 2027,
+      "pos": "QB",
+      "name": "Anthony Colandrea",
+      "school": "UNLV",
+      "adjustment": 0,
+      "traits": [
+        {
+          "label": "Top-32 creation plus",
+          "scoreImpact": false,
+          "direction": "positive",
+          "contextOnly": true
+        }
+      ],
+      "inputs": {
+        "pick": 12,
+        "pass": 82.7,
+        "run": 82.7,
+        "scrambles": 38,
+        "btt": 28,
+        "twp": 15,
+        "acc": 74.4,
+        "adot": 10,
+        "epa": 0.2,
+        "pffSeason": 2025
+      },
+      "status": "read-only / not applied to ranking",
+      "source": "public/data/prospects_2027_qb.json"
+    },
+    {
+      "year": 2027,
+      "pos": "QB",
+      "name": "Micah Alejado",
+      "school": "HAWAII",
+      "adjustment": 0,
+      "traits": [
+        {
+          "label": "Top-32 creation plus",
+          "scoreImpact": false,
+          "direction": "positive",
+          "contextOnly": true
+        }
+      ],
+      "inputs": {
+        "pick": 13,
+        "pass": 78.6,
+        "run": 54.2,
+        "scrambles": 35,
+        "btt": 28,
+        "twp": 13,
+        "acc": 77,
+        "adot": 9.4,
+        "epa": 0.11,
+        "pffSeason": 2025
+      },
+      "status": "read-only / not applied to ranking",
+      "source": "public/data/prospects_2027_qb.json"
+    },
+    {
+      "year": 2027,
+      "pos": "QB",
+      "name": "Braylon Braxton",
+      "school": "SO MISS",
+      "adjustment": 0,
+      "traits": [
+        {
+          "label": "Top-32 creation plus",
+          "scoreImpact": false,
+          "direction": "positive",
+          "contextOnly": true
+        }
+      ],
+      "inputs": {
+        "pick": 18,
+        "pass": 76.1,
+        "run": 56.4,
+        "scrambles": 37,
+        "btt": 25,
+        "twp": 12,
+        "acc": 72.1,
+        "adot": 10.7,
+        "epa": 0.06,
+        "pffSeason": 2025
+      },
+      "status": "read-only / not applied to ranking",
+      "source": "public/data/prospects_2027_qb.json"
+    },
+    {
+      "year": 2027,
+      "pos": "QB",
+      "name": "Demond Williams Jr.",
+      "school": "WASHINGTON",
+      "adjustment": 0,
+      "traits": [
+        {
+          "label": "Top-32 creation plus",
+          "scoreImpact": false,
+          "direction": "positive",
+          "contextOnly": true
+        }
+      ],
+      "inputs": {
+        "pick": 19,
+        "pass": 74.7,
+        "run": 72.4,
+        "scrambles": 65,
+        "btt": 14,
+        "twp": 10,
+        "acc": 77.4,
+        "adot": 9,
+        "epa": 0.24,
+        "pffSeason": 2025
+      },
+      "status": "read-only / not applied to ranking",
+      "source": "public/data/prospects_2027_qb.json"
+    },
+    {
+      "year": 2027,
+      "pos": "QB",
+      "name": "Athan Kaliakmanis",
+      "school": "RUTGERS",
+      "adjustment": 0,
+      "traits": [
+        {
+          "label": "Top-32 creation plus",
+          "scoreImpact": false,
+          "direction": "positive",
+          "contextOnly": true
+        }
+      ],
+      "inputs": {
+        "pick": 24,
+        "pass": 87.6,
+        "run": 64.4,
+        "scrambles": 32,
+        "btt": 26,
+        "twp": 11,
+        "acc": 70.8,
+        "adot": 11.2,
+        "epa": 0.11,
+        "pffSeason": 2025
+      },
+      "status": "read-only / not applied to ranking",
+      "source": "public/data/prospects_2027_qb.json"
+    },
+    {
+      "year": 2027,
+      "pos": "QB",
+      "name": "Arch Manning",
+      "school": "TEXAS",
+      "adjustment": 0,
+      "traits": [
+        {
+          "label": "Top-32 creation plus",
+          "scoreImpact": false,
+          "direction": "positive",
+          "contextOnly": true
+        }
+      ],
+      "inputs": {
+        "pick": 29,
+        "pass": 81,
+        "run": 81.1,
+        "scrambles": 32,
+        "btt": 19,
+        "twp": 17,
+        "acc": 73,
+        "adot": 9.7,
+        "epa": 0.14,
+        "pffSeason": 2025
+      },
+      "status": "read-only / not applied to ranking",
+      "source": "public/data/prospects_2027_qb.json"
+    },
+    {
+      "year": 2027,
+      "pos": "QB",
+      "name": "Brendon Lewis",
+      "school": "MEMPHIS",
+      "adjustment": 0.35,
+      "traits": [
+        {
+          "label": "Elite scramble creation",
+          "scoreImpact": true,
+          "direction": "positive"
+        }
+      ],
+      "inputs": {
+        "pick": 36,
+        "pass": 75.4,
+        "run": 85.9,
+        "scrambles": 49,
+        "btt": 16,
+        "twp": 14,
+        "acc": 82.3,
+        "adot": 9,
+        "epa": 0.1,
+        "pffSeason": 2025
+      },
+      "status": "read-only / not applied to ranking",
+      "source": "public/data/prospects_2027_qb.json"
+    },
+    {
+      "year": 2027,
+      "pos": "QB",
+      "name": "Walker Eget",
+      "school": "S JOSE ST",
+      "adjustment": -0.35,
+      "traits": [
+        {
+          "label": "Day-2 low pass/accuracy risk",
+          "scoreImpact": true,
+          "direction": "negative"
+        }
+      ],
+      "inputs": {
+        "pick": 48,
+        "pass": 66.7,
+        "run": 57.8,
+        "scrambles": 18,
+        "btt": 29,
+        "twp": 19,
+        "acc": 69.1,
+        "adot": 12.3,
+        "epa": 0.02,
+        "pffSeason": 2025
+      },
+      "status": "read-only / not applied to ranking",
+      "source": "public/data/prospects_2027_qb.json"
+    },
+    {
+      "year": 2027,
+      "pos": "QB",
+      "name": "Liam Szarka",
+      "school": "AIR FORCE",
+      "adjustment": -0.35,
+      "traits": [
+        {
+          "label": "Day-2 low pass/accuracy risk",
+          "scoreImpact": true,
+          "direction": "negative"
+        }
+      ],
+      "inputs": {
+        "pick": 55,
+        "pass": 71,
+        "run": 74.9,
+        "scrambles": 6,
+        "btt": 9,
+        "twp": 9,
+        "acc": 69.4,
+        "adot": 12,
+        "epa": 0.36,
+        "pffSeason": 2025
+      },
+      "status": "read-only / not applied to ranking",
+      "source": "public/data/prospects_2027_qb.json"
+    },
+    {
+      "year": 2027,
+      "pos": "QB",
+      "name": "Bryson Barnes",
+      "school": "UTAH ST",
+      "adjustment": 0.35,
+      "traits": [
+        {
+          "label": "Elite scramble creation",
+          "scoreImpact": true,
+          "direction": "positive"
+        }
+      ],
+      "inputs": {
+        "pick": 56,
+        "pass": 68.5,
+        "run": 76,
+        "scrambles": 49,
+        "btt": 18,
+        "twp": 13,
+        "acc": 70,
+        "adot": 11.2,
+        "epa": 0.02,
+        "pffSeason": 2025
+      },
+      "status": "read-only / not applied to ranking",
+      "source": "public/data/prospects_2027_qb.json"
+    },
+    {
+      "year": 2027,
+      "pos": "QB",
+      "name": "Drew Allar",
+      "school": "PENN STATE",
+      "adjustment": -0.25,
+      "traits": [
+        {
+          "label": "High-capital low-creation risk",
+          "scoreImpact": true,
+          "direction": "negative"
+        }
+      ],
+      "inputs": {
+        "pick": 57,
+        "pass": 66.1,
+        "run": 75.7,
+        "scrambles": 20,
+        "btt": 4,
+        "twp": 5,
+        "acc": 72.7,
+        "adot": 8.1,
+        "epa": 0.06,
+        "pffSeason": 2025
+      },
+      "status": "read-only / not applied to ranking",
+      "source": "public/data/prospects_2027_qb.json"
+    },
+    {
+      "year": 2027,
+      "pos": "QB",
+      "name": "Blake Baker",
+      "school": "LA TECH",
+      "adjustment": -0.25,
+      "traits": [
+        {
+          "label": "High-capital low-creation risk",
+          "scoreImpact": true,
+          "direction": "negative"
+        }
+      ],
+      "inputs": {
+        "pick": 58,
+        "pass": 65.7,
+        "run": 74.8,
+        "scrambles": 22,
+        "btt": 4,
+        "twp": 6,
+        "acc": 76.6,
+        "adot": 8,
+        "epa": 0.03,
+        "pffSeason": 2025
+      },
+      "status": "read-only / not applied to ranking",
+      "source": "public/data/prospects_2027_qb.json"
+    },
+    {
+      "year": 2027,
+      "pos": "QB",
+      "name": "Ethan Grunkemeyer",
+      "school": "PENN STATE",
+      "adjustment": -0.25,
+      "traits": [
+        {
+          "label": "High-capital low-creation risk",
+          "scoreImpact": true,
+          "direction": "negative"
+        }
+      ],
+      "inputs": {
+        "pick": 60,
+        "pass": 68,
+        "run": 58.3,
+        "scrambles": 13,
+        "btt": 4,
+        "twp": 5,
+        "acc": 80.1,
+        "adot": 7.2,
+        "epa": 0.11,
+        "pffSeason": 2025
+      },
+      "status": "read-only / not applied to ranking",
+      "source": "public/data/prospects_2027_qb.json"
+    },
+    {
+      "year": 2027,
+      "pos": "QB",
+      "name": "Joe Pesansky",
+      "school": "FIU",
+      "adjustment": -0.35,
+      "traits": [
+        {
+          "label": "Day-2 low pass/accuracy risk",
+          "scoreImpact": true,
+          "direction": "negative"
+        }
+      ],
+      "inputs": {
+        "pick": 63,
+        "pass": 68.8,
+        "run": 71.7,
+        "scrambles": 18,
+        "btt": 8,
+        "twp": 7,
+        "acc": 67.1,
+        "adot": 10.7,
+        "epa": -0.06,
+        "pffSeason": 2025
+      },
+      "status": "read-only / not applied to ranking",
+      "source": "public/data/prospects_2027_qb.json"
+    },
+    {
+      "year": 2027,
+      "pos": "QB",
+      "name": "Sawyer Robertson",
+      "school": "BAYLOR",
+      "adjustment": -0.35,
+      "traits": [
+        {
+          "label": "Day-2 low pass/accuracy risk",
+          "scoreImpact": true,
+          "direction": "negative"
+        }
+      ],
+      "inputs": {
+        "pick": 64,
+        "pass": 67.2,
+        "run": 68.4,
+        "scrambles": 16,
+        "btt": 25,
+        "twp": 21,
+        "acc": 67.2,
+        "adot": 9.9,
+        "epa": 0.01,
+        "pffSeason": 2025
+      },
+      "status": "read-only / not applied to ranking",
+      "source": "public/data/prospects_2027_qb.json"
+    },
+    {
+      "year": 2027,
+      "pos": "QB",
+      "name": "Nico Iamaleava",
+      "school": "UCLA",
+      "adjustment": 0.35,
+      "traits": [
+        {
+          "label": "Elite scramble creation",
+          "scoreImpact": true,
+          "direction": "positive"
+        }
+      ],
+      "inputs": {
+        "pick": 72,
+        "pass": 64.1,
+        "run": 78,
+        "scrambles": 49,
+        "btt": 9,
+        "twp": 10,
+        "acc": 73.7,
+        "adot": 7.9,
+        "epa": -0.06,
+        "pffSeason": 2025
+      },
+      "status": "read-only / not applied to ranking",
+      "source": "public/data/prospects_2027_qb.json"
+    },
+    {
+      "year": 2027,
+      "pos": "QB",
+      "name": "Robby Ashford",
+      "school": "WAKE",
+      "adjustment": -0.35,
+      "traits": [
+        {
+          "label": "Day-2 low pass/accuracy risk",
+          "scoreImpact": true,
+          "direction": "negative"
+        }
+      ],
+      "inputs": {
+        "pick": 75,
+        "pass": 64.8,
+        "run": 68.8,
+        "scrambles": 41,
+        "btt": 19,
+        "twp": 17,
+        "acc": 68.5,
+        "adot": 7.7,
+        "epa": 0.07,
+        "pffSeason": 2025
+      },
+      "status": "read-only / not applied to ranking",
+      "source": "public/data/prospects_2027_qb.json"
+    },
+    {
+      "year": 2027,
+      "pos": "QB",
+      "name": "Dequan Finn",
+      "school": "MIAMI OH",
+      "adjustment": -0.35,
+      "traits": [
+        {
+          "label": "Day-2 low pass/accuracy risk",
+          "scoreImpact": true,
+          "direction": "negative"
+        }
+      ],
+      "inputs": {
+        "pick": 78,
+        "pass": 67.4,
+        "run": 69.7,
+        "scrambles": 20,
+        "btt": 10,
+        "twp": 9,
+        "acc": 69.8,
+        "adot": 12,
+        "epa": 0.03,
+        "pffSeason": 2025
+      },
+      "status": "read-only / not applied to ranking",
+      "source": "public/data/prospects_2027_qb.json"
+    },
+    {
+      "year": 2027,
+      "pos": "QB",
+      "name": "Skyler Locklear",
+      "school": "UTEP",
+      "adjustment": -0.35,
+      "traits": [
+        {
+          "label": "Day-2 low pass/accuracy risk",
+          "scoreImpact": true,
+          "direction": "negative"
+        }
+      ],
+      "inputs": {
+        "pick": 79,
+        "pass": 52,
+        "run": 78,
+        "scrambles": 27,
+        "btt": 11,
+        "twp": 10,
+        "acc": 69.8,
+        "adot": 10.7,
+        "epa": -0.11,
+        "pffSeason": 2025
+      },
+      "status": "read-only / not applied to ranking",
+      "source": "public/data/prospects_2027_qb.json"
+    },
+    {
+      "year": 2027,
+      "pos": "QB",
+      "name": "Sam Leavitt",
+      "school": "ARIZONA ST",
+      "adjustment": -0.35,
+      "traits": [
+        {
+          "label": "Day-2 low pass/accuracy risk",
+          "scoreImpact": true,
+          "direction": "negative"
+        }
+      ],
+      "inputs": {
+        "pick": 81,
+        "pass": 67.4,
+        "run": 83.2,
+        "scrambles": 28,
+        "btt": 18,
+        "twp": 12,
+        "acc": 68.3,
+        "adot": 9.1,
+        "epa": 0.04,
+        "pffSeason": 2025
+      },
+      "status": "read-only / not applied to ranking",
+      "source": "public/data/prospects_2027_qb.json"
+    },
+    {
+      "year": 2027,
+      "pos": "QB",
+      "name": "Dru DeShields",
+      "school": "KENT STATE",
+      "adjustment": -0.35,
+      "traits": [
+        {
+          "label": "Day-2 low pass/accuracy risk",
+          "scoreImpact": true,
+          "direction": "negative"
+        }
+      ],
+      "inputs": {
+        "pick": 90,
+        "pass": 62,
+        "run": 54.4,
+        "scrambles": 22,
+        "btt": 15,
+        "twp": 12,
+        "acc": 65.5,
+        "adot": 10.9,
+        "epa": 0,
+        "pffSeason": 2025
+      },
+      "status": "read-only / not applied to ranking",
+      "source": "public/data/prospects_2027_qb.json"
+    },
+    {
+      "year": 2027,
+      "pos": "QB",
+      "name": "Lunch Winfield",
+      "school": "LA LAFAYET",
+      "adjustment": -0.35,
+      "traits": [
+        {
+          "label": "Day-2 low pass/accuracy risk",
+          "scoreImpact": true,
+          "direction": "negative"
+        }
+      ],
+      "inputs": {
+        "pick": 92,
+        "pass": 57.3,
+        "run": 71.8,
+        "scrambles": 29,
+        "btt": 7,
+        "twp": 10,
+        "acc": 68.3,
+        "adot": 11.4,
+        "epa": 0.09,
+        "pffSeason": 2025
+      },
+      "status": "read-only / not applied to ranking",
+      "source": "public/data/prospects_2027_qb.json"
+    },
+    {
+      "year": 2027,
+      "pos": "QB",
+      "name": "Colton Joseph",
+      "school": "DOMINION",
+      "adjustment": -0.35,
+      "traits": [
+        {
+          "label": "Day-2 low pass/accuracy risk",
+          "scoreImpact": true,
+          "direction": "negative"
+        }
+      ],
+      "inputs": {
+        "pick": 93,
+        "pass": 71.4,
+        "run": 75,
+        "scrambles": 26,
+        "btt": 16,
+        "twp": 13,
+        "acc": 65.1,
+        "adot": 13.3,
+        "epa": 0.17,
+        "pffSeason": 2025
+      },
+      "status": "read-only / not applied to ranking",
+      "source": "public/data/prospects_2027_qb.json"
+    },
+    {
+      "year": 2027,
+      "pos": "QB",
+      "name": "Parker Navarro",
+      "school": "OHIO",
+      "adjustment": 0.35,
+      "traits": [
+        {
+          "label": "Elite scramble creation",
+          "scoreImpact": true,
+          "direction": "positive"
+        }
+      ],
+      "inputs": {
+        "pick": 96,
+        "pass": 61.1,
+        "run": 75.3,
+        "scrambles": 51,
+        "btt": 16,
+        "twp": 19,
+        "acc": 70.8,
+        "adot": 10.9,
+        "epa": 0.06,
+        "pffSeason": 2025
+      },
+      "status": "read-only / not applied to ranking",
+      "source": "public/data/prospects_2027_qb.json"
+    },
+    {
+      "year": 2027,
+      "pos": "QB",
+      "name": "AJ Hairston Jr.",
+      "school": "UMASS",
+      "adjustment": -0.35,
+      "traits": [
+        {
+          "label": "Day-2 low pass/accuracy risk",
+          "scoreImpact": true,
+          "direction": "negative"
+        }
+      ],
+      "inputs": {
+        "pick": 98,
+        "pass": 58.5,
+        "run": 51.1,
+        "scrambles": 19,
+        "btt": 5,
+        "twp": 7,
+        "acc": 64.6,
+        "adot": 9.3,
+        "epa": -0.32,
+        "pffSeason": 2025
+      },
+      "status": "read-only / not applied to ranking",
+      "source": "public/data/prospects_2027_qb.json"
+    },
+    {
+      "year": 2027,
+      "pos": "QB",
+      "name": "Josh Holst",
+      "school": "N ILLINOIS",
+      "adjustment": -0.35,
+      "traits": [
+        {
+          "label": "Day-2 low pass/accuracy risk",
+          "scoreImpact": true,
+          "direction": "negative"
+        }
+      ],
+      "inputs": {
+        "pick": 100,
+        "pass": 49.2,
+        "run": 52.1,
+        "scrambles": 28,
+        "btt": 5,
+        "twp": 5,
+        "acc": 67.2,
+        "adot": 7.9,
+        "epa": -0.32,
+        "pffSeason": 2025
+      },
+      "status": "read-only / not applied to ranking",
+      "source": "public/data/prospects_2027_qb.json"
+    }
+  ],
+  "skipped": []
+}
