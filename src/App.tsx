@@ -2446,6 +2446,9 @@ function buildPlayerExplanation(player: any, ctx: any) {
   const rbScoreReadySignal = ctx?.rbScoreReadySignal || null
   const rbScoreReadyAdjustment = safeNum(rbScoreReadySignal?.recommendedAdjustment)
 
+  const qbTranslationSignal = ctx?.qbTranslationSignal || null
+  const qbTranslationAdjustment = safeNum(qbTranslationSignal?.adjustment)
+
   const compSignal = ctx?.compSignal || null
   const compAdjustment = safeNum(compSignal?.compAdjustment)
   const compConfidence = safeNum(compSignal?.confidence)
@@ -2462,6 +2465,11 @@ function buildPlayerExplanation(player: any, ctx: any) {
     drivers.push(`RB score-ready signal: ${rbScoreReadyAdjustment >= 0 ? '+' : ''}${rbScoreReadyAdjustment.toFixed(2)}`)
   }
 
+  if (qbTranslationSignal && qbTranslationAdjustment != null && qbTranslationAdjustment !== 0) {
+    badges.push('QB translation signal')
+    drivers.push(`QB translation signal: ${qbTranslationAdjustment >= 0 ? '+' : ''}${qbTranslationAdjustment.toFixed(2)}`)
+  }
+
   return {
     player,
     summary,
@@ -2472,6 +2480,7 @@ function buildPlayerExplanation(player: any, ctx: any) {
     drivers: cleanedDrivers,
     compSignal,
     rbScoreReadySignal,
+    qbTranslationSignal,
   }
 }
 
@@ -2510,6 +2519,31 @@ function PlayerExplanationModal({ explanation, onClose }: { explanation: any; on
           <h3>Model drivers</h3>
           <ul>{explanation.drivers.map((item: string) => <li key={item}>{item}</li>)}</ul>
         </section>
+
+        {explanation.qbTranslationSignal ? <section>
+          <h3>QB translation signal</h3>
+          <p>
+            Signal: <strong>{Number(explanation.qbTranslationSignal.adjustment || 0) >= 0 ? '+' : ''}{Number(explanation.qbTranslationSignal.adjustment || 0).toFixed(2)}</strong>
+            {' · '}Status: read-only / not applied to ranking
+          </p>
+          {explanation.qbTranslationSignal.traits?.length ? <>
+            <h4>Traits</h4>
+            <ul>
+              {explanation.qbTranslationSignal.traits.map((t: string, i: number) => (
+                <li key={`qb-translation-${i}`}>
+                  {t}{t === 'Top-32 creation plus' ? ' — context only' : ''}
+                </li>
+              ))}
+            </ul>
+          </> : null}
+          <h4>Signal inputs</h4>
+          <p>
+            Run grade: {Number(explanation.qbTranslationSignal.run || 0).toFixed(1)}
+            {' · '}Scrambles: {Number(explanation.qbTranslationSignal.scrambles || 0).toFixed(0)}
+            {' · '}BTT%: {Number(explanation.qbTranslationSignal.btt || 0).toFixed(1)}
+            {' · '}Adj. accuracy: {Number(explanation.qbTranslationSignal.acc || 0).toFixed(1)}
+          </p>
+        </section> : null}
 
         {explanation.rbScoreReadySignal ? <section>
           <h3>RB score-ready signal</h3>
@@ -4251,6 +4285,59 @@ function normalizeRbQuantumTraits(value: unknown): RbScoreReadySignal['quantumTr
     }
   }).filter(Boolean) as RbScoreReadySignal['quantumTraits']
 }
+
+
+
+type QbTranslationSignal = {
+  adjustment: number
+  traits: string[]
+  actual?: number
+  delta?: number
+  pass?: number
+  run?: number
+  scrambles?: number
+  btt?: number
+  acc?: number
+  adot?: number
+  epa?: number
+}
+
+function buildQbTranslationMap(payload: unknown): Map<string, QbTranslationSignal> {
+  const map = new Map<string, QbTranslationSignal>()
+  const root = asRecord(payload)
+  const rows: unknown[] = Array.isArray(root?.movers) ? root.movers : []
+
+  for (const item of rows) {
+    const r = asRecord(item)
+    if (!r) continue
+
+    const year = numberField(r, 'year', 0)
+    const name = stringField(r, 'name', '')
+    if (!year || !name) continue
+
+    const traitsRaw = r.traits
+    const traits = Array.isArray(traitsRaw)
+      ? traitsRaw.map((x) => String(x))
+      : []
+
+    map.set(projectionOverlayKey(year, 'QB', name), {
+      adjustment: numberField(r, 'adjustment', 0),
+      traits,
+      actual: numberField(r, 'actual', 0),
+      delta: numberField(r, 'delta', 0),
+      pass: numberField(r, 'pass', 0),
+      run: numberField(r, 'run', 0),
+      scrambles: numberField(r, 'scrambles', 0),
+      btt: numberField(r, 'btt', 0),
+      acc: numberField(r, 'acc', 0),
+      adot: numberField(r, 'adot', 0),
+      epa: numberField(r, 'epa', 0),
+    })
+  }
+
+  return map
+}
+
 
 function buildRbScoreReadyMap(payload: unknown): Map<string, RbScoreReadySignal> {
   const map = new Map<string, RbScoreReadySignal>()
