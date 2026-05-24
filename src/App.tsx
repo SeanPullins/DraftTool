@@ -194,7 +194,36 @@ const positionDefaults: Record<string, Partial<Prospect>> = {
   S: { height: 72, weight: 205, forty: 4.55, vertical: 35, broad: 120, cone: 7.0, shuttle: 4.22 },
 }
 
-export default function App() {
+export default 
+const DRAFTLENS_DATA_VERSION = 'qb-v10-2-visible-scores-primary-comps-2026-05-24';
+
+function clearStaleDraftLensStorage() {
+  try {
+    const versionKey = 'draftlens.dataVersion';
+    const current = window.localStorage.getItem(versionKey);
+
+    if (current === DRAFTLENS_DATA_VERSION) return;
+
+    const theme = window.localStorage.getItem('draftlens.theme');
+
+    Object.keys(window.localStorage)
+      .filter((key) =>
+        key.toLowerCase().includes('draft') ||
+        key.toLowerCase().includes('prospect') ||
+        key.toLowerCase().includes('player') ||
+        key.toLowerCase().includes('board') ||
+        key.toLowerCase().includes('class')
+      )
+      .forEach((key) => window.localStorage.removeItem(key));
+
+    if (theme) window.localStorage.setItem('draftlens.theme', theme);
+    window.localStorage.setItem(versionKey, DRAFTLENS_DATA_VERSION);
+  } catch {
+    // no-op
+  }
+}
+
+function App() {
   const [prospects, setProspects] = useState<Historical[]>([])
   const [lookupPool, setLookupPool] = useState<Historical[]>([])
   const [pffProfiles, setPffProfiles] = useState<PffProfile[]>([])
