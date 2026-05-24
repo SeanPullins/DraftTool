@@ -1,12 +1,12 @@
 {
-  "generatedAt": "2026-05-23T01:40:12.425Z",
+  "generatedAt": "2026-05-24T00:39:10.925Z",
   "note": "Current/future QB Translation Signal v1 candidates. Read-only; not applied to rankings.",
   "counts": {
     "pffRows": 4009,
-    "candidates": 59,
+    "candidates": 79,
     "positive": 12,
-    "negative": 29,
-    "contextOnly": 18,
+    "negative": 52,
+    "contextOnly": 15,
     "skipped": 0
   },
   "candidates": [
@@ -34,8 +34,11 @@
         "pass": 92,
         "run": 92.4,
         "scrambles": 55,
-        "btt": 29,
+        "btt": 8.7,
         "twp": 7,
+        "attempts": 332,
+        "rawBtt": 29,
+        "rawTwp": 7,
         "acc": 79.6,
         "adot": 10.5,
         "epa": 0.57,
@@ -64,8 +67,11 @@
         "pass": 89.8,
         "run": 73.8,
         "scrambles": 51,
-        "btt": 35,
+        "btt": 8.2,
         "twp": 9,
+        "attempts": 425,
+        "rawBtt": 35,
+        "rawTwp": 9,
         "acc": 75.3,
         "adot": 11,
         "epa": 0.18,
@@ -94,8 +100,11 @@
         "pass": 91.7,
         "run": 77.8,
         "scrambles": 32,
-        "btt": 31,
-        "twp": 18,
+        "btt": 6.8,
+        "twp": 4,
+        "attempts": 454,
+        "rawBtt": 31,
+        "rawTwp": 18,
         "acc": 76.5,
         "adot": 9.8,
         "epa": 0.33,
@@ -129,8 +138,11 @@
         "pass": 91.9,
         "run": 75.3,
         "scrambles": 45,
-        "btt": 30,
+        "btt": 7.5,
         "twp": 11,
+        "attempts": 399,
+        "rawBtt": 30,
+        "rawTwp": 11,
         "acc": 77.7,
         "adot": 11.9,
         "epa": 0.43,
@@ -164,8 +176,11 @@
         "pass": 90.7,
         "run": 82.1,
         "scrambles": 51,
-        "btt": 30,
+        "btt": 7.9,
         "twp": 12,
+        "attempts": 379,
+        "rawBtt": 30,
+        "rawTwp": 12,
         "acc": 79.2,
         "adot": 9.8,
         "epa": 0.37,
@@ -194,11 +209,46 @@
         "pass": 86.3,
         "run": 76.9,
         "scrambles": 34,
-        "btt": 23,
+        "btt": 6.8,
         "twp": 7,
+        "attempts": 336,
+        "rawBtt": 23,
+        "rawTwp": 7,
         "acc": 71,
         "adot": 10.6,
         "epa": 0.24,
+        "pffSeason": 2025
+      },
+      "primaryComp": null,
+      "status": "read-only / not applied to ranking",
+      "source": "public/data/prospects_2026_qb.json"
+    },
+    {
+      "year": 2026,
+      "pos": "QB",
+      "name": "Haynes King",
+      "school": "GA TECH",
+      "adjustment": -0.25,
+      "traits": [
+        {
+          "label": "High-capital low-creation risk",
+          "scoreImpact": true,
+          "direction": "negative"
+        }
+      ],
+      "inputs": {
+        "pick": 5,
+        "pass": 80.9,
+        "run": 75,
+        "scrambles": 18,
+        "btt": 4.1,
+        "twp": 4,
+        "attempts": 365,
+        "rawBtt": 15,
+        "rawTwp": 4,
+        "acc": 79,
+        "adot": 7.5,
+        "epa": 0.18,
         "pffSeason": 2025
       },
       "primaryComp": null,
@@ -229,8 +279,11 @@
         "pass": 85.7,
         "run": 86.2,
         "scrambles": 46,
-        "btt": 21,
+        "btt": 6.1,
         "twp": 11,
+        "attempts": 342,
+        "rawBtt": 21,
+        "rawTwp": 11,
         "acc": 75.6,
         "adot": 9.7,
         "epa": 0.26,
@@ -259,8 +312,11 @@
         "pass": 90.7,
         "run": 74,
         "scrambles": 34,
-        "btt": 23,
+        "btt": 6,
         "twp": 12,
+        "attempts": 382,
+        "rawBtt": 23,
+        "rawTwp": 12,
         "acc": 79,
         "adot": 9.8,
         "epa": 0.39,
@@ -289,8 +345,11 @@
         "pass": 83.3,
         "run": 66.9,
         "scrambles": 35,
-        "btt": 26,
+        "btt": 6.1,
         "twp": 10,
+        "attempts": 429,
+        "rawBtt": 26,
+        "rawTwp": 10,
         "acc": 75.3,
         "adot": 10.2,
         "epa": 0.13,
@@ -319,11 +378,46 @@
         "pass": 82.7,
         "run": 82.7,
         "scrambles": 38,
-        "btt": 28,
-        "twp": 15,
+        "btt": 6.7,
+        "twp": 3.6,
+        "attempts": 418,
+        "rawBtt": 28,
+        "rawTwp": 15,
         "acc": 74.4,
         "adot": 10,
         "epa": 0.2,
+        "pffSeason": 2025
+      },
+      "primaryComp": null,
+      "status": "read-only / not applied to ranking",
+      "source": "public/data/prospects_2026_qb.json"
+    },
+    {
+      "year": 2026,
+      "pos": "QB",
+      "name": "Joe Fagnano",
+      "school": "UCONN",
+      "adjustment": -0.25,
+      "traits": [
+        {
+          "label": "High-capital low-creation risk",
+          "scoreImpact": true,
+          "direction": "negative"
+        }
+      ],
+      "inputs": {
+        "pick": 17,
+        "pass": 81.9,
+        "run": 80.3,
+        "scrambles": 23,
+        "btt": 3.4,
+        "twp": 8,
+        "attempts": 414,
+        "rawBtt": 14,
+        "rawTwp": 8,
+        "acc": 78.2,
+        "adot": 7.6,
+        "epa": 0.31,
         "pffSeason": 2025
       },
       "primaryComp": null,
@@ -349,11 +443,46 @@
         "pass": 78.6,
         "run": 54.2,
         "scrambles": 35,
-        "btt": 28,
-        "twp": 13,
+        "btt": 6.5,
+        "twp": 3,
+        "attempts": 430,
+        "rawBtt": 28,
+        "rawTwp": 13,
         "acc": 77,
         "adot": 9.4,
         "epa": 0.11,
+        "pffSeason": 2025
+      },
+      "primaryComp": null,
+      "status": "read-only / not applied to ranking",
+      "source": "public/data/prospects_2026_qb.json"
+    },
+    {
+      "year": 2026,
+      "pos": "QB",
+      "name": "Cade Klubnik",
+      "school": "CLEMSON",
+      "adjustment": -0.25,
+      "traits": [
+        {
+          "label": "High-capital low-creation risk",
+          "scoreImpact": true,
+          "direction": "negative"
+        }
+      ],
+      "inputs": {
+        "pick": 22,
+        "pass": 77.4,
+        "run": 57.9,
+        "scrambles": 16,
+        "btt": 4.1,
+        "twp": 10,
+        "attempts": 394,
+        "rawBtt": 16,
+        "rawTwp": 10,
+        "acc": 77.6,
+        "adot": 8.4,
+        "epa": 0.04,
         "pffSeason": 2025
       },
       "primaryComp": null,
@@ -379,8 +508,11 @@
         "pass": 76.1,
         "run": 56.4,
         "scrambles": 37,
-        "btt": 25,
+        "btt": 6.3,
         "twp": 12,
+        "attempts": 397,
+        "rawBtt": 25,
+        "rawTwp": 12,
         "acc": 72.1,
         "adot": 10.7,
         "epa": 0.06,
@@ -395,13 +527,12 @@
       "pos": "QB",
       "name": "Demond Williams Jr.",
       "school": "WASHINGTON",
-      "adjustment": 0,
+      "adjustment": -0.25,
       "traits": [
         {
-          "label": "Top-32 creation plus",
-          "scoreImpact": false,
-          "direction": "positive",
-          "contextOnly": true
+          "label": "High-capital low-creation risk",
+          "scoreImpact": true,
+          "direction": "negative"
         }
       ],
       "inputs": {
@@ -409,11 +540,46 @@
         "pass": 74.7,
         "run": 72.4,
         "scrambles": 65,
-        "btt": 14,
+        "btt": 3.9,
         "twp": 10,
+        "attempts": 355,
+        "rawBtt": 14,
+        "rawTwp": 10,
         "acc": 77.4,
         "adot": 9,
         "epa": 0.24,
+        "pffSeason": 2025
+      },
+      "primaryComp": null,
+      "status": "read-only / not applied to ranking",
+      "source": "public/data/prospects_2026_qb.json"
+    },
+    {
+      "year": 2026,
+      "pos": "QB",
+      "name": "Gunner Stockton",
+      "school": "GEORGIA",
+      "adjustment": -0.25,
+      "traits": [
+        {
+          "label": "High-capital low-creation risk",
+          "scoreImpact": true,
+          "direction": "negative"
+        }
+      ],
+      "inputs": {
+        "pick": 27,
+        "pass": 80.7,
+        "run": 64.2,
+        "scrambles": 53,
+        "btt": 3.6,
+        "twp": 12,
+        "attempts": 386,
+        "rawBtt": 14,
+        "rawTwp": 12,
+        "acc": 81.2,
+        "adot": 7.3,
+        "epa": 0.15,
         "pffSeason": 2025
       },
       "primaryComp": null,
@@ -439,8 +605,11 @@
         "pass": 87.6,
         "run": 64.4,
         "scrambles": 32,
-        "btt": 26,
+        "btt": 7,
         "twp": 11,
+        "attempts": 370,
+        "rawBtt": 26,
+        "rawTwp": 11,
         "acc": 70.8,
         "adot": 11.2,
         "epa": 0.11,
@@ -453,14 +622,115 @@
     {
       "year": 2026,
       "pos": "QB",
+      "name": "Carson Beck",
+      "school": "MIAMI FL",
+      "adjustment": -0.25,
+      "traits": [
+        {
+          "label": "High-capital low-creation risk",
+          "scoreImpact": true,
+          "direction": "negative"
+        }
+      ],
+      "inputs": {
+        "pick": 31,
+        "pass": 75.6,
+        "run": 49.5,
+        "scrambles": 32,
+        "btt": 3.4,
+        "twp": 12,
+        "attempts": 469,
+        "rawBtt": 16,
+        "rawTwp": 12,
+        "acc": 79,
+        "adot": 7.6,
+        "epa": 0.22,
+        "pffSeason": 2025
+      },
+      "primaryComp": null,
+      "status": "read-only / not applied to ranking",
+      "source": "public/data/prospects_2026_qb.json"
+    },
+    {
+      "year": 2026,
+      "pos": "QB",
+      "name": "Kevin Jennings",
+      "school": "SMU",
+      "adjustment": -0.25,
+      "traits": [
+        {
+          "label": "High-capital low-creation risk",
+          "scoreImpact": true,
+          "direction": "negative"
+        }
+      ],
+      "inputs": {
+        "pick": 36,
+        "pass": 77.9,
+        "run": 60.4,
+        "scrambles": 26,
+        "btt": 4.4,
+        "twp": 3.7,
+        "attempts": 456,
+        "rawBtt": 20,
+        "rawTwp": 17,
+        "acc": 76.4,
+        "adot": 7.9,
+        "epa": 0.1,
+        "pffSeason": 2025
+      },
+      "primaryComp": null,
+      "status": "read-only / not applied to ranking",
+      "source": "public/data/prospects_2026_qb.json"
+    },
+    {
+      "year": 2026,
+      "pos": "QB",
+      "name": "Chandler Morris",
+      "school": "VIRGINIA",
+      "adjustment": -0.25,
+      "traits": [
+        {
+          "label": "High-capital low-creation risk",
+          "scoreImpact": true,
+          "direction": "negative"
+        }
+      ],
+      "inputs": {
+        "pick": 37,
+        "pass": 73.7,
+        "run": 73,
+        "scrambles": 27,
+        "btt": 3.9,
+        "twp": 3.2,
+        "attempts": 437,
+        "rawBtt": 17,
+        "rawTwp": 14,
+        "acc": 73.1,
+        "adot": 7.7,
+        "epa": 0.1,
+        "pffSeason": 2025
+      },
+      "primaryComp": null,
+      "status": "read-only / not applied to ranking",
+      "source": "public/data/prospects_2026_qb.json"
+    },
+    {
+      "year": 2026,
+      "pos": "QB",
       "name": "Brendon Lewis",
       "school": "MEMPHIS",
-      "adjustment": 0.35,
+      "adjustment": 0.1,
       "traits": [
         {
           "label": "Elite scramble creation",
           "scoreImpact": true,
           "direction": "positive"
+        },
+        {
+          "label": "High-capital low-creation risk",
+          "scoreImpact": true,
+          "direction": "negative"
         }
       ],
       "inputs": {
@@ -468,11 +738,78 @@
         "pass": 75.4,
         "run": 85.9,
         "scrambles": 49,
-        "btt": 16,
-        "twp": 14,
+        "btt": 4.4,
+        "twp": 3.8,
+        "attempts": 367,
+        "rawBtt": 16,
+        "rawTwp": 14,
         "acc": 82.3,
         "adot": 9,
         "epa": 0.1,
+        "pffSeason": 2025
+      },
+      "primaryComp": null,
+      "status": "read-only / not applied to ranking",
+      "source": "public/data/prospects_2026_qb.json"
+    },
+    {
+      "year": 2026,
+      "pos": "QB",
+      "name": "Noah Kim",
+      "school": "E MICHIGAN",
+      "adjustment": -0.25,
+      "traits": [
+        {
+          "label": "High-capital low-creation risk",
+          "scoreImpact": true,
+          "direction": "negative"
+        }
+      ],
+      "inputs": {
+        "pick": 44,
+        "pass": 69.4,
+        "run": 53.2,
+        "scrambles": 22,
+        "btt": 4.2,
+        "twp": 3.7,
+        "attempts": 403,
+        "rawBtt": 17,
+        "rawTwp": 15,
+        "acc": 73.8,
+        "adot": 8.9,
+        "epa": 0.03,
+        "pffSeason": 2025
+      },
+      "primaryComp": null,
+      "status": "read-only / not applied to ranking",
+      "source": "public/data/prospects_2026_qb.json"
+    },
+    {
+      "year": 2026,
+      "pos": "QB",
+      "name": "Malik Washington",
+      "school": "MARYLAND",
+      "adjustment": -0.25,
+      "traits": [
+        {
+          "label": "High-capital low-creation risk",
+          "scoreImpact": true,
+          "direction": "negative"
+        }
+      ],
+      "inputs": {
+        "pick": 50,
+        "pass": 67.6,
+        "run": 72.1,
+        "scrambles": 24,
+        "btt": 3.2,
+        "twp": 3,
+        "attempts": 474,
+        "rawBtt": 15,
+        "rawTwp": 14,
+        "acc": 70.4,
+        "adot": 8,
+        "epa": -0.06,
         "pffSeason": 2025
       },
       "primaryComp": null,
@@ -497,11 +834,78 @@
         "pass": 66.7,
         "run": 57.8,
         "scrambles": 18,
-        "btt": 29,
-        "twp": 19,
+        "btt": 7.3,
+        "twp": 4.8,
+        "attempts": 397,
+        "rawBtt": 29,
+        "rawTwp": 19,
         "acc": 69.1,
         "adot": 12.3,
         "epa": 0.02,
+        "pffSeason": 2025
+      },
+      "primaryComp": null,
+      "status": "read-only / not applied to ranking",
+      "source": "public/data/prospects_2026_qb.json"
+    },
+    {
+      "year": 2026,
+      "pos": "QB",
+      "name": "Evan Simon",
+      "school": "TEMPLE",
+      "adjustment": -0.25,
+      "traits": [
+        {
+          "label": "High-capital low-creation risk",
+          "scoreImpact": true,
+          "direction": "negative"
+        }
+      ],
+      "inputs": {
+        "pick": 56,
+        "pass": 64.5,
+        "run": 64.4,
+        "scrambles": 22,
+        "btt": 4.1,
+        "twp": 11,
+        "attempts": 314,
+        "rawBtt": 13,
+        "rawTwp": 11,
+        "acc": 71.4,
+        "adot": 8.7,
+        "epa": 0.11,
+        "pffSeason": 2025
+      },
+      "primaryComp": null,
+      "status": "read-only / not applied to ranking",
+      "source": "public/data/prospects_2026_qb.json"
+    },
+    {
+      "year": 2026,
+      "pos": "QB",
+      "name": "CJ Bailey",
+      "school": "NC STATE",
+      "adjustment": -0.25,
+      "traits": [
+        {
+          "label": "High-capital low-creation risk",
+          "scoreImpact": true,
+          "direction": "negative"
+        }
+      ],
+      "inputs": {
+        "pick": 57,
+        "pass": 64.1,
+        "run": 68.2,
+        "scrambles": 30,
+        "btt": 3.2,
+        "twp": 4.2,
+        "attempts": 402,
+        "rawBtt": 13,
+        "rawTwp": 17,
+        "acc": 76,
+        "adot": 8.9,
+        "epa": 0.12,
         "pffSeason": 2025
       },
       "primaryComp": null,
@@ -528,6 +932,9 @@
         "scrambles": 6,
         "btt": 9,
         "twp": 9,
+        "attempts": 122,
+        "rawBtt": 9,
+        "rawTwp": 9,
         "acc": 69.4,
         "adot": 12,
         "epa": 0.36,
@@ -555,8 +962,11 @@
         "pass": 68.5,
         "run": 76,
         "scrambles": 49,
-        "btt": 18,
-        "twp": 13,
+        "btt": 5.1,
+        "twp": 3.7,
+        "attempts": 356,
+        "rawBtt": 18,
+        "rawTwp": 13,
         "acc": 70,
         "adot": 11.2,
         "epa": 0.02,
@@ -586,6 +996,9 @@
         "scrambles": 20,
         "btt": 4,
         "twp": 5,
+        "attempts": 159,
+        "rawBtt": 4,
+        "rawTwp": 5,
         "acc": 72.7,
         "adot": 8.1,
         "epa": 0.06,
@@ -615,6 +1028,9 @@
         "scrambles": 22,
         "btt": 4,
         "twp": 6,
+        "attempts": 155,
+        "rawBtt": 4,
+        "rawTwp": 6,
         "acc": 76.6,
         "adot": 8,
         "epa": 0.03,
@@ -644,6 +1060,9 @@
         "scrambles": 18,
         "btt": 8,
         "twp": 7,
+        "attempts": 160,
+        "rawBtt": 8,
+        "rawTwp": 7,
         "acc": 67.1,
         "adot": 10.7,
         "epa": -0.06,
@@ -671,8 +1090,11 @@
         "pass": 67.2,
         "run": 68.4,
         "scrambles": 16,
-        "btt": 25,
-        "twp": 21,
+        "btt": 5,
+        "twp": 4.2,
+        "attempts": 505,
+        "rawBtt": 25,
+        "rawTwp": 21,
         "acc": 67.2,
         "adot": 9.9,
         "epa": 0.01,
@@ -700,8 +1122,11 @@
         "pass": 64.8,
         "run": 68.8,
         "scrambles": 41,
-        "btt": 19,
-        "twp": 17,
+        "btt": 5.9,
+        "twp": 5.3,
+        "attempts": 322,
+        "rawBtt": 19,
+        "rawTwp": 17,
         "acc": 68.5,
         "adot": 7.7,
         "epa": 0.07,
@@ -731,6 +1156,9 @@
         "scrambles": 49,
         "btt": 9,
         "twp": 10,
+        "attempts": 329,
+        "rawBtt": 9,
+        "rawTwp": 10,
         "acc": 73.7,
         "adot": 7.9,
         "epa": -0.06,
@@ -760,6 +1188,9 @@
         "scrambles": 20,
         "btt": 10,
         "twp": 9,
+        "attempts": 180,
+        "rawBtt": 10,
+        "rawTwp": 9,
         "acc": 69.8,
         "adot": 12,
         "epa": 0.03,
@@ -789,6 +1220,9 @@
         "scrambles": 27,
         "btt": 11,
         "twp": 10,
+        "attempts": 213,
+        "rawBtt": 11,
+        "rawTwp": 10,
         "acc": 69.8,
         "adot": 10.7,
         "epa": -0.11,
@@ -816,8 +1250,11 @@
         "pass": 67.4,
         "run": 83.2,
         "scrambles": 28,
-        "btt": 18,
+        "btt": 7.5,
         "twp": 12,
+        "attempts": 239,
+        "rawBtt": 18,
+        "rawTwp": 12,
         "acc": 68.3,
         "adot": 9.1,
         "epa": 0.04,
@@ -845,8 +1282,11 @@
         "pass": 62,
         "run": 54.4,
         "scrambles": 22,
-        "btt": 15,
+        "btt": 6.1,
         "twp": 12,
+        "attempts": 244,
+        "rawBtt": 15,
+        "rawTwp": 12,
         "acc": 65.5,
         "adot": 10.9,
         "epa": 0,
@@ -876,6 +1316,9 @@
         "scrambles": 29,
         "btt": 7,
         "twp": 10,
+        "attempts": 217,
+        "rawBtt": 7,
+        "rawTwp": 10,
         "acc": 68.3,
         "adot": 11.4,
         "epa": 0.09,
@@ -903,8 +1346,11 @@
         "pass": 71.4,
         "run": 75,
         "scrambles": 26,
-        "btt": 16,
-        "twp": 13,
+        "btt": 5.5,
+        "twp": 4.5,
+        "attempts": 291,
+        "rawBtt": 16,
+        "rawTwp": 13,
         "acc": 65.1,
         "adot": 13.3,
         "epa": 0.17,
@@ -933,8 +1379,11 @@
         "pass": 86.3,
         "run": 76.9,
         "scrambles": 34,
-        "btt": 23,
+        "btt": 6.8,
         "twp": 7,
+        "attempts": 336,
+        "rawBtt": 23,
+        "rawTwp": 7,
         "acc": 71,
         "adot": 10.6,
         "epa": 0.24,
@@ -943,7 +1392,7 @@
       "primaryComp": {
         "name": "Patrick Mahomes",
         "archetype": "Top-32 creation plus",
-        "distance": 4.73
+        "distance": 2.7
       },
       "status": "read-only / not applied to ranking",
       "source": "public/data/prospects_2027_qb.json"
@@ -972,8 +1421,11 @@
         "pass": 85.7,
         "run": 86.2,
         "scrambles": 46,
-        "btt": 21,
+        "btt": 6.1,
         "twp": 11,
+        "attempts": 342,
+        "rawBtt": 21,
+        "rawTwp": 11,
         "acc": 75.6,
         "adot": 9.7,
         "epa": 0.26,
@@ -982,7 +1434,7 @@
       "primaryComp": {
         "name": "Patrick Mahomes",
         "archetype": "Top-32 creation plus",
-        "distance": 3.67
+        "distance": 1.93
       },
       "status": "read-only / not applied to ranking",
       "source": "public/data/prospects_2027_qb.json"
@@ -1006,8 +1458,11 @@
         "pass": 83.3,
         "run": 66.9,
         "scrambles": 35,
-        "btt": 26,
+        "btt": 6.1,
         "twp": 10,
+        "attempts": 429,
+        "rawBtt": 26,
+        "rawTwp": 10,
         "acc": 75.3,
         "adot": 10.2,
         "epa": 0.13,
@@ -1016,7 +1471,7 @@
       "primaryComp": {
         "name": "Patrick Mahomes",
         "archetype": "Top-32 creation plus",
-        "distance": 4.73
+        "distance": 2.37
       },
       "status": "read-only / not applied to ranking",
       "source": "public/data/prospects_2027_qb.json"
@@ -1040,8 +1495,11 @@
         "pass": 82.7,
         "run": 82.7,
         "scrambles": 38,
-        "btt": 28,
-        "twp": 15,
+        "btt": 6.7,
+        "twp": 3.6,
+        "attempts": 418,
+        "rawBtt": 28,
+        "rawTwp": 15,
         "acc": 74.4,
         "adot": 10,
         "epa": 0.2,
@@ -1050,7 +1508,7 @@
       "primaryComp": {
         "name": "Patrick Mahomes",
         "archetype": "Top-32 creation plus",
-        "distance": 5.41
+        "distance": 2.75
       },
       "status": "read-only / not applied to ranking",
       "source": "public/data/prospects_2027_qb.json"
@@ -1074,8 +1532,11 @@
         "pass": 78.6,
         "run": 54.2,
         "scrambles": 35,
-        "btt": 28,
-        "twp": 13,
+        "btt": 6.5,
+        "twp": 3,
+        "attempts": 430,
+        "rawBtt": 28,
+        "rawTwp": 13,
         "acc": 77,
         "adot": 9.4,
         "epa": 0.11,
@@ -1084,7 +1545,43 @@
       "primaryComp": {
         "name": "Dwayne Haskins",
         "archetype": "High-capital low-creation risk",
-        "distance": 4.97
+        "distance": 2.28
+      },
+      "status": "read-only / not applied to ranking",
+      "source": "public/data/prospects_2027_qb.json"
+    },
+    {
+      "year": 2027,
+      "pos": "QB",
+      "name": "Cade Klubnik",
+      "school": "CLEMSON",
+      "adjustment": -0.25,
+      "traits": [
+        {
+          "label": "High-capital low-creation risk",
+          "scoreImpact": true,
+          "direction": "negative"
+        }
+      ],
+      "inputs": {
+        "pick": 17,
+        "pass": 77.4,
+        "run": 57.9,
+        "scrambles": 16,
+        "btt": 4.1,
+        "twp": 10,
+        "attempts": 394,
+        "rawBtt": 16,
+        "rawTwp": 10,
+        "acc": 77.6,
+        "adot": 8.4,
+        "epa": 0.04,
+        "pffSeason": 2025
+      },
+      "primaryComp": {
+        "name": "Dwayne Haskins",
+        "archetype": "High-capital low-creation risk",
+        "distance": 2.5
       },
       "status": "read-only / not applied to ranking",
       "source": "public/data/prospects_2027_qb.json"
@@ -1108,8 +1605,11 @@
         "pass": 76.1,
         "run": 56.4,
         "scrambles": 37,
-        "btt": 25,
+        "btt": 6.3,
         "twp": 12,
+        "attempts": 397,
+        "rawBtt": 25,
+        "rawTwp": 12,
         "acc": 72.1,
         "adot": 10.7,
         "epa": 0.06,
@@ -1118,7 +1618,7 @@
       "primaryComp": {
         "name": "Dwayne Haskins",
         "archetype": "High-capital low-creation risk",
-        "distance": 5.83
+        "distance": 3.5
       },
       "status": "read-only / not applied to ranking",
       "source": "public/data/prospects_2027_qb.json"
@@ -1128,13 +1628,12 @@
       "pos": "QB",
       "name": "Demond Williams Jr.",
       "school": "WASHINGTON",
-      "adjustment": 0,
+      "adjustment": -0.25,
       "traits": [
         {
-          "label": "Top-32 creation plus",
-          "scoreImpact": false,
-          "direction": "positive",
-          "contextOnly": true
+          "label": "High-capital low-creation risk",
+          "scoreImpact": true,
+          "direction": "negative"
         }
       ],
       "inputs": {
@@ -1142,8 +1641,11 @@
         "pass": 74.7,
         "run": 72.4,
         "scrambles": 65,
-        "btt": 14,
+        "btt": 3.9,
         "twp": 10,
+        "attempts": 355,
+        "rawBtt": 14,
+        "rawTwp": 10,
         "acc": 77.4,
         "adot": 9,
         "epa": 0.24,
@@ -1152,7 +1654,43 @@
       "primaryComp": {
         "name": "Patrick Mahomes",
         "archetype": "Top-32 creation plus",
-        "distance": 3.69
+        "distance": 3.1
+      },
+      "status": "read-only / not applied to ranking",
+      "source": "public/data/prospects_2027_qb.json"
+    },
+    {
+      "year": 2027,
+      "pos": "QB",
+      "name": "Gunner Stockton",
+      "school": "GEORGIA",
+      "adjustment": -0.25,
+      "traits": [
+        {
+          "label": "High-capital low-creation risk",
+          "scoreImpact": true,
+          "direction": "negative"
+        }
+      ],
+      "inputs": {
+        "pick": 22,
+        "pass": 80.7,
+        "run": 64.2,
+        "scrambles": 53,
+        "btt": 3.6,
+        "twp": 12,
+        "attempts": 386,
+        "rawBtt": 14,
+        "rawTwp": 12,
+        "acc": 81.2,
+        "adot": 7.3,
+        "epa": 0.15,
+        "pffSeason": 2025
+      },
+      "primaryComp": {
+        "name": "Patrick Mahomes",
+        "archetype": "Top-32 creation plus",
+        "distance": 3.36
       },
       "status": "read-only / not applied to ranking",
       "source": "public/data/prospects_2027_qb.json"
@@ -1176,8 +1714,11 @@
         "pass": 87.6,
         "run": 64.4,
         "scrambles": 32,
-        "btt": 26,
+        "btt": 7,
         "twp": 11,
+        "attempts": 370,
+        "rawBtt": 26,
+        "rawTwp": 11,
         "acc": 70.8,
         "adot": 11.2,
         "epa": 0.11,
@@ -1186,7 +1727,7 @@
       "primaryComp": {
         "name": "Dwayne Haskins",
         "archetype": "High-capital low-creation risk",
-        "distance": 5.65
+        "distance": 3.27
       },
       "status": "read-only / not applied to ranking",
       "source": "public/data/prospects_2027_qb.json"
@@ -1194,33 +1735,107 @@
     {
       "year": 2027,
       "pos": "QB",
-      "name": "Arch Manning",
-      "school": "TEXAS",
-      "adjustment": 0,
+      "name": "Carson Beck",
+      "school": "MIAMI FL",
+      "adjustment": -0.25,
       "traits": [
         {
-          "label": "Top-32 creation plus",
-          "scoreImpact": false,
-          "direction": "positive",
-          "contextOnly": true
+          "label": "High-capital low-creation risk",
+          "scoreImpact": true,
+          "direction": "negative"
         }
       ],
       "inputs": {
-        "pick": 29,
-        "pass": 81,
-        "run": 81.1,
+        "pick": 26,
+        "pass": 75.6,
+        "run": 49.5,
         "scrambles": 32,
-        "btt": 19,
-        "twp": 17,
-        "acc": 73,
-        "adot": 9.7,
-        "epa": 0.14,
+        "btt": 3.4,
+        "twp": 12,
+        "attempts": 469,
+        "rawBtt": 16,
+        "rawTwp": 12,
+        "acc": 79,
+        "adot": 7.6,
+        "epa": 0.22,
         "pffSeason": 2025
       },
       "primaryComp": {
-        "name": "Lamar Jackson",
-        "archetype": "Elite scramble creator",
-        "distance": 4.91
+        "name": "Dwayne Haskins",
+        "archetype": "High-capital low-creation risk",
+        "distance": 2.5
+      },
+      "status": "read-only / not applied to ranking",
+      "source": "public/data/prospects_2027_qb.json"
+    },
+    {
+      "year": 2027,
+      "pos": "QB",
+      "name": "Kevin Jennings",
+      "school": "SMU",
+      "adjustment": -0.25,
+      "traits": [
+        {
+          "label": "High-capital low-creation risk",
+          "scoreImpact": true,
+          "direction": "negative"
+        }
+      ],
+      "inputs": {
+        "pick": 31,
+        "pass": 77.9,
+        "run": 60.4,
+        "scrambles": 26,
+        "btt": 4.4,
+        "twp": 3.7,
+        "attempts": 456,
+        "rawBtt": 20,
+        "rawTwp": 17,
+        "acc": 76.4,
+        "adot": 7.9,
+        "epa": 0.1,
+        "pffSeason": 2025
+      },
+      "primaryComp": {
+        "name": "Dwayne Haskins",
+        "archetype": "High-capital low-creation risk",
+        "distance": 1.96
+      },
+      "status": "read-only / not applied to ranking",
+      "source": "public/data/prospects_2027_qb.json"
+    },
+    {
+      "year": 2027,
+      "pos": "QB",
+      "name": "Chandler Morris",
+      "school": "VIRGINIA",
+      "adjustment": -0.25,
+      "traits": [
+        {
+          "label": "High-capital low-creation risk",
+          "scoreImpact": true,
+          "direction": "negative"
+        }
+      ],
+      "inputs": {
+        "pick": 32,
+        "pass": 73.7,
+        "run": 73,
+        "scrambles": 27,
+        "btt": 3.9,
+        "twp": 3.2,
+        "attempts": 437,
+        "rawBtt": 17,
+        "rawTwp": 14,
+        "acc": 73.1,
+        "adot": 7.7,
+        "epa": 0.1,
+        "pffSeason": 2025
+      },
+      "primaryComp": {
+        "name": "Paxton Lynch",
+        "archetype": "Safe-limited low-creation risk",
+        "distance": 2.93
       },
       "status": "read-only / not applied to ranking",
       "source": "public/data/prospects_2027_qb.json"
@@ -1230,12 +1845,17 @@
       "pos": "QB",
       "name": "Brendon Lewis",
       "school": "MEMPHIS",
-      "adjustment": 0.35,
+      "adjustment": 0.1,
       "traits": [
         {
           "label": "Elite scramble creation",
           "scoreImpact": true,
           "direction": "positive"
+        },
+        {
+          "label": "High-capital low-creation risk",
+          "scoreImpact": true,
+          "direction": "negative"
         }
       ],
       "inputs": {
@@ -1243,8 +1863,11 @@
         "pass": 75.4,
         "run": 85.9,
         "scrambles": 49,
-        "btt": 16,
-        "twp": 14,
+        "btt": 4.4,
+        "twp": 3.8,
+        "attempts": 367,
+        "rawBtt": 16,
+        "rawTwp": 14,
         "acc": 82.3,
         "adot": 9,
         "epa": 0.1,
@@ -1253,7 +1876,79 @@
       "primaryComp": {
         "name": "Lamar Jackson",
         "archetype": "Elite scramble creator",
-        "distance": 3.98
+        "distance": 2.53
+      },
+      "status": "read-only / not applied to ranking",
+      "source": "public/data/prospects_2027_qb.json"
+    },
+    {
+      "year": 2027,
+      "pos": "QB",
+      "name": "Noah Kim",
+      "school": "E MICHIGAN",
+      "adjustment": -0.25,
+      "traits": [
+        {
+          "label": "High-capital low-creation risk",
+          "scoreImpact": true,
+          "direction": "negative"
+        }
+      ],
+      "inputs": {
+        "pick": 39,
+        "pass": 69.4,
+        "run": 53.2,
+        "scrambles": 22,
+        "btt": 4.2,
+        "twp": 3.7,
+        "attempts": 403,
+        "rawBtt": 17,
+        "rawTwp": 15,
+        "acc": 73.8,
+        "adot": 8.9,
+        "epa": 0.03,
+        "pffSeason": 2025
+      },
+      "primaryComp": {
+        "name": "Christian Hackenberg",
+        "archetype": "Day-2 low pass/accuracy risk",
+        "distance": 2.77
+      },
+      "status": "read-only / not applied to ranking",
+      "source": "public/data/prospects_2027_qb.json"
+    },
+    {
+      "year": 2027,
+      "pos": "QB",
+      "name": "Malik Washington",
+      "school": "MARYLAND",
+      "adjustment": -0.25,
+      "traits": [
+        {
+          "label": "High-capital low-creation risk",
+          "scoreImpact": true,
+          "direction": "negative"
+        }
+      ],
+      "inputs": {
+        "pick": 46,
+        "pass": 67.6,
+        "run": 72.1,
+        "scrambles": 24,
+        "btt": 3.2,
+        "twp": 3,
+        "attempts": 474,
+        "rawBtt": 15,
+        "rawTwp": 14,
+        "acc": 70.4,
+        "adot": 8,
+        "epa": -0.06,
+        "pffSeason": 2025
+      },
+      "primaryComp": {
+        "name": "Christian Hackenberg",
+        "archetype": "Day-2 low pass/accuracy risk",
+        "distance": 3.55
       },
       "status": "read-only / not applied to ranking",
       "source": "public/data/prospects_2027_qb.json"
@@ -1276,8 +1971,11 @@
         "pass": 66.7,
         "run": 57.8,
         "scrambles": 18,
-        "btt": 29,
-        "twp": 19,
+        "btt": 7.3,
+        "twp": 4.8,
+        "attempts": 397,
+        "rawBtt": 29,
+        "rawTwp": 19,
         "acc": 69.1,
         "adot": 12.3,
         "epa": 0.02,
@@ -1286,7 +1984,79 @@
       "primaryComp": {
         "name": "Christian Hackenberg",
         "archetype": "Day-2 low pass/accuracy risk",
-        "distance": 6
+        "distance": 3.29
+      },
+      "status": "read-only / not applied to ranking",
+      "source": "public/data/prospects_2027_qb.json"
+    },
+    {
+      "year": 2027,
+      "pos": "QB",
+      "name": "Evan Simon",
+      "school": "TEMPLE",
+      "adjustment": -0.25,
+      "traits": [
+        {
+          "label": "High-capital low-creation risk",
+          "scoreImpact": true,
+          "direction": "negative"
+        }
+      ],
+      "inputs": {
+        "pick": 51,
+        "pass": 64.5,
+        "run": 64.4,
+        "scrambles": 22,
+        "btt": 4.1,
+        "twp": 11,
+        "attempts": 314,
+        "rawBtt": 13,
+        "rawTwp": 11,
+        "acc": 71.4,
+        "adot": 8.7,
+        "epa": 0.11,
+        "pffSeason": 2025
+      },
+      "primaryComp": {
+        "name": "Christian Hackenberg",
+        "archetype": "Day-2 low pass/accuracy risk",
+        "distance": 3.06
+      },
+      "status": "read-only / not applied to ranking",
+      "source": "public/data/prospects_2027_qb.json"
+    },
+    {
+      "year": 2027,
+      "pos": "QB",
+      "name": "CJ Bailey",
+      "school": "NC STATE",
+      "adjustment": -0.25,
+      "traits": [
+        {
+          "label": "High-capital low-creation risk",
+          "scoreImpact": true,
+          "direction": "negative"
+        }
+      ],
+      "inputs": {
+        "pick": 52,
+        "pass": 64.1,
+        "run": 68.2,
+        "scrambles": 30,
+        "btt": 3.2,
+        "twp": 4.2,
+        "attempts": 402,
+        "rawBtt": 13,
+        "rawTwp": 17,
+        "acc": 76,
+        "adot": 8.9,
+        "epa": 0.12,
+        "pffSeason": 2025
+      },
+      "primaryComp": {
+        "name": "Paxton Lynch",
+        "archetype": "Safe-limited low-creation risk",
+        "distance": 3.37
       },
       "status": "read-only / not applied to ranking",
       "source": "public/data/prospects_2027_qb.json"
@@ -1311,6 +2081,9 @@
         "scrambles": 6,
         "btt": 9,
         "twp": 9,
+        "attempts": 122,
+        "rawBtt": 9,
+        "rawTwp": 9,
         "acc": 69.4,
         "adot": 12,
         "epa": 0.36,
@@ -1342,8 +2115,11 @@
         "pass": 68.5,
         "run": 76,
         "scrambles": 49,
-        "btt": 18,
-        "twp": 13,
+        "btt": 5.1,
+        "twp": 3.7,
+        "attempts": 356,
+        "rawBtt": 18,
+        "rawTwp": 13,
         "acc": 70,
         "adot": 11.2,
         "epa": 0.02,
@@ -1352,7 +2128,7 @@
       "primaryComp": {
         "name": "Lamar Jackson",
         "archetype": "Elite scramble creator",
-        "distance": 4.18
+        "distance": 2.57
       },
       "status": "read-only / not applied to ranking",
       "source": "public/data/prospects_2027_qb.json"
@@ -1377,6 +2153,9 @@
         "scrambles": 20,
         "btt": 4,
         "twp": 5,
+        "attempts": 159,
+        "rawBtt": 4,
+        "rawTwp": 5,
         "acc": 72.7,
         "adot": 8.1,
         "epa": 0.06,
@@ -1410,6 +2189,9 @@
         "scrambles": 22,
         "btt": 4,
         "twp": 6,
+        "attempts": 155,
+        "rawBtt": 4,
+        "rawTwp": 6,
         "acc": 76.6,
         "adot": 8,
         "epa": 0.03,
@@ -1443,6 +2225,9 @@
         "scrambles": 13,
         "btt": 4,
         "twp": 5,
+        "attempts": 179,
+        "rawBtt": 4,
+        "rawTwp": 5,
         "acc": 80.1,
         "adot": 7.2,
         "epa": 0.11,
@@ -1452,6 +2237,42 @@
         "name": "Paxton Lynch",
         "archetype": "Safe-limited low-creation risk",
         "distance": 3.76
+      },
+      "status": "read-only / not applied to ranking",
+      "source": "public/data/prospects_2027_qb.json"
+    },
+    {
+      "year": 2027,
+      "pos": "QB",
+      "name": "Caden Veltkamp",
+      "school": "FAU",
+      "adjustment": -0.25,
+      "traits": [
+        {
+          "label": "High-capital low-creation risk",
+          "scoreImpact": true,
+          "direction": "negative"
+        }
+      ],
+      "inputs": {
+        "pick": 61,
+        "pass": 73.6,
+        "run": 54.1,
+        "scrambles": 20,
+        "btt": 4.5,
+        "twp": 4.7,
+        "attempts": 512,
+        "rawBtt": 23,
+        "rawTwp": 24,
+        "acc": 75.3,
+        "adot": 7.6,
+        "epa": 0.06,
+        "pffSeason": 2025
+      },
+      "primaryComp": {
+        "name": "Paxton Lynch",
+        "archetype": "Safe-limited low-creation risk",
+        "distance": 3.13
       },
       "status": "read-only / not applied to ranking",
       "source": "public/data/prospects_2027_qb.json"
@@ -1476,6 +2297,9 @@
         "scrambles": 18,
         "btt": 8,
         "twp": 7,
+        "attempts": 160,
+        "rawBtt": 8,
+        "rawTwp": 7,
         "acc": 67.1,
         "adot": 10.7,
         "epa": -0.06,
@@ -1507,8 +2331,11 @@
         "pass": 67.2,
         "run": 68.4,
         "scrambles": 16,
-        "btt": 25,
-        "twp": 21,
+        "btt": 5,
+        "twp": 4.2,
+        "attempts": 505,
+        "rawBtt": 25,
+        "rawTwp": 21,
         "acc": 67.2,
         "adot": 9.9,
         "epa": 0.01,
@@ -1517,7 +2344,7 @@
       "primaryComp": {
         "name": "Christian Hackenberg",
         "archetype": "Day-2 low pass/accuracy risk",
-        "distance": 5.69
+        "distance": 3.19
       },
       "status": "read-only / not applied to ranking",
       "source": "public/data/prospects_2027_qb.json"
@@ -1542,6 +2369,9 @@
         "scrambles": 49,
         "btt": 9,
         "twp": 10,
+        "attempts": 329,
+        "rawBtt": 9,
+        "rawTwp": 10,
         "acc": 73.7,
         "adot": 7.9,
         "epa": -0.06,
@@ -1573,8 +2403,11 @@
         "pass": 64.8,
         "run": 68.8,
         "scrambles": 41,
-        "btt": 19,
-        "twp": 17,
+        "btt": 5.9,
+        "twp": 5.3,
+        "attempts": 322,
+        "rawBtt": 19,
+        "rawTwp": 17,
         "acc": 68.5,
         "adot": 7.7,
         "epa": 0.07,
@@ -1583,7 +2416,7 @@
       "primaryComp": {
         "name": "Patrick Mahomes",
         "archetype": "Top-32 creation plus",
-        "distance": 6.04
+        "distance": 4.57
       },
       "status": "read-only / not applied to ranking",
       "source": "public/data/prospects_2027_qb.json"
@@ -1608,6 +2441,9 @@
         "scrambles": 20,
         "btt": 10,
         "twp": 9,
+        "attempts": 180,
+        "rawBtt": 10,
+        "rawTwp": 9,
         "acc": 69.8,
         "adot": 12,
         "epa": 0.03,
@@ -1641,6 +2477,9 @@
         "scrambles": 27,
         "btt": 11,
         "twp": 10,
+        "attempts": 213,
+        "rawBtt": 11,
+        "rawTwp": 10,
         "acc": 69.8,
         "adot": 10.7,
         "epa": -0.11,
@@ -1672,8 +2511,11 @@
         "pass": 67.4,
         "run": 83.2,
         "scrambles": 28,
-        "btt": 18,
+        "btt": 7.5,
         "twp": 12,
+        "attempts": 239,
+        "rawBtt": 18,
+        "rawTwp": 12,
         "acc": 68.3,
         "adot": 9.1,
         "epa": 0.04,
@@ -1682,7 +2524,7 @@
       "primaryComp": {
         "name": "Lamar Jackson",
         "archetype": "Elite scramble creator",
-        "distance": 5.76
+        "distance": 4.44
       },
       "status": "read-only / not applied to ranking",
       "source": "public/data/prospects_2027_qb.json"
@@ -1705,8 +2547,11 @@
         "pass": 62,
         "run": 54.4,
         "scrambles": 22,
-        "btt": 15,
+        "btt": 6.1,
         "twp": 12,
+        "attempts": 244,
+        "rawBtt": 15,
+        "rawTwp": 12,
         "acc": 65.5,
         "adot": 10.9,
         "epa": 0,
@@ -1715,7 +2560,7 @@
       "primaryComp": {
         "name": "Christian Hackenberg",
         "archetype": "Day-2 low pass/accuracy risk",
-        "distance": 2.58
+        "distance": 1.47
       },
       "status": "read-only / not applied to ranking",
       "source": "public/data/prospects_2027_qb.json"
@@ -1740,6 +2585,9 @@
         "scrambles": 29,
         "btt": 7,
         "twp": 10,
+        "attempts": 217,
+        "rawBtt": 7,
+        "rawTwp": 10,
         "acc": 68.3,
         "adot": 11.4,
         "epa": 0.09,
@@ -1771,8 +2619,11 @@
         "pass": 71.4,
         "run": 75,
         "scrambles": 26,
-        "btt": 16,
-        "twp": 13,
+        "btt": 5.5,
+        "twp": 4.5,
+        "attempts": 291,
+        "rawBtt": 16,
+        "rawTwp": 13,
         "acc": 65.1,
         "adot": 13.3,
         "epa": 0.17,
@@ -1781,7 +2632,7 @@
       "primaryComp": {
         "name": "Lamar Jackson",
         "archetype": "Elite scramble creator",
-        "distance": 5.92
+        "distance": 4.61
       },
       "status": "read-only / not applied to ranking",
       "source": "public/data/prospects_2027_qb.json"
@@ -1804,8 +2655,11 @@
         "pass": 61.1,
         "run": 75.3,
         "scrambles": 51,
-        "btt": 16,
-        "twp": 19,
+        "btt": 5.2,
+        "twp": 6.2,
+        "attempts": 308,
+        "rawBtt": 16,
+        "rawTwp": 19,
         "acc": 70.8,
         "adot": 10.9,
         "epa": 0.06,
@@ -1814,7 +2668,7 @@
       "primaryComp": {
         "name": "Lamar Jackson",
         "archetype": "Elite scramble creator",
-        "distance": 4.34
+        "distance": 2.99
       },
       "status": "read-only / not applied to ranking",
       "source": "public/data/prospects_2027_qb.json"
@@ -1839,6 +2693,9 @@
         "scrambles": 19,
         "btt": 5,
         "twp": 7,
+        "attempts": 220,
+        "rawBtt": 5,
+        "rawTwp": 7,
         "acc": 64.6,
         "adot": 9.3,
         "epa": -0.32,
@@ -1872,6 +2729,9 @@
         "scrambles": 28,
         "btt": 5,
         "twp": 5,
+        "attempts": 130,
+        "rawBtt": 5,
+        "rawTwp": 5,
         "acc": 67.2,
         "adot": 7.9,
         "epa": -0.32,

@@ -85,8 +85,15 @@ function qbSignal(prospect, pff) {
   const pass = val(pff, ['pass', 'passGrade', 'pass_grade', 'grades_pass', 'pff'], 0);
   const run = val(pff, ['run', 'runGrade', 'run_grade', 'grades_run'], 0);
   const scrambles = val(pff, ['scrambles'], 0);
-  const btt = val(pff, ['btt', 'bttPct', 'btt_rate', 'btt_pct', 'btt%'], 0);
-  const twp = val(pff, ['twp', 'twpPct', 'twp_rate', 'twp_pct', 'twp%'], 0);
+  const attempts = val(pff, ['attempts', 'dropbacks'], 0);
+
+  const rawBtt = val(pff, ['btt', 'bttPct', 'btt_rate', 'btt_pct', 'btt%'], 0);
+  const rawTwp = val(pff, ['twp', 'twpPct', 'twp_rate', 'twp_pct', 'twp%'], 0);
+
+  // Historical backtest uses BTT/TWP rates. Some current/future PFF rows store raw counts.
+  const btt = rawBtt > 12 && attempts > 0 ? (rawBtt / attempts) * 100 : rawBtt;
+  const twp = rawTwp > 12 && attempts > 0 ? (rawTwp / attempts) * 100 : rawTwp;
+
   const acc = val(pff, ['acc', 'adjustedAccuracy', 'adjusted_completion_percent', 'accuracy_percent', 'adjustedCompletionPercent'], 0);
   const adot = val(pff, ['adot', 'avgDepthOfTarget', 'avg_depth_of_target'], 0);
   const epa = val(pff, ['epa', 'epa_per_play'], 0);
@@ -159,8 +166,11 @@ function qbSignal(prospect, pff) {
       pass,
       run,
       scrambles,
-      btt,
-      twp,
+      btt: Number(btt.toFixed(1)),
+      twp: Number(twp.toFixed(1)),
+      attempts,
+      rawBtt,
+      rawTwp,
       acc,
       adot,
       epa,
