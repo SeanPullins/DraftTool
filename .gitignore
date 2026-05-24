@@ -24,3 +24,10 @@ scripts/build-pff-comparison-data.mjs
 package-lock.json
 .claude/
 /public/data/model/qb_advanced_pff_all.json
+
+# Local research artifacts
+/tmp/
+/backups/
+wr_pff_files.zip
+wr_pff_seasons.json
+public/data/model/qb_advanced_pff_all.json
