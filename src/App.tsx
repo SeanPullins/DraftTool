@@ -2797,6 +2797,57 @@ function buildLatestPffSeasonMap(seasons: any[]) {
 
 
 function ClassExplorer({ pool, history, pffProfiles, pffLookup, y1Data, careerStats, histFlagMap, currentName, currentYear, saved, projectionOverlay, compSignalMap, rbScoreReadyMap, qbTranslationMap, qbPffSeasons, wrPffSeasons, tePffSeasons, rbPffSeasons }: { pool: Historical[]; history: Historical[]; pffProfiles: PffProfile[]; pffLookup: Map<string, PffProfile>; y1Data?: Y1Data; careerStats?: CareerStatMap; histFlagMap: Map<string, HistoricalOutcomeFlag>; currentName: string; currentYear: number; saved: SavedProspect[]; projectionOverlay: Map<string, PositionProjectionOverlay>; compSignalMap: Map<string, PositionCompSignal>; rbScoreReadyMap: Map<string, RbScoreReadySignal>; qbTranslationMap: Map<string, QbTranslationSignal>; qbPffSeasons: QbPffSeason[]; wrPffSeasons: WrPffSeason[]; tePffSeasons: any[]; rbPffSeasons: any[]; }) {
+  const [qbV102ScoreMap, setQbV102ScoreMap] = useState<Map<string, any>>(new Map())
+
+  useEffect(() => {
+    let cancelled = false
+    const base = import.meta.env.BASE_URL || '/'
+    fetch(`${base}data/model/qb_realistic_projection_v10_2.json`)
+      .then((r) => r.json())
+      .then((payload) => {
+        if (cancelled) return
+        const map = new Map<string, any>()
+        const rows = [
+          ...((payload?.current || []) as any[]),
+          ...((payload?.historic || []) as any[]),
+        ]
+
+        rows.forEach((row: any) => {
+          const name = row?.name
+          const year = Number(row?.year || row?.draftYear)
+          if (!name || !Number.isFinite(year)) return
+
+          map.set(projectionOverlayKey(year, 'QB', name), row)
+        })
+
+        setQbV102ScoreMap(map)
+      })
+      .catch(() => {
+        if (!cancelled) setQbV102ScoreMap(new Map())
+      })
+
+    return () => { cancelled = true }
+  }, [])
+
+  const getQbV102Row = (player: any) => {
+    const pos = String(player?.pos || player?.position || '').toUpperCase()
+    if (pos !== 'QB') return null
+
+    const years = [
+      Number(player?.year),
+      Number(player?.draftYear),
+      Number(player?.draftSeason),
+      Number(currentYear),
+    ].filter((y) => Number.isFinite(y))
+
+    for (const year of years) {
+      const row = qbV102ScoreMap.get(projectionOverlayKey(year, 'QB', player?.name))
+      if (row) return row
+    }
+
+    return null
+  }
+
   const years = useMemo(() => {
     const set = new Set<number>()
     for (const player of pool) set.add(player.year)
