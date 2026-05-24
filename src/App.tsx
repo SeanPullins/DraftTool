@@ -797,6 +797,7 @@ export default function App() {
           <p>NFL Draft Intelligence</p>
         </div>
         
+{page === 'guide' && (
 <section className="panel qbGuidePanel">
   <div className="panelHeader">
     <h2>QB Model Guide</h2>
@@ -811,6 +812,7 @@ export default function App() {
     ))}
   </div>
 </section>
+)}
 
 <div className="dataPills">
           <span>{loading ? 'Loading…' : `${prospects.length.toLocaleString()} comps`}</span>

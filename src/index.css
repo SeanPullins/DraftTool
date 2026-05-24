@@ -194,3 +194,206 @@
     border-radius: 18px;
   }
 }
+
+/* === DraftLens UI cleanup patch === */
+
+:root {
+  --dl-bg: #f4f7fb;
+  --dl-card: #ffffff;
+  --dl-border: rgba(15, 23, 42, 0.12);
+  --dl-muted: #64748b;
+  --dl-dark-card: #102a52;
+  --dl-dark-card-2: #163765;
+}
+
+/* Keep guide/help content from floating awkwardly over the workbench */
+.qbGuidePanel {
+  margin: 16px auto;
+  max-width: 1120px;
+  border: 1px solid var(--dl-border);
+  border-radius: 18px;
+  background: var(--dl-card);
+  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.08);
+  padding: 18px;
+}
+
+.qbGuidePanel .panelHeader {
+  margin-bottom: 14px;
+}
+
+.qbGuidePanel .panelHeader h2 {
+  margin: 0 0 4px;
+  font-size: 1.25rem;
+  line-height: 1.2;
+}
+
+.qbGuidePanel .panelHeader p {
+  margin: 0;
+  color: var(--dl-muted);
+  font-size: 0.95rem;
+}
+
+.guideGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.guideCard {
+  border: 1px solid var(--dl-border);
+  border-radius: 14px;
+  background: rgba(248, 250, 252, 0.96);
+  padding: 14px;
+}
+
+.guideCard h3 {
+  margin: 0 0 7px;
+  font-size: 0.98rem;
+}
+
+.guideCard p {
+  margin: 0;
+  color: #475569;
+  line-height: 1.45;
+  font-size: 0.93rem;
+}
+
+/* Workbench should breathe */
+.workbench,
+.workbenchGrid,
+.mainGrid,
+.appGrid {
+  gap: 18px;
+}
+
+/* Make left loader/editor less visually dominant */
+.playerLoader,
+.loaderPanel,
+.sidebarPanel,
+.prospectEditor,
+.panel {
+  border-radius: 18px;
+}
+
+/* Modal cleanup */
+.modal,
+.playerModal,
+.explainModal,
+.cardModal {
+  max-width: min(1040px, calc(100vw - 48px));
+  max-height: calc(100vh - 64px);
+  overflow: auto;
+  border-radius: 18px;
+}
+
+.modalOverlay,
+.overlay,
+.dialogOverlay {
+  padding: 24px;
+  align-items: center;
+}
+
+/* The big card inside modal should not stretch edge-to-edge */
+.modal .card,
+.playerModal .card,
+.explainModal .card,
+.cardModal .card {
+  max-width: 980px;
+  margin: 0 auto;
+}
+
+/* Score ring area */
+.scoreRing,
+.scoreDonut,
+.scoreCircle {
+  flex-shrink: 0;
+}
+
+/* Alert boxes: make them readable, not overwhelming */
+.alertBox,
+.missPatternAlert,
+.hiddenGemSignal,
+.signalBox {
+  border-radius: 10px;
+  padding: 12px 14px;
+  line-height: 1.4;
+}
+
+.missPatternAlert,
+.alert-danger {
+  background: rgba(127, 29, 29, 0.22);
+}
+
+.hiddenGemSignal,
+.alert-success {
+  background: rgba(6, 95, 70, 0.22);
+}
+
+/* Prevent long comp/signal text from making panels enormous */
+.alertBox p,
+.alertBox li,
+.missPatternAlert p,
+.hiddenGemSignal p,
+.signalBox p {
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+
+/* Current top nav should stay compact */
+.topNav,
+.navTabs,
+.mainTabs {
+  align-items: center;
+  gap: 6px;
+}
+
+.topNav a,
+.navTabs a,
+.mainTabs a,
+.topNav button,
+.navTabs button,
+.mainTabs button {
+  white-space: nowrap;
+}
+
+/* Responsive cleanup */
+@media (max-width: 980px) {
+  .guideGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .qbGuidePanel {
+    margin: 12px;
+  }
+
+  .modal,
+  .playerModal,
+  .explainModal,
+  .cardModal {
+    max-width: calc(100vw - 24px);
+    max-height: calc(100vh - 24px);
+  }
+
+  .modalOverlay,
+  .overlay,
+  .dialogOverlay {
+    padding: 12px;
+  }
+}
+
+@media (max-width: 760px) {
+  .workbench,
+  .workbenchGrid,
+  .mainGrid,
+  .appGrid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .topNav,
+  .navTabs,
+  .mainTabs {
+    overflow-x: auto;
+    padding-bottom: 4px;
+  }
+}
+
