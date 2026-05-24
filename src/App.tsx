@@ -3223,6 +3223,7 @@ function ClassExplorer({ pool, history, pffProfiles, pffLookup, y1Data, careerSt
                   const playerAny = player as any
                   const isQb = String(playerAny.pos || '').toUpperCase() === 'QB'
                   const qbScore = Number(playerAny.qbProjectionScore)
+                  const qbV102 = getQbV102Row(playerAny)
                   const qbV102Score = Number(qbV102?.realisticProjectionScoreV10_2 ?? qbScore)
                   const displayScore = isQb && Number.isFinite(qbV102Score)
                     ? qbV102Score
