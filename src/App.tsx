@@ -3223,8 +3223,9 @@ function ClassExplorer({ pool, history, pffProfiles, pffLookup, y1Data, careerSt
                   const playerAny = player as any
                   const isQb = String(playerAny.pos || '').toUpperCase() === 'QB'
                   const qbScore = Number(playerAny.qbProjectionScore)
-                  const displayScore = isQb && Number.isFinite(qbScore)
-                    ? qbScore
+                  const qbV102Score = Number(qbV102?.realisticProjectionScoreV10_2 ?? qbScore)
+                  const displayScore = isQb && Number.isFinite(qbV102Score)
+                    ? qbV102Score
                     : v57?.v57Percentile != null
                       ? Number(v57.v57Percentile)
                       : (projected ? projected.score : null)
