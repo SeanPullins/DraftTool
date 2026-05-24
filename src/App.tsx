@@ -826,7 +826,7 @@ export default function App() {
     </div>
 
     {error ? <section className="panel empty">{error}</section> : page === 'class' ? <div className="classPage">
-      <ClassExplorer pool={lookupPool} history={prospects} pffProfiles={pffProfiles} pffLookup={pffLookup} y1Data={y1Data} careerStats={careerStats} histFlagMap={histFlagMap} currentName={input.name} currentYear={input.draftSeason} saved={saved} projectionOverlay={projectionOverlay} compSignalMap={compSignalMap} rbScoreReadyMap={rbScoreReadyMap} qbPffSeasons={qbPffSeasons} wrPffSeasons={wrPffSeasons} tePffSeasons={tePffSeasons} rbPffSeasons={rbPffSeasons} />
+      <ClassExplorer pool={lookupPool} history={prospects} pffProfiles={pffProfiles} pffLookup={pffLookup} y1Data={y1Data} careerStats={careerStats} histFlagMap={histFlagMap} currentName={input.name} currentYear={input.draftSeason} saved={saved} projectionOverlay={projectionOverlay} compSignalMap={compSignalMap} rbScoreReadyMap={rbScoreReadyMap} qbTranslationMap={qbTranslationMap} qbPffSeasons={qbPffSeasons} wrPffSeasons={wrPffSeasons} tePffSeasons={tePffSeasons} rbPffSeasons={rbPffSeasons} />
     </div> : page === 'players' ? <div className="classPage">
       <PlayerBrowser pool={lookupPool} history={prospects} histFlagMap={histFlagMap} onOpenModal={openModal} onCompare={handleCompare} />
     </div> : page === 'compare' ? <div className="classPage">
@@ -2662,7 +2662,7 @@ function buildLatestPffSeasonMap(seasons: any[]) {
 }
 
 
-function ClassExplorer({ pool, history, pffProfiles, pffLookup, y1Data, careerStats, histFlagMap, currentName, currentYear, saved, projectionOverlay, compSignalMap, rbScoreReadyMap, qbPffSeasons, wrPffSeasons, tePffSeasons, rbPffSeasons }: { pool: Historical[]; history: Historical[]; pffProfiles: PffProfile[]; pffLookup: Map<string, PffProfile>; y1Data?: Y1Data; careerStats?: CareerStatMap; histFlagMap: Map<string, HistoricalOutcomeFlag>; currentName: string; currentYear: number; saved: SavedProspect[]; projectionOverlay: Map<string, PositionProjectionOverlay>; compSignalMap: Map<string, PositionCompSignal>; rbScoreReadyMap: Map<string, RbScoreReadySignal>; qbPffSeasons: QbPffSeason[]; wrPffSeasons: WrPffSeason[]; tePffSeasons: any[]; rbPffSeasons: any[]; }) {
+function ClassExplorer({ pool, history, pffProfiles, pffLookup, y1Data, careerStats, histFlagMap, currentName, currentYear, saved, projectionOverlay, compSignalMap, rbScoreReadyMap, qbTranslationMap, qbPffSeasons, wrPffSeasons, tePffSeasons, rbPffSeasons }: { pool: Historical[]; history: Historical[]; pffProfiles: PffProfile[]; pffLookup: Map<string, PffProfile>; y1Data?: Y1Data; careerStats?: CareerStatMap; histFlagMap: Map<string, HistoricalOutcomeFlag>; currentName: string; currentYear: number; saved: SavedProspect[]; projectionOverlay: Map<string, PositionProjectionOverlay>; compSignalMap: Map<string, PositionCompSignal>; rbScoreReadyMap: Map<string, RbScoreReadySignal>; qbTranslationMap: Map<string, QbTranslationSignal>; qbPffSeasons: QbPffSeason[]; wrPffSeasons: WrPffSeason[]; tePffSeasons: any[]; rbPffSeasons: any[]; }) {
   const years = useMemo(() => {
     const set = new Set<number>()
     for (const player of pool) set.add(player.year)
@@ -2999,6 +2999,11 @@ function ClassExplorer({ pool, history, pffProfiles, pffLookup, y1Data, careerSt
                         rbContext: player.pos === 'RB' ? latestRbPffMap.get(pffKey) : null,
                         compSignal: compSignalMap.get(projectionOverlayKey(player.year, player.pos, player.name)) ?? null,
                         rbScoreReadySignal: rbScoreReadyMap.get(projectionOverlayKey(player.year, player.pos, player.name)) ?? null,
+                        qbTranslationSignal:
+                          qbTranslationMap.get(projectionOverlayKey(player.year, player.pos, player.name)) ??
+                          qbTranslationMap.get(projectionOverlayKey(player.year, 'QB', player.name)) ??
+                          qbTranslationMap.get(projectionOverlayKey(currentYear, 'QB', player.name)) ??
+                          null,
                       }))
                     }}
                   >
