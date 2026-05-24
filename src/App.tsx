@@ -2743,7 +2743,7 @@ function PlayerExplanationModal({ explanation, onClose }: { explanation: any; on
           {explanation.compSignal.projectionComps?.length ? <>
             <h4>Projection comps</h4>
             <ul>
-              {explanation.compSignal.projectionComps.slice(0, 1).map((c: any) => (
+              {explanation.compSignal.projectionComps.slice(0, 4).map((c: any) => (
                 <li key={`proj-${c.name}-${c.year}`}>{c.name} {c.year} · Pick #{c.pick} · Δ{Number(c.delta || 0).toFixed(1)}</li>
               ))}
             </ul>
@@ -2751,7 +2751,7 @@ function PlayerExplanationModal({ explanation, onClose }: { explanation: any; on
           {explanation.compSignal.styleComps?.length ? <>
             <h4>Style comps</h4>
             <ul>
-              {explanation.compSignal.styleComps.slice(0, 1).map((c: any) => (
+              {explanation.compSignal.styleComps.slice(0, 4).map((c: any) => (
                 <li key={`style-${c.name}-${c.year}`}>{c.name} {c.year} · Pick #{c.pick} · Δ{Number(c.delta || 0).toFixed(1)}</li>
               ))}
             </ul>
@@ -3131,10 +3131,7 @@ function ClassExplorer({ pool, history, pffProfiles, pffLookup, y1Data, careerSt
                         wrContext: player.pos === 'WR' ? latestWrPffMap.get(pffKey) : null,
                         teContext: player.pos === 'TE' ? latestTePffMap.get(pffKey) : null,
                         rbContext: player.pos === 'RB' ? latestRbPffMap.get(pffKey) : null,
-                        compSignal: qbSinglePrimaryCompSignal(
-                          player,
-                          compSignalMap.get(projectionOverlayKey(player.year, player.pos, player.name)) ?? null
-                        ),
+                        compSignal: compSignalMap.get(projectionOverlayKey(player.year, player.pos, player.name)) ?? null,
                         rbScoreReadySignal: rbScoreReadyMap.get(projectionOverlayKey(player.year, player.pos, player.name)) ?? null,
                         qbTranslationSignal:
                           qbTranslationMap.get(projectionOverlayKey(player.year, player.pos, player.name)) ??
@@ -3158,13 +3155,7 @@ function ClassExplorer({ pool, history, pffProfiles, pffLookup, y1Data, careerSt
                 {useProjections ? <td>{projected ? projected.av.toFixed(1) : '-'}</td> : null}
                 {useProjections ? (() => {
                   const v57 = getV57Row(player)
-                  const playerAny = player as any
-                  const isQb = String(playerAny.pos || playerAny.position || '').toUpperCase() === 'QB'
-                  const displayScore = isQb && playerAny.qbProjectionScore != null
-                    ? qbDisplayScore(playerAny)
-                    : v57?.v57Percentile != null
-                      ? Number(v57.v57Percentile)
-                      : (projected ? projected.score : null)
+                  const displayScore = v57?.v57Percentile != null ? Number(v57.v57Percentile) : (projected ? projected.score : null)
                   const delta = v57?.v57Delta != null ? Number(v57.v57Delta) : null
                   const title = v57
                     ? `V5.7P score${delta != null ? ` · Δ ${delta > 0 ? '+' : ''}${delta.toFixed(1)}` : ''}${v57.flag ? ` · ${v57.flag}` : ''}`
@@ -4528,26 +4519,6 @@ function qbRiskLabel(player: any): string {
 function qbRiskTraits(player: any): string[] {
   const traits = player?.qbMissRiskTraits || player?.missRiskTraits || [];
   return Array.isArray(traits) ? traits.map(String).filter(Boolean) : [];
-}
-
-
-function qbSinglePrimaryCompSignal(player: any, existing: any): any {
-  const year = Number(player?.year || player?.draftYear || player?.draftSeason || 0)
-  const pos = String(player?.pos || player?.position || '').toUpperCase()
-
-  if (pos !== 'QB' || year < 2024) return existing
-
-  const comp = qbPrimaryComp(player)
-  if (!comp?.name) return existing
-
-  return {
-    ...(existing || {}),
-    compAdjustment: existing?.compAdjustment ?? 0,
-    confidence: existing?.confidence ?? 1,
-    realDraftPrior: existing?.realDraftPrior ?? true,
-    projectionComps: [comp],
-    styleComps: [],
-  }
 }
 
 function qbPrimaryComp(player: any): any {
