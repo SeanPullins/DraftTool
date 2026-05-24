@@ -14,7 +14,7 @@
     "score": 79,
     "source": "qb_drafted_projection_75_20_5",
     "forecast": {
-      "final": 95,
+      "final": 79,
       "draft": 100,
       "pff": 86,
       "athletic": 50,
@@ -22,7 +22,9 @@
         "draft": 75,
         "pff": 20,
         "athletic": 5
-      }
+      },
+      "modelScore": 79,
+      "projectionScore": 79
     },
     "pff": {
       "season_used": 2022,
@@ -60,7 +62,68 @@
     "qbModelPath": "Strong Outlier Creation Blend",
     "qbTraditionalScore": 76,
     "qbOutlierScore": 80,
-    "modelScore": 79
+    "modelScore": 79,
+    "qbModelScore": 79,
+    "qbScore": 79,
+    "projectedScore": 79,
+    "projectionScore": 79,
+    "finalScore": 79,
+    "displayScore": 79,
+    "overallScore": 79,
+    "valueScore": 79,
+    "primaryQbProfileComp": {
+      "name": "Bryce Young",
+      "year": 2023,
+      "pick": 1,
+      "score": 78.8,
+      "outcome": "Miss",
+      "distance": 0.237,
+      "reason": "Closest historical QB profile by v10.2 score, passing profile, pressure/depth traits, creation, and risk shape."
+    },
+    "projectionComps": [
+      {
+        "name": "Bryce Young",
+        "year": 2023,
+        "pick": 1,
+        "score": 78.8,
+        "outcome": "Miss",
+        "distance": 0.237,
+        "reason": "Closest historical QB profile by v10.2 score, passing profile, pressure/depth traits, creation, and risk shape."
+      }
+    ],
+    "styleComps": [
+      {
+        "name": "Bryce Young",
+        "year": 2023,
+        "pick": 1,
+        "score": 78.8,
+        "outcome": "Miss",
+        "distance": 0.237,
+        "reason": "Closest historical QB profile by v10.2 score, passing profile, pressure/depth traits, creation, and risk shape."
+      }
+    ],
+    "qbComps": [
+      {
+        "name": "Bryce Young",
+        "year": 2023,
+        "pick": 1,
+        "score": 78.8,
+        "outcome": "Miss",
+        "distance": 0.237,
+        "reason": "Closest historical QB profile by v10.2 score, passing profile, pressure/depth traits, creation, and risk shape."
+      }
+    ],
+    "comps": [
+      {
+        "name": "Bryce Young",
+        "year": 2023,
+        "pick": 1,
+        "score": 78.8,
+        "outcome": "Miss",
+        "distance": 0.237,
+        "reason": "Closest historical QB profile by v10.2 score, passing profile, pressure/depth traits, creation, and risk shape."
+      }
+    ]
   },
   {
     "id": "qb-2024-jaydendaniels",
@@ -77,7 +140,7 @@
     "score": 87.9,
     "source": "qb_drafted_projection_75_20_5",
     "forecast": {
-      "final": 87,
+      "final": 87.9,
       "draft": 88,
       "pff": 93,
       "athletic": 50,
@@ -85,7 +148,9 @@
         "draft": 75,
         "pff": 20,
         "athletic": 5
-      }
+      },
+      "modelScore": 87.9,
+      "projectionScore": 87.9
     },
     "pff": {
       "season_used": 2023,
@@ -129,7 +194,68 @@
     "qbModelPath": "Strong Outlier Creation Blend",
     "qbTraditionalScore": 83.2,
     "qbOutlierScore": 89.4,
-    "modelScore": 87.9
+    "modelScore": 87.9,
+    "qbModelScore": 87.9,
+    "qbScore": 87.9,
+    "projectedScore": 87.9,
+    "projectionScore": 87.9,
+    "finalScore": 87.9,
+    "displayScore": 87.9,
+    "overallScore": 87.9,
+    "valueScore": 87.9,
+    "primaryQbProfileComp": {
+      "name": "Drake Maye",
+      "year": 2024,
+      "pick": 3,
+      "score": 89.3,
+      "outcome": "Miss",
+      "distance": 0.224,
+      "reason": "Closest historical QB profile by v10.2 score, passing profile, pressure/depth traits, creation, and risk shape."
+    },
+    "projectionComps": [
+      {
+        "name": "Drake Maye",
+        "year": 2024,
+        "pick": 3,
+        "score": 89.3,
+        "outcome": "Miss",
+        "distance": 0.224,
+        "reason": "Closest historical QB profile by v10.2 score, passing profile, pressure/depth traits, creation, and risk shape."
+      }
+    ],
+    "styleComps": [
+      {
+        "name": "Drake Maye",
+        "year": 2024,
+        "pick": 3,
+        "score": 89.3,
+        "outcome": "Miss",
+        "distance": 0.224,
+        "reason": "Closest historical QB profile by v10.2 score, passing profile, pressure/depth traits, creation, and risk shape."
+      }
+    ],
+    "qbComps": [
+      {
+        "name": "Drake Maye",
+        "year": 2024,
+        "pick": 3,
+        "score": 89.3,
+        "outcome": "Miss",
+        "distance": 0.224,
+        "reason": "Closest historical QB profile by v10.2 score, passing profile, pressure/depth traits, creation, and risk shape."
+      }
+    ],
+    "comps": [
+      {
+        "name": "Drake Maye",
+        "year": 2024,
+        "pick": 3,
+        "score": 89.3,
+        "outcome": "Miss",
+        "distance": 0.224,
+        "reason": "Closest historical QB profile by v10.2 score, passing profile, pressure/depth traits, creation, and risk shape."
+      }
+    ]
   },
   {
     "id": "qb-2024-drakemaye",
@@ -146,7 +272,7 @@
     "score": 80.5,
     "source": "qb_drafted_projection_75_20_5",
     "forecast": {
-      "final": 80,
+      "final": 80.5,
       "draft": 80,
       "pff": 87,
       "athletic": 50,
@@ -154,7 +280,9 @@
         "draft": 75,
         "pff": 20,
         "athletic": 5
-      }
+      },
+      "modelScore": 80.5,
+      "projectionScore": 80.5
     },
     "pff": {
       "season_used": 2022,
@@ -192,7 +320,68 @@
     "qbModelPath": "Strong Outlier Creation Blend",
     "qbTraditionalScore": 76,
     "qbOutlierScore": 82,
-    "modelScore": 80.5
+    "modelScore": 80.5,
+    "qbModelScore": 80.5,
+    "qbScore": 80.5,
+    "projectedScore": 80.5,
+    "projectionScore": 80.5,
+    "finalScore": 80.5,
+    "displayScore": 80.5,
+    "overallScore": 80.5,
+    "valueScore": 80.5,
+    "primaryQbProfileComp": {
+      "name": "C.J. Stroud",
+      "year": 2023,
+      "pick": 2,
+      "score": 80.5,
+      "outcome": "Miss",
+      "distance": 0.216,
+      "reason": "Closest historical QB profile by v10.2 score, passing profile, pressure/depth traits, creation, and risk shape."
+    },
+    "projectionComps": [
+      {
+        "name": "C.J. Stroud",
+        "year": 2023,
+        "pick": 2,
+        "score": 80.5,
+        "outcome": "Miss",
+        "distance": 0.216,
+        "reason": "Closest historical QB profile by v10.2 score, passing profile, pressure/depth traits, creation, and risk shape."
+      }
+    ],
+    "styleComps": [
+      {
+        "name": "C.J. Stroud",
+        "year": 2023,
+        "pick": 2,
+        "score": 80.5,
+        "outcome": "Miss",
+        "distance": 0.216,
+        "reason": "Closest historical QB profile by v10.2 score, passing profile, pressure/depth traits, creation, and risk shape."
+      }
+    ],
+    "qbComps": [
+      {
+        "name": "C.J. Stroud",
+        "year": 2023,
+        "pick": 2,
+        "score": 80.5,
+        "outcome": "Miss",
+        "distance": 0.216,
+        "reason": "Closest historical QB profile by v10.2 score, passing profile, pressure/depth traits, creation, and risk shape."
+      }
+    ],
+    "comps": [
+      {
+        "name": "C.J. Stroud",
+        "year": 2023,
+        "pick": 2,
+        "score": 80.5,
+        "outcome": "Miss",
+        "distance": 0.216,
+        "reason": "Closest historical QB profile by v10.2 score, passing profile, pressure/depth traits, creation, and risk shape."
+      }
+    ]
   },
   {
     "id": "qb-2024-jjmccarthy",
@@ -209,7 +398,7 @@
     "score": 76,
     "source": "qb_drafted_projection_75_20_5",
     "forecast": {
-      "final": 62,
+      "final": 76,
       "draft": 59,
       "pff": 76,
       "athletic": 50,
@@ -217,7 +406,9 @@
         "draft": 75,
         "pff": 20,
         "athletic": 5
-      }
+      },
+      "modelScore": 76,
+      "projectionScore": 76
     },
     "pff": {
       "season_used": 2023,
@@ -260,7 +451,68 @@
     "qbModelPath": "Traditional Translation",
     "qbTraditionalScore": 76,
     "qbOutlierScore": 76,
-    "modelScore": 76
+    "modelScore": 76,
+    "qbModelScore": 76,
+    "qbScore": 76,
+    "projectedScore": 76,
+    "projectionScore": 76,
+    "finalScore": 76,
+    "displayScore": 76,
+    "overallScore": 76,
+    "valueScore": 76,
+    "primaryQbProfileComp": {
+      "name": "Tua Tagovailoa",
+      "year": 2020,
+      "pick": 5,
+      "score": 76,
+      "outcome": "Hit",
+      "distance": 0.154,
+      "reason": "Closest historical QB profile by v10.2 score, passing profile, pressure/depth traits, creation, and risk shape."
+    },
+    "projectionComps": [
+      {
+        "name": "Tua Tagovailoa",
+        "year": 2020,
+        "pick": 5,
+        "score": 76,
+        "outcome": "Hit",
+        "distance": 0.154,
+        "reason": "Closest historical QB profile by v10.2 score, passing profile, pressure/depth traits, creation, and risk shape."
+      }
+    ],
+    "styleComps": [
+      {
+        "name": "Tua Tagovailoa",
+        "year": 2020,
+        "pick": 5,
+        "score": 76,
+        "outcome": "Hit",
+        "distance": 0.154,
+        "reason": "Closest historical QB profile by v10.2 score, passing profile, pressure/depth traits, creation, and risk shape."
+      }
+    ],
+    "qbComps": [
+      {
+        "name": "Tua Tagovailoa",
+        "year": 2020,
+        "pick": 5,
+        "score": 76,
+        "outcome": "Hit",
+        "distance": 0.154,
+        "reason": "Closest historical QB profile by v10.2 score, passing profile, pressure/depth traits, creation, and risk shape."
+      }
+    ],
+    "comps": [
+      {
+        "name": "Tua Tagovailoa",
+        "year": 2020,
+        "pick": 5,
+        "score": 76,
+        "outcome": "Hit",
+        "distance": 0.154,
+        "reason": "Closest historical QB profile by v10.2 score, passing profile, pressure/depth traits, creation, and risk shape."
+      }
+    ]
   },
   {
     "id": "qb-2024-bonix",
@@ -277,7 +529,7 @@
     "score": 61.6,
     "source": "qb_drafted_projection_75_20_5",
     "forecast": {
-      "final": 62,
+      "final": 61.6,
       "draft": 55,
       "pff": 88,
       "athletic": 50,
@@ -285,7 +537,9 @@
         "draft": 75,
         "pff": 20,
         "athletic": 5
-      }
+      },
+      "modelScore": 61.6,
+      "projectionScore": 61.6
     },
     "pff": {
       "season_used": 2023,
@@ -331,7 +585,68 @@
     "qbModelPath": "Traditional Translation",
     "qbTraditionalScore": 83.2,
     "qbOutlierScore": 76,
-    "modelScore": 61.6
+    "modelScore": 61.6,
+    "qbModelScore": 61.6,
+    "qbScore": 61.6,
+    "projectedScore": 61.6,
+    "projectionScore": 61.6,
+    "finalScore": 61.6,
+    "displayScore": 61.6,
+    "overallScore": 61.6,
+    "valueScore": 61.6,
+    "primaryQbProfileComp": {
+      "name": "Brandon Doughty",
+      "year": 2016,
+      "pick": 223,
+      "score": 51.2,
+      "outcome": "Miss",
+      "distance": 0.261,
+      "reason": "Closest historical QB profile by v10.2 score, passing profile, pressure/depth traits, creation, and risk shape."
+    },
+    "projectionComps": [
+      {
+        "name": "Brandon Doughty",
+        "year": 2016,
+        "pick": 223,
+        "score": 51.2,
+        "outcome": "Miss",
+        "distance": 0.261,
+        "reason": "Closest historical QB profile by v10.2 score, passing profile, pressure/depth traits, creation, and risk shape."
+      }
+    ],
+    "styleComps": [
+      {
+        "name": "Brandon Doughty",
+        "year": 2016,
+        "pick": 223,
+        "score": 51.2,
+        "outcome": "Miss",
+        "distance": 0.261,
+        "reason": "Closest historical QB profile by v10.2 score, passing profile, pressure/depth traits, creation, and risk shape."
+      }
+    ],
+    "qbComps": [
+      {
+        "name": "Brandon Doughty",
+        "year": 2016,
+        "pick": 223,
+        "score": 51.2,
+        "outcome": "Miss",
+        "distance": 0.261,
+        "reason": "Closest historical QB profile by v10.2 score, passing profile, pressure/depth traits, creation, and risk shape."
+      }
+    ],
+    "comps": [
+      {
+        "name": "Brandon Doughty",
+        "year": 2016,
+        "pick": 223,
+        "score": 51.2,
+        "outcome": "Miss",
+        "distance": 0.261,
+        "reason": "Closest historical QB profile by v10.2 score, passing profile, pressure/depth traits, creation, and risk shape."
+      }
+    ]
   },
   {
     "id": "qb-2024-jordantravis",
@@ -348,7 +663,7 @@
     "score": 36.3,
     "source": "qb_drafted_projection_75_20_5",
     "forecast": {
-      "final": 25,
+      "final": 36.3,
       "draft": 8,
       "pff": 83,
       "athletic": 50,
@@ -356,7 +671,9 @@
         "draft": 75,
         "pff": 20,
         "athletic": 5
-      }
+      },
+      "modelScore": 36.3,
+      "projectionScore": 36.3
     },
     "pff": {
       "season_used": 2022,
@@ -394,7 +711,68 @@
     "qbModelPath": "Outlier Creation Blend",
     "qbTraditionalScore": 45.5,
     "qbOutlierScore": 55.1,
-    "modelScore": 36.3
+    "modelScore": 36.3,
+    "qbModelScore": 36.3,
+    "qbScore": 36.3,
+    "projectedScore": 36.3,
+    "projectionScore": 36.3,
+    "finalScore": 36.3,
+    "displayScore": 36.3,
+    "overallScore": 36.3,
+    "valueScore": 36.3,
+    "primaryQbProfileComp": {
+      "name": "Jameis Winston",
+      "year": 2015,
+      "pick": 1,
+      "score": 36.2,
+      "outcome": "Hit",
+      "distance": 0.145,
+      "reason": "Closest historical QB profile by v10.2 score, passing profile, pressure/depth traits, creation, and risk shape."
+    },
+    "projectionComps": [
+      {
+        "name": "Jameis Winston",
+        "year": 2015,
+        "pick": 1,
+        "score": 36.2,
+        "outcome": "Hit",
+        "distance": 0.145,
+        "reason": "Closest historical QB profile by v10.2 score, passing profile, pressure/depth traits, creation, and risk shape."
+      }
+    ],
+    "styleComps": [
+      {
+        "name": "Jameis Winston",
+        "year": 2015,
+        "pick": 1,
+        "score": 36.2,
+        "outcome": "Hit",
+        "distance": 0.145,
+        "reason": "Closest historical QB profile by v10.2 score, passing profile, pressure/depth traits, creation, and risk shape."
+      }
+    ],
+    "qbComps": [
+      {
+        "name": "Jameis Winston",
+        "year": 2015,
+        "pick": 1,
+        "score": 36.2,
+        "outcome": "Hit",
+        "distance": 0.145,
+        "reason": "Closest historical QB profile by v10.2 score, passing profile, pressure/depth traits, creation, and risk shape."
+      }
+    ],
+    "comps": [
+      {
+        "name": "Jameis Winston",
+        "year": 2015,
+        "pick": 1,
+        "score": 36.2,
+        "outcome": "Hit",
+        "distance": 0.145,
+        "reason": "Closest historical QB profile by v10.2 score, passing profile, pressure/depth traits, creation, and risk shape."
+      }
+    ]
   },
   {
     "id": "qb-2024-spencerrattler",
@@ -411,7 +789,7 @@
     "score": 37.8,
     "source": "qb_drafted_projection_75_20_5",
     "forecast": {
-      "final": 22,
+      "final": 37.8,
       "draft": 10,
       "pff": 63,
       "athletic": 40,
@@ -419,7 +797,9 @@
         "draft": 75,
         "pff": 20,
         "athletic": 5
-      }
+      },
+      "modelScore": 37.8,
+      "projectionScore": 37.8
     },
     "pff": {
       "season_used": 2023,
@@ -457,7 +837,68 @@
     "qbModelPath": "Traditional Translation",
     "qbTraditionalScore": 42.3,
     "qbOutlierScore": 24.9,
-    "modelScore": 37.8
+    "modelScore": 37.8,
+    "qbModelScore": 37.8,
+    "qbScore": 37.8,
+    "projectedScore": 37.8,
+    "projectionScore": 37.8,
+    "finalScore": 37.8,
+    "displayScore": 37.8,
+    "overallScore": 37.8,
+    "valueScore": 37.8,
+    "primaryQbProfileComp": {
+      "name": "Jake Rudock",
+      "year": 2016,
+      "pick": 191,
+      "score": 40.7,
+      "outcome": "Miss",
+      "distance": 0.254,
+      "reason": "Closest historical QB profile by v10.2 score, passing profile, pressure/depth traits, creation, and risk shape."
+    },
+    "projectionComps": [
+      {
+        "name": "Jake Rudock",
+        "year": 2016,
+        "pick": 191,
+        "score": 40.7,
+        "outcome": "Miss",
+        "distance": 0.254,
+        "reason": "Closest historical QB profile by v10.2 score, passing profile, pressure/depth traits, creation, and risk shape."
+      }
+    ],
+    "styleComps": [
+      {
+        "name": "Jake Rudock",
+        "year": 2016,
+        "pick": 191,
+        "score": 40.7,
+        "outcome": "Miss",
+        "distance": 0.254,
+        "reason": "Closest historical QB profile by v10.2 score, passing profile, pressure/depth traits, creation, and risk shape."
+      }
+    ],
+    "qbComps": [
+      {
+        "name": "Jake Rudock",
+        "year": 2016,
+        "pick": 191,
+        "score": 40.7,
+        "outcome": "Miss",
+        "distance": 0.254,
+        "reason": "Closest historical QB profile by v10.2 score, passing profile, pressure/depth traits, creation, and risk shape."
+      }
+    ],
+    "comps": [
+      {
+        "name": "Jake Rudock",
+        "year": 2016,
+        "pick": 191,
+        "score": 40.7,
+        "outcome": "Miss",
+        "distance": 0.254,
+        "reason": "Closest historical QB profile by v10.2 score, passing profile, pressure/depth traits, creation, and risk shape."
+      }
+    ]
   },
   {
     "id": "qb-2024-michaelpratt",
@@ -474,7 +915,7 @@
     "score": 40.9,
     "source": "qb_drafted_projection_75_20_5",
     "forecast": {
-      "final": 18,
+      "final": 40.9,
       "draft": 1,
       "pff": 67,
       "athletic": 83,
@@ -482,7 +923,9 @@
         "draft": 75,
         "pff": 20,
         "athletic": 5
-      }
+      },
+      "modelScore": 40.9,
+      "projectionScore": 40.9
     },
     "pff": {
       "season_used": 2022,
@@ -520,7 +963,68 @@
     "qbModelPath": "Traditional Translation",
     "qbTraditionalScore": 45.4,
     "qbOutlierScore": 33.8,
-    "modelScore": 40.9
+    "modelScore": 40.9,
+    "qbModelScore": 40.9,
+    "qbScore": 40.9,
+    "projectedScore": 40.9,
+    "projectionScore": 40.9,
+    "finalScore": 40.9,
+    "displayScore": 40.9,
+    "overallScore": 40.9,
+    "valueScore": 40.9,
+    "primaryQbProfileComp": {
+      "name": "Garrett Grayson",
+      "year": 2015,
+      "pick": 75,
+      "score": 41.7,
+      "outcome": "Miss",
+      "distance": 0.142,
+      "reason": "Closest historical QB profile by v10.2 score, passing profile, pressure/depth traits, creation, and risk shape."
+    },
+    "projectionComps": [
+      {
+        "name": "Garrett Grayson",
+        "year": 2015,
+        "pick": 75,
+        "score": 41.7,
+        "outcome": "Miss",
+        "distance": 0.142,
+        "reason": "Closest historical QB profile by v10.2 score, passing profile, pressure/depth traits, creation, and risk shape."
+      }
+    ],
+    "styleComps": [
+      {
+        "name": "Garrett Grayson",
+        "year": 2015,
+        "pick": 75,
+        "score": 41.7,
+        "outcome": "Miss",
+        "distance": 0.142,
+        "reason": "Closest historical QB profile by v10.2 score, passing profile, pressure/depth traits, creation, and risk shape."
+      }
+    ],
+    "qbComps": [
+      {
+        "name": "Garrett Grayson",
+        "year": 2015,
+        "pick": 75,
+        "score": 41.7,
+        "outcome": "Miss",
+        "distance": 0.142,
+        "reason": "Closest historical QB profile by v10.2 score, passing profile, pressure/depth traits, creation, and risk shape."
+      }
+    ],
+    "comps": [
+      {
+        "name": "Garrett Grayson",
+        "year": 2015,
+        "pick": 75,
+        "score": 41.7,
+        "outcome": "Miss",
+        "distance": 0.142,
+        "reason": "Closest historical QB profile by v10.2 score, passing profile, pressure/depth traits, creation, and risk shape."
+      }
+    ]
   },
   {
     "id": "qb-2024-devinleary",
@@ -537,7 +1041,7 @@
     "score": 18.9,
     "source": "qb_drafted_projection_75_20_5",
     "forecast": {
-      "final": 14,
+      "final": 18.9,
       "draft": 3,
       "pff": 47,
       "athletic": 50,
@@ -545,7 +1049,9 @@
         "draft": 75,
         "pff": 20,
         "athletic": 5
-      }
+      },
+      "modelScore": 18.9,
+      "projectionScore": 18.9
     },
     "pff": {
       "season_used": 2022,
@@ -583,6 +1089,67 @@
     "qbModelPath": "Traditional Translation",
     "qbTraditionalScore": 23.4,
     "qbOutlierScore": 20.4,
-    "modelScore": 18.9
+    "modelScore": 18.9,
+    "qbModelScore": 18.9,
+    "qbScore": 18.9,
+    "projectedScore": 18.9,
+    "projectionScore": 18.9,
+    "finalScore": 18.9,
+    "displayScore": 18.9,
+    "overallScore": 18.9,
+    "valueScore": 18.9,
+    "primaryQbProfileComp": {
+      "name": "Michael Penix",
+      "year": 2024,
+      "pick": 8,
+      "score": 18.5,
+      "outcome": "Miss",
+      "distance": 0.02,
+      "reason": "Closest historical QB profile by v10.2 score, passing profile, pressure/depth traits, creation, and risk shape."
+    },
+    "projectionComps": [
+      {
+        "name": "Michael Penix",
+        "year": 2024,
+        "pick": 8,
+        "score": 18.5,
+        "outcome": "Miss",
+        "distance": 0.02,
+        "reason": "Closest historical QB profile by v10.2 score, passing profile, pressure/depth traits, creation, and risk shape."
+      }
+    ],
+    "styleComps": [
+      {
+        "name": "Michael Penix",
+        "year": 2024,
+        "pick": 8,
+        "score": 18.5,
+        "outcome": "Miss",
+        "distance": 0.02,
+        "reason": "Closest historical QB profile by v10.2 score, passing profile, pressure/depth traits, creation, and risk shape."
+      }
+    ],
+    "qbComps": [
+      {
+        "name": "Michael Penix",
+        "year": 2024,
+        "pick": 8,
+        "score": 18.5,
+        "outcome": "Miss",
+        "distance": 0.02,
+        "reason": "Closest historical QB profile by v10.2 score, passing profile, pressure/depth traits, creation, and risk shape."
+      }
+    ],
+    "comps": [
+      {
+        "name": "Michael Penix",
+        "year": 2024,
+        "pick": 8,
+        "score": 18.5,
+        "outcome": "Miss",
+        "distance": 0.02,
+        "reason": "Closest historical QB profile by v10.2 score, passing profile, pressure/depth traits, creation, and risk shape."
+      }
+    ]
   }
 ]
