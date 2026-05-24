@@ -1,72 +1,72 @@
 {
-  "generatedAt": "2026-05-24T11:13:22.979Z",
-  "rowCount": 1159,
+  "generatedAt": "2026-05-24T11:17:05.066Z",
+  "rowCount": 789,
   "files": [
     {
-      "file": "passing_allowed_pressure (4).csv",
+      "file": "passing_allowed_pressure (5).csv",
       "prefix": "allowed_pressure",
-      "rows": 394,
+      "rows": 334,
       "columns": 32
     },
     {
-      "file": "passing_concept (8).csv",
+      "file": "passing_concept (10).csv",
       "prefix": "passing_concept",
-      "rows": 549,
+      "rows": 446,
       "columns": 199
     },
     {
-      "file": "passing_concept (9).csv",
+      "file": "passing_concept (11).csv",
       "prefix": "passing_concept",
-      "rows": 549,
+      "rows": 446,
       "columns": 199
     },
     {
-      "file": "passing_depth (20).csv",
+      "file": "passing_depth (24).csv",
       "prefix": "passing_depth",
-      "rows": 549,
+      "rows": 446,
       "columns": 554
     },
     {
-      "file": "passing_depth (21).csv",
+      "file": "passing_depth (25).csv",
       "prefix": "passing_depth",
-      "rows": 549,
+      "rows": 446,
       "columns": 554
     },
     {
-      "file": "passing_depth (22).csv",
+      "file": "passing_depth (26).csv",
       "prefix": "passing_depth",
-      "rows": 549,
+      "rows": 446,
       "columns": 554
     },
     {
-      "file": "passing_depth (23).csv",
+      "file": "passing_depth (27).csv",
       "prefix": "passing_depth",
-      "rows": 549,
+      "rows": 446,
       "columns": 554
     },
     {
-      "file": "passing_pressure (8).csv",
+      "file": "passing_pressure (10).csv",
       "prefix": "passing_pressure",
-      "rows": 549,
+      "rows": 446,
       "columns": 197
     },
     {
-      "file": "passing_pressure (9).csv",
+      "file": "passing_pressure (11).csv",
       "prefix": "passing_pressure",
-      "rows": 549,
+      "rows": 446,
       "columns": 197
     },
     {
-      "file": "time_in_pocket (4).csv",
+      "file": "time_in_pocket (5).csv",
       "prefix": "time_in_pocket",
-      "rows": 1159,
-      "columns": 105
+      "rows": 789,
+      "columns": 107
     }
   ],
   "coverage": {
     "passing_pressure_grades_pass": {
-      "count": 540,
-      "rate": 0.466
+      "count": 440,
+      "rate": 0.558
     },
     "passing_pressure_pressure_to_sack_rate": {
       "count": 0,
@@ -77,7 +77,7 @@
       "rate": 0
     },
     "time_in_pocket_avg_time_to_throw": {
-      "count": 1159,
+      "count": 789,
       "rate": 1
     },
     "time_in_pocket_time_to_throw": {
@@ -85,8 +85,8 @@
       "rate": 0
     },
     "allowed_pressure_pressures_allowed": {
-      "count": 394,
-      "rate": 0.34
+      "count": 334,
+      "rate": 0.423
     },
     "passing_depth_accuracy_percent": {
       "count": 0,
