@@ -2906,6 +2906,10 @@ function ClassExplorer({ pool, history, pffProfiles, pffLookup, y1Data, careerSt
   // Persistent cache: avoids recomputing the same player on year revisits
   const projCache = useRef(new Map<string, { av: number; score: number }>())
 
+  useEffect(() => {
+    projCache.current.clear()
+  }, [qbV102ScoreMap])
+
   // Set of "name|year" strings for all saved prospects — used to highlight them in the table
   const savedSet = useMemo(() => {
     const set = new Set<string>()
@@ -2967,7 +2971,14 @@ function ClassExplorer({ pool, history, pffProfiles, pffLookup, y1Data, careerSt
           ? { ...synthesized, wrTrajectory: wrContext.trajectory }
           : synthesized
       const projected = project(synthesizedWithContext, history, pffProfiles, player.id, y1Data, careerStats, undefined, qbContext?.trajectory?.gradeDelta ?? null)
-      const result = { av: projected.expectedAv, score: projected.score }
+      const playerAny = player as any
+      const isQb = String(playerAny.pos || playerAny.position || '').toUpperCase() === 'QB'
+      const qbV102 = getQbV102Row(playerAny)
+      const qbV102Score = Number(qbV102?.realisticProjectionScoreV10_2 ?? playerAny.qbProjectionScore)
+      const result = {
+        av: projected.expectedAv,
+        score: isQb && Number.isFinite(qbV102Score) ? qbV102Score : projected.score,
+      }
       projCache.current.set(cacheKey, result)
       out.set(player.id, result)
     }
