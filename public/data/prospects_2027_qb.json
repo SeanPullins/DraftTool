@@ -18,7 +18,7 @@
       "pick": 1,
       "projectedPick": 1,
       "grade": 84,
-      "score": 84,
+      "score": 87.5,
       "source": "qb_future_pff_forecast",
       "forecast": {
         "final": 84,
@@ -61,7 +61,18 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 1
+      "rank": 1,
+      "modelScoreBeforeAdvancedPassing": 84,
+      "advancedPassingAdjustment": 0.35,
+      "advancedPassingScoreDelta": 3.5,
+      "advancedPassingTraits": [
+        "Elite pressure + intermediate translator",
+        "Pressure-depth creator",
+        "Complete advanced translator"
+      ],
+      "advancedPassingLabel": "Advanced passing boost",
+      "projectionHitMiss": "Projection — Hit",
+      "modelScoreAfterAdvancedPassing": 87.5
     },
     {
       "id": "qb-2027-brendansorsby",
@@ -118,7 +129,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 2
+      "rank": 2,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2027-dantemoore",
@@ -132,7 +147,7 @@
       "pick": 3,
       "projectedPick": 3,
       "grade": 76,
-      "score": 76,
+      "score": 77,
       "source": "qb_future_pff_forecast",
       "forecast": {
         "final": 76,
@@ -175,7 +190,16 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 3
+      "rank": 3,
+      "modelScoreBeforeAdvancedPassing": 76,
+      "advancedPassingAdjustment": 0.1,
+      "advancedPassingScoreDelta": 1,
+      "advancedPassingTraits": [
+        "Pressure-depth creator"
+      ],
+      "advancedPassingLabel": "Advanced passing boost",
+      "projectionHitMiss": "Projection — Hit",
+      "modelScoreAfterAdvancedPassing": 77
     },
     {
       "id": "qb-2027-tommycastellanos",
@@ -232,7 +256,16 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 4
+      "rank": 4,
+      "modelScoreBeforeAdvancedPassing": 75,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingScoreDelta": 0,
+      "advancedPassingTraits": [
+        "Hold-ball creation-safe"
+      ],
+      "advancedPassingLabel": "Advanced passing context",
+      "projectionHitMiss": "Projection — Watch",
+      "modelScoreAfterAdvancedPassing": 75
     },
     {
       "id": "qb-2027-trinidadchambliss",
@@ -289,7 +322,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 5
+      "rank": 5,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2027-tuckergleason",
@@ -346,7 +383,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 6
+      "rank": 6,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2027-byrumbrown",
@@ -403,7 +444,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 7
+      "rank": 7,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2027-blakehorvath",
@@ -460,7 +505,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 8
+      "rank": 8,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2027-drewmestemaker",
@@ -517,7 +566,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 9
+      "rank": 9,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2027-noahfifita",
@@ -574,7 +627,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 10
+      "rank": 10,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2027-cjcarr",
@@ -631,7 +688,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 11
+      "rank": 11,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2027-anthonycolandrea",
@@ -688,7 +749,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 12
+      "rank": 12,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2027-micahalejado",
@@ -745,7 +810,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 13
+      "rank": 13,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2027-katinhouser",
@@ -802,7 +871,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 14
+      "rank": 14,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2027-cameranbrown",
@@ -859,7 +932,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 15
+      "rank": 15,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2027-devondampier",
@@ -916,7 +993,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 16
+      "rank": 16,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2027-cadeklubnik",
@@ -973,7 +1054,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 17
+      "rank": 17,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2027-braylonbraxton",
@@ -1030,7 +1115,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 18
+      "rank": 18,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2027-demondwilliamsjr",
@@ -1087,7 +1176,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 19
+      "rank": 19,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2027-bradjackson",
@@ -1144,7 +1237,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 20
+      "rank": 20,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2027-darianmensah",
@@ -1201,7 +1298,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 21
+      "rank": 21,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2027-gunnerstockton",
@@ -1258,7 +1359,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 22
+      "rank": 22,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2027-broclowry",
@@ -1315,7 +1420,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 23
+      "rank": 23,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2027-athankaliakmanis",
@@ -1372,7 +1481,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 24
+      "rank": 24,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2027-tysimpson",
@@ -1429,7 +1542,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 25
+      "rank": 25,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2027-carsonbeck",
@@ -1486,7 +1603,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 26
+      "rank": 26,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2027-romangagliano",
@@ -1543,7 +1664,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 27
+      "rank": 27,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2027-chasejenkins",
@@ -1600,7 +1725,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 28
+      "rank": 28,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2027-archmanning",
@@ -1657,7 +1786,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 29
+      "rank": 29,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2027-jaydenmaiava",
@@ -1714,7 +1847,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 30
+      "rank": 30,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2027-kevinjennings",
@@ -1771,7 +1908,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 31
+      "rank": 31,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2027-chandlermorris",
@@ -1828,7 +1969,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 32
+      "rank": 32,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2027-carlosdelriowilson",
@@ -1885,7 +2030,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 33
+      "rank": 33,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2027-jaronkeawesagapolutele",
@@ -1942,7 +2091,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 34
+      "rank": 34,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2027-steveangeli",
@@ -1999,7 +2152,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 35
+      "rank": 35,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2027-brendonlewis",
@@ -2056,7 +2213,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 36
+      "rank": 36,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2027-maverickmcivor",
@@ -2113,7 +2274,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 37
+      "rank": 37,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2027-jacobclark",
@@ -2170,7 +2335,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 38
+      "rank": 38,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2027-noahkim",
@@ -2184,7 +2353,7 @@
       "pick": 39,
       "projectedPick": 39,
       "grade": 58,
-      "score": 58,
+      "score": 56,
       "source": "qb_future_pff_forecast",
       "forecast": {
         "final": 58,
@@ -2227,7 +2396,16 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 39
+      "rank": 39,
+      "modelScoreBeforeAdvancedPassing": 58,
+      "advancedPassingAdjustment": -0.2,
+      "advancedPassingScoreDelta": -2,
+      "advancedPassingTraits": [
+        "Day-2 pressure/accuracy risk"
+      ],
+      "advancedPassingLabel": "Advanced passing risk",
+      "projectionHitMiss": "Projection — Miss",
+      "modelScoreAfterAdvancedPassing": 56
     },
     {
       "id": "qb-2027-roccobecht",
@@ -2284,7 +2462,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 40
+      "rank": 40,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2027-garrettnussmeier",
@@ -2341,7 +2523,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 41
+      "rank": 41,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2027-giolopez",
@@ -2355,7 +2541,7 @@
       "pick": 42,
       "projectedPick": 42,
       "grade": 57,
-      "score": 57,
+      "score": 55,
       "source": "qb_future_pff_forecast",
       "forecast": {
         "final": 57,
@@ -2398,7 +2584,16 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 42
+      "rank": 42,
+      "modelScoreBeforeAdvancedPassing": 57,
+      "advancedPassingAdjustment": -0.2,
+      "advancedPassingScoreDelta": -2,
+      "advancedPassingTraits": [
+        "Day-2 pressure/accuracy risk"
+      ],
+      "advancedPassingLabel": "Advanced passing risk",
+      "projectionHitMiss": "Projection — Miss",
+      "modelScoreAfterAdvancedPassing": 55
     },
     {
       "id": "qb-2027-alonzabarnettiii",
@@ -2412,7 +2607,7 @@
       "pick": 43,
       "projectedPick": 43,
       "grade": 57,
-      "score": 57,
+      "score": 55,
       "source": "qb_future_pff_forecast",
       "forecast": {
         "final": 57,
@@ -2455,7 +2650,16 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 43
+      "rank": 43,
+      "modelScoreBeforeAdvancedPassing": 57,
+      "advancedPassingAdjustment": -0.2,
+      "advancedPassingScoreDelta": -2,
+      "advancedPassingTraits": [
+        "Day-2 pressure/accuracy risk"
+      ],
+      "advancedPassingLabel": "Advanced passing risk",
+      "projectionHitMiss": "Projection — Miss",
+      "modelScoreAfterAdvancedPassing": 55
     },
     {
       "id": "qb-2027-blakeshapen",
@@ -2512,7 +2716,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 44
+      "rank": 44,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2027-jacklayne",
@@ -2569,7 +2777,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 45
+      "rank": 45,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2027-malikwashington",
@@ -2583,7 +2795,7 @@
       "pick": 46,
       "projectedPick": 46,
       "grade": 56,
-      "score": 56,
+      "score": 54,
       "source": "qb_future_pff_forecast",
       "forecast": {
         "final": 56,
@@ -2626,7 +2838,16 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 46
+      "rank": 46,
+      "modelScoreBeforeAdvancedPassing": 56,
+      "advancedPassingAdjustment": -0.2,
+      "advancedPassingScoreDelta": -2,
+      "advancedPassingTraits": [
+        "Day-2 pressure/accuracy risk"
+      ],
+      "advancedPassingLabel": "Advanced passing risk",
+      "projectionHitMiss": "Projection — Miss",
+      "modelScoreAfterAdvancedPassing": 54
     },
     {
       "id": "qb-2027-zevieckhaus",
@@ -2640,7 +2861,7 @@
       "pick": 47,
       "projectedPick": 47,
       "grade": 56,
-      "score": 56,
+      "score": 54,
       "source": "qb_future_pff_forecast",
       "forecast": {
         "final": 56,
@@ -2683,7 +2904,16 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 47
+      "rank": 47,
+      "modelScoreBeforeAdvancedPassing": 56,
+      "advancedPassingAdjustment": -0.2,
+      "advancedPassingScoreDelta": -2,
+      "advancedPassingTraits": [
+        "Day-2 pressure/accuracy risk"
+      ],
+      "advancedPassingLabel": "Advanced passing risk",
+      "projectionHitMiss": "Projection — Miss",
+      "modelScoreAfterAdvancedPassing": 54
     },
     {
       "id": "qb-2027-walkereget",
@@ -2697,7 +2927,7 @@
       "pick": 48,
       "projectedPick": 48,
       "grade": 55,
-      "score": 55,
+      "score": 53,
       "source": "qb_future_pff_forecast",
       "forecast": {
         "final": 55,
@@ -2740,7 +2970,16 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 48
+      "rank": 48,
+      "modelScoreBeforeAdvancedPassing": 55,
+      "advancedPassingAdjustment": -0.2,
+      "advancedPassingScoreDelta": -2,
+      "advancedPassingTraits": [
+        "Day-2 pressure/accuracy risk"
+      ],
+      "advancedPassingLabel": "Advanced passing risk",
+      "projectionHitMiss": "Projection — Miss",
+      "modelScoreAfterAdvancedPassing": 53
     },
     {
       "id": "qb-2027-markgronowski",
@@ -2797,7 +3036,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 49
+      "rank": 49,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2027-owenmccown",
@@ -2854,7 +3097,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 50
+      "rank": 50,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2027-evansimon",
@@ -2868,7 +3115,7 @@
       "pick": 51,
       "projectedPick": 51,
       "grade": 54,
-      "score": 54,
+      "score": 52,
       "source": "qb_future_pff_forecast",
       "forecast": {
         "final": 54,
@@ -2911,7 +3158,16 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 51
+      "rank": 51,
+      "modelScoreBeforeAdvancedPassing": 54,
+      "advancedPassingAdjustment": -0.2,
+      "advancedPassingScoreDelta": -2,
+      "advancedPassingTraits": [
+        "Day-2 pressure/accuracy risk"
+      ],
+      "advancedPassingLabel": "Advanced passing risk",
+      "projectionHitMiss": "Projection — Miss",
+      "modelScoreAfterAdvancedPassing": 52
     },
     {
       "id": "qb-2027-cjbailey",
@@ -2925,7 +3181,7 @@
       "pick": 52,
       "projectedPick": 52,
       "grade": 54,
-      "score": 54,
+      "score": 52,
       "source": "qb_future_pff_forecast",
       "forecast": {
         "final": 54,
@@ -2968,7 +3224,16 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 52
+      "rank": 52,
+      "modelScoreBeforeAdvancedPassing": 54,
+      "advancedPassingAdjustment": -0.2,
+      "advancedPassingScoreDelta": -2,
+      "advancedPassingTraits": [
+        "Day-2 pressure/accuracy risk"
+      ],
+      "advancedPassingLabel": "Advanced passing risk",
+      "projectionHitMiss": "Projection — Miss",
+      "modelScoreAfterAdvancedPassing": 52
     },
     {
       "id": "qb-2027-lukealtmyer",
@@ -2982,7 +3247,7 @@
       "pick": 53,
       "projectedPick": 53,
       "grade": 53,
-      "score": 53,
+      "score": 51,
       "source": "qb_future_pff_forecast",
       "forecast": {
         "final": 53,
@@ -3025,7 +3290,16 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 53
+      "rank": 53,
+      "modelScoreBeforeAdvancedPassing": 53,
+      "advancedPassingAdjustment": -0.2,
+      "advancedPassingScoreDelta": -2,
+      "advancedPassingTraits": [
+        "Day-2 pressure/accuracy risk"
+      ],
+      "advancedPassingLabel": "Advanced passing risk",
+      "projectionHitMiss": "Projection — Miss",
+      "modelScoreAfterAdvancedPassing": 51
     },
     {
       "id": "qb-2027-jalondaniels",
@@ -3039,7 +3313,7 @@
       "pick": 54,
       "projectedPick": 54,
       "grade": 53,
-      "score": 53,
+      "score": 49.5,
       "source": "qb_future_pff_forecast",
       "forecast": {
         "final": 53,
@@ -3082,7 +3356,17 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 54
+      "rank": 54,
+      "modelScoreBeforeAdvancedPassing": 53,
+      "advancedPassingAdjustment": -0.35,
+      "advancedPassingScoreDelta": -3.5,
+      "advancedPassingTraits": [
+        "Day-2 pressure/accuracy risk",
+        "Play-action inflation risk"
+      ],
+      "advancedPassingLabel": "Advanced passing risk",
+      "projectionHitMiss": "Projection — Miss",
+      "modelScoreAfterAdvancedPassing": 49.5
     },
     {
       "id": "qb-2027-liamszarka",
@@ -3139,7 +3423,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 55
+      "rank": 55,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2027-brysonbarnes",
@@ -3196,7 +3484,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 56
+      "rank": 56,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2027-drewallar",
@@ -3210,7 +3502,7 @@
       "pick": 57,
       "projectedPick": 57,
       "grade": 53,
-      "score": 53,
+      "score": 51,
       "source": "qb_future_pff_forecast",
       "forecast": {
         "final": 53,
@@ -3253,7 +3545,16 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 57
+      "rank": 57,
+      "modelScoreBeforeAdvancedPassing": 53,
+      "advancedPassingAdjustment": -0.2,
+      "advancedPassingScoreDelta": -2,
+      "advancedPassingTraits": [
+        "Day-2 pressure/accuracy risk"
+      ],
+      "advancedPassingLabel": "Advanced passing risk",
+      "projectionHitMiss": "Projection — Miss",
+      "modelScoreAfterAdvancedPassing": 51
     },
     {
       "id": "qb-2027-blakebaker",
@@ -3267,7 +3568,7 @@
       "pick": 58,
       "projectedPick": 58,
       "grade": 53,
-      "score": 53,
+      "score": 51,
       "source": "qb_future_pff_forecast",
       "forecast": {
         "final": 53,
@@ -3310,7 +3611,16 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 58
+      "rank": 58,
+      "modelScoreBeforeAdvancedPassing": 53,
+      "advancedPassingAdjustment": -0.2,
+      "advancedPassingScoreDelta": -2,
+      "advancedPassingTraits": [
+        "Day-2 pressure/accuracy risk"
+      ],
+      "advancedPassingLabel": "Advanced passing risk",
+      "projectionHitMiss": "Projection — Miss",
+      "modelScoreAfterAdvancedPassing": 51
     },
     {
       "id": "qb-2027-cadencreel",
@@ -3324,7 +3634,7 @@
       "pick": 59,
       "projectedPick": 59,
       "grade": 53,
-      "score": 53,
+      "score": 51,
       "source": "qb_future_pff_forecast",
       "forecast": {
         "final": 53,
@@ -3367,7 +3677,16 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 59
+      "rank": 59,
+      "modelScoreBeforeAdvancedPassing": 53,
+      "advancedPassingAdjustment": -0.2,
+      "advancedPassingScoreDelta": -2,
+      "advancedPassingTraits": [
+        "Day-2 pressure/accuracy risk"
+      ],
+      "advancedPassingLabel": "Advanced passing risk",
+      "projectionHitMiss": "Projection — Miss",
+      "modelScoreAfterAdvancedPassing": 51
     },
     {
       "id": "qb-2027-ethangrunkemeyer",
@@ -3424,7 +3743,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 60
+      "rank": 60,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2027-cadenveltkamp",
@@ -3438,7 +3761,7 @@
       "pick": 61,
       "projectedPick": 61,
       "grade": 51,
-      "score": 51,
+      "score": 49,
       "source": "qb_future_pff_forecast",
       "forecast": {
         "final": 51,
@@ -3481,7 +3804,16 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 61
+      "rank": 61,
+      "modelScoreBeforeAdvancedPassing": 51,
+      "advancedPassingAdjustment": -0.2,
+      "advancedPassingScoreDelta": -2,
+      "advancedPassingTraits": [
+        "Day-2 pressure/accuracy risk"
+      ],
+      "advancedPassingLabel": "Advanced passing risk",
+      "projectionHitMiss": "Projection — Miss",
+      "modelScoreAfterAdvancedPassing": 49
     },
     {
       "id": "qb-2027-dylanlonergan",
@@ -3495,7 +3827,7 @@
       "pick": 62,
       "projectedPick": 62,
       "grade": 51,
-      "score": 51,
+      "score": 49,
       "source": "qb_future_pff_forecast",
       "forecast": {
         "final": 51,
@@ -3538,7 +3870,16 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 62
+      "rank": 62,
+      "modelScoreBeforeAdvancedPassing": 51,
+      "advancedPassingAdjustment": -0.2,
+      "advancedPassingScoreDelta": -2,
+      "advancedPassingTraits": [
+        "Day-2 pressure/accuracy risk"
+      ],
+      "advancedPassingLabel": "Advanced passing risk",
+      "projectionHitMiss": "Projection — Miss",
+      "modelScoreAfterAdvancedPassing": 49
     },
     {
       "id": "qb-2027-joepesansky",
@@ -3552,7 +3893,7 @@
       "pick": 63,
       "projectedPick": 63,
       "grade": 51,
-      "score": 51,
+      "score": 49,
       "source": "qb_future_pff_forecast",
       "forecast": {
         "final": 51,
@@ -3595,7 +3936,16 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 63
+      "rank": 63,
+      "modelScoreBeforeAdvancedPassing": 51,
+      "advancedPassingAdjustment": -0.2,
+      "advancedPassingScoreDelta": -2,
+      "advancedPassingTraits": [
+        "Day-2 pressure/accuracy risk"
+      ],
+      "advancedPassingLabel": "Advanced passing risk",
+      "projectionHitMiss": "Projection — Miss",
+      "modelScoreAfterAdvancedPassing": 49
     },
     {
       "id": "qb-2027-sawyerrobertson",
@@ -3609,7 +3959,7 @@
       "pick": 64,
       "projectedPick": 64,
       "grade": 51,
-      "score": 51,
+      "score": 49,
       "source": "qb_future_pff_forecast",
       "forecast": {
         "final": 51,
@@ -3652,7 +4002,16 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 64
+      "rank": 64,
+      "modelScoreBeforeAdvancedPassing": 51,
+      "advancedPassingAdjustment": -0.2,
+      "advancedPassingScoreDelta": -2,
+      "advancedPassingTraits": [
+        "Day-2 pressure/accuracy risk"
+      ],
+      "advancedPassingLabel": "Advanced passing risk",
+      "projectionHitMiss": "Projection — Miss",
+      "modelScoreAfterAdvancedPassing": 49
     },
     {
       "id": "qb-2027-bryceunderwood",
@@ -3666,7 +4025,7 @@
       "pick": 65,
       "projectedPick": 65,
       "grade": 51,
-      "score": 51,
+      "score": 49,
       "source": "qb_future_pff_forecast",
       "forecast": {
         "final": 51,
@@ -3709,7 +4068,16 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 65
+      "rank": 65,
+      "modelScoreBeforeAdvancedPassing": 51,
+      "advancedPassingAdjustment": -0.2,
+      "advancedPassingScoreDelta": -2,
+      "advancedPassingTraits": [
+        "Day-2 pressure/accuracy risk"
+      ],
+      "advancedPassingLabel": "Advanced passing risk",
+      "projectionHitMiss": "Projection — Miss",
+      "modelScoreAfterAdvancedPassing": 49
     },
     {
       "id": "qb-2027-jjkohl",
@@ -3723,7 +4091,7 @@
       "pick": 66,
       "projectedPick": 66,
       "grade": 51,
-      "score": 51,
+      "score": 49,
       "source": "qb_future_pff_forecast",
       "forecast": {
         "final": 51,
@@ -3766,7 +4134,16 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 66
+      "rank": 66,
+      "modelScoreBeforeAdvancedPassing": 51,
+      "advancedPassingAdjustment": -0.2,
+      "advancedPassingScoreDelta": -2,
+      "advancedPassingTraits": [
+        "Day-2 pressure/accuracy risk"
+      ],
+      "advancedPassingLabel": "Advanced passing risk",
+      "projectionHitMiss": "Projection — Miss",
+      "modelScoreAfterAdvancedPassing": 49
     },
     {
       "id": "qb-2027-ashtondaniels",
@@ -3780,7 +4157,7 @@
       "pick": 67,
       "projectedPick": 67,
       "grade": 51,
-      "score": 51,
+      "score": 49,
       "source": "qb_future_pff_forecast",
       "forecast": {
         "final": 51,
@@ -3823,7 +4200,16 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 67
+      "rank": 67,
+      "modelScoreBeforeAdvancedPassing": 51,
+      "advancedPassingAdjustment": -0.2,
+      "advancedPassingScoreDelta": -2,
+      "advancedPassingTraits": [
+        "Day-2 pressure/accuracy risk"
+      ],
+      "advancedPassingLabel": "Advanced passing risk",
+      "projectionHitMiss": "Projection — Miss",
+      "modelScoreAfterAdvancedPassing": 49
     },
     {
       "id": "qb-2027-joshhoover",
@@ -3880,7 +4266,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 68
+      "rank": 68,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2027-jakeretzlaff",
@@ -3937,7 +4327,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 69
+      "rank": 69,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2027-averyjohnson",
@@ -3951,7 +4345,7 @@
       "pick": 70,
       "projectedPick": 70,
       "grade": 50,
-      "score": 50,
+      "score": 48,
       "source": "qb_future_pff_forecast",
       "forecast": {
         "final": 50,
@@ -3994,7 +4388,16 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 70
+      "rank": 70,
+      "modelScoreBeforeAdvancedPassing": 50,
+      "advancedPassingAdjustment": -0.2,
+      "advancedPassingScoreDelta": -2,
+      "advancedPassingTraits": [
+        "Day-2 pressure/accuracy risk"
+      ],
+      "advancedPassingLabel": "Advanced passing risk",
+      "projectionHitMiss": "Projection — Miss",
+      "modelScoreAfterAdvancedPassing": 48
     },
     {
       "id": "qb-2027-amariodom",
@@ -4008,7 +4411,7 @@
       "pick": 71,
       "projectedPick": 71,
       "grade": 50,
-      "score": 50,
+      "score": 48,
       "source": "qb_future_pff_forecast",
       "forecast": {
         "final": 50,
@@ -4051,7 +4454,16 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 71
+      "rank": 71,
+      "modelScoreBeforeAdvancedPassing": 50,
+      "advancedPassingAdjustment": -0.2,
+      "advancedPassingScoreDelta": -2,
+      "advancedPassingTraits": [
+        "Day-2 pressure/accuracy risk"
+      ],
+      "advancedPassingLabel": "Advanced passing risk",
+      "projectionHitMiss": "Projection — Miss",
+      "modelScoreAfterAdvancedPassing": 48
     },
     {
       "id": "qb-2027-nicoiamaleava",
@@ -4065,7 +4477,7 @@
       "pick": 72,
       "projectedPick": 72,
       "grade": 50,
-      "score": 50,
+      "score": 48,
       "source": "qb_future_pff_forecast",
       "forecast": {
         "final": 50,
@@ -4108,7 +4520,16 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 72
+      "rank": 72,
+      "modelScoreBeforeAdvancedPassing": 50,
+      "advancedPassingAdjustment": -0.2,
+      "advancedPassingScoreDelta": -2,
+      "advancedPassingTraits": [
+        "Day-2 pressure/accuracy risk"
+      ],
+      "advancedPassingLabel": "Advanced passing risk",
+      "projectionHitMiss": "Projection — Miss",
+      "modelScoreAfterAdvancedPassing": 48
     },
     {
       "id": "qb-2027-connerweigman",
@@ -4122,7 +4543,7 @@
       "pick": 73,
       "projectedPick": 73,
       "grade": 50,
-      "score": 50,
+      "score": 48,
       "source": "qb_future_pff_forecast",
       "forecast": {
         "final": 50,
@@ -4165,7 +4586,16 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 73
+      "rank": 73,
+      "modelScoreBeforeAdvancedPassing": 50,
+      "advancedPassingAdjustment": -0.2,
+      "advancedPassingScoreDelta": -2,
+      "advancedPassingTraits": [
+        "Day-2 pressure/accuracy risk"
+      ],
+      "advancedPassingLabel": "Advanced passing risk",
+      "projectionHitMiss": "Projection — Miss",
+      "modelScoreAfterAdvancedPassing": 48
     },
     {
       "id": "qb-2027-behrenmorton",
@@ -4222,7 +4652,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 74
+      "rank": 74,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2027-robbyashford",
@@ -4236,7 +4670,7 @@
       "pick": 75,
       "projectedPick": 75,
       "grade": 49,
-      "score": 49,
+      "score": 47,
       "source": "qb_future_pff_forecast",
       "forecast": {
         "final": 49,
@@ -4279,7 +4713,16 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 75
+      "rank": 75,
+      "modelScoreBeforeAdvancedPassing": 49,
+      "advancedPassingAdjustment": -0.2,
+      "advancedPassingScoreDelta": -2,
+      "advancedPassingTraits": [
+        "Day-2 pressure/accuracy risk"
+      ],
+      "advancedPassingLabel": "Advanced passing risk",
+      "projectionHitMiss": "Projection — Miss",
+      "modelScoreAfterAdvancedPassing": 47
     },
     {
       "id": "qb-2027-jcfrenchiv",
@@ -4293,7 +4736,7 @@
       "pick": 76,
       "projectedPick": 76,
       "grade": 49,
-      "score": 49,
+      "score": 47,
       "source": "qb_future_pff_forecast",
       "forecast": {
         "final": 49,
@@ -4336,7 +4779,16 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 76
+      "rank": 76,
+      "modelScoreBeforeAdvancedPassing": 49,
+      "advancedPassingAdjustment": -0.2,
+      "advancedPassingScoreDelta": -2,
+      "advancedPassingTraits": [
+        "Day-2 pressure/accuracy risk"
+      ],
+      "advancedPassingLabel": "Advanced passing risk",
+      "projectionHitMiss": "Projection — Miss",
+      "modelScoreAfterAdvancedPassing": 47
     },
     {
       "id": "qb-2027-jaylenraynor",
@@ -4350,7 +4802,7 @@
       "pick": 77,
       "projectedPick": 77,
       "grade": 48,
-      "score": 48,
+      "score": 46,
       "source": "qb_future_pff_forecast",
       "forecast": {
         "final": 48,
@@ -4393,7 +4845,16 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 77
+      "rank": 77,
+      "modelScoreBeforeAdvancedPassing": 48,
+      "advancedPassingAdjustment": -0.2,
+      "advancedPassingScoreDelta": -2,
+      "advancedPassingTraits": [
+        "Day-2 pressure/accuracy risk"
+      ],
+      "advancedPassingLabel": "Advanced passing risk",
+      "projectionHitMiss": "Projection — Miss",
+      "modelScoreAfterAdvancedPassing": 46
     },
     {
       "id": "qb-2027-dequanfinn",
@@ -4450,7 +4911,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 78
+      "rank": 78,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2027-skylerlocklear",
@@ -4464,7 +4929,7 @@
       "pick": 79,
       "projectedPick": 79,
       "grade": 48,
-      "score": 48,
+      "score": 46,
       "source": "qb_future_pff_forecast",
       "forecast": {
         "final": 48,
@@ -4507,7 +4972,16 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 79
+      "rank": 79,
+      "modelScoreBeforeAdvancedPassing": 48,
+      "advancedPassingAdjustment": -0.2,
+      "advancedPassingScoreDelta": -2,
+      "advancedPassingTraits": [
+        "Day-2 pressure/accuracy risk"
+      ],
+      "advancedPassingLabel": "Advanced passing risk",
+      "projectionHitMiss": "Projection — Miss",
+      "modelScoreAfterAdvancedPassing": 46
     },
     {
       "id": "qb-2027-bearbachmeier",
@@ -4564,7 +5038,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 80
+      "rank": 80,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2027-samleavitt",
@@ -4578,7 +5056,7 @@
       "pick": 81,
       "projectedPick": 81,
       "grade": 47,
-      "score": 47,
+      "score": 45,
       "source": "qb_future_pff_forecast",
       "forecast": {
         "final": 47,
@@ -4621,7 +5099,16 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 81
+      "rank": 81,
+      "modelScoreBeforeAdvancedPassing": 47,
+      "advancedPassingAdjustment": -0.2,
+      "advancedPassingScoreDelta": -2,
+      "advancedPassingTraits": [
+        "Day-2 pressure/accuracy risk"
+      ],
+      "advancedPassingLabel": "Advanced passing risk",
+      "projectionHitMiss": "Projection — Miss",
+      "modelScoreAfterAdvancedPassing": 45
     },
     {
       "id": "qb-2027-marcelreed",
@@ -4635,7 +5122,7 @@
       "pick": 82,
       "projectedPick": 82,
       "grade": 47,
-      "score": 47,
+      "score": 43.5,
       "source": "qb_future_pff_forecast",
       "forecast": {
         "final": 47,
@@ -4678,7 +5165,17 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 82
+      "rank": 82,
+      "modelScoreBeforeAdvancedPassing": 47,
+      "advancedPassingAdjustment": -0.35,
+      "advancedPassingScoreDelta": -3.5,
+      "advancedPassingTraits": [
+        "Day-2 pressure/accuracy risk",
+        "Play-action inflation risk"
+      ],
+      "advancedPassingLabel": "Advanced passing risk",
+      "projectionHitMiss": "Projection — Miss",
+      "modelScoreAfterAdvancedPassing": 43.5
     },
     {
       "id": "qb-2027-beaupribula",
@@ -4692,7 +5189,7 @@
       "pick": 83,
       "projectedPick": 83,
       "grade": 46,
-      "score": 46,
+      "score": 44,
       "source": "qb_future_pff_forecast",
       "forecast": {
         "final": 46,
@@ -4735,7 +5232,16 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 83
+      "rank": 83,
+      "modelScoreBeforeAdvancedPassing": 46,
+      "advancedPassingAdjustment": -0.2,
+      "advancedPassingScoreDelta": -2,
+      "advancedPassingTraits": [
+        "Day-2 pressure/accuracy risk"
+      ],
+      "advancedPassingLabel": "Advanced passing risk",
+      "projectionHitMiss": "Projection — Miss",
+      "modelScoreAfterAdvancedPassing": 44
     },
     {
       "id": "qb-2027-alessiomilivojevic",
@@ -4749,7 +5255,7 @@
       "pick": 84,
       "projectedPick": 84,
       "grade": 46,
-      "score": 46,
+      "score": 44,
       "source": "qb_future_pff_forecast",
       "forecast": {
         "final": 46,
@@ -4792,7 +5298,16 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 84
+      "rank": 84,
+      "modelScoreBeforeAdvancedPassing": 46,
+      "advancedPassingAdjustment": -0.2,
+      "advancedPassingScoreDelta": -2,
+      "advancedPassingTraits": [
+        "Day-2 pressure/accuracy risk"
+      ],
+      "advancedPassingLabel": "Advanced passing risk",
+      "projectionHitMiss": "Projection — Miss",
+      "modelScoreAfterAdvancedPassing": 44
     },
     {
       "id": "qb-2027-drakelindsey",
@@ -4806,7 +5321,7 @@
       "pick": 85,
       "projectedPick": 85,
       "grade": 46,
-      "score": 46,
+      "score": 44,
       "source": "qb_future_pff_forecast",
       "forecast": {
         "final": 46,
@@ -4849,7 +5364,16 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 85
+      "rank": 85,
+      "modelScoreBeforeAdvancedPassing": 46,
+      "advancedPassingAdjustment": -0.2,
+      "advancedPassingScoreDelta": -2,
+      "advancedPassingTraits": [
+        "Day-2 pressure/accuracy risk"
+      ],
+      "advancedPassingLabel": "Advanced passing risk",
+      "projectionHitMiss": "Projection — Miss",
+      "modelScoreAfterAdvancedPassing": 44
     },
     {
       "id": "qb-2027-lanorrissellers",
@@ -4863,7 +5387,7 @@
       "pick": 86,
       "projectedPick": 86,
       "grade": 46,
-      "score": 46,
+      "score": 44,
       "source": "qb_future_pff_forecast",
       "forecast": {
         "final": 46,
@@ -4906,7 +5430,16 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 86
+      "rank": 86,
+      "modelScoreBeforeAdvancedPassing": 46,
+      "advancedPassingAdjustment": -0.2,
+      "advancedPassingScoreDelta": -2,
+      "advancedPassingTraits": [
+        "Day-2 pressure/accuracy risk"
+      ],
+      "advancedPassingLabel": "Advanced passing risk",
+      "projectionHitMiss": "Projection — Miss",
+      "modelScoreAfterAdvancedPassing": 44
     },
     {
       "id": "qb-2027-nickminicucci",
@@ -4920,7 +5453,7 @@
       "pick": 87,
       "projectedPick": 87,
       "grade": 46,
-      "score": 46,
+      "score": 44,
       "source": "qb_future_pff_forecast",
       "forecast": {
         "final": 46,
@@ -4963,7 +5496,16 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 87
+      "rank": 87,
+      "modelScoreBeforeAdvancedPassing": 46,
+      "advancedPassingAdjustment": -0.2,
+      "advancedPassingScoreDelta": -2,
+      "advancedPassingTraits": [
+        "Day-2 pressure/accuracy risk"
+      ],
+      "advancedPassingLabel": "Advanced passing risk",
+      "projectionHitMiss": "Projection — Miss",
+      "modelScoreAfterAdvancedPassing": 44
     },
     {
       "id": "qb-2027-nicholasvattiato",
@@ -4977,7 +5519,7 @@
       "pick": 88,
       "projectedPick": 88,
       "grade": 46,
-      "score": 46,
+      "score": 44,
       "source": "qb_future_pff_forecast",
       "forecast": {
         "final": 46,
@@ -5020,7 +5562,16 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 88
+      "rank": 88,
+      "modelScoreBeforeAdvancedPassing": 46,
+      "advancedPassingAdjustment": -0.2,
+      "advancedPassingScoreDelta": -2,
+      "advancedPassingTraits": [
+        "Day-2 pressure/accuracy risk"
+      ],
+      "advancedPassingLabel": "Advanced passing risk",
+      "projectionHitMiss": "Projection — Miss",
+      "modelScoreAfterAdvancedPassing": 44
     },
     {
       "id": "qb-2027-joelabas",
@@ -5077,7 +5628,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 89
+      "rank": 89,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2027-drudeshields",
@@ -5091,7 +5646,7 @@
       "pick": 90,
       "projectedPick": 90,
       "grade": 45,
-      "score": 45,
+      "score": 41.5,
       "source": "qb_future_pff_forecast",
       "forecast": {
         "final": 45,
@@ -5134,7 +5689,17 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 90
+      "rank": 90,
+      "modelScoreBeforeAdvancedPassing": 45,
+      "advancedPassingAdjustment": -0.35,
+      "advancedPassingScoreDelta": -3.5,
+      "advancedPassingTraits": [
+        "Day-2 pressure/accuracy risk",
+        "Play-action inflation risk"
+      ],
+      "advancedPassingLabel": "Advanced passing risk",
+      "projectionHitMiss": "Projection — Miss",
+      "modelScoreAfterAdvancedPassing": 41.5
     },
     {
       "id": "qb-2027-baylorhayes",
@@ -5148,7 +5713,7 @@
       "pick": 91,
       "projectedPick": 91,
       "grade": 45,
-      "score": 45,
+      "score": 43,
       "source": "qb_future_pff_forecast",
       "forecast": {
         "final": 45,
@@ -5191,7 +5756,16 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 91
+      "rank": 91,
+      "modelScoreBeforeAdvancedPassing": 45,
+      "advancedPassingAdjustment": -0.2,
+      "advancedPassingScoreDelta": -2,
+      "advancedPassingTraits": [
+        "Day-2 pressure/accuracy risk"
+      ],
+      "advancedPassingLabel": "Advanced passing risk",
+      "projectionHitMiss": "Projection — Miss",
+      "modelScoreAfterAdvancedPassing": 43
     },
     {
       "id": "qb-2027-lunchwinfield",
@@ -5205,7 +5779,7 @@
       "pick": 92,
       "projectedPick": 92,
       "grade": 45,
-      "score": 45,
+      "score": 43,
       "source": "qb_future_pff_forecast",
       "forecast": {
         "final": 45,
@@ -5248,7 +5822,16 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 92
+      "rank": 92,
+      "modelScoreBeforeAdvancedPassing": 45,
+      "advancedPassingAdjustment": -0.2,
+      "advancedPassingScoreDelta": -2,
+      "advancedPassingTraits": [
+        "Day-2 pressure/accuracy risk"
+      ],
+      "advancedPassingLabel": "Advanced passing risk",
+      "projectionHitMiss": "Projection — Miss",
+      "modelScoreAfterAdvancedPassing": 43
     },
     {
       "id": "qb-2027-coltonjoseph",
@@ -5262,7 +5845,7 @@
       "pick": 93,
       "projectedPick": 93,
       "grade": 44,
-      "score": 44,
+      "score": 42,
       "source": "qb_future_pff_forecast",
       "forecast": {
         "final": 44,
@@ -5305,7 +5888,16 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 93
+      "rank": 93,
+      "modelScoreBeforeAdvancedPassing": 44,
+      "advancedPassingAdjustment": -0.2,
+      "advancedPassingScoreDelta": -2,
+      "advancedPassingTraits": [
+        "Day-2 pressure/accuracy risk"
+      ],
+      "advancedPassingLabel": "Advanced passing risk",
+      "projectionHitMiss": "Projection — Miss",
+      "modelScoreAfterAdvancedPassing": 42
     },
     {
       "id": "qb-2027-dylanraiola",
@@ -5319,7 +5911,7 @@
       "pick": 94,
       "projectedPick": 94,
       "grade": 44,
-      "score": 44,
+      "score": 42,
       "source": "qb_future_pff_forecast",
       "forecast": {
         "final": 44,
@@ -5362,7 +5954,16 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 94
+      "rank": 94,
+      "modelScoreBeforeAdvancedPassing": 44,
+      "advancedPassingAdjustment": -0.2,
+      "advancedPassingScoreDelta": -2,
+      "advancedPassingTraits": [
+        "Day-2 pressure/accuracy risk"
+      ],
+      "advancedPassingLabel": "Advanced passing risk",
+      "projectionHitMiss": "Projection — Miss",
+      "modelScoreAfterAdvancedPassing": 42
     },
     {
       "id": "qb-2027-tuckerkilcrease",
@@ -5376,7 +5977,7 @@
       "pick": 95,
       "projectedPick": 95,
       "grade": 44,
-      "score": 44,
+      "score": 42,
       "source": "qb_future_pff_forecast",
       "forecast": {
         "final": 44,
@@ -5419,7 +6020,16 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 95
+      "rank": 95,
+      "modelScoreBeforeAdvancedPassing": 44,
+      "advancedPassingAdjustment": -0.2,
+      "advancedPassingScoreDelta": -2,
+      "advancedPassingTraits": [
+        "Day-2 pressure/accuracy risk"
+      ],
+      "advancedPassingLabel": "Advanced passing risk",
+      "projectionHitMiss": "Projection — Miss",
+      "modelScoreAfterAdvancedPassing": 42
     },
     {
       "id": "qb-2027-parkernavarro",
@@ -5476,7 +6086,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 96
+      "rank": 96,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2027-madduxmadsen",
@@ -5490,7 +6104,7 @@
       "pick": 97,
       "projectedPick": 97,
       "grade": 43,
-      "score": 43,
+      "score": 41,
       "source": "qb_future_pff_forecast",
       "forecast": {
         "final": 43,
@@ -5533,7 +6147,16 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 97
+      "rank": 97,
+      "modelScoreBeforeAdvancedPassing": 43,
+      "advancedPassingAdjustment": -0.2,
+      "advancedPassingScoreDelta": -2,
+      "advancedPassingTraits": [
+        "Day-2 pressure/accuracy risk"
+      ],
+      "advancedPassingLabel": "Advanced passing risk",
+      "projectionHitMiss": "Projection — Miss",
+      "modelScoreAfterAdvancedPassing": 41
     },
     {
       "id": "qb-2027-ajhairstonjr",
@@ -5547,7 +6170,7 @@
       "pick": 98,
       "projectedPick": 98,
       "grade": 43,
-      "score": 43,
+      "score": 41,
       "source": "qb_future_pff_forecast",
       "forecast": {
         "final": 43,
@@ -5590,7 +6213,16 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 98
+      "rank": 98,
+      "modelScoreBeforeAdvancedPassing": 43,
+      "advancedPassingAdjustment": -0.2,
+      "advancedPassingScoreDelta": -2,
+      "advancedPassingTraits": [
+        "Day-2 pressure/accuracy risk"
+      ],
+      "advancedPassingLabel": "Advanced passing risk",
+      "projectionHitMiss": "Projection — Miss",
+      "modelScoreAfterAdvancedPassing": 41
     },
     {
       "id": "qb-2027-jacksonbrousseau",
@@ -5647,7 +6279,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 99
+      "rank": 99,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2027-joshholst",
@@ -5661,7 +6297,7 @@
       "pick": 100,
       "projectedPick": 100,
       "grade": 43,
-      "score": 43,
+      "score": 41,
       "source": "qb_future_pff_forecast",
       "forecast": {
         "final": 43,
@@ -5704,7 +6340,16 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 100
+      "rank": 100,
+      "modelScoreBeforeAdvancedPassing": 43,
+      "advancedPassingAdjustment": -0.2,
+      "advancedPassingScoreDelta": -2,
+      "advancedPassingTraits": [
+        "Day-2 pressure/accuracy risk"
+      ],
+      "advancedPassingLabel": "Advanced passing risk",
+      "projectionHitMiss": "Projection — Miss",
+      "modelScoreAfterAdvancedPassing": 41
     },
     {
       "id": "qb-2027-michaelvanburenjr",
@@ -5761,7 +6406,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 101
+      "rank": 101,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2027-ryanbrowne",
@@ -5818,7 +6467,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 102
+      "rank": 102,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2027-millermoss",
@@ -5875,7 +6528,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 103
+      "rank": 103,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2027-tjlateef",
@@ -5932,7 +6589,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 104
+      "rank": 104,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2027-ajswann",
@@ -5989,7 +6650,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 105
+      "rank": 105,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2027-aidanchiles",
@@ -6046,7 +6711,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 106
+      "rank": 106,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2027-prestonstone",
@@ -6103,7 +6772,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 107
+      "rank": 107,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2027-hunterwatson",
@@ -6160,7 +6833,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 108
+      "rank": 108,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2027-kaidonsalter",
@@ -6217,7 +6894,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 109
+      "rank": 109,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2027-goosecrowder",
@@ -6274,7 +6955,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 110
+      "rank": 110,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2027-ejwarner",
@@ -6331,7 +7016,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 111
+      "rank": 111,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2027-jeffsims",
@@ -6388,7 +7077,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 112
+      "rank": 112,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2027-taquanroberson",
@@ -6445,7 +7138,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 113
+      "rank": 113,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2027-jacksonarnold",
@@ -6502,7 +7199,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 114
+      "rank": 114,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2027-ethanvasko",
@@ -6559,7 +7260,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 115
+      "rank": 115,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2027-jaydendenegal",
@@ -6616,7 +7321,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 116
+      "rank": 116,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2027-kyrondrones",
@@ -6673,7 +7382,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 117
+      "rank": 117,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2027-keyonejenkins",
@@ -6730,7 +7443,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 118
+      "rank": 118,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2027-tjfinley",
@@ -6787,7 +7504,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 119
+      "rank": 119,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2027-aidanarmenta",
@@ -6844,7 +7565,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 120
+      "rank": 120,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2027-scottyfoxjr",
@@ -6901,7 +7626,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 121
+      "rank": 121,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2027-eliholstein",
@@ -6958,7 +7687,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 122
+      "rank": 122,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2027-taylengreen",
@@ -7015,7 +7748,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 123
+      "rank": 123,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2027-djlagway",
@@ -7072,7 +7809,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 124
+      "rank": 124,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2027-jalenkitna",
@@ -7129,7 +7870,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 125
+      "rank": 125,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2027-graysonloftis",
@@ -7186,7 +7931,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 126
+      "rank": 126,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2027-johnmateer",
@@ -7243,7 +7992,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 127
+      "rank": 127,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2027-tayvenjackson",
@@ -7300,7 +8053,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 128
+      "rank": 128,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2027-rodneytisdalejr",
@@ -7357,7 +8114,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 129
+      "rank": 129,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2027-drewpyne",
@@ -7414,7 +8175,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 130
+      "rank": 130,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2027-masonheintschel",
@@ -7471,7 +8236,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 131
+      "rank": 131,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2027-tadhudson",
@@ -7528,7 +8297,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 132
+      "rank": 132,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2027-malachinelson",
@@ -7585,7 +8358,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 133
+      "rank": 133,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2027-zaneflores",
@@ -7642,7 +8419,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 134
+      "rank": 134,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2027-maalikmurphy",
@@ -7699,7 +8480,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 135
+      "rank": 135,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2027-dexterwilliamsii",
@@ -7756,7 +8541,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 136
+      "rank": 136,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2027-kadenanderson",
@@ -7813,7 +8602,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 137
+      "rank": 137,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2027-bishopdavenport",
@@ -7870,7 +8663,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 138
+      "rank": 138,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2027-loganfife",
@@ -7927,7 +8724,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 139
+      "rank": 139,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2027-benfinley",
@@ -7984,7 +8785,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 140
+      "rank": 140,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2027-cutterboley",
@@ -8041,7 +8846,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 141
+      "rank": 141,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2027-elijahbrown",
@@ -8098,7 +8907,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 142
+      "rank": 142,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2027-bengulbranson",
@@ -8155,7 +8968,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 143
+      "rank": 143,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2027-graysonjames",
@@ -8212,7 +9029,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 144
+      "rank": 144,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2027-maxcutforth",
@@ -8269,7 +9090,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 145
+      "rank": 145,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2027-rickiecollins",
@@ -8326,7 +9151,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 146
+      "rank": 146,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2027-kiaelkelly",
@@ -8383,7 +9212,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 147
+      "rank": 147,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2027-carterjones",
@@ -8440,7 +9273,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 148
+      "rank": 148,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2027-landynlocke",
@@ -8497,7 +9334,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 149
+      "rank": 149,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     }
   ]
 }

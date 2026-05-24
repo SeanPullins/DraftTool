@@ -18,7 +18,7 @@
       "pick": 1,
       "projectedPick": 1,
       "grade": 84,
-      "score": 84,
+      "score": 87.5,
       "source": "qb_future_pff_forecast",
       "forecast": {
         "final": 84,
@@ -61,7 +61,18 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 1
+      "rank": 1,
+      "modelScoreBeforeAdvancedPassing": 84,
+      "advancedPassingAdjustment": 0.35,
+      "advancedPassingScoreDelta": 3.5,
+      "advancedPassingTraits": [
+        "Elite pressure + intermediate translator",
+        "Pressure-depth creator",
+        "Complete advanced translator"
+      ],
+      "advancedPassingLabel": "Advanced passing boost",
+      "projectionHitMiss": "Projection — Hit",
+      "modelScoreAfterAdvancedPassing": 87.5
     },
     {
       "id": "qb-2026-diegopavia",
@@ -75,7 +86,7 @@
       "pick": 2,
       "projectedPick": 2,
       "grade": 82,
-      "score": 82,
+      "score": 83.5,
       "source": "qb_future_pff_forecast",
       "forecast": {
         "final": 82,
@@ -118,7 +129,16 @@
         "alltime_ras": 4.51,
         "ras_source_url": "https://ras.football/ras-information/?PlayerID=29873"
       },
-      "rank": 2
+      "rank": 2,
+      "modelScoreBeforeAdvancedPassing": 82,
+      "advancedPassingAdjustment": 0.15,
+      "advancedPassingScoreDelta": 1.5,
+      "advancedPassingTraits": [
+        "Elite pressure + intermediate translator"
+      ],
+      "advancedPassingLabel": "Advanced passing boost",
+      "projectionHitMiss": "Projection — Hit",
+      "modelScoreAfterAdvancedPassing": 83.5
     },
     {
       "id": "qb-2026-brendansorsby",
@@ -175,7 +195,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 3
+      "rank": 3,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2026-joeyaguilar",
@@ -189,7 +213,7 @@
       "pick": 4,
       "projectedPick": 4,
       "grade": 77,
-      "score": 77,
+      "score": 79.5,
       "source": "qb_future_pff_forecast",
       "forecast": {
         "final": 77,
@@ -232,7 +256,17 @@
         "alltime_ras": null,
         "ras_source_url": "https://ras.football/ras-information/?PlayerID=29861"
       },
-      "rank": 4
+      "rank": 4,
+      "modelScoreBeforeAdvancedPassing": 77,
+      "advancedPassingAdjustment": 0.25,
+      "advancedPassingScoreDelta": 2.5,
+      "advancedPassingTraits": [
+        "Elite pressure + intermediate translator",
+        "Pressure-depth creator"
+      ],
+      "advancedPassingLabel": "Advanced passing boost",
+      "projectionHitMiss": "Projection — Hit",
+      "modelScoreAfterAdvancedPassing": 79.5
     },
     {
       "id": "qb-2026-haynesking",
@@ -289,7 +323,11 @@
         "alltime_ras": 9.65,
         "ras_source_url": "https://ras.football/ras-information/?PlayerID=29868"
       },
-      "rank": 5
+      "rank": 5,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2026-dantemoore",
@@ -303,7 +341,7 @@
       "pick": 6,
       "projectedPick": 6,
       "grade": 76,
-      "score": 76,
+      "score": 77,
       "source": "qb_future_pff_forecast",
       "forecast": {
         "final": 76,
@@ -346,7 +384,16 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 6
+      "rank": 6,
+      "modelScoreBeforeAdvancedPassing": 76,
+      "advancedPassingAdjustment": 0.1,
+      "advancedPassingScoreDelta": 1,
+      "advancedPassingTraits": [
+        "Pressure-depth creator"
+      ],
+      "advancedPassingLabel": "Advanced passing boost",
+      "projectionHitMiss": "Projection — Hit",
+      "modelScoreAfterAdvancedPassing": 77
     },
     {
       "id": "qb-2026-tommycastellanos",
@@ -403,7 +450,16 @@
         "alltime_ras": 6.36,
         "ras_source_url": "https://ras.football/ras-information/?PlayerID=30461"
       },
-      "rank": 7
+      "rank": 7,
+      "modelScoreBeforeAdvancedPassing": 75,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingScoreDelta": 0,
+      "advancedPassingTraits": [
+        "Hold-ball creation-safe"
+      ],
+      "advancedPassingLabel": "Advanced passing context",
+      "projectionHitMiss": "Projection — Watch",
+      "modelScoreAfterAdvancedPassing": 75
     },
     {
       "id": "qb-2026-trinidadchambliss",
@@ -460,7 +516,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 8
+      "rank": 8,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2026-tuckergleason",
@@ -517,7 +577,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 9
+      "rank": 9,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2026-byrumbrown",
@@ -574,7 +638,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 10
+      "rank": 10,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2026-blakehorvath",
@@ -631,7 +699,11 @@
         "alltime_ras": 8.2,
         "ras_source_url": "https://ras.football/ras-information/?PlayerID=30560"
       },
-      "rank": 11
+      "rank": 11,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2026-fernandomendoza",
@@ -645,7 +717,7 @@
       "pick": 12,
       "projectedPick": 12,
       "grade": 72,
-      "score": 72,
+      "score": 74.5,
       "source": "qb_future_pff_forecast",
       "forecast": {
         "final": 72,
@@ -688,7 +760,17 @@
         "alltime_ras": null,
         "ras_source_url": "https://ras.football/ras-information/?PlayerID=29870"
       },
-      "rank": 12
+      "rank": 12,
+      "modelScoreBeforeAdvancedPassing": 72,
+      "advancedPassingAdjustment": 0.25,
+      "advancedPassingScoreDelta": 2.5,
+      "advancedPassingTraits": [
+        "Elite pressure + intermediate translator",
+        "Pressure-depth creator"
+      ],
+      "advancedPassingLabel": "Advanced passing boost",
+      "projectionHitMiss": "Projection — Hit",
+      "modelScoreAfterAdvancedPassing": 74.5
     },
     {
       "id": "qb-2026-drewmestemaker",
@@ -745,7 +827,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 13
+      "rank": 13,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2026-noahfifita",
@@ -802,7 +888,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 14
+      "rank": 14,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2026-cjcarr",
@@ -859,7 +949,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 15
+      "rank": 15,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2026-anthonycolandrea",
@@ -916,7 +1010,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 16
+      "rank": 16,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2026-joefagnano",
@@ -973,7 +1071,11 @@
         "alltime_ras": 8.55,
         "ras_source_url": "https://ras.football/ras-information/?PlayerID=29866"
       },
-      "rank": 17
+      "rank": 17,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2026-micahalejado",
@@ -1030,7 +1132,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 18
+      "rank": 18,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2026-katinhouser",
@@ -1087,7 +1193,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 19
+      "rank": 19,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2026-cameranbrown",
@@ -1144,7 +1254,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 20
+      "rank": 20,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2026-devondampier",
@@ -1201,7 +1315,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 21
+      "rank": 21,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2026-cadeklubnik",
@@ -1258,7 +1376,11 @@
         "alltime_ras": 7.82,
         "ras_source_url": "https://ras.football/ras-information/?PlayerID=29869"
       },
-      "rank": 22
+      "rank": 22,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2026-braylonbraxton",
@@ -1315,7 +1437,11 @@
         "alltime_ras": 5.04,
         "ras_source_url": "https://ras.football/ras-information/?PlayerID=32177"
       },
-      "rank": 23
+      "rank": 23,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2026-demondwilliamsjr",
@@ -1372,7 +1498,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 24
+      "rank": 24,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2026-bradjackson",
@@ -1429,7 +1559,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 25
+      "rank": 25,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2026-darianmensah",
@@ -1486,7 +1620,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 26
+      "rank": 26,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2026-gunnerstockton",
@@ -1543,7 +1681,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 27
+      "rank": 27,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2026-broclowry",
@@ -1600,7 +1742,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 28
+      "rank": 28,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2026-athankaliakmanis",
@@ -1657,7 +1803,11 @@
         "alltime_ras": 5.37,
         "ras_source_url": "https://ras.football/ras-information/?PlayerID=30245"
       },
-      "rank": 29
+      "rank": 29,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2026-tysimpson",
@@ -1714,7 +1864,11 @@
         "alltime_ras": null,
         "ras_source_url": "https://ras.football/ras-information/?PlayerID=29876"
       },
-      "rank": 30
+      "rank": 30,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2026-carsonbeck",
@@ -1771,7 +1925,11 @@
         "alltime_ras": null,
         "ras_source_url": "https://ras.football/ras-information/?PlayerID=29864"
       },
-      "rank": 31
+      "rank": 31,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2026-romangagliano",
@@ -1828,7 +1986,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 32
+      "rank": 32,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2026-chasejenkins",
@@ -1842,7 +2004,7 @@
       "pick": 33,
       "projectedPick": 33,
       "grade": 62,
-      "score": 62,
+      "score": 60,
       "source": "qb_future_pff_forecast",
       "forecast": {
         "final": 62,
@@ -1885,7 +2047,16 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 33
+      "rank": 33,
+      "modelScoreBeforeAdvancedPassing": 62,
+      "advancedPassingAdjustment": -0.2,
+      "advancedPassingScoreDelta": -2,
+      "advancedPassingTraits": [
+        "Day-2 pressure/accuracy risk"
+      ],
+      "advancedPassingLabel": "Advanced passing risk",
+      "projectionHitMiss": "Projection — Miss",
+      "modelScoreAfterAdvancedPassing": 60
     },
     {
       "id": "qb-2026-archmanning",
@@ -1942,7 +2113,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 34
+      "rank": 34,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2026-jaydenmaiava",
@@ -1999,7 +2174,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 35
+      "rank": 35,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2026-kevinjennings",
@@ -2056,7 +2235,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 36
+      "rank": 36,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2026-chandlermorris",
@@ -2070,7 +2253,7 @@
       "pick": 37,
       "projectedPick": 37,
       "grade": 61,
-      "score": 61,
+      "score": 59,
       "source": "qb_future_pff_forecast",
       "forecast": {
         "final": 61,
@@ -2113,7 +2296,16 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 37
+      "rank": 37,
+      "modelScoreBeforeAdvancedPassing": 61,
+      "advancedPassingAdjustment": -0.2,
+      "advancedPassingScoreDelta": -2,
+      "advancedPassingTraits": [
+        "Day-2 pressure/accuracy risk"
+      ],
+      "advancedPassingLabel": "Advanced passing risk",
+      "projectionHitMiss": "Projection — Miss",
+      "modelScoreAfterAdvancedPassing": 59
     },
     {
       "id": "qb-2026-carlosdelriowilson",
@@ -2170,7 +2362,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 38
+      "rank": 38,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2026-jaronkeawesagapolutele",
@@ -2227,7 +2423,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 39
+      "rank": 39,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2026-steveangeli",
@@ -2284,7 +2484,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 40
+      "rank": 40,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2026-brendonlewis",
@@ -2341,7 +2545,11 @@
         "alltime_ras": 8.32,
         "ras_source_url": "https://ras.football/ras-information/?PlayerID=31312"
       },
-      "rank": 41
+      "rank": 41,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2026-maverickmcivor",
@@ -2398,7 +2606,11 @@
         "alltime_ras": 3.11,
         "ras_source_url": "https://ras.football/ras-information/?PlayerID=30361"
       },
-      "rank": 42
+      "rank": 42,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2026-jacobclark",
@@ -2455,7 +2667,11 @@
         "alltime_ras": null,
         "ras_source_url": "https://ras.football/ras-information/?PlayerID=30349"
       },
-      "rank": 43
+      "rank": 43,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2026-noahkim",
@@ -2469,7 +2685,7 @@
       "pick": 44,
       "projectedPick": 44,
       "grade": 58,
-      "score": 58,
+      "score": 56,
       "source": "qb_future_pff_forecast",
       "forecast": {
         "final": 58,
@@ -2512,7 +2728,16 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 44
+      "rank": 44,
+      "modelScoreBeforeAdvancedPassing": 58,
+      "advancedPassingAdjustment": -0.2,
+      "advancedPassingScoreDelta": -2,
+      "advancedPassingTraits": [
+        "Day-2 pressure/accuracy risk"
+      ],
+      "advancedPassingLabel": "Advanced passing risk",
+      "projectionHitMiss": "Projection — Miss",
+      "modelScoreAfterAdvancedPassing": 56
     },
     {
       "id": "qb-2026-roccobecht",
@@ -2569,7 +2794,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 45
+      "rank": 45,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2026-garrettnussmeier",
@@ -2626,7 +2855,11 @@
         "alltime_ras": null,
         "ras_source_url": "https://ras.football/ras-information/?PlayerID=29872"
       },
-      "rank": 46
+      "rank": 46,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2026-giolopez",
@@ -2640,7 +2873,7 @@
       "pick": 47,
       "projectedPick": 47,
       "grade": 57,
-      "score": 57,
+      "score": 55,
       "source": "qb_future_pff_forecast",
       "forecast": {
         "final": 57,
@@ -2683,7 +2916,16 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 47
+      "rank": 47,
+      "modelScoreBeforeAdvancedPassing": 57,
+      "advancedPassingAdjustment": -0.2,
+      "advancedPassingScoreDelta": -2,
+      "advancedPassingTraits": [
+        "Day-2 pressure/accuracy risk"
+      ],
+      "advancedPassingLabel": "Advanced passing risk",
+      "projectionHitMiss": "Projection — Miss",
+      "modelScoreAfterAdvancedPassing": 55
     },
     {
       "id": "qb-2026-alonzabarnettiii",
@@ -2697,7 +2939,7 @@
       "pick": 48,
       "projectedPick": 48,
       "grade": 57,
-      "score": 57,
+      "score": 55,
       "source": "qb_future_pff_forecast",
       "forecast": {
         "final": 57,
@@ -2740,7 +2982,16 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 48
+      "rank": 48,
+      "modelScoreBeforeAdvancedPassing": 57,
+      "advancedPassingAdjustment": -0.2,
+      "advancedPassingScoreDelta": -2,
+      "advancedPassingTraits": [
+        "Day-2 pressure/accuracy risk"
+      ],
+      "advancedPassingLabel": "Advanced passing risk",
+      "projectionHitMiss": "Projection — Miss",
+      "modelScoreAfterAdvancedPassing": 55
     },
     {
       "id": "qb-2026-jacklayne",
@@ -2797,7 +3048,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 49
+      "rank": 49,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2026-malikwashington",
@@ -2811,7 +3066,7 @@
       "pick": 50,
       "projectedPick": 50,
       "grade": 56,
-      "score": 56,
+      "score": 54,
       "source": "qb_future_pff_forecast",
       "forecast": {
         "final": 56,
@@ -2854,7 +3109,16 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 50
+      "rank": 50,
+      "modelScoreBeforeAdvancedPassing": 56,
+      "advancedPassingAdjustment": -0.2,
+      "advancedPassingScoreDelta": -2,
+      "advancedPassingTraits": [
+        "Day-2 pressure/accuracy risk"
+      ],
+      "advancedPassingLabel": "Advanced passing risk",
+      "projectionHitMiss": "Projection — Miss",
+      "modelScoreAfterAdvancedPassing": 54
     },
     {
       "id": "qb-2026-zevieckhaus",
@@ -2868,7 +3132,7 @@
       "pick": 51,
       "projectedPick": 51,
       "grade": 56,
-      "score": 56,
+      "score": 54,
       "source": "qb_future_pff_forecast",
       "forecast": {
         "final": 56,
@@ -2911,7 +3175,16 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 51
+      "rank": 51,
+      "modelScoreBeforeAdvancedPassing": 56,
+      "advancedPassingAdjustment": -0.2,
+      "advancedPassingScoreDelta": -2,
+      "advancedPassingTraits": [
+        "Day-2 pressure/accuracy risk"
+      ],
+      "advancedPassingLabel": "Advanced passing risk",
+      "projectionHitMiss": "Projection — Miss",
+      "modelScoreAfterAdvancedPassing": 54
     },
     {
       "id": "qb-2026-blakeshapen",
@@ -2968,7 +3241,11 @@
         "alltime_ras": 0.72,
         "ras_source_url": "https://ras.football/ras-information/?PlayerID=32493"
       },
-      "rank": 52
+      "rank": 52,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2026-walkereget",
@@ -2982,7 +3259,7 @@
       "pick": 53,
       "projectedPick": 53,
       "grade": 55,
-      "score": 55,
+      "score": 53,
       "source": "qb_future_pff_forecast",
       "forecast": {
         "final": 55,
@@ -3025,7 +3302,16 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 53
+      "rank": 53,
+      "modelScoreBeforeAdvancedPassing": 55,
+      "advancedPassingAdjustment": -0.2,
+      "advancedPassingScoreDelta": -2,
+      "advancedPassingTraits": [
+        "Day-2 pressure/accuracy risk"
+      ],
+      "advancedPassingLabel": "Advanced passing risk",
+      "projectionHitMiss": "Projection — Miss",
+      "modelScoreAfterAdvancedPassing": 53
     },
     {
       "id": "qb-2026-markgronowski",
@@ -3082,7 +3368,11 @@
         "alltime_ras": 9.61,
         "ras_source_url": "https://ras.football/ras-information/?PlayerID=30309"
       },
-      "rank": 54
+      "rank": 54,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2026-owenmccown",
@@ -3139,7 +3429,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 55
+      "rank": 55,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2026-evansimon",
@@ -3153,7 +3447,7 @@
       "pick": 56,
       "projectedPick": 56,
       "grade": 54,
-      "score": 54,
+      "score": 52,
       "source": "qb_future_pff_forecast",
       "forecast": {
         "final": 54,
@@ -3196,7 +3490,16 @@
         "alltime_ras": 5.59,
         "ras_source_url": "https://ras.football/ras-information/?PlayerID=31480"
       },
-      "rank": 56
+      "rank": 56,
+      "modelScoreBeforeAdvancedPassing": 54,
+      "advancedPassingAdjustment": -0.2,
+      "advancedPassingScoreDelta": -2,
+      "advancedPassingTraits": [
+        "Day-2 pressure/accuracy risk"
+      ],
+      "advancedPassingLabel": "Advanced passing risk",
+      "projectionHitMiss": "Projection — Miss",
+      "modelScoreAfterAdvancedPassing": 52
     },
     {
       "id": "qb-2026-cjbailey",
@@ -3210,7 +3513,7 @@
       "pick": 57,
       "projectedPick": 57,
       "grade": 54,
-      "score": 54,
+      "score": 52,
       "source": "qb_future_pff_forecast",
       "forecast": {
         "final": 54,
@@ -3253,7 +3556,16 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 57
+      "rank": 57,
+      "modelScoreBeforeAdvancedPassing": 54,
+      "advancedPassingAdjustment": -0.2,
+      "advancedPassingScoreDelta": -2,
+      "advancedPassingTraits": [
+        "Day-2 pressure/accuracy risk"
+      ],
+      "advancedPassingLabel": "Advanced passing risk",
+      "projectionHitMiss": "Projection — Miss",
+      "modelScoreAfterAdvancedPassing": 52
     },
     {
       "id": "qb-2026-lukealtmyer",
@@ -3267,7 +3579,7 @@
       "pick": 58,
       "projectedPick": 58,
       "grade": 53,
-      "score": 53,
+      "score": 51,
       "source": "qb_future_pff_forecast",
       "forecast": {
         "final": 53,
@@ -3310,7 +3622,16 @@
         "alltime_ras": 6.74,
         "ras_source_url": "https://ras.football/ras-information/?PlayerID=29863"
       },
-      "rank": 58
+      "rank": 58,
+      "modelScoreBeforeAdvancedPassing": 53,
+      "advancedPassingAdjustment": -0.2,
+      "advancedPassingScoreDelta": -2,
+      "advancedPassingTraits": [
+        "Day-2 pressure/accuracy risk"
+      ],
+      "advancedPassingLabel": "Advanced passing risk",
+      "projectionHitMiss": "Projection — Miss",
+      "modelScoreAfterAdvancedPassing": 51
     },
     {
       "id": "qb-2026-jalondaniels",
@@ -3324,7 +3645,7 @@
       "pick": 59,
       "projectedPick": 59,
       "grade": 53,
-      "score": 53,
+      "score": 49.5,
       "source": "qb_future_pff_forecast",
       "forecast": {
         "final": 53,
@@ -3367,7 +3688,17 @@
         "alltime_ras": null,
         "ras_source_url": "https://ras.football/ras-information/?PlayerID=29865"
       },
-      "rank": 59
+      "rank": 59,
+      "modelScoreBeforeAdvancedPassing": 53,
+      "advancedPassingAdjustment": -0.35,
+      "advancedPassingScoreDelta": -3.5,
+      "advancedPassingTraits": [
+        "Day-2 pressure/accuracy risk",
+        "Play-action inflation risk"
+      ],
+      "advancedPassingLabel": "Advanced passing risk",
+      "projectionHitMiss": "Projection — Miss",
+      "modelScoreAfterAdvancedPassing": 49.5
     },
     {
       "id": "qb-2026-liamszarka",
@@ -3424,7 +3755,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 60
+      "rank": 60,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2026-brysonbarnes",
@@ -3481,7 +3816,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 61
+      "rank": 61,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2026-drewallar",
@@ -3495,7 +3834,7 @@
       "pick": 62,
       "projectedPick": 62,
       "grade": 53,
-      "score": 53,
+      "score": 51,
       "source": "qb_future_pff_forecast",
       "forecast": {
         "final": 53,
@@ -3538,7 +3877,16 @@
         "alltime_ras": null,
         "ras_source_url": "https://ras.football/ras-information/?PlayerID=29862"
       },
-      "rank": 62
+      "rank": 62,
+      "modelScoreBeforeAdvancedPassing": 53,
+      "advancedPassingAdjustment": -0.2,
+      "advancedPassingScoreDelta": -2,
+      "advancedPassingTraits": [
+        "Day-2 pressure/accuracy risk"
+      ],
+      "advancedPassingLabel": "Advanced passing risk",
+      "projectionHitMiss": "Projection — Miss",
+      "modelScoreAfterAdvancedPassing": 51
     },
     {
       "id": "qb-2026-blakebaker",
@@ -3552,7 +3900,7 @@
       "pick": 63,
       "projectedPick": 63,
       "grade": 53,
-      "score": 53,
+      "score": 51,
       "source": "qb_future_pff_forecast",
       "forecast": {
         "final": 53,
@@ -3595,7 +3943,16 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 63
+      "rank": 63,
+      "modelScoreBeforeAdvancedPassing": 53,
+      "advancedPassingAdjustment": -0.2,
+      "advancedPassingScoreDelta": -2,
+      "advancedPassingTraits": [
+        "Day-2 pressure/accuracy risk"
+      ],
+      "advancedPassingLabel": "Advanced passing risk",
+      "projectionHitMiss": "Projection — Miss",
+      "modelScoreAfterAdvancedPassing": 51
     },
     {
       "id": "qb-2026-cadencreel",
@@ -3609,7 +3966,7 @@
       "pick": 64,
       "projectedPick": 64,
       "grade": 53,
-      "score": 53,
+      "score": 51,
       "source": "qb_future_pff_forecast",
       "forecast": {
         "final": 53,
@@ -3652,7 +4009,16 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 64
+      "rank": 64,
+      "modelScoreBeforeAdvancedPassing": 53,
+      "advancedPassingAdjustment": -0.2,
+      "advancedPassingScoreDelta": -2,
+      "advancedPassingTraits": [
+        "Day-2 pressure/accuracy risk"
+      ],
+      "advancedPassingLabel": "Advanced passing risk",
+      "projectionHitMiss": "Projection — Miss",
+      "modelScoreAfterAdvancedPassing": 51
     },
     {
       "id": "qb-2026-ethangrunkemeyer",
@@ -3709,7 +4075,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 65
+      "rank": 65,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2026-cadenveltkamp",
@@ -3723,7 +4093,7 @@
       "pick": 66,
       "projectedPick": 66,
       "grade": 51,
-      "score": 51,
+      "score": 49,
       "source": "qb_future_pff_forecast",
       "forecast": {
         "final": 51,
@@ -3766,7 +4136,16 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 66
+      "rank": 66,
+      "modelScoreBeforeAdvancedPassing": 51,
+      "advancedPassingAdjustment": -0.2,
+      "advancedPassingScoreDelta": -2,
+      "advancedPassingTraits": [
+        "Day-2 pressure/accuracy risk"
+      ],
+      "advancedPassingLabel": "Advanced passing risk",
+      "projectionHitMiss": "Projection — Miss",
+      "modelScoreAfterAdvancedPassing": 49
     },
     {
       "id": "qb-2026-dylanlonergan",
@@ -3780,7 +4159,7 @@
       "pick": 67,
       "projectedPick": 67,
       "grade": 51,
-      "score": 51,
+      "score": 49,
       "source": "qb_future_pff_forecast",
       "forecast": {
         "final": 51,
@@ -3823,7 +4202,16 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 67
+      "rank": 67,
+      "modelScoreBeforeAdvancedPassing": 51,
+      "advancedPassingAdjustment": -0.2,
+      "advancedPassingScoreDelta": -2,
+      "advancedPassingTraits": [
+        "Day-2 pressure/accuracy risk"
+      ],
+      "advancedPassingLabel": "Advanced passing risk",
+      "projectionHitMiss": "Projection — Miss",
+      "modelScoreAfterAdvancedPassing": 49
     },
     {
       "id": "qb-2026-joepesansky",
@@ -3837,7 +4225,7 @@
       "pick": 68,
       "projectedPick": 68,
       "grade": 51,
-      "score": 51,
+      "score": 49,
       "source": "qb_future_pff_forecast",
       "forecast": {
         "final": 51,
@@ -3880,7 +4268,16 @@
         "alltime_ras": 5.74,
         "ras_source_url": "https://ras.football/ras-information/?PlayerID=31840"
       },
-      "rank": 68
+      "rank": 68,
+      "modelScoreBeforeAdvancedPassing": 51,
+      "advancedPassingAdjustment": -0.2,
+      "advancedPassingScoreDelta": -2,
+      "advancedPassingTraits": [
+        "Day-2 pressure/accuracy risk"
+      ],
+      "advancedPassingLabel": "Advanced passing risk",
+      "projectionHitMiss": "Projection — Miss",
+      "modelScoreAfterAdvancedPassing": 49
     },
     {
       "id": "qb-2026-sawyerrobertson",
@@ -3894,7 +4291,7 @@
       "pick": 69,
       "projectedPick": 69,
       "grade": 51,
-      "score": 51,
+      "score": 49,
       "source": "qb_future_pff_forecast",
       "forecast": {
         "final": 51,
@@ -3937,7 +4334,16 @@
         "alltime_ras": 8.65,
         "ras_source_url": "https://ras.football/ras-information/?PlayerID=29875"
       },
-      "rank": 69
+      "rank": 69,
+      "modelScoreBeforeAdvancedPassing": 51,
+      "advancedPassingAdjustment": -0.2,
+      "advancedPassingScoreDelta": -2,
+      "advancedPassingTraits": [
+        "Day-2 pressure/accuracy risk"
+      ],
+      "advancedPassingLabel": "Advanced passing risk",
+      "projectionHitMiss": "Projection — Miss",
+      "modelScoreAfterAdvancedPassing": 49
     },
     {
       "id": "qb-2026-bryceunderwood",
@@ -3951,7 +4357,7 @@
       "pick": 70,
       "projectedPick": 70,
       "grade": 51,
-      "score": 51,
+      "score": 49,
       "source": "qb_future_pff_forecast",
       "forecast": {
         "final": 51,
@@ -3994,7 +4400,16 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 70
+      "rank": 70,
+      "modelScoreBeforeAdvancedPassing": 51,
+      "advancedPassingAdjustment": -0.2,
+      "advancedPassingScoreDelta": -2,
+      "advancedPassingTraits": [
+        "Day-2 pressure/accuracy risk"
+      ],
+      "advancedPassingLabel": "Advanced passing risk",
+      "projectionHitMiss": "Projection — Miss",
+      "modelScoreAfterAdvancedPassing": 49
     },
     {
       "id": "qb-2026-jjkohl",
@@ -4008,7 +4423,7 @@
       "pick": 71,
       "projectedPick": 71,
       "grade": 51,
-      "score": 51,
+      "score": 49,
       "source": "qb_future_pff_forecast",
       "forecast": {
         "final": 51,
@@ -4051,7 +4466,16 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 71
+      "rank": 71,
+      "modelScoreBeforeAdvancedPassing": 51,
+      "advancedPassingAdjustment": -0.2,
+      "advancedPassingScoreDelta": -2,
+      "advancedPassingTraits": [
+        "Day-2 pressure/accuracy risk"
+      ],
+      "advancedPassingLabel": "Advanced passing risk",
+      "projectionHitMiss": "Projection — Miss",
+      "modelScoreAfterAdvancedPassing": 49
     },
     {
       "id": "qb-2026-ashtondaniels",
@@ -4065,7 +4489,7 @@
       "pick": 72,
       "projectedPick": 72,
       "grade": 51,
-      "score": 51,
+      "score": 49,
       "source": "qb_future_pff_forecast",
       "forecast": {
         "final": 51,
@@ -4108,7 +4532,16 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 72
+      "rank": 72,
+      "modelScoreBeforeAdvancedPassing": 51,
+      "advancedPassingAdjustment": -0.2,
+      "advancedPassingScoreDelta": -2,
+      "advancedPassingTraits": [
+        "Day-2 pressure/accuracy risk"
+      ],
+      "advancedPassingLabel": "Advanced passing risk",
+      "projectionHitMiss": "Projection — Miss",
+      "modelScoreAfterAdvancedPassing": 49
     },
     {
       "id": "qb-2026-joshhoover",
@@ -4165,7 +4598,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 73
+      "rank": 73,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2026-jakeretzlaff",
@@ -4222,7 +4659,11 @@
         "alltime_ras": null,
         "ras_source_url": "https://ras.football/ras-information/?PlayerID=32254"
       },
-      "rank": 74
+      "rank": 74,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2026-averyjohnson",
@@ -4236,7 +4677,7 @@
       "pick": 75,
       "projectedPick": 75,
       "grade": 50,
-      "score": 50,
+      "score": 48,
       "source": "qb_future_pff_forecast",
       "forecast": {
         "final": 50,
@@ -4279,7 +4720,16 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 75
+      "rank": 75,
+      "modelScoreBeforeAdvancedPassing": 50,
+      "advancedPassingAdjustment": -0.2,
+      "advancedPassingScoreDelta": -2,
+      "advancedPassingTraits": [
+        "Day-2 pressure/accuracy risk"
+      ],
+      "advancedPassingLabel": "Advanced passing risk",
+      "projectionHitMiss": "Projection — Miss",
+      "modelScoreAfterAdvancedPassing": 48
     },
     {
       "id": "qb-2026-amariodom",
@@ -4293,7 +4743,7 @@
       "pick": 76,
       "projectedPick": 76,
       "grade": 50,
-      "score": 50,
+      "score": 48,
       "source": "qb_future_pff_forecast",
       "forecast": {
         "final": 50,
@@ -4336,7 +4786,16 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 76
+      "rank": 76,
+      "modelScoreBeforeAdvancedPassing": 50,
+      "advancedPassingAdjustment": -0.2,
+      "advancedPassingScoreDelta": -2,
+      "advancedPassingTraits": [
+        "Day-2 pressure/accuracy risk"
+      ],
+      "advancedPassingLabel": "Advanced passing risk",
+      "projectionHitMiss": "Projection — Miss",
+      "modelScoreAfterAdvancedPassing": 48
     },
     {
       "id": "qb-2026-robbyashford",
@@ -4350,7 +4809,7 @@
       "pick": 77,
       "projectedPick": 77,
       "grade": 50,
-      "score": 50,
+      "score": 48,
       "source": "qb_future_pff_forecast",
       "forecast": {
         "final": 50,
@@ -4393,7 +4852,16 @@
         "alltime_ras": 8.54,
         "ras_source_url": "https://ras.football/ras-information/?PlayerID=32307"
       },
-      "rank": 77
+      "rank": 77,
+      "modelScoreBeforeAdvancedPassing": 50,
+      "advancedPassingAdjustment": -0.2,
+      "advancedPassingScoreDelta": -2,
+      "advancedPassingTraits": [
+        "Day-2 pressure/accuracy risk"
+      ],
+      "advancedPassingLabel": "Advanced passing risk",
+      "projectionHitMiss": "Projection — Miss",
+      "modelScoreAfterAdvancedPassing": 48
     },
     {
       "id": "qb-2026-nicoiamaleava",
@@ -4407,7 +4875,7 @@
       "pick": 78,
       "projectedPick": 78,
       "grade": 50,
-      "score": 50,
+      "score": 48,
       "source": "qb_future_pff_forecast",
       "forecast": {
         "final": 50,
@@ -4450,7 +4918,16 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 78
+      "rank": 78,
+      "modelScoreBeforeAdvancedPassing": 50,
+      "advancedPassingAdjustment": -0.2,
+      "advancedPassingScoreDelta": -2,
+      "advancedPassingTraits": [
+        "Day-2 pressure/accuracy risk"
+      ],
+      "advancedPassingLabel": "Advanced passing risk",
+      "projectionHitMiss": "Projection — Miss",
+      "modelScoreAfterAdvancedPassing": 48
     },
     {
       "id": "qb-2026-connerweigman",
@@ -4464,7 +4941,7 @@
       "pick": 79,
       "projectedPick": 79,
       "grade": 50,
-      "score": 50,
+      "score": 48,
       "source": "qb_future_pff_forecast",
       "forecast": {
         "final": 50,
@@ -4507,7 +4984,16 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 79
+      "rank": 79,
+      "modelScoreBeforeAdvancedPassing": 50,
+      "advancedPassingAdjustment": -0.2,
+      "advancedPassingScoreDelta": -2,
+      "advancedPassingTraits": [
+        "Day-2 pressure/accuracy risk"
+      ],
+      "advancedPassingLabel": "Advanced passing risk",
+      "projectionHitMiss": "Projection — Miss",
+      "modelScoreAfterAdvancedPassing": 48
     },
     {
       "id": "qb-2026-behrenmorton",
@@ -4564,7 +5050,11 @@
         "alltime_ras": 5.66,
         "ras_source_url": "https://ras.football/ras-information/?PlayerID=29871"
       },
-      "rank": 80
+      "rank": 80,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2026-jcfrenchiv",
@@ -4578,7 +5068,7 @@
       "pick": 81,
       "projectedPick": 81,
       "grade": 49,
-      "score": 49,
+      "score": 47,
       "source": "qb_future_pff_forecast",
       "forecast": {
         "final": 49,
@@ -4621,7 +5111,16 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 81
+      "rank": 81,
+      "modelScoreBeforeAdvancedPassing": 49,
+      "advancedPassingAdjustment": -0.2,
+      "advancedPassingScoreDelta": -2,
+      "advancedPassingTraits": [
+        "Day-2 pressure/accuracy risk"
+      ],
+      "advancedPassingLabel": "Advanced passing risk",
+      "projectionHitMiss": "Projection — Miss",
+      "modelScoreAfterAdvancedPassing": 47
     },
     {
       "id": "qb-2026-jaylenraynor",
@@ -4635,7 +5134,7 @@
       "pick": 82,
       "projectedPick": 82,
       "grade": 48,
-      "score": 48,
+      "score": 46,
       "source": "qb_future_pff_forecast",
       "forecast": {
         "final": 48,
@@ -4678,7 +5177,16 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 82
+      "rank": 82,
+      "modelScoreBeforeAdvancedPassing": 48,
+      "advancedPassingAdjustment": -0.2,
+      "advancedPassingScoreDelta": -2,
+      "advancedPassingTraits": [
+        "Day-2 pressure/accuracy risk"
+      ],
+      "advancedPassingLabel": "Advanced passing risk",
+      "projectionHitMiss": "Projection — Miss",
+      "modelScoreAfterAdvancedPassing": 46
     },
     {
       "id": "qb-2026-dequanfinn",
@@ -4735,7 +5243,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 83
+      "rank": 83,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2026-skylerlocklear",
@@ -4749,7 +5261,7 @@
       "pick": 84,
       "projectedPick": 84,
       "grade": 48,
-      "score": 48,
+      "score": 46,
       "source": "qb_future_pff_forecast",
       "forecast": {
         "final": 48,
@@ -4792,7 +5304,16 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 84
+      "rank": 84,
+      "modelScoreBeforeAdvancedPassing": 48,
+      "advancedPassingAdjustment": -0.2,
+      "advancedPassingScoreDelta": -2,
+      "advancedPassingTraits": [
+        "Day-2 pressure/accuracy risk"
+      ],
+      "advancedPassingLabel": "Advanced passing risk",
+      "projectionHitMiss": "Projection — Miss",
+      "modelScoreAfterAdvancedPassing": 46
     },
     {
       "id": "qb-2026-bearbachmeier",
@@ -4849,7 +5370,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 85
+      "rank": 85,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2026-samleavitt",
@@ -4863,7 +5388,7 @@
       "pick": 86,
       "projectedPick": 86,
       "grade": 47,
-      "score": 47,
+      "score": 45,
       "source": "qb_future_pff_forecast",
       "forecast": {
         "final": 47,
@@ -4906,7 +5431,16 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 86
+      "rank": 86,
+      "modelScoreBeforeAdvancedPassing": 47,
+      "advancedPassingAdjustment": -0.2,
+      "advancedPassingScoreDelta": -2,
+      "advancedPassingTraits": [
+        "Day-2 pressure/accuracy risk"
+      ],
+      "advancedPassingLabel": "Advanced passing risk",
+      "projectionHitMiss": "Projection — Miss",
+      "modelScoreAfterAdvancedPassing": 45
     },
     {
       "id": "qb-2026-marcelreed",
@@ -4920,7 +5454,7 @@
       "pick": 87,
       "projectedPick": 87,
       "grade": 47,
-      "score": 47,
+      "score": 43.5,
       "source": "qb_future_pff_forecast",
       "forecast": {
         "final": 47,
@@ -4963,7 +5497,17 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 87
+      "rank": 87,
+      "modelScoreBeforeAdvancedPassing": 47,
+      "advancedPassingAdjustment": -0.35,
+      "advancedPassingScoreDelta": -3.5,
+      "advancedPassingTraits": [
+        "Day-2 pressure/accuracy risk",
+        "Play-action inflation risk"
+      ],
+      "advancedPassingLabel": "Advanced passing risk",
+      "projectionHitMiss": "Projection — Miss",
+      "modelScoreAfterAdvancedPassing": 43.5
     },
     {
       "id": "qb-2026-beaupribula",
@@ -4977,7 +5521,7 @@
       "pick": 88,
       "projectedPick": 88,
       "grade": 46,
-      "score": 46,
+      "score": 44,
       "source": "qb_future_pff_forecast",
       "forecast": {
         "final": 46,
@@ -5020,7 +5564,16 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 88
+      "rank": 88,
+      "modelScoreBeforeAdvancedPassing": 46,
+      "advancedPassingAdjustment": -0.2,
+      "advancedPassingScoreDelta": -2,
+      "advancedPassingTraits": [
+        "Day-2 pressure/accuracy risk"
+      ],
+      "advancedPassingLabel": "Advanced passing risk",
+      "projectionHitMiss": "Projection — Miss",
+      "modelScoreAfterAdvancedPassing": 44
     },
     {
       "id": "qb-2026-alessiomilivojevic",
@@ -5034,7 +5587,7 @@
       "pick": 89,
       "projectedPick": 89,
       "grade": 46,
-      "score": 46,
+      "score": 44,
       "source": "qb_future_pff_forecast",
       "forecast": {
         "final": 46,
@@ -5077,7 +5630,16 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 89
+      "rank": 89,
+      "modelScoreBeforeAdvancedPassing": 46,
+      "advancedPassingAdjustment": -0.2,
+      "advancedPassingScoreDelta": -2,
+      "advancedPassingTraits": [
+        "Day-2 pressure/accuracy risk"
+      ],
+      "advancedPassingLabel": "Advanced passing risk",
+      "projectionHitMiss": "Projection — Miss",
+      "modelScoreAfterAdvancedPassing": 44
     },
     {
       "id": "qb-2026-drakelindsey",
@@ -5091,7 +5653,7 @@
       "pick": 90,
       "projectedPick": 90,
       "grade": 46,
-      "score": 46,
+      "score": 44,
       "source": "qb_future_pff_forecast",
       "forecast": {
         "final": 46,
@@ -5134,7 +5696,16 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 90
+      "rank": 90,
+      "modelScoreBeforeAdvancedPassing": 46,
+      "advancedPassingAdjustment": -0.2,
+      "advancedPassingScoreDelta": -2,
+      "advancedPassingTraits": [
+        "Day-2 pressure/accuracy risk"
+      ],
+      "advancedPassingLabel": "Advanced passing risk",
+      "projectionHitMiss": "Projection — Miss",
+      "modelScoreAfterAdvancedPassing": 44
     },
     {
       "id": "qb-2026-lanorrissellers",
@@ -5148,7 +5719,7 @@
       "pick": 91,
       "projectedPick": 91,
       "grade": 46,
-      "score": 46,
+      "score": 44,
       "source": "qb_future_pff_forecast",
       "forecast": {
         "final": 46,
@@ -5191,7 +5762,16 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 91
+      "rank": 91,
+      "modelScoreBeforeAdvancedPassing": 46,
+      "advancedPassingAdjustment": -0.2,
+      "advancedPassingScoreDelta": -2,
+      "advancedPassingTraits": [
+        "Day-2 pressure/accuracy risk"
+      ],
+      "advancedPassingLabel": "Advanced passing risk",
+      "projectionHitMiss": "Projection — Miss",
+      "modelScoreAfterAdvancedPassing": 44
     },
     {
       "id": "qb-2026-nickminicucci",
@@ -5205,7 +5785,7 @@
       "pick": 92,
       "projectedPick": 92,
       "grade": 46,
-      "score": 46,
+      "score": 44,
       "source": "qb_future_pff_forecast",
       "forecast": {
         "final": 46,
@@ -5248,7 +5828,16 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 92
+      "rank": 92,
+      "modelScoreBeforeAdvancedPassing": 46,
+      "advancedPassingAdjustment": -0.2,
+      "advancedPassingScoreDelta": -2,
+      "advancedPassingTraits": [
+        "Day-2 pressure/accuracy risk"
+      ],
+      "advancedPassingLabel": "Advanced passing risk",
+      "projectionHitMiss": "Projection — Miss",
+      "modelScoreAfterAdvancedPassing": 44
     },
     {
       "id": "qb-2026-nicholasvattiato",
@@ -5262,7 +5851,7 @@
       "pick": 93,
       "projectedPick": 93,
       "grade": 46,
-      "score": 46,
+      "score": 44,
       "source": "qb_future_pff_forecast",
       "forecast": {
         "final": 46,
@@ -5305,7 +5894,16 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 93
+      "rank": 93,
+      "modelScoreBeforeAdvancedPassing": 46,
+      "advancedPassingAdjustment": -0.2,
+      "advancedPassingScoreDelta": -2,
+      "advancedPassingTraits": [
+        "Day-2 pressure/accuracy risk"
+      ],
+      "advancedPassingLabel": "Advanced passing risk",
+      "projectionHitMiss": "Projection — Miss",
+      "modelScoreAfterAdvancedPassing": 44
     },
     {
       "id": "qb-2026-joelabas",
@@ -5362,7 +5960,11 @@
         "alltime_ras": 1.64,
         "ras_source_url": "https://ras.football/ras-information/?PlayerID=31134"
       },
-      "rank": 94
+      "rank": 94,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2026-drudeshields",
@@ -5376,7 +5978,7 @@
       "pick": 95,
       "projectedPick": 95,
       "grade": 45,
-      "score": 45,
+      "score": 41.5,
       "source": "qb_future_pff_forecast",
       "forecast": {
         "final": 45,
@@ -5419,7 +6021,17 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 95
+      "rank": 95,
+      "modelScoreBeforeAdvancedPassing": 45,
+      "advancedPassingAdjustment": -0.35,
+      "advancedPassingScoreDelta": -3.5,
+      "advancedPassingTraits": [
+        "Day-2 pressure/accuracy risk",
+        "Play-action inflation risk"
+      ],
+      "advancedPassingLabel": "Advanced passing risk",
+      "projectionHitMiss": "Projection — Miss",
+      "modelScoreAfterAdvancedPassing": 41.5
     },
     {
       "id": "qb-2026-baylorhayes",
@@ -5433,7 +6045,7 @@
       "pick": 96,
       "projectedPick": 96,
       "grade": 45,
-      "score": 45,
+      "score": 43,
       "source": "qb_future_pff_forecast",
       "forecast": {
         "final": 45,
@@ -5476,7 +6088,16 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 96
+      "rank": 96,
+      "modelScoreBeforeAdvancedPassing": 45,
+      "advancedPassingAdjustment": -0.2,
+      "advancedPassingScoreDelta": -2,
+      "advancedPassingTraits": [
+        "Day-2 pressure/accuracy risk"
+      ],
+      "advancedPassingLabel": "Advanced passing risk",
+      "projectionHitMiss": "Projection — Miss",
+      "modelScoreAfterAdvancedPassing": 43
     },
     {
       "id": "qb-2026-lunchwinfield",
@@ -5490,7 +6111,7 @@
       "pick": 97,
       "projectedPick": 97,
       "grade": 45,
-      "score": 45,
+      "score": 43,
       "source": "qb_future_pff_forecast",
       "forecast": {
         "final": 45,
@@ -5533,7 +6154,16 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 97
+      "rank": 97,
+      "modelScoreBeforeAdvancedPassing": 45,
+      "advancedPassingAdjustment": -0.2,
+      "advancedPassingScoreDelta": -2,
+      "advancedPassingTraits": [
+        "Day-2 pressure/accuracy risk"
+      ],
+      "advancedPassingLabel": "Advanced passing risk",
+      "projectionHitMiss": "Projection — Miss",
+      "modelScoreAfterAdvancedPassing": 43
     },
     {
       "id": "qb-2026-coltonjoseph",
@@ -5547,7 +6177,7 @@
       "pick": 98,
       "projectedPick": 98,
       "grade": 44,
-      "score": 44,
+      "score": 42,
       "source": "qb_future_pff_forecast",
       "forecast": {
         "final": 44,
@@ -5590,7 +6220,16 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 98
+      "rank": 98,
+      "modelScoreBeforeAdvancedPassing": 44,
+      "advancedPassingAdjustment": -0.2,
+      "advancedPassingScoreDelta": -2,
+      "advancedPassingTraits": [
+        "Day-2 pressure/accuracy risk"
+      ],
+      "advancedPassingLabel": "Advanced passing risk",
+      "projectionHitMiss": "Projection — Miss",
+      "modelScoreAfterAdvancedPassing": 42
     },
     {
       "id": "qb-2026-dylanraiola",
@@ -5604,7 +6243,7 @@
       "pick": 99,
       "projectedPick": 99,
       "grade": 44,
-      "score": 44,
+      "score": 42,
       "source": "qb_future_pff_forecast",
       "forecast": {
         "final": 44,
@@ -5647,7 +6286,16 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 99
+      "rank": 99,
+      "modelScoreBeforeAdvancedPassing": 44,
+      "advancedPassingAdjustment": -0.2,
+      "advancedPassingScoreDelta": -2,
+      "advancedPassingTraits": [
+        "Day-2 pressure/accuracy risk"
+      ],
+      "advancedPassingLabel": "Advanced passing risk",
+      "projectionHitMiss": "Projection — Miss",
+      "modelScoreAfterAdvancedPassing": 42
     },
     {
       "id": "qb-2026-tuckerkilcrease",
@@ -5661,7 +6309,7 @@
       "pick": 100,
       "projectedPick": 100,
       "grade": 44,
-      "score": 44,
+      "score": 42,
       "source": "qb_future_pff_forecast",
       "forecast": {
         "final": 44,
@@ -5704,7 +6352,16 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 100
+      "rank": 100,
+      "modelScoreBeforeAdvancedPassing": 44,
+      "advancedPassingAdjustment": -0.2,
+      "advancedPassingScoreDelta": -2,
+      "advancedPassingTraits": [
+        "Day-2 pressure/accuracy risk"
+      ],
+      "advancedPassingLabel": "Advanced passing risk",
+      "projectionHitMiss": "Projection — Miss",
+      "modelScoreAfterAdvancedPassing": 42
     },
     {
       "id": "qb-2026-parkernavarro",
@@ -5761,7 +6418,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 101
+      "rank": 101,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2026-madduxmadsen",
@@ -5818,7 +6479,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 102
+      "rank": 102,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2026-ajhairstonjr",
@@ -5875,7 +6540,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 103
+      "rank": 103,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2026-jacksonbrousseau",
@@ -5932,7 +6601,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 104
+      "rank": 104,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2026-joshholst",
@@ -5989,7 +6662,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 105
+      "rank": 105,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2026-michaelvanburenjr",
@@ -6046,7 +6723,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 106
+      "rank": 106,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2026-ryanbrowne",
@@ -6103,7 +6784,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 107
+      "rank": 107,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2026-millermoss",
@@ -6160,7 +6845,11 @@
         "alltime_ras": null,
         "ras_source_url": "https://ras.football/ras-information/?PlayerID=30287"
       },
-      "rank": 108
+      "rank": 108,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2026-tjlateef",
@@ -6217,7 +6906,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 109
+      "rank": 109,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2026-ajswann",
@@ -6274,7 +6967,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 110
+      "rank": 110,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2026-aidanchiles",
@@ -6331,7 +7028,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 111
+      "rank": 111,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2026-prestonstone",
@@ -6388,7 +7089,11 @@
         "alltime_ras": null,
         "ras_source_url": "https://ras.football/ras-information/?PlayerID=30464"
       },
-      "rank": 112
+      "rank": 112,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2026-hunterwatson",
@@ -6445,7 +7150,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 113
+      "rank": 113,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2026-jeffsims",
@@ -6502,7 +7211,11 @@
         "alltime_ras": 9.97,
         "ras_source_url": "https://ras.football/ras-information/?PlayerID=32328"
       },
-      "rank": 114
+      "rank": 114,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2026-kaidonsalter",
@@ -6559,7 +7272,11 @@
         "alltime_ras": 7.62,
         "ras_source_url": "https://ras.football/ras-information/?PlayerID=30298"
       },
-      "rank": 115
+      "rank": 115,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2026-goosecrowder",
@@ -6616,7 +7333,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 116
+      "rank": 116,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2026-ejwarner",
@@ -6673,7 +7394,11 @@
         "alltime_ras": 3.95,
         "ras_source_url": "https://ras.football/ras-information/?PlayerID=30620"
       },
-      "rank": 117
+      "rank": 117,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2026-kyrondrones",
@@ -6730,7 +7455,11 @@
         "alltime_ras": 9.58,
         "ras_source_url": "https://ras.football/ras-information/?PlayerID=30327"
       },
-      "rank": 118
+      "rank": 118,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2026-taquanroberson",
@@ -6787,7 +7516,11 @@
         "alltime_ras": 3.84,
         "ras_source_url": "https://ras.football/ras-information/?PlayerID=32336"
       },
-      "rank": 119
+      "rank": 119,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2026-jacksonarnold",
@@ -6844,7 +7577,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 120
+      "rank": 120,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2026-ethanvasko",
@@ -6901,7 +7638,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 121
+      "rank": 121,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2026-jaydendenegal",
@@ -6958,7 +7699,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 122
+      "rank": 122,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2026-keyonejenkins",
@@ -7015,7 +7760,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 123
+      "rank": 123,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2026-taylengreen",
@@ -7072,7 +7821,11 @@
         "alltime_ras": 9.99,
         "ras_source_url": "https://ras.football/ras-information/?PlayerID=29867"
       },
-      "rank": 124
+      "rank": 124,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2026-tjfinley",
@@ -7129,7 +7882,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 125
+      "rank": 125,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2026-aidanarmenta",
@@ -7186,7 +7943,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 126
+      "rank": 126,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2026-scottyfoxjr",
@@ -7243,7 +8004,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 127
+      "rank": 127,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2026-eliholstein",
@@ -7300,7 +8065,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 128
+      "rank": 128,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2026-djlagway",
@@ -7357,7 +8126,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 129
+      "rank": 129,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2026-jalenkitna",
@@ -7414,7 +8187,11 @@
         "alltime_ras": null,
         "ras_source_url": "https://ras.football/ras-information/?PlayerID=31664"
       },
-      "rank": 130
+      "rank": 130,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2026-graysonloftis",
@@ -7471,7 +8248,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 131
+      "rank": 131,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2026-johnmateer",
@@ -7528,7 +8309,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 132
+      "rank": 132,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2026-tayvenjackson",
@@ -7585,7 +8370,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 133
+      "rank": 133,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2026-rodneytisdalejr",
@@ -7642,7 +8431,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 134
+      "rank": 134,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2026-drewpyne",
@@ -7699,7 +8492,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 135
+      "rank": 135,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2026-masonheintschel",
@@ -7756,7 +8553,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 136
+      "rank": 136,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2026-tadhudson",
@@ -7813,7 +8614,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 137
+      "rank": 137,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2026-malachinelson",
@@ -7870,7 +8675,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 138
+      "rank": 138,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2026-zaneflores",
@@ -7927,7 +8736,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 139
+      "rank": 139,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2026-maalikmurphy",
@@ -7984,7 +8797,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 140
+      "rank": 140,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2026-dexterwilliamsii",
@@ -8041,7 +8858,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 141
+      "rank": 141,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2026-kadenanderson",
@@ -8098,7 +8919,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 142
+      "rank": 142,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2026-bishopdavenport",
@@ -8155,7 +8980,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 143
+      "rank": 143,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2026-loganfife",
@@ -8212,7 +9041,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 144
+      "rank": 144,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2026-benfinley",
@@ -8269,7 +9102,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 145
+      "rank": 145,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2026-cutterboley",
@@ -8326,7 +9163,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 146
+      "rank": 146,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2026-elijahbrown",
@@ -8383,7 +9224,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 147
+      "rank": 147,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2026-bengulbranson",
@@ -8440,7 +9285,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 148
+      "rank": 148,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2026-graysonjames",
@@ -8497,7 +9346,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 149
+      "rank": 149,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2026-maxcutforth",
@@ -8554,7 +9407,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 150
+      "rank": 150,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2026-rickiecollins",
@@ -8611,7 +9468,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 151
+      "rank": 151,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2026-kiaelkelly",
@@ -8668,7 +9529,11 @@
         "alltime_ras": 7.16,
         "ras_source_url": "https://ras.football/ras-information/?PlayerID=30598"
       },
-      "rank": 152
+      "rank": 152,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2026-carterjones",
@@ -8725,7 +9590,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 153
+      "rank": 153,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2026-landynlocke",
@@ -8782,7 +9651,11 @@
         "alltime_ras": null,
         "ras_source_url": null
       },
-      "rank": 154
+      "rank": 154,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     }
   ]
 }

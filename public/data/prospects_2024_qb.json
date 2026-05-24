@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-05-22T19:44:58.518Z",
+  "generatedAt": "2026-05-22T21:26:24.650Z",
   "model": "QB_DRAFTED_75_20_5",
   "notes": [
     "Drafted QB projection uses 75% draft capital, 20% best qualifying final-2-season QB PFF, 5% athletic/RAS.",
@@ -49,7 +49,11 @@
         "alltime_ras": null,
         "ras_source_url": "https://ras.football/ras-information/?PlayerID=25157"
       },
-      "rank": 1
+      "rank": 1,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2024-jaydendaniels",
@@ -63,7 +67,7 @@
       "pick": 2,
       "projectedPick": 2,
       "grade": 87,
-      "score": 87,
+      "score": 89.5,
       "source": "qb_drafted_projection_75_20_5",
       "forecast": {
         "final": 87,
@@ -94,7 +98,17 @@
         "alltime_ras": null,
         "ras_source_url": "https://ras.football/ras-information/?PlayerID=25164"
       },
-      "rank": 2
+      "rank": 2,
+      "modelScoreBeforeAdvancedPassing": 87,
+      "advancedPassingAdjustment": 0.25,
+      "advancedPassingScoreDelta": 2.5,
+      "advancedPassingTraits": [
+        "Elite pressure + intermediate translator",
+        "Pressure-depth creator"
+      ],
+      "advancedPassingLabel": "Advanced passing boost",
+      "projectionHitMiss": "Projection — Hit",
+      "modelScoreAfterAdvancedPassing": 89.5
     },
     {
       "id": "qb-2024-drakemaye",
@@ -139,7 +153,11 @@
         "alltime_ras": null,
         "ras_source_url": "https://ras.football/ras-information/?PlayerID=25158"
       },
-      "rank": 3
+      "rank": 3,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2024-jjmccarthy",
@@ -153,7 +171,7 @@
       "pick": 10,
       "projectedPick": 10,
       "grade": 62,
-      "score": 62,
+      "score": 63,
       "source": "qb_drafted_projection_75_20_5",
       "forecast": {
         "final": 62,
@@ -184,7 +202,16 @@
         "alltime_ras": null,
         "ras_source_url": "https://ras.football/ras-information/?PlayerID=25176"
       },
-      "rank": 4
+      "rank": 4,
+      "modelScoreBeforeAdvancedPassing": 62,
+      "advancedPassingAdjustment": 0.1,
+      "advancedPassingScoreDelta": 1,
+      "advancedPassingTraits": [
+        "Pressure-depth creator"
+      ],
+      "advancedPassingLabel": "Advanced passing boost",
+      "projectionHitMiss": "Projection — Hit",
+      "modelScoreAfterAdvancedPassing": 63
     },
     {
       "id": "qb-2024-bonix",
@@ -198,7 +225,7 @@
       "pick": 12,
       "projectedPick": 12,
       "grade": 62,
-      "score": 62,
+      "score": 65.5,
       "source": "qb_drafted_projection_75_20_5",
       "forecast": {
         "final": 62,
@@ -229,7 +256,18 @@
         "alltime_ras": null,
         "ras_source_url": "https://ras.football/ras-information/?PlayerID=25102"
       },
-      "rank": 5
+      "rank": 5,
+      "modelScoreBeforeAdvancedPassing": 62,
+      "advancedPassingAdjustment": 0.35,
+      "advancedPassingScoreDelta": 3.5,
+      "advancedPassingTraits": [
+        "Elite pressure + intermediate translator",
+        "Pressure-depth creator",
+        "Complete advanced translator"
+      ],
+      "advancedPassingLabel": "Advanced passing boost",
+      "projectionHitMiss": "Projection — Hit",
+      "modelScoreAfterAdvancedPassing": 65.5
     },
     {
       "id": "qb-2024-jordantravis",
@@ -274,7 +312,11 @@
         "alltime_ras": null,
         "ras_source_url": "https://ras.football/ras-information/?PlayerID=24935"
       },
-      "rank": 6
+      "rank": 6,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2024-spencerrattler",
@@ -319,7 +361,11 @@
         "alltime_ras": 3.94,
         "ras_source_url": "https://ras.football/ras-information/?PlayerID=25104"
       },
-      "rank": 7
+      "rank": 7,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2024-michaelpratt",
@@ -364,7 +410,11 @@
         "alltime_ras": 8.36,
         "ras_source_url": "https://ras.football/ras-information/?PlayerID=25106"
       },
-      "rank": 8
+      "rank": 8,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     },
     {
       "id": "qb-2024-devinleary",
@@ -409,7 +459,11 @@
         "alltime_ras": null,
         "ras_source_url": "https://ras.football/ras-information/?PlayerID=24934"
       },
-      "rank": 9
+      "rank": 9,
+      "advancedPassingAdjustment": 0,
+      "advancedPassingTraits": [],
+      "advancedPassingLabel": "No advanced passing signal",
+      "projectionHitMiss": "Projection — Watch"
     }
   ]
 }

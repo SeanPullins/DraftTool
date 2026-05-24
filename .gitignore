@@ -23,3 +23,4 @@ vite.config.d.ts
 scripts/build-pff-comparison-data.mjs
 package-lock.json
 .claude/
+/public/data/model/qb_advanced_pff_all.json
