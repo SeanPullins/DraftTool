@@ -2798,6 +2798,7 @@ function buildLatestPffSeasonMap(seasons: any[]) {
 
 function ClassExplorer({ pool, history, pffProfiles, pffLookup, y1Data, careerStats, histFlagMap, currentName, currentYear, saved, projectionOverlay, compSignalMap, rbScoreReadyMap, qbTranslationMap, qbPffSeasons, wrPffSeasons, tePffSeasons, rbPffSeasons }: { pool: Historical[]; history: Historical[]; pffProfiles: PffProfile[]; pffLookup: Map<string, PffProfile>; y1Data?: Y1Data; careerStats?: CareerStatMap; histFlagMap: Map<string, HistoricalOutcomeFlag>; currentName: string; currentYear: number; saved: SavedProspect[]; projectionOverlay: Map<string, PositionProjectionOverlay>; compSignalMap: Map<string, PositionCompSignal>; rbScoreReadyMap: Map<string, RbScoreReadySignal>; qbTranslationMap: Map<string, QbTranslationSignal>; qbPffSeasons: QbPffSeason[]; wrPffSeasons: WrPffSeason[]; tePffSeasons: any[]; rbPffSeasons: any[]; }) {
   const [qbV102ScoreMap, setQbV102ScoreMap] = useState<Map<string, any>>(new Map())
+  const qbV102CleanName = (value: any) => String(value || '').toLowerCase().replace(/[^a-z0-9]/g, '')
 
   useEffect(() => {
     let cancelled = false
@@ -2818,6 +2819,7 @@ function ClassExplorer({ pool, history, pffProfiles, pffLookup, y1Data, careerSt
           if (!name || !Number.isFinite(year)) return
 
           map.set(projectionOverlayKey(year, 'QB', name), row)
+          map.set(`QB_NAME|${qbV102CleanName(name)}`, row)
         })
 
         setQbV102ScoreMap(map)
@@ -2844,6 +2846,9 @@ function ClassExplorer({ pool, history, pffProfiles, pffLookup, y1Data, careerSt
       const row = qbV102ScoreMap.get(projectionOverlayKey(year, 'QB', player?.name))
       if (row) return row
     }
+
+    const nameOnly = qbV102ScoreMap.get(`QB_NAME|${qbV102CleanName(player?.name)}`)
+    if (nameOnly) return nameOnly
 
     return null
   }
