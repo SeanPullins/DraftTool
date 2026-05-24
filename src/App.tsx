@@ -2466,7 +2466,7 @@ function buildPlayerExplanation(player: any, ctx: any) {
   const rbScoreReadySignal = ctx?.rbScoreReadySignal || null
   const rbScoreReadyAdjustment = safeNum(rbScoreReadySignal?.recommendedAdjustment)
 
-  const qbTranslationSignal = ctx?.qbTranslationSignal || null
+  const qbTranslationSignal = ctx?.qbTranslationSignal || buildInlineQbTranslationSignal(player, ctx?.qbContext)
   const qbTranslationAdjustment = safeNum(qbTranslationSignal?.adjustment)
 
   const compSignal = ctx?.compSignal || null
@@ -2503,6 +2503,119 @@ function buildPlayerExplanation(player: any, ctx: any) {
     qbTranslationSignal,
   }
 }
+
+
+function fieldNumLoose(source: unknown, keys: string[], fallback = 0): number {
+  const r = asRecord(source)
+  if (!r) return fallback
+
+  for (const key of keys) {
+    const direct = numberField(r, key, Number.NaN)
+    if (Number.isFinite(direct)) return direct
+  }
+
+  const normalizedKeys = keys.map((k) => norm(k))
+  for (const [key, value] of Object.entries(r)) {
+    if (!normalizedKeys.includes(norm(key))) continue
+    const n = Number(value)
+    if (Number.isFinite(n)) return n
+  }
+
+  return fallback
+}
+
+function buildInlineQbTranslationSignal(player: Historical, qbContext: unknown): QbTranslationSignal | null {
+  if (player.pos !== 'QB' || !qbContext) return null
+
+  const pick = Number.isFinite(player.pick) ? player.pick : 999
+  const attempts = fieldNumLoose(qbContext, ['attempts', 'dropbacks'], 0)
+
+  const rawBtt = fieldNumLoose(qbContext, ['btt', 'bttPct', 'btt_rate', 'btt_pct', 'btt%', 'big_time_throw_rate'], 0)
+  const rawTwp = fieldNumLoose(qbContext, ['twp', 'twpPct', 'twp_rate', 'twp_pct', 'twp%', 'turnover_worthy_play_rate'], 0)
+
+  const btt = rawBtt > 12 && attempts > 0 ? (rawBtt / attempts) * 100 : rawBtt
+  const twp = rawTwp > 12 && attempts > 0 ? (rawTwp / attempts) * 100 : rawTwp
+
+  const pass = fieldNumLoose(qbContext, ['pass', 'passGrade', 'pass_grade', 'grades_pass', 'pff'], 0)
+  const run = fieldNumLoose(qbContext, ['run', 'runGrade', 'run_grade', 'grades_run'], 0)
+  const scrambles = fieldNumLoose(qbContext, ['scrambles'], 0)
+  const acc = fieldNumLoose(qbContext, ['acc', 'adjustedAccuracy', 'adjusted_completion_percent', 'accuracy_percent', 'adjustedCompletionPercent'], 0)
+  const adot = fieldNumLoose(qbContext, ['adot', 'avgDepthOfTarget', 'avg_depth_of_target'], 0)
+  const epa = fieldNumLoose(qbContext, ['epa', 'epa_per_play'], 0)
+
+  const traits: string[] = []
+  let adjustment = 0
+
+  const eliteScrambleCreation =
+    pick <= 100 &&
+    scrambles >= 40 &&
+    run >= 75 &&
+    acc >= 70
+
+  const top32CreationPlus =
+    pick <= 32 &&
+    scrambles >= 25 &&
+    btt >= 5.5 &&
+    adot >= 9.0 &&
+    acc >= 70
+
+  const day2LowPassLowAcc =
+    pick > 32 &&
+    pick <= 100 &&
+    pass < 75 &&
+    acc < 70
+
+  const highCapitalLowCreation =
+    pick <= 64 &&
+    btt < 4.5 &&
+    adot < 9.5 &&
+    epa < 0.35
+
+  const safeLimitedLowCreation =
+    pick > 20 &&
+    btt < 4.5 &&
+    twp <= 2.5 &&
+    acc >= 72
+
+  if (eliteScrambleCreation) {
+    adjustment += 0.35
+    traits.push('Elite scramble creation')
+  }
+
+  if (top32CreationPlus) {
+    traits.push('Top-32 creation plus')
+  }
+
+  if (day2LowPassLowAcc) {
+    adjustment -= 0.35
+    traits.push('Day-2 low pass/accuracy risk')
+  }
+
+  if (highCapitalLowCreation) {
+    adjustment -= 0.25
+    traits.push('High-capital low-creation risk')
+  }
+
+  if (safeLimitedLowCreation) {
+    adjustment -= 0.20
+    traits.push('Safe-limited low-creation risk')
+  }
+
+  if (!traits.length) return null
+
+  return {
+    adjustment: Math.max(-0.60, Math.min(0.50, Number(adjustment.toFixed(2)))),
+    traits,
+    pass,
+    run,
+    scrambles,
+    btt: Number(btt.toFixed(1)),
+    acc,
+    adot,
+    epa,
+  }
+}
+
 
 function PlayerExplanationModal({ explanation, onClose }: { explanation: any; onClose: () => void }) {
   if (!explanation) return null
