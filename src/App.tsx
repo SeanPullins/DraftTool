@@ -796,7 +796,23 @@ export default function App() {
           <span className="brandDivider" />
           <p>NFL Draft Intelligence</p>
         </div>
-        <div className="dataPills">
+        
+<section className="panel qbGuidePanel">
+  <div className="panelHeader">
+    <h2>QB Model Guide</h2>
+    <p>Plain-English explanation of how the quarterback score works.</p>
+  </div>
+  <div className="guideGrid">
+    {QB_MODEL_GUIDE_LAYMAN.map((item) => (
+      <div className="guideCard" key={item.title}>
+        <h3>{item.title}</h3>
+        <p>{item.body}</p>
+      </div>
+    ))}
+  </div>
+</section>
+
+<div className="dataPills">
           <span>{loading ? 'Loading…' : `${prospects.length.toLocaleString()} comps`}</span>
           <span>{pffSummary ? `${pffSummary.matched.toLocaleString()} PFF matches` : 'PFF pending'}</span>
           <span>{saved.length} saved</span>
@@ -4453,6 +4469,64 @@ type QbTranslationSignal = {
   } | null
 }
 
+
+
+
+const QB_MODEL_GUIDE_LAYMAN = [
+  {
+    title: 'What the QB score means',
+    body: 'The QB score is trying to answer one simple question: based on college traits, draft value, and historical QB outcomes, how likely is this quarterback profile to become a useful NFL starter? A higher score means the player looks more like past successful quarterbacks.'
+  },
+  {
+    title: 'Why there is a separate miss-risk label',
+    body: 'Some quarterbacks put up huge college numbers but historically have not translated well. The miss-risk label looks for those traps, such as clean system passers, low-creation pocket profiles, fake mobility, or Day-2 production that lacks NFL-level tools.'
+  },
+  {
+    title: 'Traditional score vs. outlier score',
+    body: 'The model uses two paths. The traditional path rewards accuracy, pressure performance, depth passing, decision-making, and clean passing traits. The outlier path protects rare profiles like elite creators, explosive throwers, or rushing threats who may not look perfect in a normal pocket-passer model.'
+  },
+  {
+    title: 'How to read the final QB card',
+    body: 'Use the projection score and miss risk together. A quarterback with a good score and low risk is a cleaner bet. A quarterback with a good score and high risk has real upside, but his profile looks like past misses too. The closest comp is not a career prediction — it is the historical QB whose college profile most resembles him.'
+  }
+];
+
+function qbDisplayScore(player: any): number {
+  const candidates = [
+    player?.qbProjectionScore,
+    player?.modelScore,
+    player?.score,
+    player?.grade,
+  ];
+
+  for (const v of candidates) {
+    const n = Number(v);
+    if (Number.isFinite(n)) return n;
+  }
+
+  return 0;
+}
+
+function qbRiskLabel(player: any): string {
+  return String(player?.qbMissRiskLabel || player?.missRiskLabel || '').trim();
+}
+
+function qbRiskTraits(player: any): string[] {
+  const traits = player?.qbMissRiskTraits || player?.missRiskTraits || [];
+  return Array.isArray(traits) ? traits.map(String).filter(Boolean) : [];
+}
+
+function qbPrimaryComp(player: any): any {
+  if (player?.primaryQbProfileComp?.name) return player.primaryQbProfileComp;
+  if (player?.qbTranslationSignal?.primaryComp?.name) return player.qbTranslationSignal.primaryComp;
+
+  const lists = [player?.projectionComps, player?.styleComps, player?.qbComps, player?.comps];
+  for (const list of lists) {
+    if (Array.isArray(list) && list[0]?.name) return list[0];
+  }
+
+  return null;
+}
 
 function buildQbTranslationCandidateMap(payload: unknown): Map<string, QbTranslationSignal> {
   const map = new Map<string, QbTranslationSignal>()
