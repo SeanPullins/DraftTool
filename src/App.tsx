@@ -3206,7 +3206,16 @@ function ClassExplorer({ pool, history, pffProfiles, pffLookup, y1Data, careerSt
                 <td>{player.starts || 0}</td>
                 <td>{player.av || 0}</td>
                 <td className="pffCol" title={pffContextLabel}>
-                  {pffContextScore != null ? pffContextScore.toFixed(0) : '—'}
+                  {(() => {
+                    const playerAny = player as any
+                    const isQb = String(playerAny.pos || playerAny.position || '').toUpperCase() === 'QB'
+                    const qbV102 = getQbV102Row(playerAny)
+                    const qbV102Score = Number(qbV102?.realisticProjectionScoreV10_2 ?? playerAny.qbProjectionScore)
+                    const effectiveScore = isQb && Number.isFinite(qbV102Score)
+                      ? qbV102Score
+                      : pffContextScore
+                    return effectiveScore != null ? Number(effectiveScore).toFixed(0) : '—'
+                  })()}
                 </td>
                 {useProjections ? <td>{projected ? projected.av.toFixed(1) : '-'}</td> : null}
                 {useProjections ? (() => {
