@@ -3155,7 +3155,14 @@ function ClassExplorer({ pool, history, pffProfiles, pffLookup, y1Data, careerSt
                 {useProjections ? <td>{projected ? projected.av.toFixed(1) : '-'}</td> : null}
                 {useProjections ? (() => {
                   const v57 = getV57Row(player)
-                  const displayScore = v57?.v57Percentile != null ? Number(v57.v57Percentile) : (projected ? projected.score : null)
+                  const playerAny = player as any
+                  const isQb = String(playerAny.pos || '').toUpperCase() === 'QB'
+                  const qbScore = Number(playerAny.qbProjectionScore)
+                  const displayScore = isQb && Number.isFinite(qbScore)
+                    ? qbScore
+                    : v57?.v57Percentile != null
+                      ? Number(v57.v57Percentile)
+                      : (projected ? projected.score : null)
                   const delta = v57?.v57Delta != null ? Number(v57.v57Delta) : null
                   const title = v57
                     ? `V5.7P score${delta != null ? ` · Δ ${delta > 0 ? '+' : ''}${delta.toFixed(1)}` : ''}${v57.flag ? ` · ${v57.flag}` : ''}`
