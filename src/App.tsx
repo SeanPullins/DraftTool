@@ -2953,7 +2953,8 @@ function ClassExplorer({ pool, history, pffProfiles, pffLookup, y1Data, careerSt
       const projected = project(synthesizedWithContext, history, pffProfiles, player.id, y1Data, careerStats, undefined, qbContext?.trajectory?.gradeDelta ?? null)
       const playerAny = player as any
       const isQb = String(playerAny.pos || playerAny.position || '').toUpperCase() === 'QB'
-      const qbV11Score = Number(playerAny.qbProjectionScore)
+      const overlayEntry = projectionOverlay.get(projectionOverlayKey(player.year, player.pos, player.name))
+      const qbV11Score = isQb && Number(player.year) >= 2024 ? (overlayEntry?.score ?? NaN) : NaN
       const result = {
         av: projected.expectedAv,
         score: isQb && Number.isFinite(qbV11Score) ? qbV11Score : projected.score,
@@ -3197,22 +3198,24 @@ function ClassExplorer({ pool, history, pffProfiles, pffLookup, y1Data, careerSt
                 <td>{player.av || 0}</td>
                 <td className="pffCol" title={pffContextLabel}>
                   {(() => {
-                    const playerAny = player as any
-                    const isQb = String(playerAny.pos || playerAny.position || '').toUpperCase() === 'QB'
-                    const qbV11Score = Number(playerAny.qbProjectionScore)
-                    const effectiveScore = isQb && Number.isFinite(qbV11Score)
-                      ? qbV11Score
-                      : pffContextScore
+                    const isQb = String(player.pos || '').toUpperCase() === 'QB'
+                    const overlayQb = isQb && Number(player.year) >= 2024
+                      ? projectionOverlay.get(projectionOverlayKey(player.year, player.pos, player.name))
+                      : null
+                    const qbV11Score = overlayQb?.score ?? NaN
+                    const effectiveScore = Number.isFinite(qbV11Score) ? qbV11Score : pffContextScore
                     return effectiveScore != null ? Number(effectiveScore).toFixed(0) : '—'
                   })()}
                 </td>
                 {useProjections ? <td>{projected ? projected.av.toFixed(1) : '-'}</td> : null}
                 {useProjections ? (() => {
                   const v57 = getV57Row(player)
-                  const playerAny = player as any
-                  const isQb = String(playerAny.pos || '').toUpperCase() === 'QB'
-                  const qbV11Score = Number(playerAny.qbProjectionScore)
-                  const displayScore = isQb && Number.isFinite(qbV11Score)
+                  const isQb = String(player.pos || '').toUpperCase() === 'QB'
+                  const overlayQb = isQb && Number(player.year) >= 2024
+                    ? projectionOverlay.get(projectionOverlayKey(player.year, player.pos, player.name))
+                    : null
+                  const qbV11Score = overlayQb?.score ?? NaN
+                  const displayScore = Number.isFinite(qbV11Score)
                     ? qbV11Score
                     : v57?.v57Percentile != null
                       ? Number(v57.v57Percentile)
@@ -4761,7 +4764,10 @@ function buildProjectionOverlayMap(payloads: unknown): Map<string, PositionProje
     if (!payload || typeof payload !== 'object') continue
 
     const model = stringField(payload as Record<string, unknown>, 'model', 'generated_projection')
-    const records = (payload as { records?: unknown[] }).records
+    // QB prospect files are plain arrays; other position files wrap records in an object
+    const records = Array.isArray(payload)
+      ? payload
+      : (payload as { records?: unknown[] }).records
     if (!Array.isArray(records)) continue
 
     for (const entry of records) {
