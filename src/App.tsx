@@ -2315,7 +2315,8 @@ function buildPlayerExplanation(player: any, ctx: any) {
 
   const pos = String(player.pos || '').toUpperCase()
   const pick = safeNum(player.pick)
-  const projectedScore = safeNum(ctx?.projected?.score)
+  const qbV102Score = (pos === 'QB' && Number(player.year) >= 2024 && ctx?.qbV102Score != null) ? ctx.qbV102Score : null
+  const projectedScore = qbV102Score ?? safeNum(ctx?.projected?.score)
   const projectedAv = safeNum(ctx?.projected?.av)
   const pffScore = safeNum(ctx?.pffContextScore)
 
@@ -2382,6 +2383,17 @@ function buildPlayerExplanation(player: any, ctx: any) {
     badges.push('QB data linked')
   }
 
+  if (pos === 'QB' && Number(player.year) >= 2024) {
+    const primaryComp =
+      player.primaryQbProfileComp ||
+      player.projectionComps?.[0] ||
+      player.styleComps?.[0] ||
+      player.qbComps?.[0] ||
+      ctx?.projected?.comps?.[0]?.player?.name ||
+      null
+    if (primaryComp) drivers.push(`Closest QB comp: ${primaryComp}`)
+    if (qbV102Score != null) badges.push(`QB v10.2 score: ${qbV102Score.toFixed(1)}`)
+  }
 
   const rb = ctx?.rbContext
 
@@ -3194,6 +3206,7 @@ function ClassExplorer({ pool, history, pffProfiles, pffLookup, y1Data, careerSt
                         projected,
                         pffContextScore,
                         pffContextLabel,
+                        qbV102Score: (() => { const r = getQbV102Row(player as any); const v = Number(r?.realisticProjectionScoreV10_2); return Number.isFinite(v) ? v : null })(),
                         qbContext: player.pos === 'QB' ? latestQbPffMap.get(pffKey) : null,
                         wrContext: player.pos === 'WR' ? latestWrPffMap.get(pffKey) : null,
                         teContext: player.pos === 'TE' ? latestTePffMap.get(pffKey) : null,
@@ -3242,9 +3255,12 @@ function ClassExplorer({ pool, history, pffProfiles, pffLookup, y1Data, careerSt
                       ? Number(v57.v57Percentile)
                       : (projected ? projected.score : null)
                   const delta = v57?.v57Delta != null ? Number(v57.v57Delta) : null
-                  const title = v57
-                    ? `V5.7P score${delta != null ? ` · Δ ${delta > 0 ? '+' : ''}${delta.toFixed(1)}` : ''}${v57.flag ? ` · ${v57.flag}` : ''}`
-                    : 'V4 fallback score'
+                  const title =
+                    isQb && Number.isFinite(qbV102Score)
+                      ? 'QB v10.2 realistic projection score'
+                      : v57
+                        ? `V5.7P score${delta != null ? ` · Δ ${delta > 0 ? '+' : ''}${delta.toFixed(1)}` : ''}${v57.flag ? ` · ${v57.flag}` : ''}`
+                        : 'V4 fallback score'
                   return <td
                     title={title}
                     style={{ color: displayScore != null ? scoreColor(displayScore) : undefined, fontWeight: displayScore != null ? 800 : undefined }}
