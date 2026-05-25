@@ -369,7 +369,6 @@ def update_prospects(training, mdl, to_score, comp_scaler, comp_pool, pff_map):
 
             updated.append({
                 **rec,
-                'modelScoreBeforeV11': rec.get('score'),
                 'qbV11Score': final_r,
                 'qbV11PctScore': round(pct, 1),
                 'qbV11DraftScore': round(draft_score(pick), 1),
