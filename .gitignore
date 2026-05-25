@@ -38,3 +38,5 @@ public/data/model/qb_advanced_pff_all.json
 public/data/model/college_player_seasons_2014_2025.jsonl
 public/data/model/college_player_seasons_compact_2014_2025_enriched.json
 public/data/model/college_player_career_summary_2014_2025_enriched.json
+public/data/model/college_player_career_summary_2014_2025_with_nfl_outcomes.json
+public/data/model/college_master_shards/
