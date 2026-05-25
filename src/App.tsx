@@ -2842,7 +2842,7 @@ function ClassExplorer({ pool, history, pffProfiles, pffLookup, y1Data, careerSt
   useEffect(() => {
     let cancelled = false
     const base = import.meta.env.BASE_URL || '/'
-    const files = ['prospects_2024_qb.json', 'prospects_2025_qb.json', 'prospects_2026_qb.json']
+    const files = ['prospects_2024_qb.json', 'prospects_2025_qb.json', 'prospects_2026_qb.json', 'prospects_2027_qb.json']
     Promise.all(files.map(f => fetch(`${base}data/${f}`).then(r => r.ok ? r.json() : []).catch(() => [])))
       .then(payloads => {
         if (cancelled) return
@@ -2851,7 +2851,7 @@ function ClassExplorer({ pool, history, pffProfiles, pffLookup, y1Data, careerSt
           if (!Array.isArray(records)) continue
           for (const r of records) {
             const name = r?.name
-            const year = Number(r?.year || r?.draftYear)
+            const year = Number(r?.year || r?.draftSeason || r?.draftYear)
             const score = Number(r?.qbProjectionScore ?? r?.grade ?? r?.score)
             if (name && Number.isFinite(year) && Number.isFinite(score) && score > 0) {
               map.set(projectionOverlayKey(year, 'QB', name), score)
@@ -2864,7 +2864,7 @@ function ClassExplorer({ pool, history, pffProfiles, pffLookup, y1Data, careerSt
   }, [])
 
   const getQbV11Score = (player: Historical): number | null => {
-    if (String(player.pos || '').toUpperCase() !== 'QB' || Number(player.year) < 2024) return null
+    if (String(player.pos || '').toUpperCase() !== 'QB') return null
     const v = qbV11Map.get(projectionOverlayKey(player.year, player.pos, player.name))
     return v != null ? v : null
   }
@@ -3990,7 +3990,11 @@ function ProspectsView({ prospects2027, history, pffProfiles, careerStats, histF
     else if (sortBy === 'pick')  base.sort((a, b) => a.prospect.pick - b.prospect.pick)
     else if (sortBy === 'trend') base.sort((a, b) => (b.prospect.trajectory.gradeDelta ?? -999) - (a.prospect.trajectory.gradeDelta ?? -999))
     else if (sortBy === 'value') base.sort((a, b) => b.pickSurplus - a.pickSurplus)
-    else base.sort((a, b) => b.proj.score - a.proj.score)
+    else base.sort((a, b) => {
+      const scoreA = (a.prospect as any).qbProjectionScore ?? a.proj.score
+      const scoreB = (b.prospect as any).qbProjectionScore ?? b.proj.score
+      return scoreB - scoreA
+    })
     return base
   }, [ranked, sortBy])
 
@@ -4093,8 +4097,8 @@ function ProspectsView({ prospects2027, history, pffProfiles, careerStats, histF
               </span>
               <span className="pSchool pSchoolDesk">{p.school}</span>
               <span className={`pColNum pPickRange ${pickBandClass(p.pick)}`}>{pickRangeLabel(p.pick)}</span>
-              <span className={`pColNum pScore ${prospectScoreClass(proj.score)}`}>
-                {Math.round(proj.score)}
+              <span className={`pColNum pScore ${prospectScoreClass((p as any).qbProjectionScore ?? proj.score)}`}>
+                {Math.round((p as any).qbProjectionScore ?? proj.score)}
                 <span className="pScoreRange">{Math.round(proj.scoreLow)}–{Math.round(proj.scoreHigh)}</span>
               </span>
               <span className={`pColNum pValue ${vl.cls}`}>
