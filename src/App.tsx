@@ -3244,7 +3244,7 @@ function ClassExplorer({ pool, history, pffProfiles, pffLookup, y1Data, careerSt
                       ? Number(v57.v57Percentile)
                       : (projected ? projected.score : null)
                   const delta = v57?.v57Delta != null ? Number(v57.v57Delta) : null
-                  const tier = isQb && Number.isFinite(qbV11Score) ? getQbV11Tier(qbV11Score) : null
+                  const tier = (String(player.pos || '').toUpperCase() === 'QB') && qbV11Score != null ? getQbV11Tier(qbV11Score) : null
                   const title =
                     tier
                       ? `QB v11 · ${tier.label} tier · ${tier.hitRate}% hit rate historically (avg career AV ${tier.avgAv})`
