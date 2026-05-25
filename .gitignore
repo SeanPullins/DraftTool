@@ -33,3 +33,8 @@ package-lock.json
 wr_pff_files.zip
 wr_pff_seasons.json
 public/data/model/qb_advanced_pff_all.json
+
+# Large generated college master dataset outputs - keep local, do not commit
+public/data/model/college_player_seasons_2014_2025.jsonl
+public/data/model/college_player_seasons_compact_2014_2025_enriched.json
+public/data/model/college_player_career_summary_2014_2025_enriched.json
