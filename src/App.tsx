@@ -101,6 +101,19 @@ const sortLabels: Record<SortKey, string> = {
   outcome: 'Outcome',
 }
 const positionFilters = ['All', ...positions]
+
+// QB v11 model calibration tiers (from 2016–2022 training set, n=72)
+const QB_V11_TIERS = [
+  { min: 90, label: 'Elite',        hitRate: 100, avgAv: 93.6, risk: 'Very low'    },
+  { min: 75, label: 'High-floor',   hitRate: 64,  avgAv: 60.2, risk: 'Moderate'    },
+  { min: 50, label: 'Developmental',hitRate: 17,  avgAv: 23.8, risk: 'High'        },
+  { min: 25, label: 'Long shot',    hitRate: 11,  avgAv: 10.8, risk: 'Very high'   },
+  { min: 0,  label: 'Project',      hitRate: 6,   avgAv: 4.2,  risk: 'Extreme'     },
+]
+function getQbV11Tier(score: number) {
+  return QB_V11_TIERS.find(t => score >= t.min) ?? QB_V11_TIERS[QB_V11_TIERS.length - 1]
+}
+
 function PICK_VALUE(pick: number): number {
   return Math.max(1, Math.round(3000 * Math.exp(-0.02 * (pick - 1))))
 }
@@ -2315,8 +2328,7 @@ function buildPlayerExplanation(player: any, ctx: any) {
 
   const pos = String(player.pos || '').toUpperCase()
   const pick = safeNum(player.pick)
-  const qbV102Score = (pos === 'QB' && Number(player.year) >= 2024 && ctx?.qbV102Score != null) ? ctx.qbV102Score : null
-  const projectedScore = qbV102Score ?? safeNum(ctx?.projected?.score)
+  const projectedScore = safeNum(ctx?.projected?.score)
   const projectedAv = safeNum(ctx?.projected?.av)
   const pffScore = safeNum(ctx?.pffContextScore)
 
@@ -2327,7 +2339,16 @@ function buildPlayerExplanation(player: any, ctx: any) {
     else badges.push('Day 3 / value range')
   }
 
-  if (projectedScore != null) {
+  if (projectedScore != null && pos === 'QB' && Number(player.year) >= 2024) {
+    const tier = getQbV11Tier(projectedScore)
+    drivers.push(`QB v11 score: ${Math.round(projectedScore)} — ${tier.label} tier`)
+    drivers.push(`Historical hit rate at this score tier: ${tier.hitRate}% (avg career AV ${tier.avgAv})`)
+    badges.push(`${tier.label} · ${tier.hitRate}% hit rate`)
+    if (tier.hitRate >= 90) strengths.push(`${tier.hitRate}% of QBs in this score range have been NFL hits historically.`)
+    else if (tier.hitRate >= 60) strengths.push(`${tier.hitRate}% hit rate at this tier — more likely to contribute than not.`)
+    else if (tier.hitRate >= 20) risks.push(`Only ${tier.hitRate}% of QBs in this score range become hits — meaningful development risk.`)
+    else risks.push(`Historically a high-bust tier: only ${tier.hitRate}% of similar-scored QBs have produced.`)
+  } else if (projectedScore != null) {
     drivers.push(`Model score: ${Math.round(projectedScore)}`)
     if (projectedScore >= 85) strengths.push('High model score relative to the class.')
     else if (projectedScore >= 70) strengths.push('Solid model score with starter/value potential.')
@@ -2384,15 +2405,20 @@ function buildPlayerExplanation(player: any, ctx: any) {
   }
 
   if (pos === 'QB' && Number(player.year) >= 2024) {
-    const primaryComp =
+    const compObj =
       player.primaryQbProfileComp ||
       player.projectionComps?.[0] ||
       player.styleComps?.[0] ||
       player.qbComps?.[0] ||
-      ctx?.projected?.comps?.[0]?.player?.name ||
       null
-    if (primaryComp) drivers.push(`Closest QB comp: ${primaryComp}`)
-    if (qbV102Score != null) badges.push(`QB v10.2 score: ${qbV102Score.toFixed(1)}`)
+    if (compObj) {
+      const compName    = typeof compObj === 'string' ? compObj : compObj.name
+      const compOutcome = typeof compObj === 'object' ? compObj.outcome : null
+      const compPick    = typeof compObj === 'object' && compObj.pick ? `#${compObj.pick}` : null
+      const compYear    = typeof compObj === 'object' && compObj.year ? compObj.year : null
+      const compLabel   = [compName, compYear, compPick, compOutcome ? `(${compOutcome})` : null].filter(Boolean).join(' ')
+      drivers.push(`Closest college profile comp: ${compLabel}`)
+    }
   }
 
   const rb = ctx?.rbContext
@@ -2809,61 +2835,6 @@ function buildLatestPffSeasonMap(seasons: any[]) {
 
 
 function ClassExplorer({ pool, history, pffProfiles, pffLookup, y1Data, careerStats, histFlagMap, currentName, currentYear, saved, projectionOverlay, compSignalMap, rbScoreReadyMap, qbTranslationMap, qbPffSeasons, wrPffSeasons, tePffSeasons, rbPffSeasons }: { pool: Historical[]; history: Historical[]; pffProfiles: PffProfile[]; pffLookup: Map<string, PffProfile>; y1Data?: Y1Data; careerStats?: CareerStatMap; histFlagMap: Map<string, HistoricalOutcomeFlag>; currentName: string; currentYear: number; saved: SavedProspect[]; projectionOverlay: Map<string, PositionProjectionOverlay>; compSignalMap: Map<string, PositionCompSignal>; rbScoreReadyMap: Map<string, RbScoreReadySignal>; qbTranslationMap: Map<string, QbTranslationSignal>; qbPffSeasons: QbPffSeason[]; wrPffSeasons: WrPffSeason[]; tePffSeasons: any[]; rbPffSeasons: any[]; }) {
-  const [qbV102ScoreMap, setQbV102ScoreMap] = useState<Map<string, any>>(new Map())
-  const qbV102CleanName = (value: any) => String(value || '').toLowerCase().replace(/[^a-z0-9]/g, '')
-
-  useEffect(() => {
-    let cancelled = false
-    const base = import.meta.env.BASE_URL || '/'
-    fetch(`${base}data/model/qb_realistic_projection_v10_2.json`)
-      .then((r) => r.json())
-      .then((payload) => {
-        if (cancelled) return
-        const map = new Map<string, any>()
-        const rows = [
-          ...((payload?.current || []) as any[]),
-          ...((payload?.historic || []) as any[]),
-        ]
-
-        rows.forEach((row: any) => {
-          const name = row?.name
-          const year = Number(row?.year || row?.draftYear)
-          if (!name || !Number.isFinite(year)) return
-
-          map.set(projectionOverlayKey(year, 'QB', name), row)
-          map.set(`QB_NAME|${qbV102CleanName(name)}`, row)
-        })
-
-        setQbV102ScoreMap(map)
-      })
-      .catch(() => {
-        if (!cancelled) setQbV102ScoreMap(new Map())
-      })
-
-    return () => { cancelled = true }
-  }, [])
-
-  const getQbV102Row = (player: any) => {
-    const pos = String(player?.pos || player?.position || '').toUpperCase()
-    if (pos !== 'QB') return null
-
-    const years = [
-      Number(player?.year),
-      Number(player?.draftYear),
-      Number(player?.draftSeason),
-      Number(currentYear),
-    ].filter((y) => Number.isFinite(y))
-
-    for (const year of years) {
-      const row = qbV102ScoreMap.get(projectionOverlayKey(year, 'QB', player?.name))
-      if (row) return row
-    }
-
-    const nameOnly = qbV102ScoreMap.get(`QB_NAME|${qbV102CleanName(player?.name)}`)
-    if (nameOnly) return nameOnly
-
-    return null
-  }
 
   const years = useMemo(() => {
     const set = new Set<number>()
@@ -2918,9 +2889,6 @@ function ClassExplorer({ pool, history, pffProfiles, pffLookup, y1Data, careerSt
   // Persistent cache: avoids recomputing the same player on year revisits
   const projCache = useRef(new Map<string, { av: number; score: number }>())
 
-  useEffect(() => {
-    projCache.current.clear()
-  }, [qbV102ScoreMap])
 
   // Set of "name|year" strings for all saved prospects — used to highlight them in the table
   const savedSet = useMemo(() => {
@@ -2985,11 +2953,10 @@ function ClassExplorer({ pool, history, pffProfiles, pffLookup, y1Data, careerSt
       const projected = project(synthesizedWithContext, history, pffProfiles, player.id, y1Data, careerStats, undefined, qbContext?.trajectory?.gradeDelta ?? null)
       const playerAny = player as any
       const isQb = String(playerAny.pos || playerAny.position || '').toUpperCase() === 'QB'
-      const qbV102 = getQbV102Row(playerAny)
-      const qbV102Score = Number(qbV102?.realisticProjectionScoreV10_2 ?? playerAny.qbProjectionScore)
+      const qbV11Score = Number(playerAny.qbProjectionScore)
       const result = {
         av: projected.expectedAv,
-        score: isQb && Number.isFinite(qbV102Score) ? qbV102Score : projected.score,
+        score: isQb && Number.isFinite(qbV11Score) ? qbV11Score : projected.score,
       }
       projCache.current.set(cacheKey, result)
       out.set(player.id, result)
@@ -3206,7 +3173,6 @@ function ClassExplorer({ pool, history, pffProfiles, pffLookup, y1Data, careerSt
                         projected,
                         pffContextScore,
                         pffContextLabel,
-                        qbV102Score: (() => { const r = getQbV102Row(player as any); const v = Number(r?.realisticProjectionScoreV10_2); return Number.isFinite(v) ? v : null })(),
                         qbContext: player.pos === 'QB' ? latestQbPffMap.get(pffKey) : null,
                         wrContext: player.pos === 'WR' ? latestWrPffMap.get(pffKey) : null,
                         teContext: player.pos === 'TE' ? latestTePffMap.get(pffKey) : null,
@@ -3233,10 +3199,9 @@ function ClassExplorer({ pool, history, pffProfiles, pffLookup, y1Data, careerSt
                   {(() => {
                     const playerAny = player as any
                     const isQb = String(playerAny.pos || playerAny.position || '').toUpperCase() === 'QB'
-                    const qbV102 = getQbV102Row(playerAny)
-                    const qbV102Score = Number(qbV102?.realisticProjectionScoreV10_2 ?? playerAny.qbProjectionScore)
-                    const effectiveScore = isQb && Number.isFinite(qbV102Score)
-                      ? qbV102Score
+                    const qbV11Score = Number(playerAny.qbProjectionScore)
+                    const effectiveScore = isQb && Number.isFinite(qbV11Score)
+                      ? qbV11Score
                       : pffContextScore
                     return effectiveScore != null ? Number(effectiveScore).toFixed(0) : '—'
                   })()}
@@ -3246,18 +3211,17 @@ function ClassExplorer({ pool, history, pffProfiles, pffLookup, y1Data, careerSt
                   const v57 = getV57Row(player)
                   const playerAny = player as any
                   const isQb = String(playerAny.pos || '').toUpperCase() === 'QB'
-                  const qbScore = Number(playerAny.qbProjectionScore)
-                  const qbV102 = getQbV102Row(playerAny)
-                  const qbV102Score = Number(qbV102?.realisticProjectionScoreV10_2 ?? qbScore)
-                  const displayScore = isQb && Number.isFinite(qbV102Score)
-                    ? qbV102Score
+                  const qbV11Score = Number(playerAny.qbProjectionScore)
+                  const displayScore = isQb && Number.isFinite(qbV11Score)
+                    ? qbV11Score
                     : v57?.v57Percentile != null
                       ? Number(v57.v57Percentile)
                       : (projected ? projected.score : null)
                   const delta = v57?.v57Delta != null ? Number(v57.v57Delta) : null
+                  const tier = isQb && Number.isFinite(qbV11Score) ? getQbV11Tier(qbV11Score) : null
                   const title =
-                    isQb && Number.isFinite(qbV102Score)
-                      ? 'QB v10.2 realistic projection score'
+                    tier
+                      ? `QB v11 · ${tier.label} tier · ${tier.hitRate}% hit rate historically (avg career AV ${tier.avgAv})`
                       : v57
                         ? `V5.7P score${delta != null ? ` · Δ ${delta > 0 ? '+' : ''}${delta.toFixed(1)}` : ''}${v57.flag ? ` · ${v57.flag}` : ''}`
                         : 'V4 fallback score'

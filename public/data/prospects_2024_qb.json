@@ -10,8 +10,8 @@
     "position": "QB",
     "pick": 1,
     "projectedPick": 1,
-    "grade": 79,
-    "score": 79,
+    "grade": 92.2,
+    "score": 92.2,
     "source": "qb_drafted_projection_75_20_5",
     "forecast": {
       "final": 79,
@@ -48,11 +48,11 @@
     "advancedPassingAdjustment": 0,
     "advancedPassingTraits": [],
     "advancedPassingLabel": "No advanced passing signal",
-    "projectionHitMiss": "Projection — Watch",
+    "projectionHitMiss": "Projection \u2014 Watch",
     "modelScoreBeforeV10_2": 95,
-    "qbProjectionScore": 79,
+    "qbProjectionScore": 92.2,
     "qbProjectionTier": "Toolsy / Developmental Starter Range",
-    "qbProjectionLabel": "Projection — Watch",
+    "qbProjectionLabel": "Projection \u2014 Watch",
     "qbMissRiskScore": 0,
     "qbMissRiskLabel": "Low Miss Risk",
     "qbMissRiskPenalty": 0,
@@ -62,7 +62,7 @@
     "qbModelPath": "Strong Outlier Creation Blend",
     "qbTraditionalScore": 76,
     "qbOutlierScore": 80,
-    "modelScore": 79,
+    "modelScore": 92.2,
     "qbModelScore": 79,
     "qbScore": 79,
     "projectedScore": 79,
@@ -72,58 +72,69 @@
     "overallScore": 79,
     "valueScore": 79,
     "primaryQbProfileComp": {
-      "name": "Bryce Young",
-      "year": 2023,
-      "pick": 1,
-      "score": 78.8,
-      "outcome": "Miss",
-      "distance": 0.237,
-      "reason": "Closest historical QB profile by v10.2 score, passing profile, pressure/depth traits, creation, and risk shape."
+      "name": "Justin Herbert",
+      "year": 2020,
+      "pick": 6,
+      "actualAv": 97.2,
+      "outcome": "Hit",
+      "similarity": 0.379,
+      "distance": 1.642,
+      "reason": "Closest college-profile match in v11 standardized feature space (pass grade, BTT, ball-security, accuracy, EPA, pocket presence)."
     },
     "projectionComps": [
       {
-        "name": "Bryce Young",
-        "year": 2023,
-        "pick": 1,
-        "score": 78.8,
-        "outcome": "Miss",
-        "distance": 0.237,
-        "reason": "Closest historical QB profile by v10.2 score, passing profile, pressure/depth traits, creation, and risk shape."
+        "name": "Justin Herbert",
+        "year": 2020,
+        "pick": 6,
+        "actualAv": 97.2,
+        "outcome": "Hit",
+        "similarity": 0.379,
+        "distance": 1.642,
+        "reason": "Closest college-profile match in v11 standardized feature space (pass grade, BTT, ball-security, accuracy, EPA, pocket presence)."
       }
     ],
     "styleComps": [
       {
-        "name": "Bryce Young",
-        "year": 2023,
-        "pick": 1,
-        "score": 78.8,
-        "outcome": "Miss",
-        "distance": 0.237,
-        "reason": "Closest historical QB profile by v10.2 score, passing profile, pressure/depth traits, creation, and risk shape."
+        "name": "Justin Herbert",
+        "year": 2020,
+        "pick": 6,
+        "actualAv": 97.2,
+        "outcome": "Hit",
+        "similarity": 0.379,
+        "distance": 1.642,
+        "reason": "Closest college-profile match in v11 standardized feature space (pass grade, BTT, ball-security, accuracy, EPA, pocket presence)."
       }
     ],
     "qbComps": [
       {
-        "name": "Bryce Young",
-        "year": 2023,
-        "pick": 1,
-        "score": 78.8,
-        "outcome": "Miss",
-        "distance": 0.237,
-        "reason": "Closest historical QB profile by v10.2 score, passing profile, pressure/depth traits, creation, and risk shape."
+        "name": "Justin Herbert",
+        "year": 2020,
+        "pick": 6,
+        "actualAv": 97.2,
+        "outcome": "Hit",
+        "similarity": 0.379,
+        "distance": 1.642,
+        "reason": "Closest college-profile match in v11 standardized feature space (pass grade, BTT, ball-security, accuracy, EPA, pocket presence)."
       }
     ],
     "comps": [
       {
-        "name": "Bryce Young",
-        "year": 2023,
-        "pick": 1,
-        "score": 78.8,
-        "outcome": "Miss",
-        "distance": 0.237,
-        "reason": "Closest historical QB profile by v10.2 score, passing profile, pressure/depth traits, creation, and risk shape."
+        "name": "Justin Herbert",
+        "year": 2020,
+        "pick": 6,
+        "actualAv": 97.2,
+        "outcome": "Hit",
+        "similarity": 0.379,
+        "distance": 1.642,
+        "reason": "Closest college-profile match in v11 standardized feature space (pass grade, BTT, ball-security, accuracy, EPA, pocket presence)."
       }
-    ]
+    ],
+    "modelScoreBeforeV11": 93.5,
+    "qbV11Score": 92.2,
+    "qbV11PffComponent": 85.8,
+    "qbV11DraftComponent": 100.0,
+    "qbV11PctScore": 94.4,
+    "qbV11DraftScore": 100.0
   },
   {
     "id": "qb-2024-jaydendaniels",
@@ -136,8 +147,8 @@
     "position": "QB",
     "pick": 2,
     "projectedPick": 2,
-    "grade": 87.9,
-    "score": 87.9,
+    "grade": 90.9,
+    "score": 90.9,
     "source": "qb_drafted_projection_75_20_5",
     "forecast": {
       "final": 87.9,
@@ -179,12 +190,12 @@
       "Pressure-depth creator"
     ],
     "advancedPassingLabel": "Advanced passing boost",
-    "projectionHitMiss": "Projection — Hit",
+    "projectionHitMiss": "Projection \u2014 Hit",
     "modelScoreAfterAdvancedPassing": 89.5,
     "modelScoreBeforeV10_2": 89.5,
-    "qbProjectionScore": 87.9,
+    "qbProjectionScore": 90.9,
     "qbProjectionTier": "High-End Starter Prospect",
-    "qbProjectionLabel": "Projection — Strong Hit Signal",
+    "qbProjectionLabel": "Projection \u2014 Strong Hit Signal",
     "qbMissRiskScore": 0,
     "qbMissRiskLabel": "Low Miss Risk",
     "qbMissRiskPenalty": 0,
@@ -194,7 +205,7 @@
     "qbModelPath": "Strong Outlier Creation Blend",
     "qbTraditionalScore": 83.2,
     "qbOutlierScore": 89.4,
-    "modelScore": 87.9,
+    "modelScore": 90.9,
     "qbModelScore": 87.9,
     "qbScore": 87.9,
     "projectedScore": 87.9,
@@ -204,58 +215,69 @@
     "overallScore": 87.9,
     "valueScore": 87.9,
     "primaryQbProfileComp": {
-      "name": "Drake Maye",
-      "year": 2024,
-      "pick": 3,
-      "score": 89.3,
-      "outcome": "Miss",
-      "distance": 0.224,
-      "reason": "Closest historical QB profile by v10.2 score, passing profile, pressure/depth traits, creation, and risk shape."
+      "name": "Joe Burrow",
+      "year": 2020,
+      "pick": 1,
+      "actualAv": 93,
+      "outcome": "Hit",
+      "similarity": 0.445,
+      "distance": 1.246,
+      "reason": "Closest college-profile match in v11 standardized feature space (pass grade, BTT, ball-security, accuracy, EPA, pocket presence)."
     },
     "projectionComps": [
       {
-        "name": "Drake Maye",
-        "year": 2024,
-        "pick": 3,
-        "score": 89.3,
-        "outcome": "Miss",
-        "distance": 0.224,
-        "reason": "Closest historical QB profile by v10.2 score, passing profile, pressure/depth traits, creation, and risk shape."
+        "name": "Joe Burrow",
+        "year": 2020,
+        "pick": 1,
+        "actualAv": 93,
+        "outcome": "Hit",
+        "similarity": 0.445,
+        "distance": 1.246,
+        "reason": "Closest college-profile match in v11 standardized feature space (pass grade, BTT, ball-security, accuracy, EPA, pocket presence)."
       }
     ],
     "styleComps": [
       {
-        "name": "Drake Maye",
-        "year": 2024,
-        "pick": 3,
-        "score": 89.3,
-        "outcome": "Miss",
-        "distance": 0.224,
-        "reason": "Closest historical QB profile by v10.2 score, passing profile, pressure/depth traits, creation, and risk shape."
+        "name": "Joe Burrow",
+        "year": 2020,
+        "pick": 1,
+        "actualAv": 93,
+        "outcome": "Hit",
+        "similarity": 0.445,
+        "distance": 1.246,
+        "reason": "Closest college-profile match in v11 standardized feature space (pass grade, BTT, ball-security, accuracy, EPA, pocket presence)."
       }
     ],
     "qbComps": [
       {
-        "name": "Drake Maye",
-        "year": 2024,
-        "pick": 3,
-        "score": 89.3,
-        "outcome": "Miss",
-        "distance": 0.224,
-        "reason": "Closest historical QB profile by v10.2 score, passing profile, pressure/depth traits, creation, and risk shape."
+        "name": "Joe Burrow",
+        "year": 2020,
+        "pick": 1,
+        "actualAv": 93,
+        "outcome": "Hit",
+        "similarity": 0.445,
+        "distance": 1.246,
+        "reason": "Closest college-profile match in v11 standardized feature space (pass grade, BTT, ball-security, accuracy, EPA, pocket presence)."
       }
     ],
     "comps": [
       {
-        "name": "Drake Maye",
-        "year": 2024,
-        "pick": 3,
-        "score": 89.3,
-        "outcome": "Miss",
-        "distance": 0.224,
-        "reason": "Closest historical QB profile by v10.2 score, passing profile, pressure/depth traits, creation, and risk shape."
+        "name": "Joe Burrow",
+        "year": 2020,
+        "pick": 1,
+        "actualAv": 93,
+        "outcome": "Hit",
+        "similarity": 0.445,
+        "distance": 1.246,
+        "reason": "Closest college-profile match in v11 standardized feature space (pass grade, BTT, ball-security, accuracy, EPA, pocket presence)."
       }
-    ]
+    ],
+    "modelScoreBeforeV11": 90.9,
+    "qbV11Score": 90.9,
+    "qbV11PffComponent": 61.6,
+    "qbV11DraftComponent": 87.5,
+    "qbV11PctScore": 93.1,
+    "qbV11DraftScore": 87.5
   },
   {
     "id": "qb-2024-drakemaye",
@@ -268,8 +290,8 @@
     "position": "QB",
     "pick": 3,
     "projectedPick": 3,
-    "grade": 80.5,
-    "score": 80.5,
+    "grade": 89.6,
+    "score": 89.6,
     "source": "qb_drafted_projection_75_20_5",
     "forecast": {
       "final": 80.5,
@@ -306,11 +328,11 @@
     "advancedPassingAdjustment": 0,
     "advancedPassingTraits": [],
     "advancedPassingLabel": "No advanced passing signal",
-    "projectionHitMiss": "Projection — Watch",
+    "projectionHitMiss": "Projection \u2014 Watch",
     "modelScoreBeforeV10_2": 80,
-    "qbProjectionScore": 80.5,
+    "qbProjectionScore": 89.6,
     "qbProjectionTier": "Starter-Caliber Prospect",
-    "qbProjectionLabel": "Projection — Hit Signal",
+    "qbProjectionLabel": "Projection \u2014 Hit Signal",
     "qbMissRiskScore": 0,
     "qbMissRiskLabel": "Low Miss Risk",
     "qbMissRiskPenalty": 0,
@@ -320,7 +342,7 @@
     "qbModelPath": "Strong Outlier Creation Blend",
     "qbTraditionalScore": 76,
     "qbOutlierScore": 82,
-    "modelScore": 80.5,
+    "modelScore": 89.6,
     "qbModelScore": 80.5,
     "qbScore": 80.5,
     "projectedScore": 80.5,
@@ -330,58 +352,69 @@
     "overallScore": 80.5,
     "valueScore": 80.5,
     "primaryQbProfileComp": {
-      "name": "C.J. Stroud",
-      "year": 2023,
-      "pick": 2,
-      "score": 80.5,
-      "outcome": "Miss",
-      "distance": 0.216,
-      "reason": "Closest historical QB profile by v10.2 score, passing profile, pressure/depth traits, creation, and risk shape."
+      "name": "Justin Fields",
+      "year": 2021,
+      "pick": 11,
+      "actualAv": 48.8,
+      "outcome": "Hit",
+      "similarity": 0.313,
+      "distance": 2.192,
+      "reason": "Closest college-profile match in v11 standardized feature space (pass grade, BTT, ball-security, accuracy, EPA, pocket presence)."
     },
     "projectionComps": [
       {
-        "name": "C.J. Stroud",
-        "year": 2023,
-        "pick": 2,
-        "score": 80.5,
-        "outcome": "Miss",
-        "distance": 0.216,
-        "reason": "Closest historical QB profile by v10.2 score, passing profile, pressure/depth traits, creation, and risk shape."
+        "name": "Justin Fields",
+        "year": 2021,
+        "pick": 11,
+        "actualAv": 48.8,
+        "outcome": "Hit",
+        "similarity": 0.313,
+        "distance": 2.192,
+        "reason": "Closest college-profile match in v11 standardized feature space (pass grade, BTT, ball-security, accuracy, EPA, pocket presence)."
       }
     ],
     "styleComps": [
       {
-        "name": "C.J. Stroud",
-        "year": 2023,
-        "pick": 2,
-        "score": 80.5,
-        "outcome": "Miss",
-        "distance": 0.216,
-        "reason": "Closest historical QB profile by v10.2 score, passing profile, pressure/depth traits, creation, and risk shape."
+        "name": "Justin Fields",
+        "year": 2021,
+        "pick": 11,
+        "actualAv": 48.8,
+        "outcome": "Hit",
+        "similarity": 0.313,
+        "distance": 2.192,
+        "reason": "Closest college-profile match in v11 standardized feature space (pass grade, BTT, ball-security, accuracy, EPA, pocket presence)."
       }
     ],
     "qbComps": [
       {
-        "name": "C.J. Stroud",
-        "year": 2023,
-        "pick": 2,
-        "score": 80.5,
-        "outcome": "Miss",
-        "distance": 0.216,
-        "reason": "Closest historical QB profile by v10.2 score, passing profile, pressure/depth traits, creation, and risk shape."
+        "name": "Justin Fields",
+        "year": 2021,
+        "pick": 11,
+        "actualAv": 48.8,
+        "outcome": "Hit",
+        "similarity": 0.313,
+        "distance": 2.192,
+        "reason": "Closest college-profile match in v11 standardized feature space (pass grade, BTT, ball-security, accuracy, EPA, pocket presence)."
       }
     ],
     "comps": [
       {
-        "name": "C.J. Stroud",
-        "year": 2023,
-        "pick": 2,
-        "score": 80.5,
-        "outcome": "Miss",
-        "distance": 0.216,
-        "reason": "Closest historical QB profile by v10.2 score, passing profile, pressure/depth traits, creation, and risk shape."
+        "name": "Justin Fields",
+        "year": 2021,
+        "pick": 11,
+        "actualAv": 48.8,
+        "outcome": "Hit",
+        "similarity": 0.313,
+        "distance": 2.192,
+        "reason": "Closest college-profile match in v11 standardized feature space (pass grade, BTT, ball-security, accuracy, EPA, pocket presence)."
       }
-    ]
+    ],
+    "modelScoreBeforeV11": 90.9,
+    "qbV11Score": 89.6,
+    "qbV11PffComponent": 65.8,
+    "qbV11DraftComponent": 80.2,
+    "qbV11PctScore": 91.7,
+    "qbV11DraftScore": 80.2
   },
   {
     "id": "qb-2024-jjmccarthy",
@@ -394,8 +427,8 @@
     "position": "QB",
     "pick": 10,
     "projectedPick": 10,
-    "grade": 76,
-    "score": 76,
+    "grade": 84.3,
+    "score": 84.3,
     "source": "qb_drafted_projection_75_20_5",
     "forecast": {
       "final": 76,
@@ -436,12 +469,12 @@
       "Pressure-depth creator"
     ],
     "advancedPassingLabel": "Advanced passing boost",
-    "projectionHitMiss": "Projection — Hit",
+    "projectionHitMiss": "Projection \u2014 Hit",
     "modelScoreAfterAdvancedPassing": 63,
     "modelScoreBeforeV10_2": 63,
-    "qbProjectionScore": 76,
+    "qbProjectionScore": 84.3,
     "qbProjectionTier": "Toolsy / Developmental Starter Range",
-    "qbProjectionLabel": "Projection — Watch",
+    "qbProjectionLabel": "Projection \u2014 Watch",
     "qbMissRiskScore": 0,
     "qbMissRiskLabel": "Low Miss Risk",
     "qbMissRiskPenalty": 0,
@@ -451,7 +484,7 @@
     "qbModelPath": "Traditional Translation",
     "qbTraditionalScore": 76,
     "qbOutlierScore": 76,
-    "modelScore": 76,
+    "modelScore": 84.3,
     "qbModelScore": 76,
     "qbScore": 76,
     "projectedScore": 76,
@@ -461,58 +494,69 @@
     "overallScore": 76,
     "valueScore": 76,
     "primaryQbProfileComp": {
-      "name": "Tua Tagovailoa",
-      "year": 2020,
-      "pick": 5,
-      "score": 76,
+      "name": "Trevor Lawrence",
+      "year": 2021,
+      "pick": 1,
+      "actualAv": 66,
       "outcome": "Hit",
-      "distance": 0.154,
-      "reason": "Closest historical QB profile by v10.2 score, passing profile, pressure/depth traits, creation, and risk shape."
+      "similarity": 0.417,
+      "distance": 1.397,
+      "reason": "Closest college-profile match in v11 standardized feature space (pass grade, BTT, ball-security, accuracy, EPA, pocket presence)."
     },
     "projectionComps": [
       {
-        "name": "Tua Tagovailoa",
-        "year": 2020,
-        "pick": 5,
-        "score": 76,
+        "name": "Trevor Lawrence",
+        "year": 2021,
+        "pick": 1,
+        "actualAv": 66,
         "outcome": "Hit",
-        "distance": 0.154,
-        "reason": "Closest historical QB profile by v10.2 score, passing profile, pressure/depth traits, creation, and risk shape."
+        "similarity": 0.417,
+        "distance": 1.397,
+        "reason": "Closest college-profile match in v11 standardized feature space (pass grade, BTT, ball-security, accuracy, EPA, pocket presence)."
       }
     ],
     "styleComps": [
       {
-        "name": "Tua Tagovailoa",
-        "year": 2020,
-        "pick": 5,
-        "score": 76,
+        "name": "Trevor Lawrence",
+        "year": 2021,
+        "pick": 1,
+        "actualAv": 66,
         "outcome": "Hit",
-        "distance": 0.154,
-        "reason": "Closest historical QB profile by v10.2 score, passing profile, pressure/depth traits, creation, and risk shape."
+        "similarity": 0.417,
+        "distance": 1.397,
+        "reason": "Closest college-profile match in v11 standardized feature space (pass grade, BTT, ball-security, accuracy, EPA, pocket presence)."
       }
     ],
     "qbComps": [
       {
-        "name": "Tua Tagovailoa",
-        "year": 2020,
-        "pick": 5,
-        "score": 76,
+        "name": "Trevor Lawrence",
+        "year": 2021,
+        "pick": 1,
+        "actualAv": 66,
         "outcome": "Hit",
-        "distance": 0.154,
-        "reason": "Closest historical QB profile by v10.2 score, passing profile, pressure/depth traits, creation, and risk shape."
+        "similarity": 0.417,
+        "distance": 1.397,
+        "reason": "Closest college-profile match in v11 standardized feature space (pass grade, BTT, ball-security, accuracy, EPA, pocket presence)."
       }
     ],
     "comps": [
       {
-        "name": "Tua Tagovailoa",
-        "year": 2020,
-        "pick": 5,
-        "score": 76,
+        "name": "Trevor Lawrence",
+        "year": 2021,
+        "pick": 1,
+        "actualAv": 66,
         "outcome": "Hit",
-        "distance": 0.154,
-        "reason": "Closest historical QB profile by v10.2 score, passing profile, pressure/depth traits, creation, and risk shape."
+        "similarity": 0.417,
+        "distance": 1.397,
+        "reason": "Closest college-profile match in v11 standardized feature space (pass grade, BTT, ball-security, accuracy, EPA, pocket presence)."
       }
-    ]
+    ],
+    "modelScoreBeforeV11": 83.0,
+    "qbV11Score": 84.3,
+    "qbV11PffComponent": 45.4,
+    "qbV11DraftComponent": 58.6,
+    "qbV11PctScore": 86.1,
+    "qbV11DraftScore": 58.6
   },
   {
     "id": "qb-2024-bonix",
@@ -525,8 +569,8 @@
     "position": "QB",
     "pick": 12,
     "projectedPick": 12,
-    "grade": 61.6,
-    "score": 61.6,
+    "grade": 80.3,
+    "score": 80.3,
     "source": "qb_drafted_projection_75_20_5",
     "forecast": {
       "final": 61.6,
@@ -569,12 +613,12 @@
       "Complete advanced translator"
     ],
     "advancedPassingLabel": "Advanced passing boost",
-    "projectionHitMiss": "Projection — Hit",
+    "projectionHitMiss": "Projection \u2014 Hit",
     "modelScoreAfterAdvancedPassing": 65.5,
     "modelScoreBeforeV10_2": 65.5,
-    "qbProjectionScore": 61.6,
+    "qbProjectionScore": 80.3,
     "qbProjectionTier": "Developmental / Low Confidence",
-    "qbProjectionLabel": "Projection — High Miss Risk",
+    "qbProjectionLabel": "Projection \u2014 High Miss Risk",
     "qbMissRiskScore": 58,
     "qbMissRiskLabel": "High Miss Risk",
     "qbMissRiskPenalty": 10.4,
@@ -585,7 +629,7 @@
     "qbModelPath": "Traditional Translation",
     "qbTraditionalScore": 83.2,
     "qbOutlierScore": 76,
-    "modelScore": 61.6,
+    "modelScore": 80.3,
     "qbModelScore": 61.6,
     "qbScore": 61.6,
     "projectedScore": 61.6,
@@ -595,58 +639,69 @@
     "overallScore": 61.6,
     "valueScore": 61.6,
     "primaryQbProfileComp": {
-      "name": "Brandon Doughty",
-      "year": 2016,
-      "pick": 223,
-      "score": 51.2,
-      "outcome": "Miss",
-      "distance": 0.261,
-      "reason": "Closest historical QB profile by v10.2 score, passing profile, pressure/depth traits, creation, and risk shape."
+      "name": "Mac Jones",
+      "year": 2021,
+      "pick": 15,
+      "actualAv": 45.6,
+      "outcome": "Hit",
+      "similarity": 0.229,
+      "distance": 3.364,
+      "reason": "Closest college-profile match in v11 standardized feature space (pass grade, BTT, ball-security, accuracy, EPA, pocket presence)."
     },
     "projectionComps": [
       {
-        "name": "Brandon Doughty",
-        "year": 2016,
-        "pick": 223,
-        "score": 51.2,
-        "outcome": "Miss",
-        "distance": 0.261,
-        "reason": "Closest historical QB profile by v10.2 score, passing profile, pressure/depth traits, creation, and risk shape."
+        "name": "Mac Jones",
+        "year": 2021,
+        "pick": 15,
+        "actualAv": 45.6,
+        "outcome": "Hit",
+        "similarity": 0.229,
+        "distance": 3.364,
+        "reason": "Closest college-profile match in v11 standardized feature space (pass grade, BTT, ball-security, accuracy, EPA, pocket presence)."
       }
     ],
     "styleComps": [
       {
-        "name": "Brandon Doughty",
-        "year": 2016,
-        "pick": 223,
-        "score": 51.2,
-        "outcome": "Miss",
-        "distance": 0.261,
-        "reason": "Closest historical QB profile by v10.2 score, passing profile, pressure/depth traits, creation, and risk shape."
+        "name": "Mac Jones",
+        "year": 2021,
+        "pick": 15,
+        "actualAv": 45.6,
+        "outcome": "Hit",
+        "similarity": 0.229,
+        "distance": 3.364,
+        "reason": "Closest college-profile match in v11 standardized feature space (pass grade, BTT, ball-security, accuracy, EPA, pocket presence)."
       }
     ],
     "qbComps": [
       {
-        "name": "Brandon Doughty",
-        "year": 2016,
-        "pick": 223,
-        "score": 51.2,
-        "outcome": "Miss",
-        "distance": 0.261,
-        "reason": "Closest historical QB profile by v10.2 score, passing profile, pressure/depth traits, creation, and risk shape."
+        "name": "Mac Jones",
+        "year": 2021,
+        "pick": 15,
+        "actualAv": 45.6,
+        "outcome": "Hit",
+        "similarity": 0.229,
+        "distance": 3.364,
+        "reason": "Closest college-profile match in v11 standardized feature space (pass grade, BTT, ball-security, accuracy, EPA, pocket presence)."
       }
     ],
     "comps": [
       {
-        "name": "Brandon Doughty",
-        "year": 2016,
-        "pick": 223,
-        "score": 51.2,
-        "outcome": "Miss",
-        "distance": 0.261,
-        "reason": "Closest historical QB profile by v10.2 score, passing profile, pressure/depth traits, creation, and risk shape."
+        "name": "Mac Jones",
+        "year": 2021,
+        "pick": 15,
+        "actualAv": 45.6,
+        "outcome": "Hit",
+        "similarity": 0.229,
+        "distance": 3.364,
+        "reason": "Closest college-profile match in v11 standardized feature space (pass grade, BTT, ball-security, accuracy, EPA, pocket presence)."
       }
-    ]
+    ],
+    "modelScoreBeforeV11": 80.3,
+    "qbV11Score": 80.3,
+    "qbV11PffComponent": 38.5,
+    "qbV11DraftComponent": 55.3,
+    "qbV11PctScore": 81.9,
+    "qbV11DraftScore": 55.3
   },
   {
     "id": "qb-2024-jordantravis",
@@ -659,8 +714,8 @@
     "position": "QB",
     "pick": 171,
     "projectedPick": 171,
-    "grade": 36.3,
-    "score": 36.3,
+    "grade": 34.2,
+    "score": 34.2,
     "source": "qb_drafted_projection_75_20_5",
     "forecast": {
       "final": 36.3,
@@ -697,11 +752,11 @@
     "advancedPassingAdjustment": 0,
     "advancedPassingTraits": [],
     "advancedPassingLabel": "No advanced passing signal",
-    "projectionHitMiss": "Projection — Watch",
+    "projectionHitMiss": "Projection \u2014 Watch",
     "modelScoreBeforeV10_2": 25,
-    "qbProjectionScore": 36.3,
+    "qbProjectionScore": 34.2,
     "qbProjectionTier": "Developmental / Low Confidence",
-    "qbProjectionLabel": "Projection — Severe Miss Risk",
+    "qbProjectionLabel": "Projection \u2014 Severe Miss Risk",
     "qbMissRiskScore": 80,
     "qbMissRiskLabel": "Severe Miss Risk",
     "qbMissRiskPenalty": 14,
@@ -711,7 +766,7 @@
     "qbModelPath": "Outlier Creation Blend",
     "qbTraditionalScore": 45.5,
     "qbOutlierScore": 55.1,
-    "modelScore": 36.3,
+    "modelScore": 34.2,
     "qbModelScore": 36.3,
     "qbScore": 36.3,
     "projectedScore": 36.3,
@@ -721,58 +776,69 @@
     "overallScore": 36.3,
     "valueScore": 36.3,
     "primaryQbProfileComp": {
-      "name": "Jameis Winston",
-      "year": 2015,
-      "pick": 1,
-      "score": 36.2,
-      "outcome": "Hit",
-      "distance": 0.145,
-      "reason": "Closest historical QB profile by v10.2 score, passing profile, pressure/depth traits, creation, and risk shape."
+      "name": "Jeff Driskel",
+      "year": 2016,
+      "pick": 207,
+      "actualAv": 7,
+      "outcome": "Neutral",
+      "similarity": 0.478,
+      "distance": 1.091,
+      "reason": "Closest college-profile match in v11 standardized feature space (pass grade, BTT, ball-security, accuracy, EPA, pocket presence)."
     },
     "projectionComps": [
       {
-        "name": "Jameis Winston",
-        "year": 2015,
-        "pick": 1,
-        "score": 36.2,
-        "outcome": "Hit",
-        "distance": 0.145,
-        "reason": "Closest historical QB profile by v10.2 score, passing profile, pressure/depth traits, creation, and risk shape."
+        "name": "Jeff Driskel",
+        "year": 2016,
+        "pick": 207,
+        "actualAv": 7,
+        "outcome": "Neutral",
+        "similarity": 0.478,
+        "distance": 1.091,
+        "reason": "Closest college-profile match in v11 standardized feature space (pass grade, BTT, ball-security, accuracy, EPA, pocket presence)."
       }
     ],
     "styleComps": [
       {
-        "name": "Jameis Winston",
-        "year": 2015,
-        "pick": 1,
-        "score": 36.2,
-        "outcome": "Hit",
-        "distance": 0.145,
-        "reason": "Closest historical QB profile by v10.2 score, passing profile, pressure/depth traits, creation, and risk shape."
+        "name": "Jeff Driskel",
+        "year": 2016,
+        "pick": 207,
+        "actualAv": 7,
+        "outcome": "Neutral",
+        "similarity": 0.478,
+        "distance": 1.091,
+        "reason": "Closest college-profile match in v11 standardized feature space (pass grade, BTT, ball-security, accuracy, EPA, pocket presence)."
       }
     ],
     "qbComps": [
       {
-        "name": "Jameis Winston",
-        "year": 2015,
-        "pick": 1,
-        "score": 36.2,
-        "outcome": "Hit",
-        "distance": 0.145,
-        "reason": "Closest historical QB profile by v10.2 score, passing profile, pressure/depth traits, creation, and risk shape."
+        "name": "Jeff Driskel",
+        "year": 2016,
+        "pick": 207,
+        "actualAv": 7,
+        "outcome": "Neutral",
+        "similarity": 0.478,
+        "distance": 1.091,
+        "reason": "Closest college-profile match in v11 standardized feature space (pass grade, BTT, ball-security, accuracy, EPA, pocket presence)."
       }
     ],
     "comps": [
       {
-        "name": "Jameis Winston",
-        "year": 2015,
-        "pick": 1,
-        "score": 36.2,
-        "outcome": "Hit",
-        "distance": 0.145,
-        "reason": "Closest historical QB profile by v10.2 score, passing profile, pressure/depth traits, creation, and risk shape."
+        "name": "Jeff Driskel",
+        "year": 2016,
+        "pick": 207,
+        "actualAv": 7,
+        "outcome": "Neutral",
+        "similarity": 0.478,
+        "distance": 1.091,
+        "reason": "Closest college-profile match in v11 standardized feature space (pass grade, BTT, ball-security, accuracy, EPA, pocket presence)."
       }
-    ]
+    ],
+    "modelScoreBeforeV11": 35.5,
+    "qbV11Score": 34.2,
+    "qbV11PffComponent": 15.5,
+    "qbV11DraftComponent": 7.5,
+    "qbV11PctScore": 33.3,
+    "qbV11DraftScore": 7.5
   },
   {
     "id": "qb-2024-spencerrattler",
@@ -785,8 +851,8 @@
     "position": "QB",
     "pick": 150,
     "projectedPick": 150,
-    "grade": 37.8,
-    "score": 37.8,
+    "grade": 37.6,
+    "score": 37.6,
     "source": "qb_drafted_projection_75_20_5",
     "forecast": {
       "final": 37.8,
@@ -823,11 +889,11 @@
     "advancedPassingAdjustment": 0,
     "advancedPassingTraits": [],
     "advancedPassingLabel": "No advanced passing signal",
-    "projectionHitMiss": "Projection — Watch",
+    "projectionHitMiss": "Projection \u2014 Watch",
     "modelScoreBeforeV10_2": 22,
-    "qbProjectionScore": 37.8,
+    "qbProjectionScore": 37.6,
     "qbProjectionTier": "Developmental / Low Confidence",
-    "qbProjectionLabel": "Projection — Miss Risk",
+    "qbProjectionLabel": "Projection \u2014 Miss Risk",
     "qbMissRiskScore": 25,
     "qbMissRiskLabel": "Medium Miss Risk",
     "qbMissRiskPenalty": 4.5,
@@ -837,7 +903,7 @@
     "qbModelPath": "Traditional Translation",
     "qbTraditionalScore": 42.3,
     "qbOutlierScore": 24.9,
-    "modelScore": 37.8,
+    "modelScore": 37.6,
     "qbModelScore": 37.8,
     "qbScore": 37.8,
     "projectedScore": 37.8,
@@ -847,58 +913,69 @@
     "overallScore": 37.8,
     "valueScore": 37.8,
     "primaryQbProfileComp": {
-      "name": "Jake Rudock",
-      "year": 2016,
-      "pick": 191,
-      "score": 40.7,
+      "name": "Ian Book",
+      "year": 2021,
+      "pick": 133,
+      "actualAv": 0,
       "outcome": "Miss",
-      "distance": 0.254,
-      "reason": "Closest historical QB profile by v10.2 score, passing profile, pressure/depth traits, creation, and risk shape."
+      "similarity": 0.35,
+      "distance": 1.859,
+      "reason": "Closest college-profile match in v11 standardized feature space (pass grade, BTT, ball-security, accuracy, EPA, pocket presence)."
     },
     "projectionComps": [
       {
-        "name": "Jake Rudock",
-        "year": 2016,
-        "pick": 191,
-        "score": 40.7,
+        "name": "Ian Book",
+        "year": 2021,
+        "pick": 133,
+        "actualAv": 0,
         "outcome": "Miss",
-        "distance": 0.254,
-        "reason": "Closest historical QB profile by v10.2 score, passing profile, pressure/depth traits, creation, and risk shape."
+        "similarity": 0.35,
+        "distance": 1.859,
+        "reason": "Closest college-profile match in v11 standardized feature space (pass grade, BTT, ball-security, accuracy, EPA, pocket presence)."
       }
     ],
     "styleComps": [
       {
-        "name": "Jake Rudock",
-        "year": 2016,
-        "pick": 191,
-        "score": 40.7,
+        "name": "Ian Book",
+        "year": 2021,
+        "pick": 133,
+        "actualAv": 0,
         "outcome": "Miss",
-        "distance": 0.254,
-        "reason": "Closest historical QB profile by v10.2 score, passing profile, pressure/depth traits, creation, and risk shape."
+        "similarity": 0.35,
+        "distance": 1.859,
+        "reason": "Closest college-profile match in v11 standardized feature space (pass grade, BTT, ball-security, accuracy, EPA, pocket presence)."
       }
     ],
     "qbComps": [
       {
-        "name": "Jake Rudock",
-        "year": 2016,
-        "pick": 191,
-        "score": 40.7,
+        "name": "Ian Book",
+        "year": 2021,
+        "pick": 133,
+        "actualAv": 0,
         "outcome": "Miss",
-        "distance": 0.254,
-        "reason": "Closest historical QB profile by v10.2 score, passing profile, pressure/depth traits, creation, and risk shape."
+        "similarity": 0.35,
+        "distance": 1.859,
+        "reason": "Closest college-profile match in v11 standardized feature space (pass grade, BTT, ball-security, accuracy, EPA, pocket presence)."
       }
     ],
     "comps": [
       {
-        "name": "Jake Rudock",
-        "year": 2016,
-        "pick": 191,
-        "score": 40.7,
+        "name": "Ian Book",
+        "year": 2021,
+        "pick": 133,
+        "actualAv": 0,
         "outcome": "Miss",
-        "distance": 0.254,
-        "reason": "Closest historical QB profile by v10.2 score, passing profile, pressure/depth traits, creation, and risk shape."
+        "similarity": 0.35,
+        "distance": 1.859,
+        "reason": "Closest college-profile match in v11 standardized feature space (pass grade, BTT, ball-security, accuracy, EPA, pocket presence)."
       }
-    ]
+    ],
+    "modelScoreBeforeV11": 35.0,
+    "qbV11Score": 37.6,
+    "qbV11PffComponent": 9.4,
+    "qbV11DraftComponent": 9.9,
+    "qbV11PctScore": 37.5,
+    "qbV11DraftScore": 9.9
   },
   {
     "id": "qb-2024-michaelpratt",
@@ -911,8 +988,8 @@
     "position": "QB",
     "pick": 245,
     "projectedPick": 245,
-    "grade": 40.9,
-    "score": 40.9,
+    "grade": 8.1,
+    "score": 8.1,
     "source": "qb_drafted_projection_75_20_5",
     "forecast": {
       "final": 40.9,
@@ -949,11 +1026,11 @@
     "advancedPassingAdjustment": 0,
     "advancedPassingTraits": [],
     "advancedPassingLabel": "No advanced passing signal",
-    "projectionHitMiss": "Projection — Watch",
+    "projectionHitMiss": "Projection \u2014 Watch",
     "modelScoreBeforeV10_2": 18,
-    "qbProjectionScore": 40.9,
+    "qbProjectionScore": 8.1,
     "qbProjectionTier": "Developmental / Low Confidence",
-    "qbProjectionLabel": "Projection — Miss Risk",
+    "qbProjectionLabel": "Projection \u2014 Miss Risk",
     "qbMissRiskScore": 25,
     "qbMissRiskLabel": "Medium Miss Risk",
     "qbMissRiskPenalty": 4.5,
@@ -963,7 +1040,7 @@
     "qbModelPath": "Traditional Translation",
     "qbTraditionalScore": 45.4,
     "qbOutlierScore": 33.8,
-    "modelScore": 40.9,
+    "modelScore": 8.1,
     "qbModelScore": 40.9,
     "qbScore": 40.9,
     "projectedScore": 40.9,
@@ -973,58 +1050,69 @@
     "overallScore": 40.9,
     "valueScore": 40.9,
     "primaryQbProfileComp": {
-      "name": "Garrett Grayson",
-      "year": 2015,
-      "pick": 75,
-      "score": 41.7,
+      "name": "Logan Woodside",
+      "year": 2018,
+      "pick": 249,
+      "actualAv": 0,
       "outcome": "Miss",
-      "distance": 0.142,
-      "reason": "Closest historical QB profile by v10.2 score, passing profile, pressure/depth traits, creation, and risk shape."
+      "similarity": 0.384,
+      "distance": 1.601,
+      "reason": "Closest college-profile match in v11 standardized feature space (pass grade, BTT, ball-security, accuracy, EPA, pocket presence)."
     },
     "projectionComps": [
       {
-        "name": "Garrett Grayson",
-        "year": 2015,
-        "pick": 75,
-        "score": 41.7,
+        "name": "Logan Woodside",
+        "year": 2018,
+        "pick": 249,
+        "actualAv": 0,
         "outcome": "Miss",
-        "distance": 0.142,
-        "reason": "Closest historical QB profile by v10.2 score, passing profile, pressure/depth traits, creation, and risk shape."
+        "similarity": 0.384,
+        "distance": 1.601,
+        "reason": "Closest college-profile match in v11 standardized feature space (pass grade, BTT, ball-security, accuracy, EPA, pocket presence)."
       }
     ],
     "styleComps": [
       {
-        "name": "Garrett Grayson",
-        "year": 2015,
-        "pick": 75,
-        "score": 41.7,
+        "name": "Logan Woodside",
+        "year": 2018,
+        "pick": 249,
+        "actualAv": 0,
         "outcome": "Miss",
-        "distance": 0.142,
-        "reason": "Closest historical QB profile by v10.2 score, passing profile, pressure/depth traits, creation, and risk shape."
+        "similarity": 0.384,
+        "distance": 1.601,
+        "reason": "Closest college-profile match in v11 standardized feature space (pass grade, BTT, ball-security, accuracy, EPA, pocket presence)."
       }
     ],
     "qbComps": [
       {
-        "name": "Garrett Grayson",
-        "year": 2015,
-        "pick": 75,
-        "score": 41.7,
+        "name": "Logan Woodside",
+        "year": 2018,
+        "pick": 249,
+        "actualAv": 0,
         "outcome": "Miss",
-        "distance": 0.142,
-        "reason": "Closest historical QB profile by v10.2 score, passing profile, pressure/depth traits, creation, and risk shape."
+        "similarity": 0.384,
+        "distance": 1.601,
+        "reason": "Closest college-profile match in v11 standardized feature space (pass grade, BTT, ball-security, accuracy, EPA, pocket presence)."
       }
     ],
     "comps": [
       {
-        "name": "Garrett Grayson",
-        "year": 2015,
-        "pick": 75,
-        "score": 41.7,
+        "name": "Logan Woodside",
+        "year": 2018,
+        "pick": 249,
+        "actualAv": 0,
         "outcome": "Miss",
-        "distance": 0.142,
-        "reason": "Closest historical QB profile by v10.2 score, passing profile, pressure/depth traits, creation, and risk shape."
+        "similarity": 0.384,
+        "distance": 1.601,
+        "reason": "Closest college-profile match in v11 standardized feature space (pass grade, BTT, ball-security, accuracy, EPA, pocket presence)."
       }
-    ]
+    ],
+    "modelScoreBeforeV11": 8.1,
+    "qbV11Score": 8.1,
+    "qbV11PffComponent": 2.8,
+    "qbV11DraftComponent": 1.1,
+    "qbV11PctScore": 4.2,
+    "qbV11DraftScore": 1.1
   },
   {
     "id": "qb-2024-devinleary",
@@ -1037,8 +1125,8 @@
     "position": "QB",
     "pick": 218,
     "projectedPick": 218,
-    "grade": 18.9,
-    "score": 18.9,
+    "grade": 18.3,
+    "score": 18.3,
     "source": "qb_drafted_projection_75_20_5",
     "forecast": {
       "final": 18.9,
@@ -1075,11 +1163,11 @@
     "advancedPassingAdjustment": 0,
     "advancedPassingTraits": [],
     "advancedPassingLabel": "No advanced passing signal",
-    "projectionHitMiss": "Projection — Watch",
+    "projectionHitMiss": "Projection \u2014 Watch",
     "modelScoreBeforeV10_2": 14,
-    "qbProjectionScore": 18.9,
+    "qbProjectionScore": 18.3,
     "qbProjectionTier": "Developmental / Low Confidence",
-    "qbProjectionLabel": "Projection — Miss Risk",
+    "qbProjectionLabel": "Projection \u2014 Miss Risk",
     "qbMissRiskScore": 25,
     "qbMissRiskLabel": "Medium Miss Risk",
     "qbMissRiskPenalty": 4.5,
@@ -1089,7 +1177,7 @@
     "qbModelPath": "Traditional Translation",
     "qbTraditionalScore": 23.4,
     "qbOutlierScore": 20.4,
-    "modelScore": 18.9,
+    "modelScore": 18.3,
     "qbModelScore": 18.9,
     "qbScore": 18.9,
     "projectedScore": 18.9,
@@ -1099,57 +1187,68 @@
     "overallScore": 18.9,
     "valueScore": 18.9,
     "primaryQbProfileComp": {
-      "name": "Michael Penix",
-      "year": 2024,
-      "pick": 8,
-      "score": 18.5,
+      "name": "Tanner Lee",
+      "year": 2018,
+      "pick": 203,
+      "actualAv": 0,
       "outcome": "Miss",
-      "distance": 0.02,
-      "reason": "Closest historical QB profile by v10.2 score, passing profile, pressure/depth traits, creation, and risk shape."
+      "similarity": 0.341,
+      "distance": 1.931,
+      "reason": "Closest college-profile match in v11 standardized feature space (pass grade, BTT, ball-security, accuracy, EPA, pocket presence)."
     },
     "projectionComps": [
       {
-        "name": "Michael Penix",
-        "year": 2024,
-        "pick": 8,
-        "score": 18.5,
+        "name": "Tanner Lee",
+        "year": 2018,
+        "pick": 203,
+        "actualAv": 0,
         "outcome": "Miss",
-        "distance": 0.02,
-        "reason": "Closest historical QB profile by v10.2 score, passing profile, pressure/depth traits, creation, and risk shape."
+        "similarity": 0.341,
+        "distance": 1.931,
+        "reason": "Closest college-profile match in v11 standardized feature space (pass grade, BTT, ball-security, accuracy, EPA, pocket presence)."
       }
     ],
     "styleComps": [
       {
-        "name": "Michael Penix",
-        "year": 2024,
-        "pick": 8,
-        "score": 18.5,
+        "name": "Tanner Lee",
+        "year": 2018,
+        "pick": 203,
+        "actualAv": 0,
         "outcome": "Miss",
-        "distance": 0.02,
-        "reason": "Closest historical QB profile by v10.2 score, passing profile, pressure/depth traits, creation, and risk shape."
+        "similarity": 0.341,
+        "distance": 1.931,
+        "reason": "Closest college-profile match in v11 standardized feature space (pass grade, BTT, ball-security, accuracy, EPA, pocket presence)."
       }
     ],
     "qbComps": [
       {
-        "name": "Michael Penix",
-        "year": 2024,
-        "pick": 8,
-        "score": 18.5,
+        "name": "Tanner Lee",
+        "year": 2018,
+        "pick": 203,
+        "actualAv": 0,
         "outcome": "Miss",
-        "distance": 0.02,
-        "reason": "Closest historical QB profile by v10.2 score, passing profile, pressure/depth traits, creation, and risk shape."
+        "similarity": 0.341,
+        "distance": 1.931,
+        "reason": "Closest college-profile match in v11 standardized feature space (pass grade, BTT, ball-security, accuracy, EPA, pocket presence)."
       }
     ],
     "comps": [
       {
-        "name": "Michael Penix",
-        "year": 2024,
-        "pick": 8,
-        "score": 18.5,
+        "name": "Tanner Lee",
+        "year": 2018,
+        "pick": 203,
+        "actualAv": 0,
         "outcome": "Miss",
-        "distance": 0.02,
-        "reason": "Closest historical QB profile by v10.2 score, passing profile, pressure/depth traits, creation, and risk shape."
+        "similarity": 0.341,
+        "distance": 1.931,
+        "reason": "Closest college-profile match in v11 standardized feature space (pass grade, BTT, ball-security, accuracy, EPA, pocket presence)."
       }
-    ]
+    ],
+    "modelScoreBeforeV11": 14.4,
+    "qbV11Score": 18.3,
+    "qbV11PffComponent": 2.7,
+    "qbV11DraftComponent": 3.2,
+    "qbV11PctScore": 16.7,
+    "qbV11DraftScore": 3.2
   }
 ]
