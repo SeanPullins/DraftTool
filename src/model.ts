@@ -30,6 +30,7 @@ export type Prospect = {
   officialRas?: number | null
   alltimeRas?: number | null
   qbTrajectory?: QbTrajectorySignal | null
+  wrTrajectory?: WrTrajectorySignal | null
 }
 
 export type Historical = {
@@ -177,6 +178,109 @@ export type QbTrajectorySignal = {
   trajectoryLabel: QbTrajectoryLabel
 }
 
+export type QbPffContext = {
+  source: 'qb_pff_seasons.json'
+  matchedSeasons: QbPffSeason[]
+  preDraftSeasons: QbPffSeason[]
+  latestSeason: QbPffSeason | null
+  priorSeason: QbPffSeason | null
+  careerWeightedPassGrade: number | null
+  careerWeightedAccuracy: number | null
+  careerWeightedBttRate: number | null
+  careerWeightedTwpRate: number | null
+  careerWeightedEpa: number | null
+  careerWeightedPositiveEpa: number | null
+  totalDropbacks: number
+  trajectory: QbTrajectorySignal | null
+}
+
+export type WrPffSeason = {
+  name: string
+  player_id: number | null
+  season: number
+  source_file?: string
+  position: string
+  team: string | null
+  games: number | null
+  adot: number | null
+  avoided_tackles: number | null
+  catch_rate: number | null
+  contested_catch_rate: number | null
+  contested_receptions: number | null
+  contested_targets: number | null
+  drop_rate: number | null
+  drops: number | null
+  epa: number | null
+  first_downs: number | null
+  fumbles: number | null
+  hands_drop_grade: number | null
+  hands_fumble_grade: number | null
+  offense_grade: number | null
+  route_grade: number | null
+  inline_rate: number | null
+  inline_snaps: number | null
+  longest: number | null
+  pass_block_rate: number | null
+  pass_blocks: number | null
+  pass_plays: number | null
+  penalties: number | null
+  positive_epa_percent: number | null
+  receptions: number | null
+  route_rate: number | null
+  routes: number | null
+  slot_rate: number | null
+  slot_snaps: number | null
+  targeted_qb_rating: number | null
+  targets: number | null
+  touchdowns: number | null
+  wide_rate: number | null
+  wide_snaps: number | null
+  yards: number | null
+  yards_after_catch: number | null
+  yards_after_catch_per_reception: number | null
+  yards_per_reception: number | null
+  yprr: number | null
+}
+
+export type WrVolumeConfidence = 'high' | 'medium' | 'low_sample' | 'insufficient'
+export type WrTrajectoryLabel = 'elite_breakout' | 'rising' | 'stable_good' | 'stable_limited' | 'volatile_spike' | 'regressing' | 'unknown'
+
+export type WrTrajectorySignal = {
+  latestSeason: number
+  priorSeason: number | null
+  latestVolume: WrVolumeConfidence
+  priorVolume: WrVolumeConfidence | null
+  routeGradeDelta: number | null
+  yprrDelta: number | null
+  targetDelta: number | null
+  routeDelta: number | null
+  dropRateDelta: number | null
+  epaDelta: number | null
+  positiveEpaDelta: number | null
+  trajectoryScore: number
+  trajectoryLabel: WrTrajectoryLabel
+}
+
+export type WrPffContext = {
+  source: 'wr_pff_seasons.json'
+  matchedSeasons: WrPffSeason[]
+  preDraftSeasons: WrPffSeason[]
+  latestSeason: WrPffSeason | null
+  priorSeason: WrPffSeason | null
+  careerWeightedRouteGrade: number | null
+  careerWeightedOffenseGrade: number | null
+  careerWeightedYprr: number | null
+  careerWeightedDropRate: number | null
+  careerWeightedAdot: number | null
+  careerWeightedEpa: number | null
+  careerWeightedPositiveEpa: number | null
+  totalRoutes: number
+  totalTargets: number
+  totalReceptions: number
+  totalYards: number
+  trajectory: WrTrajectorySignal | null
+}
+
 export type Y1Data = { qb: QbSeason[]; wr: WrSeason[]; rb: RbSeason[] }
 
 export type Y1NflStats = {
@@ -291,6 +395,15 @@ export function clamp(value: number, min = 0, max = 99) {
 
 export function clean(s = '') {
   return s.toLowerCase().normalize('NFKD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]/g, '')
+}
+
+export function cleanPlayerName(s = '') {
+  return clean(
+    s
+      .replace(/\b(jr|sr|ii|iii|iv|v)\b\.?/gi, '')
+      .replace(/\bjunior\b/gi, '')
+      .replace(/\bsenior\b/gi, '')
+  )
 }
 
 export function avg(values: number[]) {
@@ -724,7 +837,7 @@ export function computeQbTrajectory(
   const cleanName  = clean(playerName)
 
   const latestSeason = pffSeasons.find(
-    (s) => clean(s.name) === cleanName && s.season === latestYear,
+    (s) => cleanPlayerName(s.name) === cleanName && s.season === latestYear,
   )
   if (!latestSeason) return null
 
@@ -732,7 +845,7 @@ export function computeQbTrajectory(
   if (latestVolume === 'insufficient') return null
 
   const priorSeason = pffSeasons.find(
-    (s) => clean(s.name) === cleanName && s.season === priorYear,
+    (s) => cleanPlayerName(s.name) === cleanName && s.season === priorYear,
   )
   const priorVolume = priorSeason ? volumeConfidence(priorSeason.dropbacks) : null
   const hasPrior = priorSeason != null && priorVolume !== 'insufficient'
@@ -844,6 +957,256 @@ export function computeQbTrajectory(
     positiveEpaDelta,
     trajectoryScore,
     trajectoryLabel,
+  }
+}
+
+
+function weightedQbMetric(
+  seasons: QbPffSeason[],
+  field: keyof Pick<QbPffSeason, 'grades_pass' | 'accuracy_percent' | 'btt_rate' | 'twp_rate' | 'epa' | 'positive_epa_percent'>,
+): number | null {
+  let numerator = 0
+  let denominator = 0
+
+  for (const season of seasons) {
+    const raw = season[field]
+    const weight = season.dropbacks ?? 0
+    if (raw == null || !Number.isFinite(raw) || weight <= 0) continue
+    numerator += raw * weight
+    denominator += weight
+  }
+
+  return denominator > 0 ? numerator / denominator : null
+}
+
+export function getQbPffContext(
+  draftYear: number,
+  playerName: string,
+  pffSeasons: QbPffSeason[],
+): QbPffContext | null {
+  const cleanName = cleanPlayerName(playerName)
+  const matchedSeasons = pffSeasons
+    .filter((s) => cleanPlayerName(s.name) === cleanName)
+    .sort((a, b) => a.season - b.season)
+
+  if (!matchedSeasons.length) return null
+
+  // Leakage guard: for every QB, historical or future, only use seasons before draft year.
+  const preDraftSeasons = matchedSeasons
+    .filter((s) => s.season < draftYear)
+    .sort((a, b) => a.season - b.season)
+
+  if (!preDraftSeasons.length) return null
+
+  const latestSeason = preDraftSeasons[preDraftSeasons.length - 1] ?? null
+  const priorSeason = preDraftSeasons.length >= 2 ? preDraftSeasons[preDraftSeasons.length - 2] : null
+  const totalDropbacks = preDraftSeasons.reduce((sum, s) => sum + (s.dropbacks ?? 0), 0)
+
+  return {
+    source: 'qb_pff_seasons.json',
+    matchedSeasons,
+    preDraftSeasons,
+    latestSeason,
+    priorSeason,
+    careerWeightedPassGrade: weightedQbMetric(preDraftSeasons, 'grades_pass'),
+    careerWeightedAccuracy: weightedQbMetric(preDraftSeasons, 'accuracy_percent'),
+    careerWeightedBttRate: weightedQbMetric(preDraftSeasons, 'btt_rate'),
+    careerWeightedTwpRate: weightedQbMetric(preDraftSeasons, 'twp_rate'),
+    careerWeightedEpa: weightedQbMetric(preDraftSeasons, 'epa'),
+    careerWeightedPositiveEpa: weightedQbMetric(preDraftSeasons, 'positive_epa_percent'),
+    totalDropbacks,
+    trajectory: computeQbTrajectory(draftYear, playerName, pffSeasons),
+  }
+}
+
+function wrVolumeConfidence(routes: number | null, targets: number | null): WrVolumeConfidence {
+  const r = routes ?? 0
+  const t = targets ?? 0
+  if (r >= 300 || t >= 85) return 'high'
+  if (r >= 175 || t >= 50) return 'medium'
+  if (r >= 80 || t >= 25) return 'low_sample'
+  return 'insufficient'
+}
+
+export function computeWrTrajectory(
+  draftYear: number,
+  playerName: string,
+  pffSeasons: WrPffSeason[],
+): WrTrajectorySignal | null {
+  const latestYear = draftYear - 1
+  const priorYear = draftYear - 2
+  const cleanName = cleanPlayerName(playerName)
+
+  const latestSeason = pffSeasons.find(
+    (s) => cleanPlayerName(s.name) === cleanName && s.season === latestYear,
+  )
+  if (!latestSeason) return null
+
+  const latestVolume = wrVolumeConfidence(latestSeason.routes, latestSeason.targets)
+  if (latestVolume === 'insufficient') return null
+
+  const priorSeason = pffSeasons.find(
+    (s) => cleanPlayerName(s.name) === cleanName && s.season === priorYear,
+  )
+  const priorVolume = priorSeason ? wrVolumeConfidence(priorSeason.routes, priorSeason.targets) : null
+  const hasPrior = priorSeason != null && priorVolume !== 'insufficient'
+
+  let routeGradeDelta: number | null = null
+  let yprrDelta: number | null = null
+  let targetDelta: number | null = null
+  let routeDelta: number | null = null
+  let dropRateDelta: number | null = null
+  let epaDelta: number | null = null
+  let positiveEpaDelta: number | null = null
+
+  if (hasPrior && priorSeason) {
+    if (latestSeason.route_grade != null && priorSeason.route_grade != null)
+      routeGradeDelta = latestSeason.route_grade - priorSeason.route_grade
+    if (latestSeason.yprr != null && priorSeason.yprr != null)
+      yprrDelta = latestSeason.yprr - priorSeason.yprr
+    if (latestSeason.targets != null && priorSeason.targets != null)
+      targetDelta = latestSeason.targets - priorSeason.targets
+    if (latestSeason.routes != null && priorSeason.routes != null)
+      routeDelta = latestSeason.routes - priorSeason.routes
+    if (latestSeason.drop_rate != null && priorSeason.drop_rate != null)
+      dropRateDelta = latestSeason.drop_rate - priorSeason.drop_rate
+    if (latestSeason.epa != null && priorSeason.epa != null)
+      epaDelta = latestSeason.epa - priorSeason.epa
+    if (latestSeason.positive_epa_percent != null && priorSeason.positive_epa_percent != null)
+      positiveEpaDelta = latestSeason.positive_epa_percent - priorSeason.positive_epa_percent
+  }
+
+  let trajectoryScore = 50
+  let trajectoryLabel: WrTrajectoryLabel = 'unknown'
+
+  if (hasPrior) {
+    // Route grade is the WR skill-quality anchor.
+    if (routeGradeDelta != null) trajectoryScore += clamp(routeGradeDelta, -14, 14) * 0.95
+
+    // YPRR is the most important efficiency signal; +0.50 YPRR is a major jump.
+    if (yprrDelta != null) trajectoryScore += clamp(yprrDelta * 10, -12, 12)
+
+    // Drop rate: lower is better.
+    if (dropRateDelta != null) trajectoryScore += clamp(-dropRateDelta * 0.8, -8, 8)
+
+    // EPA and positive EPA are contextual but useful as secondary efficiency signals.
+    if (epaDelta != null) trajectoryScore += clamp((epaDelta / 0.05) * 0.8, -5, 5)
+    if (positiveEpaDelta != null) trajectoryScore += clamp(positiveEpaDelta * 0.35, -5, 5)
+
+    // Volume growth matters, but avoid over-rewarding empty volume.
+    if (targetDelta != null && targetDelta >= 25 && (yprrDelta == null || yprrDelta >= -0.15)) trajectoryScore += 3
+    if (routeDelta != null && routeDelta >= 100 && latestVolume === 'high') trajectoryScore += 2
+
+    if (latestVolume === 'high' && ((routeGradeDelta ?? 0) > 0 || (yprrDelta ?? 0) > 0)) {
+      trajectoryScore += 3
+    } else if (latestVolume === 'low_sample') {
+      trajectoryScore -= 5
+    }
+
+    trajectoryScore = clamp(trajectoryScore, 20, 80)
+
+    if (
+      routeGradeDelta != null && routeGradeDelta >= 8 &&
+      yprrDelta != null && yprrDelta >= 0.45 &&
+      latestVolume === 'high' &&
+      (dropRateDelta == null || dropRateDelta <= 1.5)
+    ) {
+      trajectoryLabel = 'elite_breakout'
+    } else if (
+      routeGradeDelta != null && routeGradeDelta >= 8 &&
+      (latestVolume !== 'high' || (dropRateDelta != null && dropRateDelta >= 4))
+    ) {
+      trajectoryLabel = 'volatile_spike'
+    } else if (trajectoryScore >= 57) {
+      trajectoryLabel = 'rising'
+    } else if (trajectoryScore <= 43) {
+      trajectoryLabel = 'regressing'
+    } else if ((latestSeason.route_grade ?? latestSeason.offense_grade ?? 0) >= 78 || (latestSeason.yprr ?? 0) >= 2.2) {
+      trajectoryLabel = 'stable_good'
+    } else {
+      trajectoryLabel = 'stable_limited'
+    }
+  }
+
+  return {
+    latestSeason: latestYear,
+    priorSeason: hasPrior ? priorYear : null,
+    latestVolume,
+    priorVolume: hasPrior ? priorVolume : null,
+    routeGradeDelta,
+    yprrDelta,
+    targetDelta,
+    routeDelta,
+    dropRateDelta,
+    epaDelta,
+    positiveEpaDelta,
+    trajectoryScore,
+    trajectoryLabel,
+  }
+}
+
+function weightedWrMetric(
+  seasons: WrPffSeason[],
+  field: keyof Pick<WrPffSeason, 'route_grade' | 'offense_grade' | 'yprr' | 'drop_rate' | 'adot' | 'epa' | 'positive_epa_percent'>,
+): number | null {
+  let numerator = 0
+  let denominator = 0
+
+  for (const season of seasons) {
+    const raw = season[field]
+    const weight = season.routes ?? season.targets ?? 0
+    if (raw == null || !Number.isFinite(raw) || weight <= 0) continue
+    numerator += raw * weight
+    denominator += weight
+  }
+
+  return denominator > 0 ? numerator / denominator : null
+}
+
+export function getWrPffContext(
+  draftYear: number,
+  playerName: string,
+  pffSeasons: WrPffSeason[],
+): WrPffContext | null {
+  const cleanName = cleanPlayerName(playerName)
+  const matchedSeasons = pffSeasons
+    .filter((s) => cleanPlayerName(s.name) === cleanName)
+    .sort((a, b) => a.season - b.season)
+
+  if (!matchedSeasons.length) return null
+
+  // Leakage guard: for every WR, historical or future, only use seasons before draft year.
+  const preDraftSeasons = matchedSeasons
+    .filter((s) => s.season < draftYear)
+    .sort((a, b) => a.season - b.season)
+
+  if (!preDraftSeasons.length) return null
+
+  const latestSeason = preDraftSeasons[preDraftSeasons.length - 1] ?? null
+  const priorSeason = preDraftSeasons.length >= 2 ? preDraftSeasons[preDraftSeasons.length - 2] : null
+  const totalRoutes = preDraftSeasons.reduce((sum, s) => sum + (s.routes ?? 0), 0)
+  const totalTargets = preDraftSeasons.reduce((sum, s) => sum + (s.targets ?? 0), 0)
+  const totalReceptions = preDraftSeasons.reduce((sum, s) => sum + (s.receptions ?? 0), 0)
+  const totalYards = preDraftSeasons.reduce((sum, s) => sum + (s.yards ?? 0), 0)
+
+  return {
+    source: 'wr_pff_seasons.json',
+    matchedSeasons,
+    preDraftSeasons,
+    latestSeason,
+    priorSeason,
+    careerWeightedRouteGrade: weightedWrMetric(preDraftSeasons, 'route_grade'),
+    careerWeightedOffenseGrade: weightedWrMetric(preDraftSeasons, 'offense_grade'),
+    careerWeightedYprr: weightedWrMetric(preDraftSeasons, 'yprr'),
+    careerWeightedDropRate: weightedWrMetric(preDraftSeasons, 'drop_rate'),
+    careerWeightedAdot: weightedWrMetric(preDraftSeasons, 'adot'),
+    careerWeightedEpa: weightedWrMetric(preDraftSeasons, 'epa'),
+    careerWeightedPositiveEpa: weightedWrMetric(preDraftSeasons, 'positive_epa_percent'),
+    totalRoutes,
+    totalTargets,
+    totalReceptions,
+    totalYards,
+    trajectory: computeWrTrajectory(draftYear, playerName, pffSeasons),
   }
 }
 
