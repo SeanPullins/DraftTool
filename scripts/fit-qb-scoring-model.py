@@ -62,6 +62,8 @@ def load_pff_map():
     return m
 
 MIN_DROPBACKS_COMP = 200   # min dropbacks for a QB to be in the comp pool
+COMP_SCORE_BRACKET = 22    # only comp against QBs within ±N v11 points of the prospect
+COMP_MIN_POOL      = 4     # expand bracket if fewer than this many candidates remain
 
 def find_best_pff(pff_map, name, draft_year):
     """Best qualifying pre-draft PFF season.
@@ -270,26 +272,39 @@ def predict_av(pick, feats, mdl):
 
 # ── comp matching ─────────────────────────────────────────────────────────────
 
-def fit_comp_scaler(training):
-    """Fit scaler only on high-sample QBs (comps must have real data)."""
+def fit_comp_scaler(training, to_score, mdl):
+    """Fit scaler only on high-sample QBs; tag each with its predicted v11 score."""
     qual = [r for r in training if r['feats'].get('log_db', 0) >= math.log(MIN_DROPBACKS_COMP)]
     pool = qual if len(qual) >= 10 else training
+    for r in pool:
+        r['v11_score'] = to_score(predict_av(r['pick'], r['feats'], mdl))
     vecs = np.array([feat_vec(r['feats'], COMP_FEAT) for r in pool])
     sc   = StandardScaler()
     sc.fit(vecs)
-    return sc, pool   # return the filtered pool too
+    return sc, pool
 
-def best_comp(target_feats, comp_pool, comp_scaler, exclude_name=None):
-    """Euclidean distance in standardized comp-feature space → single nearest QB.
-    Only searches QBs with >= MIN_DROPBACKS_COMP to avoid imputed-value pollution."""
+def best_comp(target_feats, target_score, comp_pool, comp_scaler, exclude_name=None):
+    """Nearest-neighbor in standardized PFF feature space, restricted to comps
+    within COMP_SCORE_BRACKET points of target_score so high-scorers only match
+    elite-tier historical QBs, not high-volume mid-rounders with similar raw stats."""
     if target_feats is None:
         return None
     tv = comp_scaler.transform([feat_vec(target_feats, COMP_FEAT)])[0]
 
+    def _candidates(bracket):
+        return [r for r in comp_pool
+                if abs(r.get('v11_score', 50.0) - target_score) <= bracket
+                and not (exclude_name and cleanname(r['name']) == cleanname(exclude_name))]
+
+    pool = _candidates(COMP_SCORE_BRACKET)
+    if len(pool) < COMP_MIN_POOL:
+        pool = _candidates(COMP_SCORE_BRACKET * 1.5)
+    if not pool:
+        pool = [r for r in comp_pool
+                if not (exclude_name and cleanname(r['name']) == cleanname(exclude_name))]
+
     best, best_dist = None, np.inf
-    for r in comp_pool:
-        if exclude_name and cleanname(r['name']) == cleanname(exclude_name):
-            continue
+    for r in pool:
         rv   = comp_scaler.transform([feat_vec(r['feats'], COMP_FEAT)])[0]
         dist = float(np.linalg.norm(tv - rv))
         if dist < best_dist:
@@ -297,7 +312,7 @@ def best_comp(target_feats, comp_pool, comp_scaler, exclude_name=None):
 
     if best is None:
         return None
-    sim = max(0.0, 1.0 - best_dist / (best_dist + 1.0))  # soft similarity for display
+    sim = max(0.0, 1.0 - best_dist / (best_dist + 1.0))
     return {**best, 'similarity': round(sim, 3), 'distance': round(best_dist, 3)}
 
 # ── prospect scoring ───────────────────────────────────────────────────────────
@@ -350,7 +365,7 @@ def update_prospects(training, mdl, to_score, comp_scaler, comp_pool, pff_map):
             final     = build_final_score(pct, pick, athletic)
             final_r   = round(final, 1)
 
-            comp = best_comp(feats, comp_pool, comp_scaler)
+            comp = best_comp(feats, pct, comp_pool, comp_scaler)
             comp_obj  = None
             if comp:
                 comp_obj = {
@@ -402,7 +417,7 @@ def main():
 
     print('Fitting model...')
     mdl, to_score = fit_model(training)
-    comp_scaler, comp_pool = fit_comp_scaler(training)
+    comp_scaler, comp_pool = fit_comp_scaler(training, to_score, mdl)
     print(f'  Comp pool (>={MIN_DROPBACKS_COMP} dropbacks): {len(comp_pool)} QBs')
 
     # Training validation
@@ -410,7 +425,7 @@ def main():
     scored = [(to_score(predict_av(r['pick'], r['feats'], mdl)), r) for r in training]
     scored.sort(key=lambda x: -x[0])
     for s, r in scored[:8]:
-        c = best_comp(r['feats'], comp_pool, comp_scaler, exclude_name=r['name'])
+        c = best_comp(r['feats'], s, comp_pool, comp_scaler, exclude_name=r['name'])
         print(f"  {r['year']} #{r['pick']:3d} {r['name']:22s}  v11={s:.1f}  AV={r['actual_av']:.0f}  {r['label']:8s}  comp: {c['name'] if c else '—'}")
     print('  ...')
     for s, r in scored[-5:]:

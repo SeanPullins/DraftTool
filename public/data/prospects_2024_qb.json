@@ -72,60 +72,60 @@
     "overallScore": 79,
     "valueScore": 79,
     "primaryQbProfileComp": {
-      "name": "Logan Woodside",
-      "year": 2018,
-      "pick": 249,
-      "actualAv": 0,
-      "outcome": "Miss",
-      "similarity": 0.397,
-      "distance": 1.517,
+      "name": "Justin Herbert",
+      "year": 2020,
+      "pick": 6,
+      "actualAv": 97.2,
+      "outcome": "Hit",
+      "similarity": 0.383,
+      "distance": 1.61,
       "reason": "Closest college-profile match in v11 standardized feature space (pass grade, BTT, ball-security, accuracy, EPA, pocket presence)."
     },
     "projectionComps": [
       {
-        "name": "Logan Woodside",
-        "year": 2018,
-        "pick": 249,
-        "actualAv": 0,
-        "outcome": "Miss",
-        "similarity": 0.397,
-        "distance": 1.517,
+        "name": "Justin Herbert",
+        "year": 2020,
+        "pick": 6,
+        "actualAv": 97.2,
+        "outcome": "Hit",
+        "similarity": 0.383,
+        "distance": 1.61,
         "reason": "Closest college-profile match in v11 standardized feature space (pass grade, BTT, ball-security, accuracy, EPA, pocket presence)."
       }
     ],
     "styleComps": [
       {
-        "name": "Logan Woodside",
-        "year": 2018,
-        "pick": 249,
-        "actualAv": 0,
-        "outcome": "Miss",
-        "similarity": 0.397,
-        "distance": 1.517,
+        "name": "Justin Herbert",
+        "year": 2020,
+        "pick": 6,
+        "actualAv": 97.2,
+        "outcome": "Hit",
+        "similarity": 0.383,
+        "distance": 1.61,
         "reason": "Closest college-profile match in v11 standardized feature space (pass grade, BTT, ball-security, accuracy, EPA, pocket presence)."
       }
     ],
     "qbComps": [
       {
-        "name": "Logan Woodside",
-        "year": 2018,
-        "pick": 249,
-        "actualAv": 0,
-        "outcome": "Miss",
-        "similarity": 0.397,
-        "distance": 1.517,
+        "name": "Justin Herbert",
+        "year": 2020,
+        "pick": 6,
+        "actualAv": 97.2,
+        "outcome": "Hit",
+        "similarity": 0.383,
+        "distance": 1.61,
         "reason": "Closest college-profile match in v11 standardized feature space (pass grade, BTT, ball-security, accuracy, EPA, pocket presence)."
       }
     ],
     "comps": [
       {
-        "name": "Logan Woodside",
-        "year": 2018,
-        "pick": 249,
-        "actualAv": 0,
-        "outcome": "Miss",
-        "similarity": 0.397,
-        "distance": 1.517,
+        "name": "Justin Herbert",
+        "year": 2020,
+        "pick": 6,
+        "actualAv": 97.2,
+        "outcome": "Hit",
+        "similarity": 0.383,
+        "distance": 1.61,
         "reason": "Closest college-profile match in v11 standardized feature space (pass grade, BTT, ball-security, accuracy, EPA, pocket presence)."
       }
     ],
@@ -352,60 +352,60 @@
     "overallScore": 80.5,
     "valueScore": 80.5,
     "primaryQbProfileComp": {
-      "name": "Kyle Trask",
+      "name": "Trevor Lawrence",
       "year": 2021,
-      "pick": 64,
-      "actualAv": 0,
-      "outcome": "Miss",
-      "similarity": 0.373,
-      "distance": 1.684,
+      "pick": 1,
+      "actualAv": 66,
+      "outcome": "Hit",
+      "similarity": 0.326,
+      "distance": 2.065,
       "reason": "Closest college-profile match in v11 standardized feature space (pass grade, BTT, ball-security, accuracy, EPA, pocket presence)."
     },
     "projectionComps": [
       {
-        "name": "Kyle Trask",
+        "name": "Trevor Lawrence",
         "year": 2021,
-        "pick": 64,
-        "actualAv": 0,
-        "outcome": "Miss",
-        "similarity": 0.373,
-        "distance": 1.684,
+        "pick": 1,
+        "actualAv": 66,
+        "outcome": "Hit",
+        "similarity": 0.326,
+        "distance": 2.065,
         "reason": "Closest college-profile match in v11 standardized feature space (pass grade, BTT, ball-security, accuracy, EPA, pocket presence)."
       }
     ],
     "styleComps": [
       {
-        "name": "Kyle Trask",
+        "name": "Trevor Lawrence",
         "year": 2021,
-        "pick": 64,
-        "actualAv": 0,
-        "outcome": "Miss",
-        "similarity": 0.373,
-        "distance": 1.684,
+        "pick": 1,
+        "actualAv": 66,
+        "outcome": "Hit",
+        "similarity": 0.326,
+        "distance": 2.065,
         "reason": "Closest college-profile match in v11 standardized feature space (pass grade, BTT, ball-security, accuracy, EPA, pocket presence)."
       }
     ],
     "qbComps": [
       {
-        "name": "Kyle Trask",
+        "name": "Trevor Lawrence",
         "year": 2021,
-        "pick": 64,
-        "actualAv": 0,
-        "outcome": "Miss",
-        "similarity": 0.373,
-        "distance": 1.684,
+        "pick": 1,
+        "actualAv": 66,
+        "outcome": "Hit",
+        "similarity": 0.326,
+        "distance": 2.065,
         "reason": "Closest college-profile match in v11 standardized feature space (pass grade, BTT, ball-security, accuracy, EPA, pocket presence)."
       }
     ],
     "comps": [
       {
-        "name": "Kyle Trask",
+        "name": "Trevor Lawrence",
         "year": 2021,
-        "pick": 64,
-        "actualAv": 0,
-        "outcome": "Miss",
-        "similarity": 0.373,
-        "distance": 1.684,
+        "pick": 1,
+        "actualAv": 66,
+        "outcome": "Hit",
+        "similarity": 0.326,
+        "distance": 2.065,
         "reason": "Closest college-profile match in v11 standardized feature space (pass grade, BTT, ball-security, accuracy, EPA, pocket presence)."
       }
     ],
@@ -494,60 +494,60 @@
     "overallScore": 76,
     "valueScore": 76,
     "primaryQbProfileComp": {
-      "name": "Bailey Zappe",
-      "year": 2022,
-      "pick": 137,
-      "actualAv": 2,
-      "outcome": "Miss",
-      "similarity": 0.545,
-      "distance": 0.835,
+      "name": "Jalen Hurts",
+      "year": 2020,
+      "pick": 53,
+      "actualAv": 109,
+      "outcome": "Hit",
+      "similarity": 0.464,
+      "distance": 1.155,
       "reason": "Closest college-profile match in v11 standardized feature space (pass grade, BTT, ball-security, accuracy, EPA, pocket presence)."
     },
     "projectionComps": [
       {
-        "name": "Bailey Zappe",
-        "year": 2022,
-        "pick": 137,
-        "actualAv": 2,
-        "outcome": "Miss",
-        "similarity": 0.545,
-        "distance": 0.835,
+        "name": "Jalen Hurts",
+        "year": 2020,
+        "pick": 53,
+        "actualAv": 109,
+        "outcome": "Hit",
+        "similarity": 0.464,
+        "distance": 1.155,
         "reason": "Closest college-profile match in v11 standardized feature space (pass grade, BTT, ball-security, accuracy, EPA, pocket presence)."
       }
     ],
     "styleComps": [
       {
-        "name": "Bailey Zappe",
-        "year": 2022,
-        "pick": 137,
-        "actualAv": 2,
-        "outcome": "Miss",
-        "similarity": 0.545,
-        "distance": 0.835,
+        "name": "Jalen Hurts",
+        "year": 2020,
+        "pick": 53,
+        "actualAv": 109,
+        "outcome": "Hit",
+        "similarity": 0.464,
+        "distance": 1.155,
         "reason": "Closest college-profile match in v11 standardized feature space (pass grade, BTT, ball-security, accuracy, EPA, pocket presence)."
       }
     ],
     "qbComps": [
       {
-        "name": "Bailey Zappe",
-        "year": 2022,
-        "pick": 137,
-        "actualAv": 2,
-        "outcome": "Miss",
-        "similarity": 0.545,
-        "distance": 0.835,
+        "name": "Jalen Hurts",
+        "year": 2020,
+        "pick": 53,
+        "actualAv": 109,
+        "outcome": "Hit",
+        "similarity": 0.464,
+        "distance": 1.155,
         "reason": "Closest college-profile match in v11 standardized feature space (pass grade, BTT, ball-security, accuracy, EPA, pocket presence)."
       }
     ],
     "comps": [
       {
-        "name": "Bailey Zappe",
-        "year": 2022,
-        "pick": 137,
-        "actualAv": 2,
-        "outcome": "Miss",
-        "similarity": 0.545,
-        "distance": 0.835,
+        "name": "Jalen Hurts",
+        "year": 2020,
+        "pick": 53,
+        "actualAv": 109,
+        "outcome": "Hit",
+        "similarity": 0.464,
+        "distance": 1.155,
         "reason": "Closest college-profile match in v11 standardized feature space (pass grade, BTT, ball-security, accuracy, EPA, pocket presence)."
       }
     ],
@@ -639,60 +639,60 @@
     "overallScore": 61.6,
     "valueScore": 61.6,
     "primaryQbProfileComp": {
-      "name": "Brandon Doughty",
-      "year": 2016,
-      "pick": 223,
-      "actualAv": 0,
-      "outcome": "Miss",
-      "similarity": 0.338,
-      "distance": 1.962,
+      "name": "Mac Jones",
+      "year": 2021,
+      "pick": 15,
+      "actualAv": 45.6,
+      "outcome": "Hit",
+      "similarity": 0.253,
+      "distance": 2.952,
       "reason": "Closest college-profile match in v11 standardized feature space (pass grade, BTT, ball-security, accuracy, EPA, pocket presence)."
     },
     "projectionComps": [
       {
-        "name": "Brandon Doughty",
-        "year": 2016,
-        "pick": 223,
-        "actualAv": 0,
-        "outcome": "Miss",
-        "similarity": 0.338,
-        "distance": 1.962,
+        "name": "Mac Jones",
+        "year": 2021,
+        "pick": 15,
+        "actualAv": 45.6,
+        "outcome": "Hit",
+        "similarity": 0.253,
+        "distance": 2.952,
         "reason": "Closest college-profile match in v11 standardized feature space (pass grade, BTT, ball-security, accuracy, EPA, pocket presence)."
       }
     ],
     "styleComps": [
       {
-        "name": "Brandon Doughty",
-        "year": 2016,
-        "pick": 223,
-        "actualAv": 0,
-        "outcome": "Miss",
-        "similarity": 0.338,
-        "distance": 1.962,
+        "name": "Mac Jones",
+        "year": 2021,
+        "pick": 15,
+        "actualAv": 45.6,
+        "outcome": "Hit",
+        "similarity": 0.253,
+        "distance": 2.952,
         "reason": "Closest college-profile match in v11 standardized feature space (pass grade, BTT, ball-security, accuracy, EPA, pocket presence)."
       }
     ],
     "qbComps": [
       {
-        "name": "Brandon Doughty",
-        "year": 2016,
-        "pick": 223,
-        "actualAv": 0,
-        "outcome": "Miss",
-        "similarity": 0.338,
-        "distance": 1.962,
+        "name": "Mac Jones",
+        "year": 2021,
+        "pick": 15,
+        "actualAv": 45.6,
+        "outcome": "Hit",
+        "similarity": 0.253,
+        "distance": 2.952,
         "reason": "Closest college-profile match in v11 standardized feature space (pass grade, BTT, ball-security, accuracy, EPA, pocket presence)."
       }
     ],
     "comps": [
       {
-        "name": "Brandon Doughty",
-        "year": 2016,
-        "pick": 223,
-        "actualAv": 0,
-        "outcome": "Miss",
-        "similarity": 0.338,
-        "distance": 1.962,
+        "name": "Mac Jones",
+        "year": 2021,
+        "pick": 15,
+        "actualAv": 45.6,
+        "outcome": "Hit",
+        "similarity": 0.253,
+        "distance": 2.952,
         "reason": "Closest college-profile match in v11 standardized feature space (pass grade, BTT, ball-security, accuracy, EPA, pocket presence)."
       }
     ],
@@ -913,60 +913,60 @@
     "overallScore": 37.8,
     "valueScore": 37.8,
     "primaryQbProfileComp": {
-      "name": "Cody Kessler",
-      "year": 2016,
-      "pick": 93,
-      "actualAv": 6.2,
-      "outcome": "Neutral",
-      "similarity": 0.406,
-      "distance": 1.464,
+      "name": "Ian Book",
+      "year": 2021,
+      "pick": 133,
+      "actualAv": 0,
+      "outcome": "Miss",
+      "similarity": 0.374,
+      "distance": 1.675,
       "reason": "Closest college-profile match in v11 standardized feature space (pass grade, BTT, ball-security, accuracy, EPA, pocket presence)."
     },
     "projectionComps": [
       {
-        "name": "Cody Kessler",
-        "year": 2016,
-        "pick": 93,
-        "actualAv": 6.2,
-        "outcome": "Neutral",
-        "similarity": 0.406,
-        "distance": 1.464,
+        "name": "Ian Book",
+        "year": 2021,
+        "pick": 133,
+        "actualAv": 0,
+        "outcome": "Miss",
+        "similarity": 0.374,
+        "distance": 1.675,
         "reason": "Closest college-profile match in v11 standardized feature space (pass grade, BTT, ball-security, accuracy, EPA, pocket presence)."
       }
     ],
     "styleComps": [
       {
-        "name": "Cody Kessler",
-        "year": 2016,
-        "pick": 93,
-        "actualAv": 6.2,
-        "outcome": "Neutral",
-        "similarity": 0.406,
-        "distance": 1.464,
+        "name": "Ian Book",
+        "year": 2021,
+        "pick": 133,
+        "actualAv": 0,
+        "outcome": "Miss",
+        "similarity": 0.374,
+        "distance": 1.675,
         "reason": "Closest college-profile match in v11 standardized feature space (pass grade, BTT, ball-security, accuracy, EPA, pocket presence)."
       }
     ],
     "qbComps": [
       {
-        "name": "Cody Kessler",
-        "year": 2016,
-        "pick": 93,
-        "actualAv": 6.2,
-        "outcome": "Neutral",
-        "similarity": 0.406,
-        "distance": 1.464,
+        "name": "Ian Book",
+        "year": 2021,
+        "pick": 133,
+        "actualAv": 0,
+        "outcome": "Miss",
+        "similarity": 0.374,
+        "distance": 1.675,
         "reason": "Closest college-profile match in v11 standardized feature space (pass grade, BTT, ball-security, accuracy, EPA, pocket presence)."
       }
     ],
     "comps": [
       {
-        "name": "Cody Kessler",
-        "year": 2016,
-        "pick": 93,
-        "actualAv": 6.2,
-        "outcome": "Neutral",
-        "similarity": 0.406,
-        "distance": 1.464,
+        "name": "Ian Book",
+        "year": 2021,
+        "pick": 133,
+        "actualAv": 0,
+        "outcome": "Miss",
+        "similarity": 0.374,
+        "distance": 1.675,
         "reason": "Closest college-profile match in v11 standardized feature space (pass grade, BTT, ball-security, accuracy, EPA, pocket presence)."
       }
     ],
@@ -1050,60 +1050,60 @@
     "overallScore": 40.9,
     "valueScore": 40.9,
     "primaryQbProfileComp": {
-      "name": "Josh Rosen",
+      "name": "Logan Woodside",
       "year": 2018,
-      "pick": 10,
-      "actualAv": 4.2,
+      "pick": 249,
+      "actualAv": 0,
       "outcome": "Miss",
-      "similarity": 0.422,
-      "distance": 1.369,
+      "similarity": 0.386,
+      "distance": 1.593,
       "reason": "Closest college-profile match in v11 standardized feature space (pass grade, BTT, ball-security, accuracy, EPA, pocket presence)."
     },
     "projectionComps": [
       {
-        "name": "Josh Rosen",
+        "name": "Logan Woodside",
         "year": 2018,
-        "pick": 10,
-        "actualAv": 4.2,
+        "pick": 249,
+        "actualAv": 0,
         "outcome": "Miss",
-        "similarity": 0.422,
-        "distance": 1.369,
+        "similarity": 0.386,
+        "distance": 1.593,
         "reason": "Closest college-profile match in v11 standardized feature space (pass grade, BTT, ball-security, accuracy, EPA, pocket presence)."
       }
     ],
     "styleComps": [
       {
-        "name": "Josh Rosen",
+        "name": "Logan Woodside",
         "year": 2018,
-        "pick": 10,
-        "actualAv": 4.2,
+        "pick": 249,
+        "actualAv": 0,
         "outcome": "Miss",
-        "similarity": 0.422,
-        "distance": 1.369,
+        "similarity": 0.386,
+        "distance": 1.593,
         "reason": "Closest college-profile match in v11 standardized feature space (pass grade, BTT, ball-security, accuracy, EPA, pocket presence)."
       }
     ],
     "qbComps": [
       {
-        "name": "Josh Rosen",
+        "name": "Logan Woodside",
         "year": 2018,
-        "pick": 10,
-        "actualAv": 4.2,
+        "pick": 249,
+        "actualAv": 0,
         "outcome": "Miss",
-        "similarity": 0.422,
-        "distance": 1.369,
+        "similarity": 0.386,
+        "distance": 1.593,
         "reason": "Closest college-profile match in v11 standardized feature space (pass grade, BTT, ball-security, accuracy, EPA, pocket presence)."
       }
     ],
     "comps": [
       {
-        "name": "Josh Rosen",
+        "name": "Logan Woodside",
         "year": 2018,
-        "pick": 10,
-        "actualAv": 4.2,
+        "pick": 249,
+        "actualAv": 0,
         "outcome": "Miss",
-        "similarity": 0.422,
-        "distance": 1.369,
+        "similarity": 0.386,
+        "distance": 1.593,
         "reason": "Closest college-profile match in v11 standardized feature space (pass grade, BTT, ball-security, accuracy, EPA, pocket presence)."
       }
     ],
@@ -1187,60 +1187,60 @@
     "overallScore": 18.9,
     "valueScore": 18.9,
     "primaryQbProfileComp": {
-      "name": "DeShone Kizer",
-      "year": 2017,
-      "pick": 52,
-      "actualAv": 7.2,
+      "name": "Cole McDonald",
+      "year": 2020,
+      "pick": 224,
+      "actualAv": 0,
       "outcome": "Miss",
-      "similarity": 0.41,
-      "distance": 1.442,
+      "similarity": 0.355,
+      "distance": 1.816,
       "reason": "Closest college-profile match in v11 standardized feature space (pass grade, BTT, ball-security, accuracy, EPA, pocket presence)."
     },
     "projectionComps": [
       {
-        "name": "DeShone Kizer",
-        "year": 2017,
-        "pick": 52,
-        "actualAv": 7.2,
+        "name": "Cole McDonald",
+        "year": 2020,
+        "pick": 224,
+        "actualAv": 0,
         "outcome": "Miss",
-        "similarity": 0.41,
-        "distance": 1.442,
+        "similarity": 0.355,
+        "distance": 1.816,
         "reason": "Closest college-profile match in v11 standardized feature space (pass grade, BTT, ball-security, accuracy, EPA, pocket presence)."
       }
     ],
     "styleComps": [
       {
-        "name": "DeShone Kizer",
-        "year": 2017,
-        "pick": 52,
-        "actualAv": 7.2,
+        "name": "Cole McDonald",
+        "year": 2020,
+        "pick": 224,
+        "actualAv": 0,
         "outcome": "Miss",
-        "similarity": 0.41,
-        "distance": 1.442,
+        "similarity": 0.355,
+        "distance": 1.816,
         "reason": "Closest college-profile match in v11 standardized feature space (pass grade, BTT, ball-security, accuracy, EPA, pocket presence)."
       }
     ],
     "qbComps": [
       {
-        "name": "DeShone Kizer",
-        "year": 2017,
-        "pick": 52,
-        "actualAv": 7.2,
+        "name": "Cole McDonald",
+        "year": 2020,
+        "pick": 224,
+        "actualAv": 0,
         "outcome": "Miss",
-        "similarity": 0.41,
-        "distance": 1.442,
+        "similarity": 0.355,
+        "distance": 1.816,
         "reason": "Closest college-profile match in v11 standardized feature space (pass grade, BTT, ball-security, accuracy, EPA, pocket presence)."
       }
     ],
     "comps": [
       {
-        "name": "DeShone Kizer",
-        "year": 2017,
-        "pick": 52,
-        "actualAv": 7.2,
+        "name": "Cole McDonald",
+        "year": 2020,
+        "pick": 224,
+        "actualAv": 0,
         "outcome": "Miss",
-        "similarity": 0.41,
-        "distance": 1.442,
+        "similarity": 0.355,
+        "distance": 1.816,
         "reason": "Closest college-profile match in v11 standardized feature space (pass grade, BTT, ball-security, accuracy, EPA, pocket presence)."
       }
     ],
