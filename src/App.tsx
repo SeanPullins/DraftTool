@@ -101,6 +101,19 @@ const sortLabels: Record<SortKey, string> = {
   outcome: 'Outcome',
 }
 const positionFilters = ['All', ...positions]
+
+// QB v11 model calibration tiers (from 2016–2022 training set, n=72)
+const QB_V11_TIERS = [
+  { min: 90, label: 'Elite',        hitRate: 100, avgAv: 93.6, risk: 'Very low'    },
+  { min: 75, label: 'High-floor',   hitRate: 64,  avgAv: 60.2, risk: 'Moderate'    },
+  { min: 50, label: 'Developmental',hitRate: 17,  avgAv: 23.8, risk: 'High'        },
+  { min: 25, label: 'Long shot',    hitRate: 11,  avgAv: 10.8, risk: 'Very high'   },
+  { min: 0,  label: 'Project',      hitRate: 6,   avgAv: 4.2,  risk: 'Extreme'     },
+]
+function getQbV11Tier(score: number) {
+  return QB_V11_TIERS.find(t => score >= t.min) ?? QB_V11_TIERS[QB_V11_TIERS.length - 1]
+}
+
 function PICK_VALUE(pick: number): number {
   return Math.max(1, Math.round(3000 * Math.exp(-0.02 * (pick - 1))))
 }
@@ -2326,7 +2339,16 @@ function buildPlayerExplanation(player: any, ctx: any) {
     else badges.push('Day 3 / value range')
   }
 
-  if (projectedScore != null) {
+  if (projectedScore != null && pos === 'QB' && Number(player.year) >= 2024) {
+    const tier = getQbV11Tier(projectedScore)
+    drivers.push(`QB v11 score: ${Math.round(projectedScore)} — ${tier.label} tier`)
+    drivers.push(`Historical hit rate at this score tier: ${tier.hitRate}% (avg career AV ${tier.avgAv})`)
+    badges.push(`${tier.label} · ${tier.hitRate}% hit rate`)
+    if (tier.hitRate >= 90) strengths.push(`${tier.hitRate}% of QBs in this score range have been NFL hits historically.`)
+    else if (tier.hitRate >= 60) strengths.push(`${tier.hitRate}% hit rate at this tier — more likely to contribute than not.`)
+    else if (tier.hitRate >= 20) risks.push(`Only ${tier.hitRate}% of QBs in this score range become hits — meaningful development risk.`)
+    else risks.push(`Historically a high-bust tier: only ${tier.hitRate}% of similar-scored QBs have produced.`)
+  } else if (projectedScore != null) {
     drivers.push(`Model score: ${Math.round(projectedScore)}`)
     if (projectedScore >= 85) strengths.push('High model score relative to the class.')
     else if (projectedScore >= 70) strengths.push('Solid model score with starter/value potential.')
@@ -2383,14 +2405,20 @@ function buildPlayerExplanation(player: any, ctx: any) {
   }
 
   if (pos === 'QB' && Number(player.year) >= 2024) {
-    const primaryComp =
+    const compObj =
       player.primaryQbProfileComp ||
       player.projectionComps?.[0] ||
       player.styleComps?.[0] ||
       player.qbComps?.[0] ||
-      ctx?.projected?.comps?.[0]?.player?.name ||
       null
-    if (primaryComp) drivers.push(`Closest QB comp: ${primaryComp}`)
+    if (compObj) {
+      const compName    = typeof compObj === 'string' ? compObj : compObj.name
+      const compOutcome = typeof compObj === 'object' ? compObj.outcome : null
+      const compPick    = typeof compObj === 'object' && compObj.pick ? `#${compObj.pick}` : null
+      const compYear    = typeof compObj === 'object' && compObj.year ? compObj.year : null
+      const compLabel   = [compName, compYear, compPick, compOutcome ? `(${compOutcome})` : null].filter(Boolean).join(' ')
+      drivers.push(`Closest college profile comp: ${compLabel}`)
+    }
   }
 
   const rb = ctx?.rbContext
@@ -3190,9 +3218,10 @@ function ClassExplorer({ pool, history, pffProfiles, pffLookup, y1Data, careerSt
                       ? Number(v57.v57Percentile)
                       : (projected ? projected.score : null)
                   const delta = v57?.v57Delta != null ? Number(v57.v57Delta) : null
+                  const tier = isQb && Number.isFinite(qbV11Score) ? getQbV11Tier(qbV11Score) : null
                   const title =
-                    isQb && Number.isFinite(qbV11Score)
-                      ? 'QB v11 model score'
+                    tier
+                      ? `QB v11 · ${tier.label} tier · ${tier.hitRate}% hit rate historically (avg career AV ${tier.avgAv})`
                       : v57
                         ? `V5.7P score${delta != null ? ` · Δ ${delta > 0 ? '+' : ''}${delta.toFixed(1)}` : ''}${v57.flag ? ` · ${v57.flag}` : ''}`
                         : 'V4 fallback score'
