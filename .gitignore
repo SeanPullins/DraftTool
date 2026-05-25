@@ -12,6 +12,8 @@ public/data/*
 !public/data/prospects_2027_qb.json
 !public/data/ras_main_table.csv
 !public/data/qb_pff_seasons.json
+!public/data/y1_nfl_stats.json
+!public/data/calibration_models.json
 artifacts
 .env
 .env.local

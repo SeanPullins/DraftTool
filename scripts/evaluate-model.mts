@@ -19,8 +19,8 @@
 
 import { readFileSync } from 'node:fs'
 import { gunzipSync } from 'node:zlib'
-import { clean, project, calibratedExpectedAv, matureOutcomeCutoff, outcomeOrder, group, computeQbTrajectory } from '../src/model.ts'
-import type { Historical, PffProfile, Prospect, Category, ProjectOpts, QbPffSeason, QbTrajectoryLabel } from '../src/model.ts'
+import { clean, project, calibratedExpectedAv, calibratedExpectedAvFromModel, matureOutcomeCutoff, outcomeOrder, group, computeQbTrajectory } from '../src/model.ts'
+import type { Historical, PffProfile, Prospect, Category, ProjectOpts, QbPffSeason, QbTrajectoryLabel, Y1NflStats, CalibrationModelSet, CalibrationModel } from '../src/model.ts'
 
 // ── CLI flags ─────────────────────────────────────────────────────────────────
 
@@ -379,7 +379,28 @@ const rasLookup = buildRasLookup(rasRows)
 
 const qbPffSeasonsRaw = JSON.parse(readFileSync(DATA + 'qb_pff_seasons.json', 'utf-8'))
 const qbPffSeasons: QbPffSeason[] = qbPffSeasonsRaw.records
-console.log(`  qb_pff=${qbPffSeasons.length} PFF season records`)
+
+const y1NflStatsRaw = JSON.parse(readFileSync(DATA + 'y1_nfl_stats.json', 'utf-8'))
+const y1NflStats: Y1NflStats = y1NflStatsRaw
+
+const calibModelsRaw = JSON.parse(readFileSync(DATA + 'calibration_models.json', 'utf-8'))
+
+type YearlyCalibModels = { global: Record<string, CalibrationModel>; QB: Record<string, CalibrationModel>; SKILL: Record<string, CalibrationModel>; OL: Record<string, CalibrationModel>; FRONT: Record<string, CalibrationModel>; DB: Record<string, CalibrationModel> }
+const calibModelsByYear = calibModelsRaw as YearlyCalibModels
+function getCalibModels(year: number): CalibrationModelSet {
+  const yk = String(year)
+  return {
+    global: calibModelsByYear.global[yk] ?? calibModelsByYear.global['latest'],
+    QB: calibModelsByYear.QB[yk] ?? calibModelsByYear.QB['latest'],
+    SKILL: calibModelsByYear.SKILL[yk] ?? calibModelsByYear.SKILL['latest'],
+    OL: calibModelsByYear.OL[yk] ?? calibModelsByYear.OL['latest'],
+    FRONT: calibModelsByYear.FRONT[yk] ?? calibModelsByYear.FRONT['latest'],
+    DB: calibModelsByYear.DB[yk] ?? calibModelsByYear.DB['latest'],
+  }
+}
+
+const y1NflTotal = y1NflStats.qb.length + y1NflStats.wr.length + y1NflStats.rb.length + y1NflStats.te.length
+console.log(`  qb_pff=${qbPffSeasons.length} y1_nfl=${y1NflTotal} ras=${rasRows.length}`)
 
 console.log(`✓  pool=${pool.length} pff=${pffProfiles.length} ras=${rasRows.length}`)
 
@@ -440,7 +461,8 @@ for (const player of evalSet) {
   // selection is based purely on pre-draft signals, not known NFL outcomes.
   const evalPool       = walkForward ? pool.filter((p) => p.year < player.year) : pool
   const evalPffProfiles = walkForward ? pffProfiles.filter((p) => p.draftSeason < player.year) : pffProfiles
-  const proj           = project(prospect, evalPool, evalPffProfiles, player.id, undefined, undefined, undefined, prospect.qbTrajectory?.gradeDelta ?? null, walkForward)
+  const calibModels = walkForward ? getCalibModels(player.year) : null
+  const proj           = project(prospect, evalPool, evalPffProfiles, player.id, undefined, undefined, undefined, prospect.qbTrajectory?.gradeDelta ?? null, walkForward, undefined, y1NflStats, calibModels)
 
   // Predicted category = highest-odds outcome
   const projCategory = outcomeOrder.reduce((best, cat) =>
@@ -458,7 +480,7 @@ for (const player of evalSet) {
   // Compute how much the trajectory signal moved the score (for miss analysis)
   let trajectoryScoreMoved = 0
   if (traj != null && traj.gradeDelta != null) {
-    const projNoTraj = project(prospect, evalPool, evalPffProfiles, player.id, undefined, undefined, undefined, null, walkForward)
+    const projNoTraj = project(prospect, evalPool, evalPffProfiles, player.id, undefined, undefined, undefined, null, walkForward, undefined, y1NflStats, calibModels)
     trajectoryScoreMoved = proj.score - projNoTraj.score
   }
 
@@ -728,7 +750,8 @@ if (rasSubset.length >= 30) {
   for (const r of rasSubset) {
     const ablPool        = walkForward ? pool.filter((p) => p.year < r.player.year) : pool
     const ablPffProfiles = walkForward ? pffProfiles.filter((p) => p.draftSeason < r.player.year) : pffProfiles
-    const proj = project(r.prospect, ablPool, ablPffProfiles, r.player.id, undefined, undefined, undefined, undefined, walkForward, { disableOfficialRas: true })
+    const rasAblCalib = walkForward ? getCalibModels(r.player.year) : null
+    const proj = project(r.prospect, ablPool, ablPffProfiles, r.player.id, undefined, undefined, undefined, undefined, walkForward, { disableOfficialRas: true }, y1NflStats, rasAblCalib)
     rasOffScores.push(proj.score)
     rasOffAvs.push(proj.expectedAv)
   }
@@ -928,6 +951,7 @@ if (doAblation) {
     name: string
     modify: (p: Prospect) => Prospect
     opts?: ProjectOpts
+    useWfCalib?: boolean   // if true, compare static vs walk-forward calibration
   }
 
   const ablations: AblationSpec[] = [
@@ -987,6 +1011,11 @@ if (doAblation) {
       modify: (p) => p,
       opts: { disableOfficialRas: true },
     },
+    {
+      name: 'WF calibration',
+      modify: (p) => p,
+      useWfCalib: true,
+    },
   ]
 
   // Limit ablation to a sample for speed if large eval set
@@ -1003,7 +1032,9 @@ if (doAblation) {
       const modified = abl.modify(r.prospect)
       const ablPool        = walkForward ? pool.filter((p) => p.year < r.player.year) : pool
       const ablPffProfiles = walkForward ? pffProfiles.filter((p) => p.draftSeason < r.player.year) : pffProfiles
-      const proj = project(modified, ablPool, ablPffProfiles, r.player.id, undefined, undefined, undefined, undefined, walkForward, abl.opts)
+      // WF calibration ablation: compare without calib models (static fallback) vs baseline (which uses WF calib)
+      const ablCalibModels = abl.useWfCalib ? null : (walkForward ? getCalibModels(r.player.year) : null)
+      const proj = project(modified, ablPool, ablPffProfiles, r.player.id, undefined, undefined, undefined, undefined, walkForward, abl.opts, y1NflStats, ablCalibModels)
       ablScores.push(proj.score)
       actuals.push(r.actualAv)
     }
@@ -1012,7 +1043,8 @@ if (doAblation) {
     const delta  = ablRho - baseRho
     const elapsed2 = ((Date.now() - ablStart) / 1000).toFixed(1)
     const sign = delta >= 0 ? '+' : ''
-    console.log(`  ${abl.name.padEnd(20)} ρ=${fmt(ablRho)}  Δρ=${sign}${fmt(delta)}  (${elapsed2}s)`)
+    const note = abl.useWfCalib ? '  (static calib vs WF)' : ''
+    console.log(`  ${abl.name.padEnd(20)} ρ=${fmt(ablRho)}  Δρ=${sign}${fmt(delta)}  (${elapsed2}s)${note}`)
   }
   console.log(`\n  Positive Δρ = signal hurts; negative Δρ = signal helps.`)
 }
@@ -1086,7 +1118,8 @@ if (doQbTrajectoryAblation && qbResults.length >= 5) {
   for (const r of qbResults) {
     const ablPool        = walkForward ? pool.filter((p) => p.year < r.player.year) : pool
     const ablPffProfiles = walkForward ? pffProfiles.filter((p) => p.draftSeason < r.player.year) : pffProfiles
-    const projNoTraj = project(r.prospect, ablPool, ablPffProfiles, r.player.id, undefined, undefined, undefined, null, walkForward)
+    const qbTrajCalib = walkForward ? getCalibModels(r.player.year) : null
+    const projNoTraj = project(r.prospect, ablPool, ablPffProfiles, r.player.id, undefined, undefined, undefined, null, walkForward, undefined, y1NflStats, qbTrajCalib)
     qbScoresNoTraj.push(projNoTraj.score)
     qbAvsNoTraj.push(projNoTraj.expectedAv)
   }
