@@ -2836,6 +2836,39 @@ function buildLatestPffSeasonMap(seasons: any[]) {
 
 function ClassExplorer({ pool, history, pffProfiles, pffLookup, y1Data, careerStats, histFlagMap, currentName, currentYear, saved, projectionOverlay, compSignalMap, rbScoreReadyMap, qbTranslationMap, qbPffSeasons, wrPffSeasons, tePffSeasons, rbPffSeasons }: { pool: Historical[]; history: Historical[]; pffProfiles: PffProfile[]; pffLookup: Map<string, PffProfile>; y1Data?: Y1Data; careerStats?: CareerStatMap; histFlagMap: Map<string, HistoricalOutcomeFlag>; currentName: string; currentYear: number; saved: SavedProspect[]; projectionOverlay: Map<string, PositionProjectionOverlay>; compSignalMap: Map<string, PositionCompSignal>; rbScoreReadyMap: Map<string, RbScoreReadySignal>; qbTranslationMap: Map<string, QbTranslationSignal>; qbPffSeasons: QbPffSeason[]; wrPffSeasons: WrPffSeason[]; tePffSeasons: any[]; rbPffSeasons: any[]; }) {
 
+  // QB v11 score map — loaded directly from prospect files so scores
+  // are available as soon as the component mounts, independent of overlay timing
+  const [qbV11Map, setQbV11Map] = useState<Map<string, number>>(new Map())
+  useEffect(() => {
+    let cancelled = false
+    const base = import.meta.env.BASE_URL || '/'
+    const files = ['prospects_2024_qb.json', 'prospects_2025_qb.json', 'prospects_2026_qb.json']
+    Promise.all(files.map(f => fetch(`${base}data/${f}`).then(r => r.ok ? r.json() : []).catch(() => [])))
+      .then(payloads => {
+        if (cancelled) return
+        const map = new Map<string, number>()
+        for (const records of payloads) {
+          if (!Array.isArray(records)) continue
+          for (const r of records) {
+            const name = r?.name
+            const year = Number(r?.year || r?.draftYear)
+            const score = Number(r?.qbProjectionScore ?? r?.grade ?? r?.score)
+            if (name && Number.isFinite(year) && Number.isFinite(score) && score > 0) {
+              map.set(projectionOverlayKey(year, 'QB', name), score)
+            }
+          }
+        }
+        setQbV11Map(map)
+      })
+    return () => { cancelled = true }
+  }, [])
+
+  const getQbV11Score = (player: Historical): number | null => {
+    if (String(player.pos || '').toUpperCase() !== 'QB' || Number(player.year) < 2024) return null
+    const v = qbV11Map.get(projectionOverlayKey(player.year, player.pos, player.name))
+    return v != null ? v : null
+  }
+
   const years = useMemo(() => {
     const set = new Set<number>()
     for (const player of pool) set.add(player.year)
@@ -2951,13 +2984,11 @@ function ClassExplorer({ pool, history, pffProfiles, pffLookup, y1Data, careerSt
           ? { ...synthesized, wrTrajectory: wrContext.trajectory }
           : synthesized
       const projected = project(synthesizedWithContext, history, pffProfiles, player.id, y1Data, careerStats, undefined, qbContext?.trajectory?.gradeDelta ?? null)
-      const playerAny = player as any
-      const isQb = String(playerAny.pos || playerAny.position || '').toUpperCase() === 'QB'
-      const overlayEntry = projectionOverlay.get(projectionOverlayKey(player.year, player.pos, player.name))
-      const qbV11Score = isQb && Number(player.year) >= 2024 ? (overlayEntry?.score ?? NaN) : NaN
+      const isQb = String(player.pos || '').toUpperCase() === 'QB'
+      const qbV11Score = getQbV11Score(player)
       const result = {
         av: projected.expectedAv,
-        score: isQb && Number.isFinite(qbV11Score) ? qbV11Score : projected.score,
+        score: qbV11Score != null ? qbV11Score : projected.score,
       }
       projCache.current.set(cacheKey, result)
       out.set(player.id, result)
@@ -3198,24 +3229,16 @@ function ClassExplorer({ pool, history, pffProfiles, pffLookup, y1Data, careerSt
                 <td>{player.av || 0}</td>
                 <td className="pffCol" title={pffContextLabel}>
                   {(() => {
-                    const isQb = String(player.pos || '').toUpperCase() === 'QB'
-                    const overlayQb = isQb && Number(player.year) >= 2024
-                      ? projectionOverlay.get(projectionOverlayKey(player.year, player.pos, player.name))
-                      : null
-                    const qbV11Score = overlayQb?.score ?? NaN
-                    const effectiveScore = Number.isFinite(qbV11Score) ? qbV11Score : pffContextScore
+                    const qbV11Score = getQbV11Score(player)
+                    const effectiveScore = qbV11Score ?? pffContextScore
                     return effectiveScore != null ? Number(effectiveScore).toFixed(0) : '—'
                   })()}
                 </td>
                 {useProjections ? <td>{projected ? projected.av.toFixed(1) : '-'}</td> : null}
                 {useProjections ? (() => {
                   const v57 = getV57Row(player)
-                  const isQb = String(player.pos || '').toUpperCase() === 'QB'
-                  const overlayQb = isQb && Number(player.year) >= 2024
-                    ? projectionOverlay.get(projectionOverlayKey(player.year, player.pos, player.name))
-                    : null
-                  const qbV11Score = overlayQb?.score ?? NaN
-                  const displayScore = Number.isFinite(qbV11Score)
+                  const qbV11Score = getQbV11Score(player)
+                  const displayScore = qbV11Score != null
                     ? qbV11Score
                     : v57?.v57Percentile != null
                       ? Number(v57.v57Percentile)
