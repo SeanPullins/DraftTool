@@ -324,6 +324,13 @@ function App() {
     () => project(projectedInput, prospects, pffProfiles, undefined, y1Data, careerStats, activeInjuryFlag?.severity, activeQbGradeDelta),
     [projectedInput, prospects, pffProfiles, y1Data, careerStats, activeInjuryFlag, activeQbGradeDelta],
   )
+  // For 2024+ QBs, override the generic model score with the v11 QB-specific score from the overlay
+  const displayScore = useMemo(() => {
+    if (input.pos !== 'QB') return projection.score
+    const overlayEntry = projectionOverlay.get(projectionOverlayKey(input.draftSeason, input.pos, input.name))
+    return overlayEntry?.score ?? projection.score
+  }, [input.pos, input.draftSeason, input.name, projection.score, projectionOverlay])
+
   const histFlagMap = useMemo(
     () => buildHistoricalFlagMap(
       lookupPool.filter((p) => p.year >= 2000 && p.year <= 2026 && p.pick < 260),
@@ -980,13 +987,13 @@ function App() {
 
       <section className="dashboard">
         <section className="panel heroPanel" data-pane="results">
-          <div className="scoreDial" style={{ '--angle': `${projection.score * 3.6}deg`, '--dial-color': scoreColor(Math.round(projection.score)) } as CSSProperties}>
-            <b>{Math.round(projection.score)}</b>
+          <div className="scoreDial" style={{ '--angle': `${displayScore * 3.6}deg`, '--dial-color': scoreColor(Math.round(displayScore)) } as CSSProperties}>
+            <b>{Math.round(displayScore)}</b>
             <span className="dialRange">{Math.round(projection.scoreLow)}–{Math.round(projection.scoreHigh)}</span>
             <span>score</span>
-            {baselineScore !== null && Math.round(projection.score) !== baselineScore && (
-              <span className={`scoreDelta ${projection.score > baselineScore ? 'deltaUp' : 'deltaDown'}`}>
-                {projection.score > baselineScore ? '+' : ''}{Math.round(projection.score) - baselineScore}
+            {baselineScore !== null && Math.round(displayScore) !== baselineScore && (
+              <span className={`scoreDelta ${displayScore > baselineScore ? 'deltaUp' : 'deltaDown'}`}>
+                {displayScore > baselineScore ? '+' : ''}{Math.round(displayScore) - baselineScore}
               </span>
             )}
           </div>
@@ -4803,7 +4810,7 @@ function buildProjectionOverlayMap(payloads: unknown): Map<string, PositionProje
 
       const name = stringField(r, 'name', '')
       const pos = norm(stringField(r, 'pos', stringField(r, 'position', '')))
-      const year = numberField(r, 'year', numberField(r, 'draftYear', 0))
+      const year = numberField(r, 'year', numberField(r, 'draftSeason', numberField(r, 'draftYear', 0)))
       if (!name || !year || !positions.includes(pos)) continue
 
       const forecast = asRecord(r.forecast) ?? undefined
