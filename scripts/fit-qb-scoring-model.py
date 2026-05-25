@@ -325,6 +325,7 @@ PROSPECT_FILES = [
     'public/data/prospects_2024_qb.json',
     'public/data/prospects_2025_qb.json',
     'public/data/prospects_2026_qb.json',
+    'public/data/prospects_2027_qb.json',
 ]
 
 def ras_athletic_score(rec) -> float:
@@ -354,7 +355,7 @@ def update_prospects(training, mdl, to_score, comp_scaler, comp_pool, pff_map):
         updated = []
         for rec in recs:
             name = rec.get('name') or ''
-            year = int(rec.get('year') or rec.get('draftYear') or file_year)
+            year = int(rec.get('year') or rec.get('draftSeason') or rec.get('draftYear') or file_year)
             pick = num(rec.get('pick'), 260)
 
             # Try matched PFF first, then embedded pff block
