@@ -62,8 +62,9 @@ def load_pff_map():
     return m
 
 MIN_DROPBACKS_COMP = 200   # min dropbacks for a QB to be in the comp pool
-COMP_SCORE_BRACKET = 22    # only comp against QBs within ±N v11 points of the prospect
-COMP_MIN_POOL      = 4     # expand bracket if fewer than this many candidates remain
+COMP_SCORE_BRACKET = 15    # primary bracket: comps must be within ±N v11 points
+COMP_MIN_POOL      = 4     # expand if fewer than this many candidates in bracket
+LABEL_WEIGHT       = {'Hit': 0.85, 'Neutral': 1.0, 'Miss': 1.15}  # distance multiplier by outcome
 
 def find_best_pff(pff_map, name, draft_year):
     """Best qualifying pre-draft PFF season.
@@ -133,7 +134,7 @@ def extract_features(row) -> dict | None:
     }
 
 FEAT_NAMES = ['pass_grade', 'btt_rate', 'safety', 'acc_pct', 'epa', 'pocket', 'adot', 'log_db']
-COMP_FEAT  = ['pass_grade', 'btt_rate', 'safety', 'acc_pct', 'epa', 'pocket']
+COMP_FEAT  = ['pass_grade', 'btt_rate', 'safety', 'acc_pct', 'epa', 'pocket', 'adot']
 
 def feat_vec(feats: dict, names: list[str]) -> np.ndarray:
     return np.array([feats[k] for k in names], dtype=float)
@@ -296,24 +297,27 @@ def best_comp(target_feats, target_score, comp_pool, comp_scaler, exclude_name=N
                 if abs(r.get('v11_score', 50.0) - target_score) <= bracket
                 and not (exclude_name and cleanname(r['name']) == cleanname(exclude_name))]
 
-    pool = _candidates(COMP_SCORE_BRACKET)
+    pool = _candidates(COMP_SCORE_BRACKET)          # ±15 primary
     if len(pool) < COMP_MIN_POOL:
-        pool = _candidates(COMP_SCORE_BRACKET * 1.5)
+        pool = _candidates(COMP_SCORE_BRACKET + 7)  # ±22 fallback
+    if len(pool) < COMP_MIN_POOL:
+        pool = _candidates(COMP_SCORE_BRACKET + 18) # ±33 wide fallback
     if not pool:
         pool = [r for r in comp_pool
                 if not (exclude_name and cleanname(r['name']) == cleanname(exclude_name))]
 
-    best, best_dist = None, np.inf
+    best, best_weighted, best_raw_dist = None, np.inf, np.inf
     for r in pool:
-        rv   = comp_scaler.transform([feat_vec(r['feats'], COMP_FEAT)])[0]
-        dist = float(np.linalg.norm(tv - rv))
-        if dist < best_dist:
-            best_dist, best = dist, r
+        rv       = comp_scaler.transform([feat_vec(r['feats'], COMP_FEAT)])[0]
+        raw_dist = float(np.linalg.norm(tv - rv))
+        weighted = raw_dist * LABEL_WEIGHT.get(r.get('label', 'Neutral'), 1.0)
+        if weighted < best_weighted:
+            best_weighted, best_raw_dist, best = weighted, raw_dist, r
 
     if best is None:
         return None
-    sim = max(0.0, 1.0 - best_dist / (best_dist + 1.0))
-    return {**best, 'similarity': round(sim, 3), 'distance': round(best_dist, 3)}
+    sim = max(0.0, 1.0 - best_raw_dist / (best_raw_dist + 1.0))
+    return {**best, 'similarity': round(sim, 3), 'distance': round(best_raw_dist, 3)}
 
 # ── prospect scoring ───────────────────────────────────────────────────────────
 

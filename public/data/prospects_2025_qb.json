@@ -84,8 +84,8 @@
       "pick": 1,
       "actualAv": 66,
       "outcome": "Hit",
-      "similarity": 0.581,
-      "distance": 0.722,
+      "similarity": 0.508,
+      "distance": 0.968,
       "reason": "Closest college-profile match in v11 standardized feature space (pass grade, BTT, ball-security, accuracy, EPA, pocket presence)."
     },
     "projectionComps": [
@@ -95,8 +95,8 @@
         "pick": 1,
         "actualAv": 66,
         "outcome": "Hit",
-        "similarity": 0.581,
-        "distance": 0.722,
+        "similarity": 0.508,
+        "distance": 0.968,
         "reason": "Closest college-profile match in v11 standardized feature space (pass grade, BTT, ball-security, accuracy, EPA, pocket presence)."
       }
     ],
@@ -107,8 +107,8 @@
         "pick": 1,
         "actualAv": 66,
         "outcome": "Hit",
-        "similarity": 0.581,
-        "distance": 0.722,
+        "similarity": 0.508,
+        "distance": 0.968,
         "reason": "Closest college-profile match in v11 standardized feature space (pass grade, BTT, ball-security, accuracy, EPA, pocket presence)."
       }
     ],
@@ -119,8 +119,8 @@
         "pick": 1,
         "actualAv": 66,
         "outcome": "Hit",
-        "similarity": 0.581,
-        "distance": 0.722,
+        "similarity": 0.508,
+        "distance": 0.968,
         "reason": "Closest college-profile match in v11 standardized feature space (pass grade, BTT, ball-security, accuracy, EPA, pocket presence)."
       }
     ],
@@ -131,8 +131,8 @@
         "pick": 1,
         "actualAv": 66,
         "outcome": "Hit",
-        "similarity": 0.581,
-        "distance": 0.722,
+        "similarity": 0.508,
+        "distance": 0.968,
         "reason": "Closest college-profile match in v11 standardized feature space (pass grade, BTT, ball-security, accuracy, EPA, pocket presence)."
       }
     ],
@@ -221,60 +221,60 @@
     "overallScore": 68.5,
     "valueScore": 68.5,
     "primaryQbProfileComp": {
-      "name": "Joe Burrow",
+      "name": "Jalen Hurts",
       "year": 2020,
-      "pick": 1,
-      "actualAv": 93,
+      "pick": 53,
+      "actualAv": 109,
       "outcome": "Hit",
-      "similarity": 0.44,
-      "distance": 1.27,
+      "similarity": 0.341,
+      "distance": 1.931,
       "reason": "Closest college-profile match in v11 standardized feature space (pass grade, BTT, ball-security, accuracy, EPA, pocket presence)."
     },
     "projectionComps": [
       {
-        "name": "Joe Burrow",
+        "name": "Jalen Hurts",
         "year": 2020,
-        "pick": 1,
-        "actualAv": 93,
+        "pick": 53,
+        "actualAv": 109,
         "outcome": "Hit",
-        "similarity": 0.44,
-        "distance": 1.27,
+        "similarity": 0.341,
+        "distance": 1.931,
         "reason": "Closest college-profile match in v11 standardized feature space (pass grade, BTT, ball-security, accuracy, EPA, pocket presence)."
       }
     ],
     "styleComps": [
       {
-        "name": "Joe Burrow",
+        "name": "Jalen Hurts",
         "year": 2020,
-        "pick": 1,
-        "actualAv": 93,
+        "pick": 53,
+        "actualAv": 109,
         "outcome": "Hit",
-        "similarity": 0.44,
-        "distance": 1.27,
+        "similarity": 0.341,
+        "distance": 1.931,
         "reason": "Closest college-profile match in v11 standardized feature space (pass grade, BTT, ball-security, accuracy, EPA, pocket presence)."
       }
     ],
     "qbComps": [
       {
-        "name": "Joe Burrow",
+        "name": "Jalen Hurts",
         "year": 2020,
-        "pick": 1,
-        "actualAv": 93,
+        "pick": 53,
+        "actualAv": 109,
         "outcome": "Hit",
-        "similarity": 0.44,
-        "distance": 1.27,
+        "similarity": 0.341,
+        "distance": 1.931,
         "reason": "Closest college-profile match in v11 standardized feature space (pass grade, BTT, ball-security, accuracy, EPA, pocket presence)."
       }
     ],
     "comps": [
       {
-        "name": "Joe Burrow",
+        "name": "Jalen Hurts",
         "year": 2020,
-        "pick": 1,
-        "actualAv": 93,
+        "pick": 53,
+        "actualAv": 109,
         "outcome": "Hit",
-        "similarity": 0.44,
-        "distance": 1.27,
+        "similarity": 0.341,
+        "distance": 1.931,
         "reason": "Closest college-profile match in v11 standardized feature space (pass grade, BTT, ball-security, accuracy, EPA, pocket presence)."
       }
     ],
@@ -361,8 +361,8 @@
       "pick": 12,
       "actualAv": 86.8,
       "outcome": "Hit",
-      "similarity": 0.441,
-      "distance": 1.268,
+      "similarity": 0.429,
+      "distance": 1.331,
       "reason": "Closest college-profile match in v11 standardized feature space (pass grade, BTT, ball-security, accuracy, EPA, pocket presence)."
     },
     "projectionComps": [
@@ -372,8 +372,8 @@
         "pick": 12,
         "actualAv": 86.8,
         "outcome": "Hit",
-        "similarity": 0.441,
-        "distance": 1.268,
+        "similarity": 0.429,
+        "distance": 1.331,
         "reason": "Closest college-profile match in v11 standardized feature space (pass grade, BTT, ball-security, accuracy, EPA, pocket presence)."
       }
     ],
@@ -384,8 +384,8 @@
         "pick": 12,
         "actualAv": 86.8,
         "outcome": "Hit",
-        "similarity": 0.441,
-        "distance": 1.268,
+        "similarity": 0.429,
+        "distance": 1.331,
         "reason": "Closest college-profile match in v11 standardized feature space (pass grade, BTT, ball-security, accuracy, EPA, pocket presence)."
       }
     ],
@@ -396,8 +396,8 @@
         "pick": 12,
         "actualAv": 86.8,
         "outcome": "Hit",
-        "similarity": 0.441,
-        "distance": 1.268,
+        "similarity": 0.429,
+        "distance": 1.331,
         "reason": "Closest college-profile match in v11 standardized feature space (pass grade, BTT, ball-security, accuracy, EPA, pocket presence)."
       }
     ],
@@ -408,8 +408,8 @@
         "pick": 12,
         "actualAv": 86.8,
         "outcome": "Hit",
-        "similarity": 0.441,
-        "distance": 1.268,
+        "similarity": 0.429,
+        "distance": 1.331,
         "reason": "Closest college-profile match in v11 standardized feature space (pass grade, BTT, ball-security, accuracy, EPA, pocket presence)."
       }
     ],
@@ -503,8 +503,8 @@
       "pick": 94,
       "actualAv": 0,
       "outcome": "Miss",
-      "similarity": 0.395,
-      "distance": 1.528,
+      "similarity": 0.339,
+      "distance": 1.949,
       "reason": "Closest college-profile match in v11 standardized feature space (pass grade, BTT, ball-security, accuracy, EPA, pocket presence)."
     },
     "projectionComps": [
@@ -514,8 +514,8 @@
         "pick": 94,
         "actualAv": 0,
         "outcome": "Miss",
-        "similarity": 0.395,
-        "distance": 1.528,
+        "similarity": 0.339,
+        "distance": 1.949,
         "reason": "Closest college-profile match in v11 standardized feature space (pass grade, BTT, ball-security, accuracy, EPA, pocket presence)."
       }
     ],
@@ -526,8 +526,8 @@
         "pick": 94,
         "actualAv": 0,
         "outcome": "Miss",
-        "similarity": 0.395,
-        "distance": 1.528,
+        "similarity": 0.339,
+        "distance": 1.949,
         "reason": "Closest college-profile match in v11 standardized feature space (pass grade, BTT, ball-security, accuracy, EPA, pocket presence)."
       }
     ],
@@ -538,8 +538,8 @@
         "pick": 94,
         "actualAv": 0,
         "outcome": "Miss",
-        "similarity": 0.395,
-        "distance": 1.528,
+        "similarity": 0.339,
+        "distance": 1.949,
         "reason": "Closest college-profile match in v11 standardized feature space (pass grade, BTT, ball-security, accuracy, EPA, pocket presence)."
       }
     ],
@@ -550,8 +550,8 @@
         "pick": 94,
         "actualAv": 0,
         "outcome": "Miss",
-        "similarity": 0.395,
-        "distance": 1.528,
+        "similarity": 0.339,
+        "distance": 1.949,
         "reason": "Closest college-profile match in v11 standardized feature space (pass grade, BTT, ball-security, accuracy, EPA, pocket presence)."
       }
     ],
@@ -640,8 +640,8 @@
       "pick": 122,
       "actualAv": 0,
       "outcome": "Miss",
-      "similarity": 0.583,
-      "distance": 0.717,
+      "similarity": 0.536,
+      "distance": 0.865,
       "reason": "Closest college-profile match in v11 standardized feature space (pass grade, BTT, ball-security, accuracy, EPA, pocket presence)."
     },
     "projectionComps": [
@@ -651,8 +651,8 @@
         "pick": 122,
         "actualAv": 0,
         "outcome": "Miss",
-        "similarity": 0.583,
-        "distance": 0.717,
+        "similarity": 0.536,
+        "distance": 0.865,
         "reason": "Closest college-profile match in v11 standardized feature space (pass grade, BTT, ball-security, accuracy, EPA, pocket presence)."
       }
     ],
@@ -663,8 +663,8 @@
         "pick": 122,
         "actualAv": 0,
         "outcome": "Miss",
-        "similarity": 0.583,
-        "distance": 0.717,
+        "similarity": 0.536,
+        "distance": 0.865,
         "reason": "Closest college-profile match in v11 standardized feature space (pass grade, BTT, ball-security, accuracy, EPA, pocket presence)."
       }
     ],
@@ -675,8 +675,8 @@
         "pick": 122,
         "actualAv": 0,
         "outcome": "Miss",
-        "similarity": 0.583,
-        "distance": 0.717,
+        "similarity": 0.536,
+        "distance": 0.865,
         "reason": "Closest college-profile match in v11 standardized feature space (pass grade, BTT, ball-security, accuracy, EPA, pocket presence)."
       }
     ],
@@ -687,8 +687,8 @@
         "pick": 122,
         "actualAv": 0,
         "outcome": "Miss",
-        "similarity": 0.583,
-        "distance": 0.717,
+        "similarity": 0.536,
+        "distance": 0.865,
         "reason": "Closest college-profile match in v11 standardized feature space (pass grade, BTT, ball-security, accuracy, EPA, pocket presence)."
       }
     ],
@@ -780,60 +780,60 @@
     "overallScore": 51.2,
     "valueScore": 51.2,
     "primaryQbProfileComp": {
-      "name": "Matt Corral",
-      "year": 2022,
-      "pick": 94,
-      "actualAv": 0,
+      "name": "Jake Luton",
+      "year": 2020,
+      "pick": 189,
+      "actualAv": 2,
       "outcome": "Miss",
-      "similarity": 0.336,
-      "distance": 1.979,
+      "similarity": 0.292,
+      "distance": 2.422,
       "reason": "Closest college-profile match in v11 standardized feature space (pass grade, BTT, ball-security, accuracy, EPA, pocket presence)."
     },
     "projectionComps": [
       {
-        "name": "Matt Corral",
-        "year": 2022,
-        "pick": 94,
-        "actualAv": 0,
+        "name": "Jake Luton",
+        "year": 2020,
+        "pick": 189,
+        "actualAv": 2,
         "outcome": "Miss",
-        "similarity": 0.336,
-        "distance": 1.979,
+        "similarity": 0.292,
+        "distance": 2.422,
         "reason": "Closest college-profile match in v11 standardized feature space (pass grade, BTT, ball-security, accuracy, EPA, pocket presence)."
       }
     ],
     "styleComps": [
       {
-        "name": "Matt Corral",
-        "year": 2022,
-        "pick": 94,
-        "actualAv": 0,
+        "name": "Jake Luton",
+        "year": 2020,
+        "pick": 189,
+        "actualAv": 2,
         "outcome": "Miss",
-        "similarity": 0.336,
-        "distance": 1.979,
+        "similarity": 0.292,
+        "distance": 2.422,
         "reason": "Closest college-profile match in v11 standardized feature space (pass grade, BTT, ball-security, accuracy, EPA, pocket presence)."
       }
     ],
     "qbComps": [
       {
-        "name": "Matt Corral",
-        "year": 2022,
-        "pick": 94,
-        "actualAv": 0,
+        "name": "Jake Luton",
+        "year": 2020,
+        "pick": 189,
+        "actualAv": 2,
         "outcome": "Miss",
-        "similarity": 0.336,
-        "distance": 1.979,
+        "similarity": 0.292,
+        "distance": 2.422,
         "reason": "Closest college-profile match in v11 standardized feature space (pass grade, BTT, ball-security, accuracy, EPA, pocket presence)."
       }
     ],
     "comps": [
       {
-        "name": "Matt Corral",
-        "year": 2022,
-        "pick": 94,
-        "actualAv": 0,
+        "name": "Jake Luton",
+        "year": 2020,
+        "pick": 189,
+        "actualAv": 2,
         "outcome": "Miss",
-        "similarity": 0.336,
-        "distance": 1.979,
+        "similarity": 0.292,
+        "distance": 2.422,
         "reason": "Closest college-profile match in v11 standardized feature space (pass grade, BTT, ball-security, accuracy, EPA, pocket presence)."
       }
     ],
@@ -929,7 +929,7 @@
       "actualAv": 2,
       "outcome": "Miss",
       "similarity": 0.413,
-      "distance": 1.419,
+      "distance": 1.422,
       "reason": "Closest college-profile match in v11 standardized feature space (pass grade, BTT, ball-security, accuracy, EPA, pocket presence)."
     },
     "projectionComps": [
@@ -940,7 +940,7 @@
         "actualAv": 2,
         "outcome": "Miss",
         "similarity": 0.413,
-        "distance": 1.419,
+        "distance": 1.422,
         "reason": "Closest college-profile match in v11 standardized feature space (pass grade, BTT, ball-security, accuracy, EPA, pocket presence)."
       }
     ],
@@ -952,7 +952,7 @@
         "actualAv": 2,
         "outcome": "Miss",
         "similarity": 0.413,
-        "distance": 1.419,
+        "distance": 1.422,
         "reason": "Closest college-profile match in v11 standardized feature space (pass grade, BTT, ball-security, accuracy, EPA, pocket presence)."
       }
     ],
@@ -964,7 +964,7 @@
         "actualAv": 2,
         "outcome": "Miss",
         "similarity": 0.413,
-        "distance": 1.419,
+        "distance": 1.422,
         "reason": "Closest college-profile match in v11 standardized feature space (pass grade, BTT, ball-security, accuracy, EPA, pocket presence)."
       }
     ],
@@ -976,7 +976,7 @@
         "actualAv": 2,
         "outcome": "Miss",
         "similarity": 0.413,
-        "distance": 1.419,
+        "distance": 1.422,
         "reason": "Closest college-profile match in v11 standardized feature space (pass grade, BTT, ball-security, accuracy, EPA, pocket presence)."
       }
     ],
@@ -1061,60 +1061,60 @@
     "overallScore": 41.2,
     "valueScore": 41.2,
     "primaryQbProfileComp": {
-      "name": "Alex McGough",
-      "year": 2018,
-      "pick": 220,
-      "actualAv": 0,
+      "name": "Bailey Zappe",
+      "year": 2022,
+      "pick": 137,
+      "actualAv": 2,
       "outcome": "Miss",
-      "similarity": 0.495,
-      "distance": 1.02,
+      "similarity": 0.485,
+      "distance": 1.062,
       "reason": "Closest college-profile match in v11 standardized feature space (pass grade, BTT, ball-security, accuracy, EPA, pocket presence)."
     },
     "projectionComps": [
       {
-        "name": "Alex McGough",
-        "year": 2018,
-        "pick": 220,
-        "actualAv": 0,
+        "name": "Bailey Zappe",
+        "year": 2022,
+        "pick": 137,
+        "actualAv": 2,
         "outcome": "Miss",
-        "similarity": 0.495,
-        "distance": 1.02,
+        "similarity": 0.485,
+        "distance": 1.062,
         "reason": "Closest college-profile match in v11 standardized feature space (pass grade, BTT, ball-security, accuracy, EPA, pocket presence)."
       }
     ],
     "styleComps": [
       {
-        "name": "Alex McGough",
-        "year": 2018,
-        "pick": 220,
-        "actualAv": 0,
+        "name": "Bailey Zappe",
+        "year": 2022,
+        "pick": 137,
+        "actualAv": 2,
         "outcome": "Miss",
-        "similarity": 0.495,
-        "distance": 1.02,
+        "similarity": 0.485,
+        "distance": 1.062,
         "reason": "Closest college-profile match in v11 standardized feature space (pass grade, BTT, ball-security, accuracy, EPA, pocket presence)."
       }
     ],
     "qbComps": [
       {
-        "name": "Alex McGough",
-        "year": 2018,
-        "pick": 220,
-        "actualAv": 0,
+        "name": "Bailey Zappe",
+        "year": 2022,
+        "pick": 137,
+        "actualAv": 2,
         "outcome": "Miss",
-        "similarity": 0.495,
-        "distance": 1.02,
+        "similarity": 0.485,
+        "distance": 1.062,
         "reason": "Closest college-profile match in v11 standardized feature space (pass grade, BTT, ball-security, accuracy, EPA, pocket presence)."
       }
     ],
     "comps": [
       {
-        "name": "Alex McGough",
-        "year": 2018,
-        "pick": 220,
-        "actualAv": 0,
+        "name": "Bailey Zappe",
+        "year": 2022,
+        "pick": 137,
+        "actualAv": 2,
         "outcome": "Miss",
-        "similarity": 0.495,
-        "distance": 1.02,
+        "similarity": 0.485,
+        "distance": 1.062,
         "reason": "Closest college-profile match in v11 standardized feature space (pass grade, BTT, ball-security, accuracy, EPA, pocket presence)."
       }
     ],
@@ -1203,8 +1203,8 @@
       "pick": 191,
       "actualAv": 0,
       "outcome": "Miss",
-      "similarity": 0.372,
-      "distance": 1.688,
+      "similarity": 0.356,
+      "distance": 1.807,
       "reason": "Closest college-profile match in v11 standardized feature space (pass grade, BTT, ball-security, accuracy, EPA, pocket presence)."
     },
     "projectionComps": [
@@ -1214,8 +1214,8 @@
         "pick": 191,
         "actualAv": 0,
         "outcome": "Miss",
-        "similarity": 0.372,
-        "distance": 1.688,
+        "similarity": 0.356,
+        "distance": 1.807,
         "reason": "Closest college-profile match in v11 standardized feature space (pass grade, BTT, ball-security, accuracy, EPA, pocket presence)."
       }
     ],
@@ -1226,8 +1226,8 @@
         "pick": 191,
         "actualAv": 0,
         "outcome": "Miss",
-        "similarity": 0.372,
-        "distance": 1.688,
+        "similarity": 0.356,
+        "distance": 1.807,
         "reason": "Closest college-profile match in v11 standardized feature space (pass grade, BTT, ball-security, accuracy, EPA, pocket presence)."
       }
     ],
@@ -1238,8 +1238,8 @@
         "pick": 191,
         "actualAv": 0,
         "outcome": "Miss",
-        "similarity": 0.372,
-        "distance": 1.688,
+        "similarity": 0.356,
+        "distance": 1.807,
         "reason": "Closest college-profile match in v11 standardized feature space (pass grade, BTT, ball-security, accuracy, EPA, pocket presence)."
       }
     ],
@@ -1250,8 +1250,8 @@
         "pick": 191,
         "actualAv": 0,
         "outcome": "Miss",
-        "similarity": 0.372,
-        "distance": 1.688,
+        "similarity": 0.356,
+        "distance": 1.807,
         "reason": "Closest college-profile match in v11 standardized feature space (pass grade, BTT, ball-security, accuracy, EPA, pocket presence)."
       }
     ],
@@ -1340,8 +1340,8 @@
       "pick": 171,
       "actualAv": 5,
       "outcome": "Neutral",
-      "similarity": 0.329,
-      "distance": 2.04,
+      "similarity": 0.258,
+      "distance": 2.869,
       "reason": "Closest college-profile match in v11 standardized feature space (pass grade, BTT, ball-security, accuracy, EPA, pocket presence)."
     },
     "projectionComps": [
@@ -1351,8 +1351,8 @@
         "pick": 171,
         "actualAv": 5,
         "outcome": "Neutral",
-        "similarity": 0.329,
-        "distance": 2.04,
+        "similarity": 0.258,
+        "distance": 2.869,
         "reason": "Closest college-profile match in v11 standardized feature space (pass grade, BTT, ball-security, accuracy, EPA, pocket presence)."
       }
     ],
@@ -1363,8 +1363,8 @@
         "pick": 171,
         "actualAv": 5,
         "outcome": "Neutral",
-        "similarity": 0.329,
-        "distance": 2.04,
+        "similarity": 0.258,
+        "distance": 2.869,
         "reason": "Closest college-profile match in v11 standardized feature space (pass grade, BTT, ball-security, accuracy, EPA, pocket presence)."
       }
     ],
@@ -1375,8 +1375,8 @@
         "pick": 171,
         "actualAv": 5,
         "outcome": "Neutral",
-        "similarity": 0.329,
-        "distance": 2.04,
+        "similarity": 0.258,
+        "distance": 2.869,
         "reason": "Closest college-profile match in v11 standardized feature space (pass grade, BTT, ball-security, accuracy, EPA, pocket presence)."
       }
     ],
@@ -1387,8 +1387,8 @@
         "pick": 171,
         "actualAv": 5,
         "outcome": "Neutral",
-        "similarity": 0.329,
-        "distance": 2.04,
+        "similarity": 0.258,
+        "distance": 2.869,
         "reason": "Closest college-profile match in v11 standardized feature space (pass grade, BTT, ball-security, accuracy, EPA, pocket presence)."
       }
     ],
@@ -1477,8 +1477,8 @@
       "pick": 189,
       "actualAv": 2,
       "outcome": "Miss",
-      "similarity": 0.389,
-      "distance": 1.57,
+      "similarity": 0.341,
+      "distance": 1.934,
       "reason": "Closest college-profile match in v11 standardized feature space (pass grade, BTT, ball-security, accuracy, EPA, pocket presence)."
     },
     "projectionComps": [
@@ -1488,8 +1488,8 @@
         "pick": 189,
         "actualAv": 2,
         "outcome": "Miss",
-        "similarity": 0.389,
-        "distance": 1.57,
+        "similarity": 0.341,
+        "distance": 1.934,
         "reason": "Closest college-profile match in v11 standardized feature space (pass grade, BTT, ball-security, accuracy, EPA, pocket presence)."
       }
     ],
@@ -1500,8 +1500,8 @@
         "pick": 189,
         "actualAv": 2,
         "outcome": "Miss",
-        "similarity": 0.389,
-        "distance": 1.57,
+        "similarity": 0.341,
+        "distance": 1.934,
         "reason": "Closest college-profile match in v11 standardized feature space (pass grade, BTT, ball-security, accuracy, EPA, pocket presence)."
       }
     ],
@@ -1512,8 +1512,8 @@
         "pick": 189,
         "actualAv": 2,
         "outcome": "Miss",
-        "similarity": 0.389,
-        "distance": 1.57,
+        "similarity": 0.341,
+        "distance": 1.934,
         "reason": "Closest college-profile match in v11 standardized feature space (pass grade, BTT, ball-security, accuracy, EPA, pocket presence)."
       }
     ],
@@ -1524,8 +1524,8 @@
         "pick": 189,
         "actualAv": 2,
         "outcome": "Miss",
-        "similarity": 0.389,
-        "distance": 1.57,
+        "similarity": 0.341,
+        "distance": 1.934,
         "reason": "Closest college-profile match in v11 standardized feature space (pass grade, BTT, ball-security, accuracy, EPA, pocket presence)."
       }
     ],
@@ -1614,8 +1614,8 @@
       "pick": 199,
       "actualAv": 1,
       "outcome": "Miss",
-      "similarity": 0.431,
-      "distance": 1.318,
+      "similarity": 0.399,
+      "distance": 1.504,
       "reason": "Closest college-profile match in v11 standardized feature space (pass grade, BTT, ball-security, accuracy, EPA, pocket presence)."
     },
     "projectionComps": [
@@ -1625,8 +1625,8 @@
         "pick": 199,
         "actualAv": 1,
         "outcome": "Miss",
-        "similarity": 0.431,
-        "distance": 1.318,
+        "similarity": 0.399,
+        "distance": 1.504,
         "reason": "Closest college-profile match in v11 standardized feature space (pass grade, BTT, ball-security, accuracy, EPA, pocket presence)."
       }
     ],
@@ -1637,8 +1637,8 @@
         "pick": 199,
         "actualAv": 1,
         "outcome": "Miss",
-        "similarity": 0.431,
-        "distance": 1.318,
+        "similarity": 0.399,
+        "distance": 1.504,
         "reason": "Closest college-profile match in v11 standardized feature space (pass grade, BTT, ball-security, accuracy, EPA, pocket presence)."
       }
     ],
@@ -1649,8 +1649,8 @@
         "pick": 199,
         "actualAv": 1,
         "outcome": "Miss",
-        "similarity": 0.431,
-        "distance": 1.318,
+        "similarity": 0.399,
+        "distance": 1.504,
         "reason": "Closest college-profile match in v11 standardized feature space (pass grade, BTT, ball-security, accuracy, EPA, pocket presence)."
       }
     ],
@@ -1661,8 +1661,8 @@
         "pick": 199,
         "actualAv": 1,
         "outcome": "Miss",
-        "similarity": 0.431,
-        "distance": 1.318,
+        "similarity": 0.399,
+        "distance": 1.504,
         "reason": "Closest college-profile match in v11 standardized feature space (pass grade, BTT, ball-security, accuracy, EPA, pocket presence)."
       }
     ],
