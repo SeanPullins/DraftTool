@@ -3228,18 +3228,7 @@ function ClassExplorer({ pool, history, pffProfiles, pffLookup, y1Data, careerSt
                 <td><b className="boardRank">{index + 1}</b></td>
                 <td>
                   <b>{player.name}</b>
-                  {isSaved && <span className="savedBadge" title="Saved prospect">★</span>}
-                  {(() => {
-                    const collegeV2 = getCollegeModelV2Row(player as any)
-                    if (!collegeV2?.collegeModelV2Score) return null
-                    return (
-                      <div className="collegeModelV2Badge" title={collegeV2.collegeModelV2TopSignals?.[0]?.label ? `Top signal: ${collegeV2.collegeModelV2TopSignals[0].label}` : undefined}>
-                        <span className="collegeModelV2Score">College v2 {collegeV2.collegeModelV2Score}</span>
-                        <span className="collegeModelV2Label">{collegeV2.collegeModelV2Label?.replace(' Profile', '')}</span>
-                      </div>
-                    )
-                  })()}
-                  <small>{player.school || 'No school'}</small>
+                  {isSaved && <span className="savedBadge" title="Saved prospect">★</span>}                  <small>{player.school || 'No school'}</small>
                   <button
                     type="button"
                     className="explainBtn"
