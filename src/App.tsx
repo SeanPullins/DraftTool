@@ -82,7 +82,7 @@ type RbScoreReadySignal = {
 }
 type LoaderMessage = { tone: 'good' | 'warn'; text: string } | null
 type MobileTab = 'edit' | 'results' | 'board'
-type Page = 'workbench' | 'class' | 'players' | 'compare' | 'trade' | 'rankings' | 'guide' | 'prospects' | 'historical'
+type Page = 'workbench' | 'class' | 'players' | 'compare' | 'trade' | 'rankings' | 'guide' | 'prospects' | 'historical' | 'historical'
 type BrowserSortKey = 'av' | 'games' | 'starts' | 'pb' | 'ap' | 'pick' | 'name' | 'outcome' | 'year' | 'forty'
 type SortKey = 'av' | 'projAv' | 'projScore' | 'games' | 'starts' | 'pb' | 'ap' | 'pick' | 'name' | 'outcome'
 type SortDir = 'asc' | 'desc'
