@@ -430,3 +430,13 @@
 .collegeModelV2Signal {
   display: none;
 }
+
+.scoreSourceTag {
+  display: block;
+  margin-top: 0.1rem;
+  font-size: 0.62rem;
+  font-weight: 700;
+  opacity: 0.7;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
