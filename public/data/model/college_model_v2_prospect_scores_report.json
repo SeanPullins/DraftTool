@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-05-26T15:10:37.788Z",
+  "generatedAt": "2026-05-26T18:14:46.271Z",
   "model_version": "college_model_v2_prospect_scores",
   "files": [
     {
@@ -83,7 +83,7 @@
       "scored": 753
     }
   ],
-  "total_scores": 1095,
+  "total_scores": 928,
   "byYear": {
     "2024": {
       "QB": 9
@@ -95,7 +95,7 @@
       "QB": 154
     },
     "2027": {
-      "QB": 350,
+      "QB": 183,
       "WR": 570
     }
   }

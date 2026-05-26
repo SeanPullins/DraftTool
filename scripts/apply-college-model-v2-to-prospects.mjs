@@ -7,28 +7,11 @@ const DICTIONARY = 'public/data/model/college_model_feature_dictionary_v2.json';
 const OUT = 'public/data/model/college_model_v2_prospect_scores.json';
 const REPORT = 'public/data/model/college_model_v2_prospect_scores_report.json';
 
-const prospectFiles = [
-  'public/data/prospects_2024_qb.json',
-  'public/data/prospects_2024_wr.json',
-  'public/data/prospects_2024_rb.json',
-  'public/data/prospects_2024_te.json',
-
-  'public/data/prospects_2025_qb.json',
-  'public/data/prospects_2025_wr.json',
-  'public/data/prospects_2025_rb.json',
-  'public/data/prospects_2025_te.json',
-
-  'public/data/prospects_2026_qb.json',
-  'public/data/prospects_2026_wr.json',
-  'public/data/prospects_2026_rb.json',
-  'public/data/prospects_2026_te.json',
-
-  'public/data/prospects_2027_qb.json',
-  'public/data/prospects_2027_wr.json',
-  'public/data/prospects_2027_rb.json',
-  'public/data/prospects_2027_te.json',
-  'public/data/prospects_2027_all.json',
-].filter(fs.existsSync);
+const prospectFiles = fs.readdirSync('public/data')
+  .filter((file) => /^prospects_\d{4}_.+\.json$/.test(file))
+  .map((file) => `public/data/${file}`)
+  .filter(fs.existsSync)
+  .sort();
 
 function cleanName(s = '') {
   return String(s).toLowerCase().replace(/[^a-z0-9]/g, '');
@@ -182,7 +165,50 @@ for (const file of prospectFiles) {
     const year = Number(player.year || player.draftYear || path.basename(file).match(/20\d{2}/)?.[0]);
     const positionModel = weightsPayload.positions?.[pos];
 
-    if (!positionModel || !positionModel.weights?.length) continue;
+    const fallbackExistingScore = Number(
+      player.qbProjectionScore ??
+      player.realisticProjectionScoreV10_2 ??
+      player.forecast?.final ??
+      player.forecast?.projectionScore ??
+      player.score ??
+      player.grade
+    );
+
+    if (!positionModel || !positionModel.weights?.length) {
+      const fallbackScore = Number.isFinite(fallbackExistingScore)
+        ? Math.max(0, Math.min(100, fallbackExistingScore))
+        : null;
+
+      scores.push({
+        id: player.id || `${pos.toLowerCase()}-${year}-${cleanName(player.name)}`,
+        name: player.name,
+        normalized_name: cleanName(player.name),
+        school: player.school || player.team || player.college,
+        year,
+        draftYear: player.draftYear || year,
+        pos,
+        original_position: player.pos || player.position,
+        source_file: file,
+
+        collegeModelV2Score: fallbackScore,
+        collegeModelV2RawScore: null,
+        collegeModelV2CalibratedSignalScore: null,
+        collegeModelV2Label: fallbackScore !== null ? labelFromScore(fallbackScore) : 'Insufficient Data',
+        collegeModelV2Mode: 'fallback_existing_score',
+        collegeModelV2Coverage: {
+          matched_features: 0,
+          missing_features: 0,
+          total_weight_used: 0,
+        },
+        collegeModelV2TopSignals: [],
+        collegeModelV2MissingFeatures: [],
+        existingScore: fallbackScore,
+        pick: player.pick ?? player.projectedPick ?? null,
+      });
+
+      scored++;
+      continue;
+    }
 
     let totalWeight = 0;
     let weightedScore = 0;
@@ -287,6 +313,71 @@ for (const file of prospectFiles) {
     scored,
   });
 }
+
+function overlayKey(row) {
+  return `${Number(row.year || row.draftYear || 0)}|${String(row.pos || '').toUpperCase()}|${String(row.normalized_name || '').toLowerCase()}`
+}
+
+function scoreOverlayPriority(row) {
+  let priority = 0
+
+  // Prefer real position-specific files over all-position catchall files.
+  if (!String(row.source_file || '').includes('_all.json')) priority += 1000
+
+  // Prefer true v2 scoring over fallback existing-score rows.
+  if (row.collegeModelV2Mode !== 'fallback_existing_score') priority += 500
+
+  // Prefer rows with more matched model features.
+  priority += Number(row.collegeModelV2Coverage?.matched_features || 0) * 20
+
+  // Prefer rows that have an actual score.
+  if (Number.isFinite(Number(row.collegeModelV2Score))) priority += 50
+
+  return priority
+}
+
+const deduped = new Map()
+
+for (const row of scores) {
+  const key = overlayKey(row)
+  const current = deduped.get(key)
+
+  if (!current || scoreOverlayPriority(row) > scoreOverlayPriority(current)) {
+    deduped.set(key, row)
+  }
+}
+
+scores.length = 0
+scores.push(...deduped.values())
+
+function overlayKey(row) {
+  return `${Number(row.year || row.draftYear || 0)}|${String(row.pos || '').toUpperCase()}|${String(row.normalized_name || '').toLowerCase()}`
+}
+
+function scoreOverlayPriority(row) {
+  let priority = 0
+
+  if (!String(row.source_file || '').includes('_all.json')) priority += 1000
+  if (row.collegeModelV2Mode !== 'fallback_existing_score') priority += 500
+  priority += Number(row.collegeModelV2Coverage?.matched_features || 0) * 20
+  if (Number.isFinite(Number(row.collegeModelV2Score))) priority += 50
+
+  return priority
+}
+
+const deduped = new Map()
+
+for (const row of scores) {
+  const key = overlayKey(row)
+  const current = deduped.get(key)
+
+  if (!current || scoreOverlayPriority(row) > scoreOverlayPriority(current)) {
+    deduped.set(key, row)
+  }
+}
+
+scores.length = 0
+scores.push(...deduped.values())
 
 scores.sort((a, b) =>
   (a.year - b.year) ||

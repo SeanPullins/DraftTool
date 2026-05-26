@@ -3310,7 +3310,6 @@ function ClassExplorer({ pool, history, pffProfiles, pffLookup, y1Data, careerSt
                     {useCollegeV2Score
                       ? collegeV2Score.toFixed(1)
                       : displayScore != null ? Math.round(displayScore) : '-'}
-                    {useCollegeV2Score && <small className="scoreSourceTag">v2</small>}
                   </td>
                 })() : null}
                 <td>{player.proBowls || 0}</td>
