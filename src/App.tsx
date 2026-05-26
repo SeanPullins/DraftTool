@@ -2907,7 +2907,7 @@ function ClassExplorer({ pool, history, pffProfiles, pffLookup, y1Data, careerSt
 
   useEffect(() => {
     const base = import.meta.env.BASE_URL || '/'
-    fetch(`${base}data/model/college_model_v2_score_lookup.json`)
+    fetch(`${base}data/model/college_model_v2_prospect_scores.json`)
       .then((r) => r.ok ? r.json() : null)
       .then((payload) => {
         const rows = payload?.rows || []
