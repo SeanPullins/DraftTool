@@ -3290,7 +3290,7 @@ function ClassExplorer({ pool, history, pffProfiles, pffLookup, y1Data, careerSt
                     style={{ color: displayScore != null ? scoreColor(displayScore) : undefined, fontWeight: displayScore != null ? 800 : undefined }}
                   >
                     {displayScore != null ? Math.round(displayScore) : '-'}
-                    {Number.isFinite(collegeV2Score) && <small className="scoreSourceTag">v2</small>}
+                    {Number.isFinite(Number(getCollegeModelV2Row(player as any)?.collegeModelV2Score)) && <small className="scoreSourceTag">v2</small>}
                   </td>
                 })() : null}
                 <td>{player.proBowls || 0}</td>
