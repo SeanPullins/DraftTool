@@ -218,13 +218,33 @@ for (const file of prospectFiles) {
       ? Number(((weightedScore / totalWeight) * 100).toFixed(1))
       : null;
 
+    const existingProjectionScore = Number(
+      player.qbProjectionScore ??
+      player.realisticProjectionScoreV10_2 ??
+      player.forecast?.final ??
+      player.forecast?.projectionScore ??
+      player.score ??
+      player.grade
+    );
+
+    const existingScoreForBlend = Number.isFinite(existingProjectionScore)
+      ? Math.max(0, Math.min(100, existingProjectionScore))
+      : null;
+
     const draftCapitalScore = player.pick
       ? Math.max(0, Math.min(100, 100 - ((Number(player.pick) - 1) / 260) * 100))
       : null;
 
-    const blendedScore = modelScore !== null && draftCapitalScore !== null
-      ? Number((modelScore * 0.75 + draftCapitalScore * 0.25).toFixed(1))
-      : modelScore;
+    // v2 raw feature score is useful as a signal, but current website prospect
+    // files are flatter than the raw training table. Until the feature bridge is
+    // fully native, treat v2 as an overlay adjustment rather than full replacement.
+    const calibratedSignalScore = modelScore !== null
+      ? Math.max(0, Math.min(100, 45 + modelScore * 0.65))
+      : null;
+
+    const blendedScore = existingScoreForBlend !== null && calibratedSignalScore !== null
+      ? Number((existingScoreForBlend * 0.70 + calibratedSignalScore * 0.30).toFixed(1))
+      : calibratedSignalScore ?? existingScoreForBlend ?? draftCapitalScore;
 
     const topSignals = signals
       .sort((a, b) => b.contribution - a.contribution)
@@ -243,6 +263,7 @@ for (const file of prospectFiles) {
 
       collegeModelV2Score: blendedScore,
       collegeModelV2RawScore: modelScore,
+      collegeModelV2CalibratedSignalScore: calibratedSignalScore,
       collegeModelV2Label: blendedScore !== null ? labelFromScore(blendedScore) : 'Insufficient Data',
       collegeModelV2Mode: positionModel.mode,
       collegeModelV2Coverage: {
