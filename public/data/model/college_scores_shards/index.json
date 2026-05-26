@@ -1,28 +1,10 @@
 {
-  "generatedAt": "2026-05-26T21:02:59.165Z",
+  "generatedAt": "2026-05-26T21:13:56.233Z",
   "model_version": "college_model_v2_historical_score_shards",
   "source_weights": "public/data/model/college_position_scoring_weights_v2.json",
   "row_count_total": 82600,
-  "shard_count": 204,
+  "shard_count": 156,
   "shards": [
-    {
-      "year": 2015,
-      "pos": "?",
-      "file": "public/data/model/college_scores_shards/2015_?.json",
-      "count": 51,
-      "scored_count": 0,
-      "top_player": "Akeem Daniels",
-      "top_score": null
-    },
-    {
-      "year": 2015,
-      "pos": "ATH",
-      "file": "public/data/model/college_scores_shards/2015_ATH.json",
-      "count": 353,
-      "scored_count": 0,
-      "top_player": "A.J.  Allen",
-      "top_score": null
-    },
     {
       "year": 2015,
       "pos": "CB",
@@ -75,15 +57,6 @@
       "count": 403,
       "scored_count": 0,
       "top_player": "A.J. Johnson",
-      "top_score": null
-    },
-    {
-      "year": 2015,
-      "pos": "LS",
-      "file": "public/data/model/college_scores_shards/2015_LS.json",
-      "count": 14,
-      "scored_count": 0,
-      "top_player": "Aaron Golub",
       "top_score": null
     },
     {
@@ -151,24 +124,6 @@
     },
     {
       "year": 2016,
-      "pos": "?",
-      "file": "public/data/model/college_scores_shards/2016_?.json",
-      "count": 41,
-      "scored_count": 0,
-      "top_player": "Aaron Green",
-      "top_score": null
-    },
-    {
-      "year": 2016,
-      "pos": "ATH",
-      "file": "public/data/model/college_scores_shards/2016_ATH.json",
-      "count": 254,
-      "scored_count": 0,
-      "top_player": "A.J. Smiley",
-      "top_score": null
-    },
-    {
-      "year": 2016,
       "pos": "CB",
       "file": "public/data/model/college_scores_shards/2016_CB.json",
       "count": 319,
@@ -219,24 +174,6 @@
       "count": 331,
       "scored_count": 0,
       "top_player": "A.D. Cunningham",
-      "top_score": null
-    },
-    {
-      "year": 2016,
-      "pos": "LONG SNAPPER",
-      "file": "public/data/model/college_scores_shards/2016_LONG SNAPPER.json",
-      "count": 1,
-      "scored_count": 0,
-      "top_player": "Joe Cardona",
-      "top_score": null
-    },
-    {
-      "year": 2016,
-      "pos": "LS",
-      "file": "public/data/model/college_scores_shards/2016_LS.json",
-      "count": 9,
-      "scored_count": 0,
-      "top_player": "A.J. Carty",
       "top_score": null
     },
     {
@@ -304,24 +241,6 @@
     },
     {
       "year": 2017,
-      "pos": "?",
-      "file": "public/data/model/college_scores_shards/2017_?.json",
-      "count": 61,
-      "scored_count": 0,
-      "top_player": "Albert Reid",
-      "top_score": null
-    },
-    {
-      "year": 2017,
-      "pos": "ATH",
-      "file": "public/data/model/college_scores_shards/2017_ATH.json",
-      "count": 241,
-      "scored_count": 0,
-      "top_player": "A.J. Taylor",
-      "top_score": null
-    },
-    {
-      "year": 2017,
       "pos": "CB",
       "file": "public/data/model/college_scores_shards/2017_CB.json",
       "count": 434,
@@ -376,24 +295,6 @@
     },
     {
       "year": 2017,
-      "pos": "LONG SNAPPER",
-      "file": "public/data/model/college_scores_shards/2017_LONG SNAPPER.json",
-      "count": 1,
-      "scored_count": 0,
-      "top_player": "Jimmy Landes",
-      "top_score": null
-    },
-    {
-      "year": 2017,
-      "pos": "LS",
-      "file": "public/data/model/college_scores_shards/2017_LS.json",
-      "count": 54,
-      "scored_count": 0,
-      "top_player": "Alan Lucy",
-      "top_score": null
-    },
-    {
-      "year": 2017,
       "pos": "OT",
       "file": "public/data/model/college_scores_shards/2017_OT.json",
       "count": 298,
@@ -439,15 +340,6 @@
     },
     {
       "year": 2017,
-      "pos": "ST",
-      "file": "public/data/model/college_scores_shards/2017_ST.json",
-      "count": 5,
-      "scored_count": 0,
-      "top_player": "Bud Martin",
-      "top_score": null
-    },
-    {
-      "year": 2017,
       "pos": "TE",
       "file": "public/data/model/college_scores_shards/2017_TE.json",
       "count": 254,
@@ -463,24 +355,6 @@
       "scored_count": 702,
       "top_player": "Rashard Higgins",
       "top_score": 94.5
-    },
-    {
-      "year": 2018,
-      "pos": "?",
-      "file": "public/data/model/college_scores_shards/2018_?.json",
-      "count": 52,
-      "scored_count": 0,
-      "top_player": "C.J. Reavis",
-      "top_score": null
-    },
-    {
-      "year": 2018,
-      "pos": "ATH",
-      "file": "public/data/model/college_scores_shards/2018_ATH.json",
-      "count": 291,
-      "scored_count": 0,
-      "top_player": "Aaron Pierre",
-      "top_score": null
     },
     {
       "year": 2018,
@@ -535,24 +409,6 @@
       "scored_count": 627,
       "top_player": "Marquel Lee",
       "top_score": 86.8
-    },
-    {
-      "year": 2018,
-      "pos": "LONG SNAPPER",
-      "file": "public/data/model/college_scores_shards/2018_LONG SNAPPER.json",
-      "count": 1,
-      "scored_count": 0,
-      "top_player": "Colin Holba",
-      "top_score": null
-    },
-    {
-      "year": 2018,
-      "pos": "LS",
-      "file": "public/data/model/college_scores_shards/2018_LS.json",
-      "count": 57,
-      "scored_count": 0,
-      "top_player": "Alex Boatman",
-      "top_score": null
     },
     {
       "year": 2018,
@@ -619,24 +475,6 @@
     },
     {
       "year": 2019,
-      "pos": "?",
-      "file": "public/data/model/college_scores_shards/2019_?.json",
-      "count": 44,
-      "scored_count": 0,
-      "top_player": "Aca'Cedric Ware",
-      "top_score": null
-    },
-    {
-      "year": 2019,
-      "pos": "ATH",
-      "file": "public/data/model/college_scores_shards/2019_ATH.json",
-      "count": 293,
-      "scored_count": 0,
-      "top_player": "A'Jon Vivens",
-      "top_score": null
-    },
-    {
-      "year": 2019,
       "pos": "CB",
       "file": "public/data/model/college_scores_shards/2019_CB.json",
       "count": 488,
@@ -688,24 +526,6 @@
       "scored_count": 582,
       "top_player": "Shaquem Griffin",
       "top_score": 86.9
-    },
-    {
-      "year": 2019,
-      "pos": "LONG SNAPPER",
-      "file": "public/data/model/college_scores_shards/2019_LONG SNAPPER.json",
-      "count": 1,
-      "scored_count": 0,
-      "top_player": "Hunter Bradley",
-      "top_score": null
-    },
-    {
-      "year": 2019,
-      "pos": "LS",
-      "file": "public/data/model/college_scores_shards/2019_LS.json",
-      "count": 61,
-      "scored_count": 0,
-      "top_player": "Abram Jones",
-      "top_score": null
     },
     {
       "year": 2019,
@@ -772,24 +592,6 @@
     },
     {
       "year": 2020,
-      "pos": "?",
-      "file": "public/data/model/college_scores_shards/2020_?.json",
-      "count": 8,
-      "scored_count": 0,
-      "top_player": "D.J. Worthy",
-      "top_score": null
-    },
-    {
-      "year": 2020,
-      "pos": "ATH",
-      "file": "public/data/model/college_scores_shards/2020_ATH.json",
-      "count": 299,
-      "scored_count": 0,
-      "top_player": "Aaron Beasley",
-      "top_score": null
-    },
-    {
-      "year": 2020,
       "pos": "CB",
       "file": "public/data/model/college_scores_shards/2020_CB.json",
       "count": 492,
@@ -844,24 +646,6 @@
     },
     {
       "year": 2020,
-      "pos": "LONG SNAPPER",
-      "file": "public/data/model/college_scores_shards/2020_LONG SNAPPER.json",
-      "count": 1,
-      "scored_count": 0,
-      "top_player": "Austin Cutting",
-      "top_score": null
-    },
-    {
-      "year": 2020,
-      "pos": "LS",
-      "file": "public/data/model/college_scores_shards/2020_LS.json",
-      "count": 43,
-      "scored_count": 0,
-      "top_player": "Aiden Kneller",
-      "top_score": null
-    },
-    {
-      "year": 2020,
       "pos": "OT",
       "file": "public/data/model/college_scores_shards/2020_OT.json",
       "count": 296,
@@ -898,30 +682,12 @@
     },
     {
       "year": 2020,
-      "pos": "RET",
-      "file": "public/data/model/college_scores_shards/2020_RET.json",
-      "count": 1,
-      "scored_count": 0,
-      "top_player": "Leroy Love",
-      "top_score": null
-    },
-    {
-      "year": 2020,
       "pos": "S",
       "file": "public/data/model/college_scores_shards/2020_S.json",
       "count": 813,
       "scored_count": 800,
       "top_player": "Aaron Pope",
       "top_score": 100
-    },
-    {
-      "year": 2020,
-      "pos": "ST",
-      "file": "public/data/model/college_scores_shards/2020_ST.json",
-      "count": 1,
-      "scored_count": 0,
-      "top_player": "Josh Growden",
-      "top_score": null
     },
     {
       "year": 2020,
@@ -940,24 +706,6 @@
       "scored_count": 685,
       "top_player": "Marquise Brown",
       "top_score": 83.6
-    },
-    {
-      "year": 2021,
-      "pos": "?",
-      "file": "public/data/model/college_scores_shards/2021_?.json",
-      "count": 1,
-      "scored_count": 0,
-      "top_player": "Chandler Farrell",
-      "top_score": null
-    },
-    {
-      "year": 2021,
-      "pos": "ATH",
-      "file": "public/data/model/college_scores_shards/2021_ATH.json",
-      "count": 319,
-      "scored_count": 0,
-      "top_player": "Ahmad Adams",
-      "top_score": null
     },
     {
       "year": 2021,
@@ -1012,24 +760,6 @@
       "scored_count": 237,
       "top_player": "Kenneth Murray",
       "top_score": 79.2
-    },
-    {
-      "year": 2021,
-      "pos": "LONG SNAPPER",
-      "file": "public/data/model/college_scores_shards/2021_LONG SNAPPER.json",
-      "count": 1,
-      "scored_count": 0,
-      "top_player": "Blake Ferguson",
-      "top_score": null
-    },
-    {
-      "year": 2021,
-      "pos": "LS",
-      "file": "public/data/model/college_scores_shards/2021_LS.json",
-      "count": 36,
-      "scored_count": 0,
-      "top_player": "Adam Bay",
-      "top_score": null
     },
     {
       "year": 2021,
@@ -1096,24 +826,6 @@
     },
     {
       "year": 2022,
-      "pos": "?",
-      "file": "public/data/model/college_scores_shards/2022_?.json",
-      "count": 1,
-      "scored_count": 0,
-      "top_player": "Chris Tucker",
-      "top_score": null
-    },
-    {
-      "year": 2022,
-      "pos": "ATH",
-      "file": "public/data/model/college_scores_shards/2022_ATH.json",
-      "count": 219,
-      "scored_count": 0,
-      "top_player": "Aaron Wofford",
-      "top_score": null
-    },
-    {
-      "year": 2022,
       "pos": "CB",
       "file": "public/data/model/college_scores_shards/2022_CB.json",
       "count": 343,
@@ -1165,24 +877,6 @@
       "scored_count": 545,
       "top_player": "Colin Schooler",
       "top_score": 78.7
-    },
-    {
-      "year": 2022,
-      "pos": "LONG SNAPPER",
-      "file": "public/data/model/college_scores_shards/2022_LONG SNAPPER.json",
-      "count": 2,
-      "scored_count": 0,
-      "top_player": "Camaron Cheeseman",
-      "top_score": null
-    },
-    {
-      "year": 2022,
-      "pos": "LS",
-      "file": "public/data/model/college_scores_shards/2022_LS.json",
-      "count": 64,
-      "scored_count": 0,
-      "top_player": "Adam Higuera",
-      "top_score": null
     },
     {
       "year": 2022,
@@ -1249,24 +943,6 @@
     },
     {
       "year": 2023,
-      "pos": "?",
-      "file": "public/data/model/college_scores_shards/2023_?.json",
-      "count": 5,
-      "scored_count": 0,
-      "top_player": "Christian Fredrickson",
-      "top_score": null
-    },
-    {
-      "year": 2023,
-      "pos": "ATH",
-      "file": "public/data/model/college_scores_shards/2023_ATH.json",
-      "count": 172,
-      "scored_count": 0,
-      "top_player": "Ahmarian Granger",
-      "top_score": null
-    },
-    {
-      "year": 2023,
       "pos": "CB",
       "file": "public/data/model/college_scores_shards/2023_CB.json",
       "count": 355,
@@ -1321,15 +997,6 @@
     },
     {
       "year": 2023,
-      "pos": "LS",
-      "file": "public/data/model/college_scores_shards/2023_LS.json",
-      "count": 64,
-      "scored_count": 0,
-      "top_player": "Aaron Bolinsky",
-      "top_score": null
-    },
-    {
-      "year": 2023,
       "pos": "OT",
       "file": "public/data/model/college_scores_shards/2023_OT.json",
       "count": 261,
@@ -1344,15 +1011,6 @@
       "count": 104,
       "scored_count": 0,
       "top_player": "Aadyn Sleep-Dalton",
-      "top_score": null
-    },
-    {
-      "year": 2023,
-      "pos": "PR",
-      "file": "public/data/model/college_scores_shards/2023_PR.json",
-      "count": 1,
-      "scored_count": 0,
-      "top_player": "Austin Collier",
       "top_score": null
     },
     {
@@ -1399,15 +1057,6 @@
       "scored_count": 762,
       "top_player": "Joshua Tomas",
       "top_score": 87.3
-    },
-    {
-      "year": 2024,
-      "pos": "ATH",
-      "file": "public/data/model/college_scores_shards/2024_ATH.json",
-      "count": 195,
-      "scored_count": 0,
-      "top_player": "A.C. Mason-Young",
-      "top_score": null
     },
     {
       "year": 2024,
@@ -1465,15 +1114,6 @@
     },
     {
       "year": 2024,
-      "pos": "LS",
-      "file": "public/data/model/college_scores_shards/2024_LS.json",
-      "count": 63,
-      "scored_count": 0,
-      "top_player": "Aidan Livingston",
-      "top_score": null
-    },
-    {
-      "year": 2024,
       "pos": "OT",
       "file": "public/data/model/college_scores_shards/2024_OT.json",
       "count": 199,
@@ -1488,15 +1128,6 @@
       "count": 87,
       "scored_count": 0,
       "top_player": "Aden Caine",
-      "top_score": null
-    },
-    {
-      "year": 2024,
-      "pos": "PR",
-      "file": "public/data/model/college_scores_shards/2024_PR.json",
-      "count": 1,
-      "scored_count": 0,
-      "top_player": "Jay Person",
       "top_score": null
     },
     {
@@ -1543,15 +1174,6 @@
       "scored_count": 726,
       "top_player": "Nathaniel Dell",
       "top_score": 86.3
-    },
-    {
-      "year": 2025,
-      "pos": "ATH",
-      "file": "public/data/model/college_scores_shards/2025_ATH.json",
-      "count": 224,
-      "scored_count": 0,
-      "top_player": "A.J. Spellacy",
-      "top_score": null
     },
     {
       "year": 2025,
@@ -1606,15 +1228,6 @@
       "scored_count": 699,
       "top_player": "Chandler Martin",
       "top_score": 85
-    },
-    {
-      "year": 2025,
-      "pos": "LS",
-      "file": "public/data/model/college_scores_shards/2025_LS.json",
-      "count": 98,
-      "scored_count": 0,
-      "top_player": "Aidan Flege",
-      "top_score": null
     },
     {
       "year": 2025,
@@ -1681,24 +1294,6 @@
     },
     {
       "year": 2026,
-      "pos": "?",
-      "file": "public/data/model/college_scores_shards/2026_?.json",
-      "count": 1,
-      "scored_count": 0,
-      "top_player": "Oliver Robbins",
-      "top_score": null
-    },
-    {
-      "year": 2026,
-      "pos": "ATH",
-      "file": "public/data/model/college_scores_shards/2026_ATH.json",
-      "count": 165,
-      "scored_count": 0,
-      "top_player": "A.J. Brand",
-      "top_score": null
-    },
-    {
-      "year": 2026,
       "pos": "CB",
       "file": "public/data/model/college_scores_shards/2026_CB.json",
       "count": 868,
@@ -1744,39 +1339,12 @@
     },
     {
       "year": 2026,
-      "pos": "KR",
-      "file": "public/data/model/college_scores_shards/2026_KR.json",
-      "count": 1,
-      "scored_count": 0,
-      "top_player": "Eli Stader",
-      "top_score": null
-    },
-    {
-      "year": 2026,
       "pos": "LB",
       "file": "public/data/model/college_scores_shards/2026_LB.json",
       "count": 2147,
       "scored_count": 1871,
       "top_player": "Gideon Lampron",
       "top_score": 82.3
-    },
-    {
-      "year": 2026,
-      "pos": "LONG SNAPPER",
-      "file": "public/data/model/college_scores_shards/2026_LONG SNAPPER.json",
-      "count": 1,
-      "scored_count": 0,
-      "top_player": "Julian Ashby",
-      "top_score": null
-    },
-    {
-      "year": 2026,
-      "pos": "LS",
-      "file": "public/data/model/college_scores_shards/2026_LS.json",
-      "count": 132,
-      "scored_count": 0,
-      "top_player": "Adam Booker",
-      "top_score": null
     },
     {
       "year": 2026,

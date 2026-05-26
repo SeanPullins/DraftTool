@@ -10,6 +10,22 @@ const OUT_DIR = 'public/data/model/college_scores_shards';
 const OUT_INDEX = `${OUT_DIR}/index.json`;
 const OUT_REPORT = 'public/data/model/college_model_v2_historical_scores_report.json';
 
+const ALLOWED_SHARD_POSITIONS = new Set([
+  'QB',
+  'WR',
+  'RB',
+  'TE',
+  'OT',
+  'IOL',
+  'EDGE',
+  'DL',
+  'LB',
+  'CB',
+  'S',
+  'K',
+  'P',
+]);
+
 fs.mkdirSync(OUT_DIR, { recursive: true });
 
 function cleanName(s = '') {
@@ -365,6 +381,7 @@ for (const row of rows) {
   const y = Number(row.year || 0);
   const pos = row.pos || 'UNK';
   if (!y || y < 2014 || y > 2027) continue;
+  if (!ALLOWED_SHARD_POSITIONS.has(pos)) continue;
 
   const key = `${y}_${pos}`;
   if (!byShard.has(key)) byShard.set(key, []);
