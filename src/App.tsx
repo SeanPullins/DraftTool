@@ -3272,25 +3272,35 @@ function ClassExplorer({ pool, history, pffProfiles, pffLookup, y1Data, careerSt
                 {useProjections ? (() => {
                   const v57 = getV57Row(player)
                   const qbV11Score = getQbV11Score(player)
-                  const displayScore = qbV11Score != null
-                    ? qbV11Score
-                    : v57?.v57Percentile != null
-                      ? Number(v57.v57Percentile)
-                      : (projected ? projected.score : null)
+                  const collegeV2 = getCollegeModelV2Row(player as any)
+                  const collegeV2Score = Number(collegeV2?.collegeModelV2Score)
+                  const collegeV2Matched = Number(collegeV2?.collegeModelV2Coverage?.matched_features || 0)
+                  const useCollegeV2Score = Number.isFinite(collegeV2Score) && collegeV2Matched > 0
+                  const displayScore = useCollegeV2Score
+                    ? collegeV2Score
+                    : qbV11Score != null
+                      ? qbV11Score
+                      : v57?.v57Percentile != null
+                        ? Number(v57.v57Percentile)
+                        : (projected ? projected.score : null)
                   const delta = v57?.v57Delta != null ? Number(v57.v57Delta) : null
                   const tier = (String(player.pos || '').toUpperCase() === 'QB') && qbV11Score != null ? getQbV11Tier(qbV11Score) : null
                   const title =
-                    tier
-                      ? `QB v11 · ${tier.label} tier · ${tier.hitRate}% hit rate historically (avg career AV ${tier.avgAv})`
-                      : v57
-                        ? `V5.7P score${delta != null ? ` · Δ ${delta > 0 ? '+' : ''}${delta.toFixed(1)}` : ''}${v57.flag ? ` · ${v57.flag}` : ''}`
-                        : 'V4 fallback score'
+                    useCollegeV2Score
+                      ? `College Model v2 · ${collegeV2.collegeModelV2Label || 'Prospect score'} · ${collegeV2Matched} matched features`
+                      : tier
+                        ? `QB v11 · ${tier.label} tier · ${tier.hitRate}% hit rate historically (avg career AV ${tier.avgAv})`
+                        : v57
+                          ? `V5.7P score${delta != null ? ` · Δ ${delta > 0 ? '+' : ''}${delta.toFixed(1)}` : ''}${v57.flag ? ` · ${v57.flag}` : ''}`
+                          : 'V4 fallback score'
                   return <td
                     title={title}
                     style={{ color: displayScore != null ? scoreColor(displayScore) : undefined, fontWeight: displayScore != null ? 800 : undefined }}
                   >
-                    {displayScore != null ? Math.round(displayScore) : '-'}
-                    {Number.isFinite(Number(getCollegeModelV2Row(player as any)?.collegeModelV2Score)) && <small className="scoreSourceTag">v2</small>}
+                    {useCollegeV2Score
+                      ? collegeV2Score.toFixed(1)
+                      : displayScore != null ? Math.round(displayScore) : '-'}
+                    {useCollegeV2Score && <small className="scoreSourceTag">v2</small>}
                   </td>
                 })() : null}
                 <td>{player.proBowls || 0}</td>
