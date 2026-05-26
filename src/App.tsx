@@ -413,6 +413,7 @@ function App() {
     return () => window.removeEventListener('hashchange', onHash)
   }, [])
 
+
   useEffect(() => {
     let cancelled = false
     const base = import.meta.env.BASE_URL || './'
@@ -2846,6 +2847,33 @@ function ClassExplorer({ pool, history, pffProfiles, pffLookup, y1Data, careerSt
   // QB v11 score map — loaded directly from prospect files so scores
   // are available as soon as the component mounts, independent of overlay timing
   const [qbV11Map, setQbV11Map] = useState<Map<string, number>>(new Map())
+  const [collegeModelV2Map, setCollegeModelV2Map] = useState<Map<string, any>>(new Map())
+
+  const collegeModelV2Key = (year: any, pos: any, name: any) =>
+    `${Number(year || 0)}|${String(pos || '').toUpperCase()}|${String(name || '').toLowerCase().replace(/[^a-z0-9]/g, '')}`
+
+  const getCollegeModelV2Row = (player: any) => {
+    const year = player?.year || player?.draftYear
+    const pos = player?.pos || player?.position
+    const name = player?.name
+    return collegeModelV2Map.get(collegeModelV2Key(year, pos, name))
+  }
+
+  useEffect(() => {
+    const base = import.meta.env.BASE_URL || '/'
+    fetch(`${base}data/model/college_model_v2_prospect_scores.json`)
+      .then((r) => r.ok ? r.json() : null)
+      .then((payload) => {
+        const rows = payload?.rows || []
+        const map = new Map()
+        for (const row of rows) {
+          map.set(collegeModelV2Key(row.year || row.draftYear, row.pos || row.position, row.name), row)
+        }
+        setCollegeModelV2Map(map)
+      })
+      .catch(() => setCollegeModelV2Map(new Map()))
+  }, [])
+
   useEffect(() => {
     let cancelled = false
     const base = import.meta.env.BASE_URL || '/'
@@ -3201,6 +3229,19 @@ function ClassExplorer({ pool, history, pffProfiles, pffLookup, y1Data, careerSt
                 <td>
                   <b>{player.name}</b>
                   {isSaved && <span className="savedBadge" title="Saved prospect">★</span>}
+                  {(() => {
+                    const collegeV2 = getCollegeModelV2Row(player as any)
+                    if (!collegeV2?.collegeModelV2Score) return null
+                    return (
+                      <div className="collegeModelV2Badge">
+                        <span className="collegeModelV2Score">College v2: {collegeV2.collegeModelV2Score}</span>
+                        <span className="collegeModelV2Label">{collegeV2.collegeModelV2Label}</span>
+                        {collegeV2.collegeModelV2TopSignals?.[0]?.label && (
+                          <span className="collegeModelV2Signal">Top: {collegeV2.collegeModelV2TopSignals[0].label}</span>
+                        )}
+                      </div>
+                    )
+                  })()}
                   <small>{player.school || 'No school'}</small>
                   <button
                     type="button"
