@@ -239,6 +239,12 @@ function App() {
   const [prospectsQb2027, setProspectsQb2027] = useState<ProspectQB[]>([])
   const [prospectsTe2027, setProspectsTe2027] = useState<any[]>([])
   const [prospectsRb2027, setProspectsRb2027] = useState<any[]>([])
+  const [collegeShardIndex, setCollegeShardIndex] = useState<any | null>(null)
+  const [collegeShardRows, setCollegeShardRows] = useState<any[]>([])
+  const [collegeShardYear, setCollegeShardYear] = useState<number>(2025)
+  const [collegeShardPos, setCollegeShardPos] = useState<string>('QB')
+  const [collegeShardLoading, setCollegeShardLoading] = useState(false)
+
   const [projectionOverlay, setProjectionOverlay] = useState<Map<string, PositionProjectionOverlay>>(new Map())
   const [compSignalMap, setCompSignalMap] = useState<Map<string, PositionCompSignal>>(new Map())
   const [rbScoreReadyMap, setRbScoreReadyMap] = useState<Map<string, RbScoreReadySignal>>(new Map())
@@ -889,16 +895,16 @@ function App() {
           </div>
           <div className="prospectsFilters">
             <select value={collegeShardYear} onChange={(e) => setCollegeShardYear(Number(e.target.value))}>
-              {Array.from(new Set((collegeShardIndex?.shards || []).map((s: any) => Number(s.year))))
-                .sort((a: number, b: number) => b - a)
-                .map((year: number) => <option key={year} value={year}>{year}</option>)}
+              {(Array.from(new Set((collegeShardIndex?.shards || []).map((s: any) => Number(s.year)))) as number[])
+                .sort((a, b) => b - a)
+                .map((year) => <option key={year} value={year}>{year}</option>)}
             </select>
             <select value={collegeShardPos} onChange={(e) => setCollegeShardPos(e.target.value)}>
-              {Array.from(new Set((collegeShardIndex?.shards || [])
+              {(Array.from(new Set((collegeShardIndex?.shards || [])
                 .filter((s: any) => Number(s.year) === Number(collegeShardYear))
-                .map((s: any) => String(s.pos || '').toUpperCase())))
+                .map((s: any) => String(s.pos || '').toUpperCase()))) as string[])
                 .sort()
-                .map((pos: string) => <option key={pos} value={pos}>{pos}</option>)}
+                .map((pos) => <option key={pos} value={pos}>{pos}</option>)}
             </select>
           </div>
         </div>
