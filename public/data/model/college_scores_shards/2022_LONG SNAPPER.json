@@ -1,0 +1,76 @@
+{
+  "generatedAt": "2026-05-26T21:03:00.227Z",
+  "model_version": "college_model_v2_historical_score_shard",
+  "year": 2022,
+  "pos": "LONG SNAPPER",
+  "rows": [
+    {
+      "id": "long snapper-2022-camaroncheeseman",
+      "name": "Camaron Cheeseman",
+      "normalized_name": "camaroncheeseman",
+      "school": "",
+      "year": 2022,
+      "draftYear": 2022,
+      "pos": "LONG SNAPPER",
+      "original_positions": [
+        "LONG SNAPPER"
+      ],
+      "seasons": [
+        2021
+      ],
+      "lastSeason": 2021,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 4.5,
+        "nfl_outcome_label": "Miss",
+        "hit_miss": "Miss",
+        "match_confidence": "name_only_unique"
+      }
+    },
+    {
+      "id": "long snapper-2022-thomasfletcher",
+      "name": "Thomas Fletcher",
+      "normalized_name": "thomasfletcher",
+      "school": "",
+      "year": 2022,
+      "draftYear": 2022,
+      "pos": "LONG SNAPPER",
+      "original_positions": [
+        "LONG SNAPPER"
+      ],
+      "seasons": [
+        2021
+      ],
+      "lastSeason": 2021,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 3,
+        "nfl_outcome_label": "Miss",
+        "hit_miss": "Miss",
+        "match_confidence": "name_only_unique"
+      }
+    }
+  ]
+}

@@ -1,0 +1,178 @@
+{
+  "generatedAt": "2026-05-26T21:03:00.228Z",
+  "model_version": "college_model_v2_historical_score_shard",
+  "year": 2023,
+  "pos": "?",
+  "rows": [
+    {
+      "id": "?-2023-christianfredrickson",
+      "name": "Christian Fredrickson",
+      "normalized_name": "christianfredrickson",
+      "school": "Idaho State",
+      "year": 2023,
+      "draftYear": 2023,
+      "pos": "?",
+      "original_positions": [
+        "?"
+      ],
+      "seasons": [
+        2022
+      ],
+      "lastSeason": 2022,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "?-2023-jamalmcmurrin",
+      "name": "Jamal Mcmurrin",
+      "normalized_name": "jamalmcmurrin",
+      "school": "Missouri State",
+      "year": 2023,
+      "draftYear": 2023,
+      "pos": "?",
+      "original_positions": [
+        "?"
+      ],
+      "seasons": [
+        2022
+      ],
+      "lastSeason": 2022,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "?-2023-jamesmcintyre",
+      "name": "James McIntyre",
+      "normalized_name": "jamesmcintyre",
+      "school": "Wilson",
+      "year": 2023,
+      "draftYear": 2023,
+      "pos": "?",
+      "original_positions": [
+        "?"
+      ],
+      "seasons": [
+        2022
+      ],
+      "lastSeason": 2022,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "?-2023-michaelirons",
+      "name": "Michael Irons",
+      "normalized_name": "michaelirons",
+      "school": "Tarleton State",
+      "year": 2023,
+      "draftYear": 2023,
+      "pos": "?",
+      "original_positions": [
+        "?"
+      ],
+      "seasons": [
+        2022
+      ],
+      "lastSeason": 2022,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "?-2023-zanejaniszewski",
+      "name": "Zane Janiszewski",
+      "normalized_name": "zanejaniszewski",
+      "school": "Bloomsburg",
+      "year": 2023,
+      "draftYear": 2023,
+      "pos": "?",
+      "original_positions": [
+        "?"
+      ],
+      "seasons": [
+        2022
+      ],
+      "lastSeason": 2022,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    }
+  ]
+}

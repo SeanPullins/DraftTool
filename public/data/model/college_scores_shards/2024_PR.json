@@ -1,0 +1,46 @@
+{
+  "generatedAt": "2026-05-26T21:03:00.228Z",
+  "model_version": "college_model_v2_historical_score_shard",
+  "year": 2024,
+  "pos": "PR",
+  "rows": [
+    {
+      "id": "pr-2024-jayperson",
+      "name": "Jay Person",
+      "normalized_name": "jayperson",
+      "school": "Chattanooga",
+      "year": 2024,
+      "draftYear": 2024,
+      "pos": "PR",
+      "original_positions": [
+        "PR"
+      ],
+      "seasons": [
+        2018,
+        2019,
+        2020,
+        2021,
+        2023
+      ],
+      "lastSeason": 2023,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 1.5,
+        "nfl_outcome_label": "Miss",
+        "hit_miss": "Miss",
+        "match_confidence": "name_only_unique"
+      }
+    }
+  ]
+}

@@ -1,0 +1,2246 @@
+{
+  "generatedAt": "2026-05-26T21:02:59.638Z",
+  "model_version": "college_model_v2_historical_score_shard",
+  "year": 2023,
+  "pos": "LS",
+  "rows": [
+    {
+      "id": "ls-2023-aaronbolinsky",
+      "name": "Aaron Bolinsky",
+      "normalized_name": "aaronbolinsky",
+      "school": "Syracuse",
+      "year": 2023,
+      "draftYear": 2023,
+      "pos": "LS",
+      "original_positions": [
+        "LS"
+      ],
+      "seasons": [
+        2018,
+        2019,
+        2021,
+        2022
+      ],
+      "lastSeason": 2022,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ls-2023-alexward",
+      "name": "Alex Ward",
+      "normalized_name": "alexward",
+      "school": "UCF",
+      "year": 2023,
+      "draftYear": 2023,
+      "pos": "LS",
+      "original_positions": [
+        "LS"
+      ],
+      "seasons": [
+        2020,
+        2021,
+        2022
+      ],
+      "lastSeason": 2022,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 4.5,
+        "nfl_outcome_label": "Miss",
+        "hit_miss": "Miss",
+        "match_confidence": "name+position"
+      }
+    },
+    {
+      "id": "ls-2023-andrewbeardall",
+      "name": "Andrew Beardall",
+      "normalized_name": "andrewbeardall",
+      "school": "South Florida",
+      "year": 2023,
+      "draftYear": 2023,
+      "pos": "LS",
+      "original_positions": [
+        "LS"
+      ],
+      "seasons": [
+        2019,
+        2021,
+        2022
+      ],
+      "lastSeason": 2022,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ls-2023-angelotejada",
+      "name": "Angelo Tejada",
+      "normalized_name": "angelotejada",
+      "school": "UTEP",
+      "year": 2023,
+      "draftYear": 2023,
+      "pos": "LS",
+      "original_positions": [
+        "LS"
+      ],
+      "seasons": [
+        2020,
+        2022
+      ],
+      "lastSeason": 2022,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ls-2023-austinmock",
+      "name": "Austin Mock",
+      "normalized_name": "austinmock",
+      "school": "Liberty",
+      "year": 2023,
+      "draftYear": 2023,
+      "pos": "LS",
+      "original_positions": [
+        "LS"
+      ],
+      "seasons": [
+        2019,
+        2021,
+        2022
+      ],
+      "lastSeason": 2022,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ls-2023-austinyeager",
+      "name": "Austin Yeager",
+      "normalized_name": "austinyeager",
+      "school": "Dayton",
+      "year": 2023,
+      "draftYear": 2023,
+      "pos": "LS",
+      "original_positions": [
+        "LS"
+      ],
+      "seasons": [
+        2022
+      ],
+      "lastSeason": 2022,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ls-2023-baileyparsons",
+      "name": "Bailey Parsons",
+      "normalized_name": "baileyparsons",
+      "school": "Stanford",
+      "year": 2023,
+      "draftYear": 2023,
+      "pos": "LS",
+      "original_positions": [
+        "LS"
+      ],
+      "seasons": [
+        2020,
+        2021,
+        2022
+      ],
+      "lastSeason": 2022,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ls-2023-bradyweas",
+      "name": "Brady Weas",
+      "normalized_name": "bradyweas",
+      "school": "Nebraska",
+      "year": 2023,
+      "draftYear": 2023,
+      "pos": "LS",
+      "original_positions": [
+        "LS"
+      ],
+      "seasons": [
+        2022
+      ],
+      "lastSeason": 2022,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ls-2023-bradyweeks",
+      "name": "Brady Weeks",
+      "normalized_name": "bradyweeks",
+      "school": "Minnesota",
+      "year": 2023,
+      "draftYear": 2023,
+      "pos": "LS",
+      "original_positions": [
+        "LS"
+      ],
+      "seasons": [
+        2019,
+        2021,
+        2022
+      ],
+      "lastSeason": 2022,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ls-2023-brandonoldham",
+      "name": "Brandon Oldham",
+      "normalized_name": "brandonoldham",
+      "school": "Tarleton State",
+      "year": 2023,
+      "draftYear": 2023,
+      "pos": "LS",
+      "original_positions": [
+        "LS"
+      ],
+      "seasons": [
+        2022
+      ],
+      "lastSeason": 2022,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ls-2023-brockpowers",
+      "name": "Brock Powers",
+      "normalized_name": "brockpowers",
+      "school": "UT Martin",
+      "year": 2023,
+      "draftYear": 2023,
+      "pos": "LS",
+      "original_positions": [
+        "LS"
+      ],
+      "seasons": [
+        2021,
+        2022
+      ],
+      "lastSeason": 2022,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ls-2023-brycebouwens",
+      "name": "Bryce Bouwens",
+      "normalized_name": "brycebouwens",
+      "school": "Western Michigan",
+      "year": 2023,
+      "draftYear": 2023,
+      "pos": "LS",
+      "original_positions": [
+        "LS"
+      ],
+      "seasons": [
+        2018,
+        2019,
+        2020,
+        2021,
+        2022
+      ],
+      "lastSeason": 2022,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ls-2023-calebbrown",
+      "name": "Caleb Brown",
+      "normalized_name": "calebbrown",
+      "school": "South Carolina State",
+      "year": 2023,
+      "draftYear": 2023,
+      "pos": "LS",
+      "original_positions": [
+        "LS"
+      ],
+      "seasons": [
+        2022
+      ],
+      "lastSeason": 2022,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ls-2023-calebcantrell",
+      "name": "Caleb Cantrell",
+      "normalized_name": "calebcantrell",
+      "school": "UTSA",
+      "year": 2023,
+      "draftYear": 2023,
+      "pos": "LS",
+      "original_positions": [
+        "LS"
+      ],
+      "seasons": [
+        2021,
+        2022
+      ],
+      "lastSeason": 2022,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ls-2023-calebmatthews",
+      "name": "Caleb Matthews",
+      "normalized_name": "calebmatthews",
+      "school": "Tulsa",
+      "year": 2023,
+      "draftYear": 2023,
+      "pos": "LS",
+      "original_positions": [
+        "LS"
+      ],
+      "seasons": [
+        2022
+      ],
+      "lastSeason": 2022,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ls-2023-calebrobbins",
+      "name": "Caleb Robbins",
+      "normalized_name": "calebrobbins",
+      "school": "Troy",
+      "year": 2023,
+      "draftYear": 2023,
+      "pos": "LS",
+      "original_positions": [
+        "LS"
+      ],
+      "seasons": [
+        2022
+      ],
+      "lastSeason": 2022,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ls-2023-cameronlyons",
+      "name": "Cameron Lyons",
+      "normalized_name": "cameronlyons",
+      "school": "Charlotte",
+      "year": 2023,
+      "draftYear": 2023,
+      "pos": "LS",
+      "original_positions": [
+        "LS"
+      ],
+      "seasons": [
+        2018,
+        2020,
+        2021,
+        2022
+      ],
+      "lastSeason": 2022,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 3,
+        "nfl_outcome_label": "Miss",
+        "hit_miss": "Miss",
+        "match_confidence": "name+position"
+      }
+    },
+    {
+      "id": "ls-2023-codyclements",
+      "name": "Cody Clements",
+      "normalized_name": "codyclements",
+      "school": "Eastern Washington",
+      "year": 2023,
+      "draftYear": 2023,
+      "pos": "LS",
+      "original_positions": [
+        "LS"
+      ],
+      "seasons": [
+        2021,
+        2022
+      ],
+      "lastSeason": 2022,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ls-2023-codyolszewski",
+      "name": "Cody Olszewski",
+      "normalized_name": "codyolszewski",
+      "school": "Chattanooga",
+      "year": 2023,
+      "draftYear": 2023,
+      "pos": "LS",
+      "original_positions": [
+        "LS"
+      ],
+      "seasons": [
+        2022
+      ],
+      "lastSeason": 2022,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ls-2023-davisbeal",
+      "name": "Davis Beal",
+      "normalized_name": "davisbeal",
+      "school": "Houston",
+      "year": 2023,
+      "draftYear": 2023,
+      "pos": "LS",
+      "original_positions": [
+        "LS"
+      ],
+      "seasons": [
+        2022
+      ],
+      "lastSeason": 2022,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ls-2023-durhamharris",
+      "name": "Durham Harris",
+      "normalized_name": "durhamharris",
+      "school": "Texas State",
+      "year": 2023,
+      "draftYear": 2023,
+      "pos": "LS",
+      "original_positions": [
+        "LS"
+      ],
+      "seasons": [
+        2022
+      ],
+      "lastSeason": 2022,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ls-2023-dylanseiler",
+      "name": "Dylan Seiler",
+      "normalized_name": "dylanseiler",
+      "school": "Ball State",
+      "year": 2023,
+      "draftYear": 2023,
+      "pos": "LS",
+      "original_positions": [
+        "LS"
+      ],
+      "seasons": [
+        2021,
+        2022
+      ],
+      "lastSeason": 2022,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ls-2023-franklinlama",
+      "name": "Franklin Lama",
+      "normalized_name": "franklinlama",
+      "school": "Central Michigan",
+      "year": 2023,
+      "draftYear": 2023,
+      "pos": "LS",
+      "original_positions": [
+        "LS"
+      ],
+      "seasons": [
+        2019,
+        2021,
+        2022
+      ],
+      "lastSeason": 2022,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ls-2023-garrettjordan",
+      "name": "Garrett Jordan",
+      "normalized_name": "garrettjordan",
+      "school": "North Carolina",
+      "year": 2023,
+      "draftYear": 2023,
+      "pos": "LS",
+      "original_positions": [
+        "LS"
+      ],
+      "seasons": [
+        2022
+      ],
+      "lastSeason": 2022,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ls-2023-gunnerdaniel",
+      "name": "Gunner Daniel",
+      "normalized_name": "gunnerdaniel",
+      "school": "Boston College",
+      "year": 2023,
+      "draftYear": 2023,
+      "pos": "LS",
+      "original_positions": [
+        "LS"
+      ],
+      "seasons": [
+        2019,
+        2021,
+        2022
+      ],
+      "lastSeason": 2022,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ls-2023-henryfreer",
+      "name": "Henry Freer",
+      "normalized_name": "henryfreer",
+      "school": "Georgia Tech",
+      "year": 2023,
+      "draftYear": 2023,
+      "pos": "LS",
+      "original_positions": [
+        "LS"
+      ],
+      "seasons": [
+        2022
+      ],
+      "lastSeason": 2022,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ls-2023-holdencaspersen",
+      "name": "Holden Caspersen",
+      "normalized_name": "holdencaspersen",
+      "school": "Clemson",
+      "year": 2023,
+      "draftYear": 2023,
+      "pos": "LS",
+      "original_positions": [
+        "LS"
+      ],
+      "seasons": [
+        2022
+      ],
+      "lastSeason": 2022,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ls-2023-isaiahperez",
+      "name": "Isaiah Perez",
+      "normalized_name": "isaiahperez",
+      "school": "New Mexico",
+      "year": 2023,
+      "draftYear": 2023,
+      "pos": "LS",
+      "original_positions": [
+        "LS"
+      ],
+      "seasons": [
+        2021,
+        2022
+      ],
+      "lastSeason": 2022,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ls-2023-jackbernstein",
+      "name": "Jack Bernstein",
+      "normalized_name": "jackbernstein",
+      "school": "Georgia State",
+      "year": 2023,
+      "draftYear": 2023,
+      "pos": "LS",
+      "original_positions": [
+        "LS"
+      ],
+      "seasons": [
+        2022
+      ],
+      "lastSeason": 2022,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ls-2023-jacklandherriv",
+      "name": "Jack Landherr IV",
+      "normalized_name": "jacklandherriv",
+      "school": "UCLA",
+      "year": 2023,
+      "draftYear": 2023,
+      "pos": "LS",
+      "original_positions": [
+        "LS"
+      ],
+      "seasons": [
+        2020,
+        2021,
+        2022
+      ],
+      "lastSeason": 2022,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ls-2023-jadenmueller",
+      "name": "Jaden Mueller",
+      "normalized_name": "jadenmueller",
+      "school": "South Dakota State",
+      "year": 2023,
+      "draftYear": 2023,
+      "pos": "LS",
+      "original_positions": [
+        "LS"
+      ],
+      "seasons": [
+        2022
+      ],
+      "lastSeason": 2022,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ls-2023-jakehoffman",
+      "name": "Jake Hoffman",
+      "normalized_name": "jakehoffman",
+      "school": "Missouri",
+      "year": 2023,
+      "draftYear": 2023,
+      "pos": "LS",
+      "original_positions": [
+        "LS"
+      ],
+      "seasons": [
+        2019,
+        2020,
+        2022
+      ],
+      "lastSeason": 2022,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ls-2023-jakereed",
+      "name": "Jake Reed",
+      "normalized_name": "jakereed",
+      "school": "Delaware",
+      "year": 2023,
+      "draftYear": 2023,
+      "pos": "LS",
+      "original_positions": [
+        "LS"
+      ],
+      "seasons": [
+        2022
+      ],
+      "lastSeason": 2022,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 1.5,
+        "nfl_outcome_label": "Miss",
+        "hit_miss": "Miss",
+        "match_confidence": "name_only_unique"
+      }
+    },
+    {
+      "id": "ls-2023-jamesrosenberry",
+      "name": "James Rosenberry",
+      "normalized_name": "jamesrosenberry",
+      "school": "Florida State",
+      "year": 2023,
+      "draftYear": 2023,
+      "pos": "LS",
+      "original_positions": [
+        "LS"
+      ],
+      "seasons": [
+        2021,
+        2022
+      ],
+      "lastSeason": 2022,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ls-2023-joeymalinowski",
+      "name": "Joey Malinowski",
+      "normalized_name": "joeymalinowski",
+      "school": "Illinois State",
+      "year": 2023,
+      "draftYear": 2023,
+      "pos": "LS",
+      "original_positions": [
+        "LS"
+      ],
+      "seasons": [
+        2021,
+        2022
+      ],
+      "lastSeason": 2022,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ls-2023-jordanmorrow",
+      "name": "Jordan Morrow",
+      "normalized_name": "jordanmorrow",
+      "school": "Kentucky",
+      "year": 2023,
+      "draftYear": 2023,
+      "pos": "LS",
+      "original_positions": [
+        "LS"
+      ],
+      "seasons": [
+        2022
+      ],
+      "lastSeason": 2022,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ls-2023-joshraab",
+      "name": "Josh Raab",
+      "normalized_name": "joshraab",
+      "school": "Colorado State",
+      "year": 2023,
+      "draftYear": 2023,
+      "pos": "LS",
+      "original_positions": [
+        "LS"
+      ],
+      "seasons": [
+        2022
+      ],
+      "lastSeason": 2022,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ls-2023-justinkeijers",
+      "name": "Justin Keijers",
+      "normalized_name": "justinkeijers",
+      "school": "Central Arkansas",
+      "year": 2023,
+      "draftYear": 2023,
+      "pos": "LS",
+      "original_positions": [
+        "LS"
+      ],
+      "seasons": [
+        2020,
+        2022
+      ],
+      "lastSeason": 2022,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ls-2023-kalebhalfmann",
+      "name": "Kaleb Halfmann",
+      "normalized_name": "kalebhalfmann",
+      "school": "Houston Christian",
+      "year": 2023,
+      "draftYear": 2023,
+      "pos": "LS",
+      "original_positions": [
+        "LS"
+      ],
+      "seasons": [
+        2022
+      ],
+      "lastSeason": 2022,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ls-2023-kaseykelleher",
+      "name": "Kasey Kelleher",
+      "normalized_name": "kaseykelleher",
+      "school": "Oklahoma",
+      "year": 2023,
+      "draftYear": 2023,
+      "pos": "LS",
+      "original_positions": [
+        "LS"
+      ],
+      "seasons": [
+        2019,
+        2020,
+        2021,
+        2022
+      ],
+      "lastSeason": 2022,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ls-2023-koreykarbowsky",
+      "name": "Korey Karbowsky",
+      "normalized_name": "koreykarbowsky",
+      "school": "SE Louisiana",
+      "year": 2023,
+      "draftYear": 2023,
+      "pos": "LS",
+      "original_positions": [
+        "LS"
+      ],
+      "seasons": [
+        2021,
+        2022
+      ],
+      "lastSeason": 2022,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ls-2023-kylebauman",
+      "name": "Kyle Bauman",
+      "normalized_name": "kylebauman",
+      "school": "Akron",
+      "year": 2023,
+      "draftYear": 2023,
+      "pos": "LS",
+      "original_positions": [
+        "LS"
+      ],
+      "seasons": [
+        2018,
+        2021,
+        2022
+      ],
+      "lastSeason": 2022,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ls-2023-kyledavis",
+      "name": "Kyle Davis",
+      "normalized_name": "kyledavis",
+      "school": "James Madison",
+      "year": 2023,
+      "draftYear": 2023,
+      "pos": "LS",
+      "original_positions": [
+        "LS"
+      ],
+      "seasons": [
+        2019,
+        2022
+      ],
+      "lastSeason": 2022,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ls-2023-lancestlouis",
+      "name": "Lance St. Louis",
+      "normalized_name": "lancestlouis",
+      "school": "Williams Field",
+      "year": 2023,
+      "draftYear": 2023,
+      "pos": "LS",
+      "original_positions": [
+        "LS"
+      ],
+      "seasons": [
+        2022
+      ],
+      "lastSeason": 2022,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ls-2023-lukewallis",
+      "name": "Luke Wallis",
+      "normalized_name": "lukewallis",
+      "school": "Lamar",
+      "year": 2023,
+      "draftYear": 2023,
+      "pos": "LS",
+      "original_positions": [
+        "LS"
+      ],
+      "seasons": [
+        2022
+      ],
+      "lastSeason": 2022,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ls-2023-marcoortiz",
+      "name": "Marco Ortiz",
+      "normalized_name": "marcoortiz",
+      "school": "Florida",
+      "year": 2023,
+      "draftYear": 2023,
+      "pos": "LS",
+      "original_positions": [
+        "LS"
+      ],
+      "seasons": [
+        2020,
+        2021,
+        2022
+      ],
+      "lastSeason": 2022,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ls-2023-matthembrough",
+      "name": "Matt Hembrough",
+      "normalized_name": "matthembrough",
+      "school": "Oklahoma State",
+      "year": 2023,
+      "draftYear": 2023,
+      "pos": "LS",
+      "original_positions": [
+        "LS"
+      ],
+      "seasons": [
+        2019,
+        2020,
+        2021,
+        2022
+      ],
+      "lastSeason": 2022,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 1.5,
+        "nfl_outcome_label": "Miss",
+        "hit_miss": "Miss",
+        "match_confidence": "name+position"
+      }
+    },
+    {
+      "id": "ls-2023-michaeldonovan",
+      "name": "Michael Donovan",
+      "normalized_name": "michaeldonovan",
+      "school": "Michigan State",
+      "year": 2023,
+      "draftYear": 2023,
+      "pos": "LS",
+      "original_positions": [
+        "LS"
+      ],
+      "seasons": [
+        2022
+      ],
+      "lastSeason": 2022,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ls-2023-natemerchant",
+      "name": "Nate Merchant",
+      "normalized_name": "natemerchant",
+      "school": "Easley",
+      "year": 2023,
+      "draftYear": 2023,
+      "pos": "LS",
+      "original_positions": [
+        "LS"
+      ],
+      "seasons": [
+        2022
+      ],
+      "lastSeason": 2022,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ls-2023-nathanweneta",
+      "name": "Nathan Weneta",
+      "normalized_name": "nathanweneta",
+      "school": "USC",
+      "year": 2023,
+      "draftYear": 2023,
+      "pos": "LS",
+      "original_positions": [
+        "LS"
+      ],
+      "seasons": [
+        2022
+      ],
+      "lastSeason": 2022,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ls-2023-nickzecchino",
+      "name": "Nick Zecchino",
+      "normalized_name": "nickzecchino",
+      "school": "Purdue",
+      "year": 2023,
+      "draftYear": 2023,
+      "pos": "LS",
+      "original_positions": [
+        "LS"
+      ],
+      "seasons": [
+        2016,
+        2022
+      ],
+      "lastSeason": 2022,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ls-2023-peterbowden",
+      "name": "Peter Bowden",
+      "normalized_name": "peterbowden",
+      "school": "Wisconsin",
+      "year": 2023,
+      "draftYear": 2023,
+      "pos": "LS",
+      "original_positions": [
+        "LS"
+      ],
+      "seasons": [
+        2021,
+        2022
+      ],
+      "lastSeason": 2022,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 3,
+        "nfl_outcome_label": "Miss",
+        "hit_miss": "Miss",
+        "match_confidence": "name+position"
+      }
+    },
+    {
+      "id": "ls-2023-reedmercer",
+      "name": "Reed Mercer",
+      "normalized_name": "reedmercer",
+      "school": "Cal Poly",
+      "year": 2023,
+      "draftYear": 2023,
+      "pos": "LS",
+      "original_positions": [
+        "LS"
+      ],
+      "seasons": [
+        2022
+      ],
+      "lastSeason": 2022,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ls-2023-rexgoossen",
+      "name": "Rex Goossen",
+      "normalized_name": "rexgoossen",
+      "school": "UNLV",
+      "year": 2023,
+      "draftYear": 2023,
+      "pos": "LS",
+      "original_positions": [
+        "LS"
+      ],
+      "seasons": [
+        2019,
+        2022
+      ],
+      "lastSeason": 2022,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ls-2023-robertsoderholm",
+      "name": "Robert Soderholm",
+      "normalized_name": "robertsoderholm",
+      "school": "VMI",
+      "year": 2023,
+      "draftYear": 2023,
+      "pos": "LS",
+      "original_positions": [
+        "LS"
+      ],
+      "seasons": [
+        2022
+      ],
+      "lastSeason": 2022,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ls-2023-sethmackellar",
+      "name": "Seth Mackellar",
+      "normalized_name": "sethmackellar",
+      "school": "Arizona",
+      "year": 2023,
+      "draftYear": 2023,
+      "pos": "LS",
+      "original_positions": [
+        "LS"
+      ],
+      "seasons": [
+        2019,
+        2020,
+        2022
+      ],
+      "lastSeason": 2022,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ls-2023-sethwillis",
+      "name": "Seth Willis",
+      "normalized_name": "sethwillis",
+      "school": "Texas Southern",
+      "year": 2023,
+      "draftYear": 2023,
+      "pos": "LS",
+      "original_positions": [
+        "LS"
+      ],
+      "seasons": [
+        2022
+      ],
+      "lastSeason": 2022,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ls-2023-slaterzellers",
+      "name": "Slater Zellers",
+      "normalized_name": "slaterzellers",
+      "school": "California",
+      "year": 2023,
+      "draftYear": 2023,
+      "pos": "LS",
+      "original_positions": [
+        "LS"
+      ],
+      "seasons": [
+        2018,
+        2022
+      ],
+      "lastSeason": 2022,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ls-2023-stevebird",
+      "name": "Steve Bird",
+      "normalized_name": "stevebird",
+      "school": "Eastern Michigan",
+      "year": 2023,
+      "draftYear": 2023,
+      "pos": "LS",
+      "original_positions": [
+        "LS"
+      ],
+      "seasons": [
+        2021,
+        2022
+      ],
+      "lastSeason": 2022,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ls-2023-tjharvey",
+      "name": "T.J. Harvey",
+      "normalized_name": "tjharvey",
+      "school": "Southern Miss",
+      "year": 2023,
+      "draftYear": 2023,
+      "pos": "LS",
+      "original_positions": [
+        "LS"
+      ],
+      "seasons": [
+        2018,
+        2019,
+        2022
+      ],
+      "lastSeason": 2022,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ls-2023-tobywillis",
+      "name": "Toby Willis",
+      "normalized_name": "tobywillis",
+      "school": "Norfolk State",
+      "year": 2023,
+      "draftYear": 2023,
+      "pos": "LS",
+      "original_positions": [
+        "LS"
+      ],
+      "seasons": [
+        2022
+      ],
+      "lastSeason": 2022,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ls-2023-tommyzozus",
+      "name": "Tommy Zozus",
+      "normalized_name": "tommyzozus",
+      "school": "UConn",
+      "year": 2023,
+      "draftYear": 2023,
+      "pos": "LS",
+      "original_positions": [
+        "LS"
+      ],
+      "seasons": [
+        2020,
+        2021,
+        2022
+      ],
+      "lastSeason": 2022,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ls-2023-walkerhardan",
+      "name": "Walker Hardan",
+      "normalized_name": "walkerhardan",
+      "school": "UNLV",
+      "year": 2023,
+      "draftYear": 2023,
+      "pos": "LS",
+      "original_positions": [
+        "LS"
+      ],
+      "seasons": [
+        2022
+      ],
+      "lastSeason": 2022,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ls-2023-wesleyschelling",
+      "name": "Wesley Schelling",
+      "normalized_name": "wesleyschelling",
+      "school": "Vanderbilt",
+      "year": 2023,
+      "draftYear": 2023,
+      "pos": "LS",
+      "original_positions": [
+        "LS"
+      ],
+      "seasons": [
+        2020,
+        2021,
+        2022
+      ],
+      "lastSeason": 2022,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    }
+  ]
+}

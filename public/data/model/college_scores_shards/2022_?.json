@@ -1,0 +1,44 @@
+{
+  "generatedAt": "2026-05-26T21:03:00.228Z",
+  "model_version": "college_model_v2_historical_score_shard",
+  "year": 2022,
+  "pos": "?",
+  "rows": [
+    {
+      "id": "?-2022-christucker",
+      "name": "Chris Tucker",
+      "normalized_name": "christucker",
+      "school": "Tennessee Tech",
+      "year": 2022,
+      "draftYear": 2022,
+      "pos": "?",
+      "original_positions": [
+        "?"
+      ],
+      "seasons": [
+        2018,
+        2019,
+        2021
+      ],
+      "lastSeason": 2021,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    }
+  ]
+}

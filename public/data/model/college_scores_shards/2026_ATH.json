@@ -1,0 +1,5619 @@
+{
+  "generatedAt": "2026-05-26T21:03:00.207Z",
+  "model_version": "college_model_v2_historical_score_shard",
+  "year": 2026,
+  "pos": "ATH",
+  "rows": [
+    {
+      "id": "ath-2026-ajbrand",
+      "name": "A.J. Brand",
+      "normalized_name": "ajbrand",
+      "school": "Irmo",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-adrianwalkerjr",
+      "name": "Adrian Walker Jr.",
+      "normalized_name": "adrianwalkerjr",
+      "school": "Belleville",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-andrethomas",
+      "name": "Andre Thomas",
+      "normalized_name": "andrethomas",
+      "school": "Belleville",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-andruwellis",
+      "name": "Andruw Ellis",
+      "normalized_name": "andruwellis",
+      "school": "Roxana",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-antonioharris",
+      "name": "Antonio Harris",
+      "normalized_name": "antonioharris",
+      "school": "Louisville Male",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-antoniowalton",
+      "name": "Antonio Walton",
+      "normalized_name": "antoniowalton",
+      "school": "Cathedral",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-austintillman",
+      "name": "Austin Tillman",
+      "normalized_name": "austintillman",
+      "school": "Christian Brothers College",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-azirlee",
+      "name": "Azir Lee",
+      "normalized_name": "azirlee",
+      "school": "Camden",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-banksbowen",
+      "name": "Banks Bowen",
+      "normalized_name": "banksbowen",
+      "school": "Lawrence",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-benjaminchandler",
+      "name": "Benjamin Chandler",
+      "normalized_name": "benjaminchandler",
+      "school": "Bishop McNamara",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-bodpegnmiller",
+      "name": "Bodpegn Miller",
+      "normalized_name": "bodpegnmiller",
+      "school": "Ontario",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-bradleygompers",
+      "name": "Bradley Gompers",
+      "normalized_name": "bradleygompers",
+      "school": "Central Catholic",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-bradleymartino",
+      "name": "Bradley Martino",
+      "normalized_name": "bradleymartino",
+      "school": "First Baptist Academy",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-braydenellison",
+      "name": "Brayden Ellison",
+      "normalized_name": "braydenellison",
+      "school": "Taylor County",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-brockdriver",
+      "name": "Brock Driver",
+      "normalized_name": "brockdriver",
+      "school": "Boyle County",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-brycelewis",
+      "name": "Bryce Lewis",
+      "normalized_name": "brycelewis",
+      "school": "Blessed Trinity Catholic",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-bryceyates",
+      "name": "Bryce Yates",
+      "normalized_name": "bryceyates",
+      "school": "Matoaca",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-buddycollins",
+      "name": "Buddy Collins",
+      "normalized_name": "buddycollins",
+      "school": "Scott County",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-calfaulkner",
+      "name": "Cal Faulkner",
+      "normalized_name": "calfaulkner",
+      "school": "New Lumpkin County",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-camjamerson",
+      "name": "Cam Jamerson",
+      "normalized_name": "camjamerson",
+      "school": "Shadow Creek",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-camerondyer",
+      "name": "Cameron Dyer",
+      "normalized_name": "camerondyer",
+      "school": "La Cueva",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-cameronsparks",
+      "name": "Cameron Sparks",
+      "normalized_name": "cameronsparks",
+      "school": "Baylor School",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-cashusshivers",
+      "name": "Cashus Shivers",
+      "normalized_name": "cashusshivers",
+      "school": "Cass Technical",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-chamarryusbomar",
+      "name": "ChaMarryus Bomar",
+      "normalized_name": "chamarryusbomar",
+      "school": "Westside",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-christianneptune",
+      "name": "Christian Neptune",
+      "normalized_name": "christianneptune",
+      "school": "Tate",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-cjingram",
+      "name": "CJ Ingram",
+      "normalized_name": "cjingram",
+      "school": "Montverde Academy",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-coltsparks",
+      "name": "Colt Sparks",
+      "normalized_name": "coltsparks",
+      "school": "Sabine",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-connorhodge",
+      "name": "Connor Hodge",
+      "normalized_name": "connorhodge",
+      "school": "Christian Academy Of Louisville",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-connorroush",
+      "name": "Connor Roush",
+      "normalized_name": "connorroush",
+      "school": "Wesleyan School",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-conorbooth",
+      "name": "Conor Booth",
+      "normalized_name": "conorbooth",
+      "school": "Bishop Neumann",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-cortezstone",
+      "name": "Cortez Stone",
+      "normalized_name": "cortezstone",
+      "school": "Louisville Central",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-dalenpenson",
+      "name": "Dalen Penson",
+      "normalized_name": "dalenpenson",
+      "school": "Sandy Creek",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-dallasgolden",
+      "name": "Dallas Golden",
+      "normalized_name": "dallasgolden",
+      "school": "Berkeley Prep",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-darnellwilliams",
+      "name": "Darnell Williams",
+      "normalized_name": "darnellwilliams",
+      "school": "Texas High",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-davianjackson",
+      "name": "Davian Jackson",
+      "normalized_name": "davianjackson",
+      "school": "Westgate",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-demetriusbrisbon",
+      "name": "Demetrius Brisbon",
+      "normalized_name": "demetriusbrisbon",
+      "school": "Chapel Hill",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-dericksmith",
+      "name": "Derick Smith",
+      "normalized_name": "dericksmith",
+      "school": "Southside",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-deucevance",
+      "name": "Deuce Vance",
+      "normalized_name": "deucevance",
+      "school": "Hattiesburg",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-deuceweston",
+      "name": "Deuce Weston",
+      "normalized_name": "deuceweston",
+      "school": "Wilson",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-djaveryjr",
+      "name": "DJ Avery Jr.",
+      "normalized_name": "djaveryjr",
+      "school": "Chattahoochee",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-drewcofield",
+      "name": "Drew Cofield",
+      "normalized_name": "drewcofield",
+      "school": "Newbury Park",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-dreydengarner",
+      "name": "Dreyden Garner",
+      "normalized_name": "dreydengarner",
+      "school": "University City",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-dylanrobinsonjr",
+      "name": "Dylan Robinson Jr.",
+      "normalized_name": "dylanrobinsonjr",
+      "school": "Bonita",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-elijahhunterjr",
+      "name": "Elijah Hunter Jr.",
+      "normalized_name": "elijahhunterjr",
+      "school": "Fultondale",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-elijahthomas",
+      "name": "Elijah Thomas",
+      "normalized_name": "elijahthomas",
+      "school": "Checotah",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-ellijahwashington",
+      "name": "Ellijah Washington",
+      "normalized_name": "ellijahwashington",
+      "school": "Castlemont",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-elliottnoble",
+      "name": "Elliott Noble",
+      "normalized_name": "elliottnoble",
+      "school": "Tennyson",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-emmanueltaylor",
+      "name": "Emmanuel Taylor",
+      "normalized_name": "emmanueltaylor",
+      "school": "Green Run",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-erimuswright",
+      "name": "Erimus Wright",
+      "normalized_name": "erimuswright",
+      "school": "Hillcrest",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-ezekielcastex",
+      "name": "Ezekiel Castex",
+      "normalized_name": "ezekielcastex",
+      "school": "Grant Union",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-garrettreese",
+      "name": "Garrett Reese",
+      "normalized_name": "garrettreese",
+      "school": "Nazareth Academy",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-garymerrill",
+      "name": "Gary Merrill",
+      "normalized_name": "garymerrill",
+      "school": "St. Anthony's",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-gerrittkemp",
+      "name": "Gerritt Kemp",
+      "normalized_name": "gerrittkemp",
+      "school": "Hebron Christian Academy",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-grantdean",
+      "name": "Grant Dean",
+      "normalized_name": "grantdean",
+      "school": "Neenah",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-haroldduvall",
+      "name": "Harold Duvall",
+      "normalized_name": "haroldduvall",
+      "school": "Clovis East",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-haydenanderson",
+      "name": "Hayden Anderson",
+      "normalized_name": "haydenanderson",
+      "school": "Windsor",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-isaiahanderson",
+      "name": "Isaiah Anderson",
+      "normalized_name": "isaiahanderson",
+      "school": "Hirschi",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-isaiahjordan",
+      "name": "Isaiah Jordan",
+      "normalized_name": "isaiahjordan",
+      "school": "Christian Brothers",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-isaiahmitchell",
+      "name": "Isaiah Mitchell",
+      "normalized_name": "isaiahmitchell",
+      "school": "Houston County",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-isaiahreed",
+      "name": "Isaiah Reed",
+      "normalized_name": "isaiahreed",
+      "school": "Rocky Mountain",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-isaiahrobertson",
+      "name": "Isaiah Robertson",
+      "normalized_name": "isaiahrobertson",
+      "school": "Arlington",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-iversonreport",
+      "name": "Iverson Report",
+      "normalized_name": "iversonreport",
+      "school": "Layton Christian Academy",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-jakyrianturner",
+      "name": "Ja'Kyrian Turner",
+      "normalized_name": "jakyrianturner",
+      "school": "South Sumter",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-jackvandorselaer",
+      "name": "Jack Van Dorselaer",
+      "normalized_name": "jackvandorselaer",
+      "school": "Southlake Carroll",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-jacksoncarpenter",
+      "name": "Jackson Carpenter",
+      "normalized_name": "jacksoncarpenter",
+      "school": "Southwest",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-jadecard",
+      "name": "Jade Card",
+      "normalized_name": "jadecard",
+      "school": "Norland",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-jahmaleclark",
+      "name": "Jahmale Clark",
+      "normalized_name": "jahmaleclark",
+      "school": "Trotwood-Madison",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-jaimierscott",
+      "name": "Jaimier Scott",
+      "normalized_name": "jaimierscott",
+      "school": "Mt. Healthy",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-jakobcoleman",
+      "name": "Jakob Coleman",
+      "normalized_name": "jakobcoleman",
+      "school": "Narbonne",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-jamaripearson",
+      "name": "Jamari Pearson",
+      "normalized_name": "jamaripearson",
+      "school": "North Side",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-jamarionmorrow",
+      "name": "Jamarion Morrow",
+      "normalized_name": "jamarionmorrow",
+      "school": "Melrose",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-jamauribrice",
+      "name": "Jamauri Brice",
+      "normalized_name": "jamauribrice",
+      "school": "Cartersville",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-jamesdowd",
+      "name": "James Dowd",
+      "normalized_name": "jamesdowd",
+      "school": "South Pasadena Senior",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-jamesjohnson",
+      "name": "James Johnson",
+      "normalized_name": "jamesjohnson",
+      "school": "Douglas County",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-jaquelholman",
+      "name": "Jaquel Holman",
+      "normalized_name": "jaquelholman",
+      "school": "Blackville-Hilda",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-javionkinnard",
+      "name": "Javion Kinnard",
+      "normalized_name": "javionkinnard",
+      "school": "Pearl-Cohn",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-jaycecora",
+      "name": "Jayce Cora",
+      "normalized_name": "jaycecora",
+      "school": "Community School Of Naples",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-jaylenjohnson",
+      "name": "Jaylen Johnson",
+      "normalized_name": "jaylenjohnson",
+      "school": "Enterprise",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 3,
+        "nfl_outcome_label": "Miss",
+        "hit_miss": "Miss",
+        "match_confidence": "name_only_unique"
+      }
+    },
+    {
+      "id": "ath-2026-jayloncoleman",
+      "name": "Jaylon Coleman",
+      "normalized_name": "jayloncoleman",
+      "school": "Vandebilt Catholic",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-jayshonlimar",
+      "name": "Jayshon Limar",
+      "normalized_name": "jayshonlimar",
+      "school": "Lake Stevens",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-jeremiahjones",
+      "name": "Jeremiah Jones",
+      "normalized_name": "jeremiahjones",
+      "school": "Murray",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-jeremiahthomas",
+      "name": "Jeremiah Thomas",
+      "normalized_name": "jeremiahthomas",
+      "school": "Gadsden County",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-jermanehayes",
+      "name": "Jermane Hayes",
+      "normalized_name": "jermanehayes",
+      "school": "University",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-jershaunnewton",
+      "name": "Jershaun Newton",
+      "normalized_name": "jershaunnewton",
+      "school": "Clearwater Central Catholic",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-jessiahmcgrew",
+      "name": "Jessiah McGrew",
+      "normalized_name": "jessiahmcgrew",
+      "school": "Florida State University School",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-jjbuchanan",
+      "name": "JJ Buchanan",
+      "normalized_name": "jjbuchanan",
+      "school": "Coronado",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-jjgarner",
+      "name": "JJ Garner",
+      "normalized_name": "jjgarner",
+      "school": "Timpson",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-johntofijr",
+      "name": "John Tofi Jr.",
+      "normalized_name": "johntofijr",
+      "school": "Archbishop Riordan",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-jojosolis",
+      "name": "Jojo Solis",
+      "normalized_name": "jojosolis",
+      "school": "Aquinas",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-jonathanstevens",
+      "name": "Jonathan Stevens",
+      "normalized_name": "jonathanstevens",
+      "school": "Westerville North",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-jonavondarrington",
+      "name": "Jonavon Darrington",
+      "normalized_name": "jonavondarrington",
+      "school": "Clovis West",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-jordanyoung",
+      "name": "Jordan Young",
+      "normalized_name": "jordanyoung",
+      "school": "Monroe",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2016,
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 1.5,
+        "nfl_outcome_label": "Miss",
+        "hit_miss": "Miss",
+        "match_confidence": "name_only_unique"
+      }
+    },
+    {
+      "id": "ath-2026-joshguerrier",
+      "name": "Josh Guerrier",
+      "normalized_name": "joshguerrier",
+      "school": "Ocoee",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-joshuabrantley",
+      "name": "Joshua Brantley",
+      "normalized_name": "joshuabrantley",
+      "school": "Ruston",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-kadalewilliams",
+      "name": "Kadale Williams",
+      "normalized_name": "kadalewilliams",
+      "school": "Lumen Christi",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-kaeganchambers",
+      "name": "Kaegan Chambers",
+      "normalized_name": "kaeganchambers",
+      "school": "Monroe",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-kaicallen",
+      "name": "Kai Callen",
+      "normalized_name": "kaicallen",
+      "school": "Carrollton",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-kaidenkimbleturner",
+      "name": "Kaiden Kimble-Turner",
+      "normalized_name": "kaidenkimbleturner",
+      "school": "Rocky Mountain",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-kaimanatufaga",
+      "name": "Kaimana Tufaga",
+      "normalized_name": "kaimanatufaga",
+      "school": "La Serna",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-kavonsimmons",
+      "name": "Kavon Simmons",
+      "normalized_name": "kavonsimmons",
+      "school": "Wake Forest",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-keesonhineswheeler",
+      "name": "Keeson Hines-Wheeler",
+      "normalized_name": "keesonhineswheeler",
+      "school": "Choctawhatchee",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-kelvincrawford",
+      "name": "Kelvin Crawford",
+      "normalized_name": "kelvincrawford",
+      "school": "Gadsden County",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-kenedyuzoma",
+      "name": "Kenedy Uzoma",
+      "normalized_name": "kenedyuzoma",
+      "school": "St. John's Catholic",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-kenzywest",
+      "name": "Kenzy West",
+      "normalized_name": "kenzywest",
+      "school": "Hartfield Academy",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-kobemcgill",
+      "name": "Kobe McGill",
+      "normalized_name": "kobemcgill",
+      "school": "La Cueva",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-landonpace",
+      "name": "Landon Pace",
+      "normalized_name": "landonpace",
+      "school": "St. Louis University",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-leefuimaono",
+      "name": "Lee Fuimaono",
+      "normalized_name": "leefuimaono",
+      "school": "San Clemente",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-liamthorpe",
+      "name": "Liam Thorpe",
+      "normalized_name": "liamthorpe",
+      "school": "Hun School",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-loganchristensen",
+      "name": "Logan Christensen",
+      "normalized_name": "loganchristensen",
+      "school": "JSerra Catholic",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-lukeemmerich",
+      "name": "Luke Emmerich",
+      "normalized_name": "lukeemmerich",
+      "school": "Monticello",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-lukestuewe",
+      "name": "Luke Stuewe",
+      "normalized_name": "lukestuewe",
+      "school": "Avon Lake",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-madridtucker",
+      "name": "Madrid Tucker",
+      "normalized_name": "madridtucker",
+      "school": "Fort Myers",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-makaisimpson",
+      "name": "Makai Simpson",
+      "normalized_name": "makaisimpson",
+      "school": "Beauregard",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-manacarvalho",
+      "name": "Mana Carvalho",
+      "normalized_name": "manacarvalho",
+      "school": "Kahuku",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-masonellens",
+      "name": "Mason Ellens",
+      "normalized_name": "masonellens",
+      "school": "Glenbard West",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-masonwoods",
+      "name": "Mason Woods",
+      "normalized_name": "masonwoods",
+      "school": "Iowa City West",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-mattoutten",
+      "name": "Matt Outten",
+      "normalized_name": "mattoutten",
+      "school": "I.C. Norcom",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-mckaymadsen",
+      "name": "McKay Madsen",
+      "normalized_name": "mckaymadsen",
+      "school": "Clovis North",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-meyerswinney",
+      "name": "Meyer Swinney",
+      "normalized_name": "meyerswinney",
+      "school": "Edina",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-micahmatthews",
+      "name": "Micah Matthews",
+      "normalized_name": "micahmatthews",
+      "school": "Turner Ashby",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-michaelterryiii",
+      "name": "Michael Terry III",
+      "normalized_name": "michaelterryiii",
+      "school": "Alamo Heights",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-michaeltownsend",
+      "name": "Michael Townsend",
+      "normalized_name": "michaeltownsend",
+      "school": "Allen",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-mikepetersonjr",
+      "name": "Mike Peterson Jr.",
+      "normalized_name": "mikepetersonjr",
+      "school": "Fort White",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-montinowilliamsjr",
+      "name": "Montino Williams Jr.",
+      "normalized_name": "montinowilliamsjr",
+      "school": "Matoaca",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-mylessingleton",
+      "name": "Myles Singleton",
+      "normalized_name": "mylessingleton",
+      "school": "Culver City",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-nedrickboldinjr",
+      "name": "Nedrick Boldin Jr.",
+      "normalized_name": "nedrickboldinjr",
+      "school": "Palm Beach Central",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-nigelpringle",
+      "name": "Nigel Pringle",
+      "normalized_name": "nigelpringle",
+      "school": "North Shore",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-nolananderson",
+      "name": "Nolan Anderson",
+      "normalized_name": "nolananderson",
+      "school": "Menomonee Falls",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-olontaedean",
+      "name": "O'Lontae Dean",
+      "normalized_name": "olontaedean",
+      "school": "Armwood",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-pedroreyes",
+      "name": "Pedro Reyes",
+      "normalized_name": "pedroreyes",
+      "school": "Absegami",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-peytonnelson",
+      "name": "Peyton Nelson",
+      "normalized_name": "peytonnelson",
+      "school": "Dr. Henry Wise",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-prestonpenn",
+      "name": "Preston Penn",
+      "normalized_name": "prestonpenn",
+      "school": "Gahanna Lincoln",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-qeanujohnson",
+      "name": "Qeanu Johnson",
+      "normalized_name": "qeanujohnson",
+      "school": "Hamden Hall",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-quentinmurphy",
+      "name": "Quentin Murphy",
+      "normalized_name": "quentinmurphy",
+      "school": "Parkview Magnet",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-saviontaylor",
+      "name": "Savion Taylor",
+      "normalized_name": "saviontaylor",
+      "school": "Pacifica",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-scraprichardson",
+      "name": "Scrap Richardson",
+      "normalized_name": "scraprichardson",
+      "school": "Greenville",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-seanrobinson",
+      "name": "Sean Robinson",
+      "normalized_name": "seanrobinson",
+      "school": "Steele",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-semajpierre",
+      "name": "Semaj Pierre",
+      "normalized_name": "semajpierre",
+      "school": "Memorial",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-sentelsimpson",
+      "name": "Sentel Simpson",
+      "normalized_name": "sentelsimpson",
+      "school": "Panther Creek",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-shawnleejr",
+      "name": "Shawn Lee Jr.",
+      "normalized_name": "shawnleejr",
+      "school": "Harrisburg",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-shirenmabry",
+      "name": "Shiren Mabry",
+      "normalized_name": "shirenmabry",
+      "school": "KIPP Columbus",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-skylerjackson",
+      "name": "Skyler Jackson",
+      "normalized_name": "skylerjackson",
+      "school": "Liberty",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-synkwansmith",
+      "name": "Synkwan Smith",
+      "normalized_name": "synkwansmith",
+      "school": "Roswell",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-tandrewaverly",
+      "name": "T'Andre Waverly",
+      "normalized_name": "tandrewaverly",
+      "school": "Kamiak",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-tanielatupou",
+      "name": "Taniela Tupou",
+      "normalized_name": "tanielatupou",
+      "school": "Folsom",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-tannerterch",
+      "name": "Tanner Terch",
+      "normalized_name": "tannerterch",
+      "school": "Heritage",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-terrellholcomb",
+      "name": "Terrell Holcomb",
+      "normalized_name": "terrellholcomb",
+      "school": "Gahanna Lincoln",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-terrisdudley",
+      "name": "Terris Dudley",
+      "normalized_name": "terrisdudley",
+      "school": "Hilliard Bradley",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-tjgreen",
+      "name": "TJ Green",
+      "normalized_name": "tjgreen",
+      "school": "Reynoldsburg",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 9,
+        "nfl_outcome_label": "Miss",
+        "hit_miss": "Miss",
+        "match_confidence": "name_only_unique"
+      }
+    },
+    {
+      "id": "ath-2026-toddrobinson",
+      "name": "Todd Robinson",
+      "normalized_name": "toddrobinson",
+      "school": "Valdosta",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-tracejallick",
+      "name": "Trace Jallick",
+      "normalized_name": "tracejallick",
+      "school": "Anderson",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-trennedywhatley",
+      "name": "Trennedy Whatley",
+      "normalized_name": "trennedywhatley",
+      "school": "Fayette County",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-trentoiler",
+      "name": "Trent Oiler",
+      "normalized_name": "trentoiler",
+      "school": "Brookfield East",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-treyglasper",
+      "name": "Trey Glasper",
+      "normalized_name": "treyglasper",
+      "school": "Green Valley",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-trynaewashington",
+      "name": "Trynae Washington",
+      "normalized_name": "trynaewashington",
+      "school": "Carl Albert",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-tylerhackenbracht",
+      "name": "Tyler Hackenbracht",
+      "normalized_name": "tylerhackenbracht",
+      "school": "Washington",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-ulavaifetuli",
+      "name": "Ulavai Fetuli",
+      "normalized_name": "ulavaifetuli",
+      "school": "La Habra",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-uluakitaukiuvea",
+      "name": "Uluaki Taukiuvea",
+      "normalized_name": "uluakitaukiuvea",
+      "school": "Hunter",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-westonbryan",
+      "name": "Weston Bryan",
+      "normalized_name": "westonbryan",
+      "school": "Lee County",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-xaviergoulbourne",
+      "name": "Xavier Goulbourne",
+      "normalized_name": "xaviergoulbourne",
+      "school": "Carrollwood Day",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-yasirmuhammad",
+      "name": "Yasir Muhammad",
+      "normalized_name": "yasirmuhammad",
+      "school": "Germantown",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-zaylencormier",
+      "name": "Zaylen Cormier",
+      "normalized_name": "zaylencormier",
+      "school": "Heights",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-zhaielsmith",
+      "name": "Zhaiel Smith",
+      "normalized_name": "zhaielsmith",
+      "school": "Tualatin",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-zyairefletcher",
+      "name": "Zy'Aire Fletcher",
+      "normalized_name": "zyairefletcher",
+      "school": "Springfield",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    },
+    {
+      "id": "ath-2026-zymearsmith",
+      "name": "Zymear Smith",
+      "normalized_name": "zymearsmith",
+      "school": "North Caroline",
+      "year": 2026,
+      "draftYear": 2026,
+      "pos": "ATH",
+      "original_positions": [
+        "ATH"
+      ],
+      "seasons": [
+        2025
+      ],
+      "lastSeason": 2025,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 0,
+        "nfl_outcome_label": "No NFL Match",
+        "hit_miss": "Miss",
+        "match_confidence": "unmatched"
+      }
+    }
+  ]
+}

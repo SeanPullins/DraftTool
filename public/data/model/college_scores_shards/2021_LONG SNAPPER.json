@@ -1,0 +1,42 @@
+{
+  "generatedAt": "2026-05-26T21:03:00.227Z",
+  "model_version": "college_model_v2_historical_score_shard",
+  "year": 2021,
+  "pos": "LONG SNAPPER",
+  "rows": [
+    {
+      "id": "long snapper-2021-blakeferguson",
+      "name": "Blake Ferguson",
+      "normalized_name": "blakeferguson",
+      "school": "",
+      "year": 2021,
+      "draftYear": 2021,
+      "pos": "LONG SNAPPER",
+      "original_positions": [
+        "LONG SNAPPER"
+      ],
+      "seasons": [
+        2020
+      ],
+      "lastSeason": 2020,
+      "collegeModelV2Score": null,
+      "collegeModelV2RawScore": null,
+      "collegeModelV2Label": "Insufficient Data",
+      "collegeModelV2Mode": "historical_shard",
+      "collegeModelV2Coverage": {
+        "matched_features": 0,
+        "missing_features": 0,
+        "total_weight_used": 0
+      },
+      "collegeModelV2TopSignals": [],
+      "collegeModelV2MissingFeatures": [],
+      "draft": null,
+      "nfl_outcome": {
+        "nfl_outcome_score": 9,
+        "nfl_outcome_label": "Miss",
+        "hit_miss": "Miss",
+        "match_confidence": "name_only_unique"
+      }
+    }
+  ]
+}
