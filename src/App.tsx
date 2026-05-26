@@ -3265,7 +3265,17 @@ function ClassExplorer({ pool, history, pffProfiles, pffLookup, y1Data, careerSt
                   {(() => {
                     const qbV11Score = getQbV11Score(player)
                     const effectiveScore = qbV11Score ?? pffContextScore
-                    return effectiveScore != null ? Number(effectiveScore).toFixed(0) : '—'
+                    const collegeV2 = getCollegeModelV2Row(player as any)
+                  const collegeV2Score = Number(collegeV2?.collegeModelV2Score)
+                  const collegeV2Matched = Number(collegeV2?.collegeModelV2Coverage?.matched_features || 0)
+                  const useCollegeV2Score = Number.isFinite(collegeV2Score) && collegeV2Matched > 0
+                  const scoreToShow = useCollegeV2Score ? collegeV2Score : effectiveScore
+
+                  return scoreToShow != null
+                    ? useCollegeV2Score
+                      ? Number(scoreToShow).toFixed(1)
+                      : Number(scoreToShow).toFixed(0)
+                    : '—'
                   })()}
                 </td>
                 {useProjections ? <td>{projected ? projected.av.toFixed(1) : '-'}</td> : null}
