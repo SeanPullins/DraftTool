@@ -82,7 +82,7 @@ type RbScoreReadySignal = {
 }
 type LoaderMessage = { tone: 'good' | 'warn'; text: string } | null
 type MobileTab = 'edit' | 'results' | 'board'
-type Page = 'workbench' | 'class' | 'players' | 'compare' | 'trade' | 'rankings' | 'guide' | 'prospects'
+type Page = 'workbench' | 'class' | 'players' | 'compare' | 'trade' | 'rankings' | 'guide' | 'prospects' | 'historical'
 type BrowserSortKey = 'av' | 'games' | 'starts' | 'pb' | 'ap' | 'pick' | 'name' | 'outcome' | 'year' | 'forty'
 type SortKey = 'av' | 'projAv' | 'projScore' | 'games' | 'starts' | 'pb' | 'ap' | 'pick' | 'name' | 'outcome'
 type SortDir = 'asc' | 'desc'
@@ -396,7 +396,7 @@ function App() {
 
   useEffect(() => {
     if (typeof window === 'undefined') return
-    const hashMap: Partial<Record<Page, string>> = { class: '#class', players: '#players', compare: '#compare', trade: '#trade', guide: '#guide', prospects: '#prospects' }
+    const hashMap: Partial<Record<Page, string>> = { class: '#class', players: '#players', compare: '#compare', trade: '#trade', rankings: '#rankings', guide: '#guide', prospects: '#prospects', historical: '#historical' }
     const target = hashMap[page] ?? ''
     if (window.location.hash !== target) {
       const url = target || `${window.location.pathname}${window.location.search}`
@@ -853,6 +853,7 @@ function App() {
         <button type="button" className={page === 'compare' ? 'on' : ''} onClick={() => setPage('compare')}>Compare</button>
         <button type="button" className={page === 'trade' ? 'on' : ''} onClick={() => setPage('trade')}>Trade</button>
         <button type="button" className={`${page === 'prospects' ? 'on' : ''} prospectsNavBtn`} onClick={() => setPage('prospects')}>2027 QBs</button>
+        <button type="button" className={`${page === 'historical' ? 'on' : ''} prospectsNavBtn`} onClick={() => setPage('historical')}>Historical v2</button>
         <button type="button" className={page === 'guide' ? 'on' : ''} onClick={() => setPage('guide')}>Guide</button>
         <span className="navSpacer" />
         <button type="button" className="themeNavBtn" onClick={toggleTheme} aria-label="Toggle light/dark mode">
@@ -879,7 +880,72 @@ function App() {
       <RankingsPage history={prospects} onOpenModal={openModal} onCompare={handleCompare} />
     </div> : page === 'guide' ? <div className="classPage">
       <GuideView />
-    </div> : page === 'prospects' ? <div className="classPage">
+    </div> : page === 'historical' ? <div className="classPage">
+      <section className="panel">
+        <div className="sectionHeader">
+          <div>
+            <h2>Historical College Model v2 Scores</h2>
+            <p>Browse year/position score shards generated from the 2014–2025 college dataset.</p>
+          </div>
+          <div className="prospectsFilters">
+            <select value={collegeShardYear} onChange={(e) => setCollegeShardYear(Number(e.target.value))}>
+              {Array.from(new Set((collegeShardIndex?.shards || []).map((s: any) => Number(s.year))))
+                .sort((a: number, b: number) => b - a)
+                .map((year: number) => <option key={year} value={year}>{year}</option>)}
+            </select>
+            <select value={collegeShardPos} onChange={(e) => setCollegeShardPos(e.target.value)}>
+              {Array.from(new Set((collegeShardIndex?.shards || [])
+                .filter((s: any) => Number(s.year) === Number(collegeShardYear))
+                .map((s: any) => String(s.pos || '').toUpperCase())))
+                .sort()
+                .map((pos: string) => <option key={pos} value={pos}>{pos}</option>)}
+            </select>
+          </div>
+        </div>
+
+        <div className="historicalShardMeta">
+          {collegeShardLoading ? 'Loading shard…' : `${collegeShardRows.length.toLocaleString()} players loaded`}
+        </div>
+
+        <div className="tableWrap historicalShardTable">
+          <table>
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Player</th>
+                <th>School</th>
+                <th>Pos</th>
+                <th>Score</th>
+                <th>Label</th>
+                <th>Matched</th>
+                <th>Outcome</th>
+                <th>Draft</th>
+              </tr>
+            </thead>
+            <tbody>
+              {collegeShardRows.slice(0, 300).map((row: any, index: number) => (
+                <tr key={`${row.id}-${index}`}>
+                  <td>{index + 1}</td>
+                  <td>
+                    <b>{row.name}</b>
+                    <small>{row.seasons?.length ? `Seasons: ${row.seasons.join(', ')}` : null}</small>
+                  </td>
+                  <td>{row.school || '-'}</td>
+                  <td>{row.pos}</td>
+                  <td style={{ color: row.collegeModelV2Score != null ? scoreColor(row.collegeModelV2Score) : undefined, fontWeight: 800 }}>
+                    {row.collegeModelV2Score != null ? Number(row.collegeModelV2Score).toFixed(1) : '-'}
+                  </td>
+                  <td>{row.collegeModelV2Label || '-'}</td>
+                  <td>{row.collegeModelV2Coverage?.matched_features ?? 0}</td>
+                  <td>{row.nfl_outcome?.nfl_outcome_label || '-'}</td>
+                  <td>{row.draft?.pick ? `#${row.draft.pick}` : '-'}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>: page === 'prospects' ? <div className="classPage">
       <ProspectsView prospects2027={[...prospectsQb2027, ...prospectsTe2027, ...prospectsRb2027] as any} history={prospects} pffProfiles={pffProfiles} careerStats={careerStats} histFlagMap={histFlagMap} qbPffSeasons={qbPffSeasons} wrPffSeasons={wrPffSeasons} onLoad={loadProspect2027} />
     </div> : <div className="layout">
       <aside className="controlPanel" data-pane="edit">
@@ -2848,6 +2914,12 @@ function ClassExplorer({ pool, history, pffProfiles, pffLookup, y1Data, careerSt
   // are available as soon as the component mounts, independent of overlay timing
   const [qbV11Map, setQbV11Map] = useState<Map<string, number>>(new Map())
   const [collegeModelV2Map, setCollegeModelV2Map] = useState<Map<string, any>>(new Map())
+  const [collegeShardIndex, setCollegeShardIndex] = useState<any | null>(null)
+  const [collegeShardRows, setCollegeShardRows] = useState<any[]>([])
+  const [collegeShardYear, setCollegeShardYear] = useState<number>(2025)
+  const [collegeShardPos, setCollegeShardPos] = useState<string>('QB')
+  const [collegeShardLoading, setCollegeShardLoading] = useState(false)
+
 
   const collegeModelV2Key = (year: any, pos: any, name: any) =>
     `${Number(year || 0)}|${String(pos || '').toUpperCase()}|${String(name || '').toLowerCase().replace(/[^a-z0-9]/g, '')}`
@@ -2858,6 +2930,40 @@ function ClassExplorer({ pool, history, pffProfiles, pffLookup, y1Data, careerSt
     const name = player?.name
     return collegeModelV2Map.get(collegeModelV2Key(year, pos, name))
   }
+
+
+  useEffect(() => {
+    const base = import.meta.env.BASE_URL || '/'
+    fetch(`${base}data/model/college_scores_shards/index.json`)
+      .then((r) => r.ok ? r.json() : null)
+      .then((payload) => setCollegeShardIndex(payload))
+      .catch(() => setCollegeShardIndex(null))
+  }, [])
+
+  useEffect(() => {
+    if (!collegeShardIndex?.shards?.length) return
+
+    const shard = collegeShardIndex.shards.find((s: any) =>
+      Number(s.year) === Number(collegeShardYear) &&
+      String(s.pos || '').toUpperCase() === String(collegeShardPos || '').toUpperCase()
+    )
+
+    if (!shard?.file) {
+      setCollegeShardRows([])
+      return
+    }
+
+    const base = import.meta.env.BASE_URL || '/'
+    const cleanFile = String(shard.file).replace(/^public\//, '')
+
+    setCollegeShardLoading(true)
+
+    fetch(`${base}${cleanFile}`)
+      .then((r) => r.ok ? r.json() : null)
+      .then((payload) => setCollegeShardRows(payload?.rows || []))
+      .catch(() => setCollegeShardRows([]))
+      .finally(() => setCollegeShardLoading(false))
+  }, [collegeShardIndex, collegeShardYear, collegeShardPos])
 
   useEffect(() => {
     const base = import.meta.env.BASE_URL || '/'

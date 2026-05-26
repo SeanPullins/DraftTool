@@ -431,3 +431,26 @@
   display: none;
 }
 
+
+.historicalShardMeta {
+  margin: 0.6rem 0 0.8rem;
+  font-size: 0.85rem;
+  opacity: 0.78;
+}
+
+.historicalShardTable table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.historicalShardTable th,
+.historicalShardTable td {
+  vertical-align: top;
+}
+
+.historicalShardTable td small {
+  display: block;
+  margin-top: 0.15rem;
+  opacity: 0.68;
+  font-size: 0.72rem;
+}
