@@ -397,3 +397,60 @@
   }
 }
 
+
+
+.collegeModelV2Badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  margin-top: 0.28rem;
+  font-size: 0.68rem;
+  line-height: 1.1;
+  white-space: nowrap;
+}
+
+.collegeModelV2Badge span {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid rgba(255, 122, 24, 0.35);
+  border-radius: 999px;
+  padding: 0.16rem 0.42rem;
+  background: rgba(255, 122, 24, 0.08);
+}
+
+.collegeModelV2Score {
+  font-weight: 800;
+  color: inherit;
+}
+
+.collegeModelV2Label {
+  opacity: 0.85;
+}
+
+.collegeModelV2Signal {
+  display: none;
+}
+
+
+.historicalShardMeta {
+  margin: 0.6rem 0 0.8rem;
+  font-size: 0.85rem;
+  opacity: 0.78;
+}
+
+.historicalShardTable table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.historicalShardTable th,
+.historicalShardTable td {
+  vertical-align: top;
+}
+
+.historicalShardTable td small {
+  display: block;
+  margin-top: 0.15rem;
+  opacity: 0.68;
+  font-size: 0.72rem;
+}

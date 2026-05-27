@@ -90,7 +90,7 @@ type RbScoreReadySignal = {
 }
 type LoaderMessage = { tone: 'good' | 'warn'; text: string } | null
 type MobileTab = 'edit' | 'results' | 'board'
-type Page = 'workbench' | 'class' | 'players' | 'compare' | 'trade' | 'rankings' | 'guide' | 'prospects'
+type Page = 'workbench' | 'class' | 'players' | 'compare' | 'trade' | 'rankings' | 'guide' | 'prospects' | 'historical'
 type BrowserSortKey = 'av' | 'games' | 'starts' | 'pb' | 'ap' | 'pick' | 'name' | 'outcome' | 'year' | 'forty'
 type SortKey = 'av' | 'projAv' | 'projScore' | 'games' | 'starts' | 'pb' | 'ap' | 'pick' | 'name' | 'outcome'
 type SortDir = 'asc' | 'desc'
@@ -247,6 +247,12 @@ function App() {
   const [prospectsQb2027, setProspectsQb2027] = useState<ProspectQB[]>([])
   const [prospectsTe2027, setProspectsTe2027] = useState<any[]>([])
   const [prospectsRb2027, setProspectsRb2027] = useState<any[]>([])
+  const [collegeShardIndex, setCollegeShardIndex] = useState<any | null>(null)
+  const [collegeShardRows, setCollegeShardRows] = useState<any[]>([])
+  const [collegeShardYear, setCollegeShardYear] = useState<number>(2025)
+  const [collegeShardPos, setCollegeShardPos] = useState<string>('QB')
+  const [collegeShardLoading, setCollegeShardLoading] = useState(false)
+
   const [projectionOverlay, setProjectionOverlay] = useState<Map<string, PositionProjectionOverlay>>(new Map())
   const [compSignalMap, setCompSignalMap] = useState<Map<string, PositionCompSignal>>(new Map())
   const [rbScoreReadyMap, setRbScoreReadyMap] = useState<Map<string, RbScoreReadySignal>>(new Map())
@@ -412,7 +418,7 @@ function App() {
 
   useEffect(() => {
     if (typeof window === 'undefined') return
-    const hashMap: Partial<Record<Page, string>> = { class: '#class', players: '#players', compare: '#compare', trade: '#trade', guide: '#guide', prospects: '#prospects' }
+    const hashMap: Partial<Record<Page, string>> = { class: '#class', players: '#players', compare: '#compare', trade: '#trade', rankings: '#rankings', guide: '#guide', prospects: '#prospects' }
     const target = hashMap[page] ?? ''
     if (window.location.hash !== target) {
       const url = target || `${window.location.pathname}${window.location.search}`
@@ -428,6 +434,7 @@ function App() {
     window.addEventListener('hashchange', onHash)
     return () => window.removeEventListener('hashchange', onHash)
   }, [])
+
 
   useEffect(() => {
     let cancelled = false
