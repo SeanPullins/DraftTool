@@ -56,8 +56,16 @@ type PositionProjectionOverlay = {
   model: string
   source: string
   grade?: number
+  tier?: string
   forecast?: Record<string, unknown>
   pff?: Record<string, unknown>
+}
+
+type FinalScoreResult = {
+  score: number
+  model: string
+  source: string
+  tier: string | null
 }
 
 type PositionCompSignal = {
@@ -324,12 +332,15 @@ function App() {
     () => project(projectedInput, prospects, pffProfiles, undefined, y1Data, careerStats, activeInjuryFlag?.severity, activeQbGradeDelta),
     [projectedInput, prospects, pffProfiles, y1Data, careerStats, activeInjuryFlag, activeQbGradeDelta],
   )
-  // For 2024+ QBs, override the generic model score with the v11 QB-specific score from the overlay
-  const displayScore = useMemo(() => {
-    if (input.pos !== 'QB') return projection.score
-    const overlayEntry = projectionOverlay.get(projectionOverlayKey(input.draftSeason, input.pos, input.name))
-    return overlayEntry?.score ?? projection.score
-  }, [input.pos, input.draftSeason, input.name, projection.score, projectionOverlay])
+  // Authoritative score for the active player, resolved through the shared helper.
+  const displayScore = useMemo(
+    () => resolveFinalScore(
+      { name: input.name, pos: input.pos, year: input.draftSeason },
+      projection,
+      projectionOverlay,
+    ).score,
+    [input.name, input.pos, input.draftSeason, projection, projectionOverlay],
+  )
 
   const histFlagMap = useMemo(
     () => buildHistoricalFlagMap(
@@ -362,10 +373,15 @@ function App() {
         const patternAlerts = extractPatternAlerts(projection.fullComps, histFlagMap)
         const historical = lookupPool.find((h) => clean(h.name) === clean(player.name) && h.year === player.draftSeason && h.pos === player.pos) ?? null
         const earlyFlag = historical ? (histFlagMap.get(historical.id) ?? null) : null
-        return { player, projection, patternAlerts, earlyFlag }
+        const finalScore = resolveFinalScore(
+          { name: player.name, pos: player.pos, year: player.draftSeason },
+          projection,
+          projectionOverlay,
+        ).score
+        return { player, projection, patternAlerts, earlyFlag, finalScore }
       })
-      .sort((a, b) => b.projection.score - a.projection.score),
-    [saved, prospects, pffProfiles, y1Data, careerStats, histFlagMap, lookupPool, qbPffSeasons, wrPffSeasons],
+      .sort((a, b) => b.finalScore - a.finalScore),
+    [saved, prospects, pffProfiles, y1Data, careerStats, histFlagMap, lookupPool, qbPffSeasons, wrPffSeasons, projectionOverlay],
   )
 
   const orderedBoard = useMemo(() => {
@@ -512,6 +528,10 @@ function App() {
         'prospects_2025_rb.json',
         'prospects_2026_rb.json',
         'prospects_2027_rb.json',
+
+        // Authoritative final QB model output, when generated. Loaded last so it
+        // overrides the per-prospect-file QB scores for the same player/year.
+        'model/qb_final_scores.json',
       ]
 
       const payloads = await Promise.all(
@@ -650,7 +670,7 @@ function App() {
     const id = selectedSavedId && saved.some((player) => player.id === selectedSavedId)
       ? selectedSavedId
       : `${Date.now()}-${slug(input.name || 'prospect')}`
-    const score = Math.round(projection.score)
+    const score = Math.round(displayScore)
     const record: SavedProspect = { ...input, id, updatedAt: now, notes: notes.trim() || undefined, savedScore: score }
 
     setSaved((current) => {
@@ -687,7 +707,7 @@ function App() {
   }
 
   function exportCard() {
-    const score = Math.round(projection.score)
+    const score = Math.round(displayScore)
     const lines = [
       '=== DraftLens Scouting Card ===',
       `${input.name || 'Unnamed'} | ${input.pos} | ${input.school || 'Unknown school'}`,
@@ -1100,7 +1120,7 @@ function App() {
                   <thead><tr><th>Rank</th><th>Prospect</th><th>Pos</th><th>Pick</th><th>Score</th><th>Median AV</th><th>Best Outcome</th><th></th></tr></thead>
                   <tbody>{orderedBoard.slice(0, 40).map((row, index) => {
                     const best = outcomeOrder.slice().sort((a, b) => (row.projection.odds[b] || 0) - (row.projection.odds[a] || 0))[0]
-                    const score = Math.round(row.projection.score)
+                    const score = Math.round(row.finalScore)
                     return <>
                       <tr key={row.player.id} className={`classRow-${scoreClass(score)}${row.player.id === selectedSavedId ? ' currentRow' : ''}`}>
                         <td><b className="boardRank">{index + 1}</b></td>
@@ -1130,7 +1150,7 @@ function App() {
                     <div
                       key={row.player.id}
                       className={`boardCard ${isActive ? 'boardCardActive' : ''} ${isDragging ? 'boardCardDragging' : ''}`}
-                      style={{ '--card-score-color': scoreColor(Math.round(row.projection.score)) } as CSSProperties}
+                      style={{ '--card-score-color': scoreColor(Math.round(row.finalScore)) } as CSSProperties}
                       draggable
                       onDragStart={() => handleDragStart(row.player.id)}
                       onDragOver={(e) => e.preventDefault()}
@@ -1143,7 +1163,7 @@ function App() {
                       <div className="cardName">{row.player.name}</div>
                       <div className="cardMeta">{row.player.school || 'No school'} · Pk {row.player.pick}</div>
                       <div className="cardFooter">
-                        <span className="cardScore">{Math.round(row.projection.score)}</span>
+                        <span className="cardScore">{Math.round(row.finalScore)}</span>
                         <OutcomeTag category={best} />
                         {row.earlyFlag && <FlagBadge flag={row.earlyFlag} />}
                         {row.patternAlerts.map((a) => <PatternBadge key={a.type} alert={a} />)}
@@ -2327,554 +2347,8 @@ function getAny(obj: any, keys: string[]): any {
   return null
 }
 
-function buildPlayerExplanation(player: any, ctx: any) {
-  const strengths: string[] = []
-  const risks: string[] = []
-  const drivers: string[] = []
-  const badges: string[] = []
-
-  const pos = String(player.pos || '').toUpperCase()
-  const pick = safeNum(player.pick)
-  const projectedScore = safeNum(ctx?.projected?.score)
-  const projectedAv = safeNum(ctx?.projected?.av)
-  const pffScore = safeNum(ctx?.pffContextScore)
-
-  if (pick != null) {
-    drivers.push(`Projected/actual pick: #${pick}`)
-    if (pick <= 32) badges.push('Round 1 profile')
-    else if (pick <= 100) badges.push('Top-100 profile')
-    else badges.push('Day 3 / value range')
-  }
-
-  if (projectedScore != null && pos === 'QB' && Number(player.year) >= 2024) {
-    const tier = getQbV11Tier(projectedScore)
-    drivers.push(`QB v11 score: ${Math.round(projectedScore)} — ${tier.label} tier`)
-    drivers.push(`Historical hit rate at this score tier: ${tier.hitRate}% (avg career AV ${tier.avgAv})`)
-    badges.push(`${tier.label} · ${tier.hitRate}% hit rate`)
-    if (tier.hitRate >= 90) strengths.push(`${tier.hitRate}% of QBs in this score range have been NFL hits historically.`)
-    else if (tier.hitRate >= 60) strengths.push(`${tier.hitRate}% hit rate at this tier — more likely to contribute than not.`)
-    else if (tier.hitRate >= 20) risks.push(`Only ${tier.hitRate}% of QBs in this score range become hits — meaningful development risk.`)
-    else risks.push(`Historically a high-bust tier: only ${tier.hitRate}% of similar-scored QBs have produced.`)
-  } else if (projectedScore != null) {
-    drivers.push(`Model score: ${Math.round(projectedScore)}`)
-    if (projectedScore >= 85) strengths.push('High model score relative to the class.')
-    else if (projectedScore >= 70) strengths.push('Solid model score with starter/value potential.')
-    else risks.push('Model score is more developmental than blue-chip.')
-  }
-
-  if (projectedAv != null) {
-    drivers.push(`Projected AV: ${projectedAv.toFixed(1)}`)
-  }
-
-  const hasSeasonContext = Boolean(ctx?.qbContext || ctx?.wrContext || ctx?.teContext)
-  const pffLabel = String(ctx?.pffContextLabel || '')
-  const isNoPffProfile = /no pff match/i.test(pffLabel)
-
-  if (pffScore != null && pffScore > 0 && !isNoPffProfile) {
-    drivers.push(`${ctx?.pffContextLabel || 'PFF context'}: ${pffScore.toFixed(1)}`)
-    if (pffScore >= 90) strengths.push('Elite PFF profile/season signal.')
-    else if (pffScore >= 80) strengths.push('Strong PFF profile/season signal.')
-    else if (pffScore < 65) risks.push('PFF profile is more modest than top-tier prospects.')
-  } else if (hasSeasonContext) {
-    drivers.push('Season PFF data linked.')
-  } else if (isNoPffProfile) {
-    risks.push('No full PFF comparison profile matched yet.')
-  }
-
-  const qb = ctx?.qbContext
-  const wr = ctx?.wrContext || ctx?.teContext || ctx?.teContext
-
-  if (pos === 'QB' && qb) {
-    const passGrade = safeNum(getAny(qb, ['pass_grade', 'grades_pass']))
-    const offGrade = safeNum(getAny(qb, ['offense_grade', 'grades_offense']))
-    const btt = safeNum(getAny(qb, ['btt_rate', 'btt_pct']))
-    const twp = safeNum(getAny(qb, ['twp_rate', 'twp_pct']))
-    const ttt = safeNum(getAny(qb, ['time_to_throw', 'avg_time_to_throw']))
-    const adot = safeNum(getAny(qb, ['adot', 'avg_depth_of_target']))
-    const p2s = safeNum(getAny(qb, ['pressure_to_sack_rate', 'pressure_to_sack_pct']))
-
-    if (passGrade != null) drivers.push(`QB pass grade: ${passGrade.toFixed(1)}`)
-    if (offGrade != null) drivers.push(`QB offense grade: ${offGrade.toFixed(1)}`)
-    if (btt != null) drivers.push(`BTT%: ${btt.toFixed(1)}`)
-    if (twp != null) drivers.push(`TWP%: ${twp.toFixed(1)}`)
-    if (ttt != null) drivers.push(`Time to throw: ${ttt.toFixed(2)}s`)
-    if (adot != null) drivers.push(`ADOT: ${adot.toFixed(1)}`)
-    if (p2s != null) drivers.push(`Pressure-to-sack: ${p2s.toFixed(1)}%`)
-
-    if (passGrade != null && passGrade >= 90) strengths.push('Elite passing grade.')
-    if (offGrade != null && offGrade >= 90) strengths.push('Elite overall offensive grade.')
-    if (btt != null && btt >= 6) strengths.push('High big-time throw creation.')
-    if (twp != null && twp <= 2) strengths.push('Strong ball-security profile.')
-    if (twp != null && twp >= 4) risks.push('Turnover-worthy play rate is a risk flag.')
-    if (ttt != null && ttt >= 3.0) risks.push('Longer time-to-throw profile may create NFL pressure risk.')
-
-    badges.push('QB data linked')
-  }
-
-  if (pos === 'QB' && Number(player.year) >= 2024) {
-    const compObj =
-      player.primaryQbProfileComp ||
-      player.projectionComps?.[0] ||
-      player.styleComps?.[0] ||
-      player.qbComps?.[0] ||
-      null
-    if (compObj) {
-      const compName    = typeof compObj === 'string' ? compObj : compObj.name
-      const compOutcome = typeof compObj === 'object' ? compObj.outcome : null
-      const compPick    = typeof compObj === 'object' && compObj.pick ? `#${compObj.pick}` : null
-      const compYear    = typeof compObj === 'object' && compObj.year ? compObj.year : null
-      const compLabel   = [compName, compYear, compPick, compOutcome ? `(${compOutcome})` : null].filter(Boolean).join(' ')
-      drivers.push(`Closest college profile comp: ${compLabel}`)
-    }
-  }
-
-  const rb = ctx?.rbContext
-
-  if (pos === 'RB' && rb) {
-    const runGrade = safeNum(getAny(rb, ['run_grade', 'grades_run']))
-    const offGrade = safeNum(getAny(rb, ['offense_grade', 'grades_offense']))
-    const yards = safeNum(getAny(rb, ['yards']))
-    const attempts = safeNum(getAny(rb, ['attempts']))
-    const ypa = safeNum(getAny(rb, ['ypa']))
-    const yco = safeNum(getAny(rb, ['yco_attempt']))
-    const elusive = safeNum(getAny(rb, ['elusive_rating']))
-    const avoided = safeNum(getAny(rb, ['avoided_tackles']))
-    const breakaway = safeNum(getAny(rb, ['breakaway_percent']))
-    const targets = safeNum(getAny(rb, ['targets']))
-    const recYards = safeNum(getAny(rb, ['rec_yards']))
-    const routeGrade = safeNum(getAny(rb, ['route_grade', 'grades_pass_route']))
-    const passBlock = safeNum(getAny(rb, ['pass_block_grade', 'grades_pass_block']))
-    const fumbles = safeNum(getAny(rb, ['fumbles']))
-
-    drivers.push('Season PFF data linked.')
-    if (runGrade != null) drivers.push(`Run grade: ${runGrade.toFixed(1)}`)
-    if (offGrade != null) drivers.push(`Offense grade: ${offGrade.toFixed(1)}`)
-    if (yards != null) drivers.push(`Rushing yards: ${yards.toFixed(0)}`)
-    if (attempts != null) drivers.push(`Attempts: ${attempts.toFixed(0)}`)
-    if (ypa != null) drivers.push(`YPA: ${ypa.toFixed(2)}`)
-    if (yco != null) drivers.push(`YCO/attempt: ${yco.toFixed(2)}`)
-    if (elusive != null) drivers.push(`Elusive rating: ${elusive.toFixed(1)}`)
-    if (avoided != null) drivers.push(`Avoided tackles: ${avoided.toFixed(0)}`)
-    if (breakaway != null) drivers.push(`Breakaway %: ${breakaway.toFixed(1)}`)
-    if (targets != null) drivers.push(`Targets: ${targets.toFixed(0)}`)
-    if (recYards != null) drivers.push(`Receiving yards: ${recYards.toFixed(0)}`)
-    if (routeGrade != null) drivers.push(`Route grade: ${routeGrade.toFixed(1)}`)
-    if (passBlock != null) drivers.push(`Pass-block grade: ${passBlock.toFixed(1)}`)
-
-    if (runGrade != null && runGrade >= 85) strengths.push('High-end rushing grade.')
-    if (yco != null && yco >= 3.2) strengths.push('Strong yards-after-contact profile.')
-    if (elusive != null && elusive >= 90) strengths.push('Strong tackle-breaking / elusive profile.')
-    if (targets != null && targets >= 25) strengths.push('Useful receiving workload.')
-    if (routeGrade != null && routeGrade >= 65) strengths.push('Viable receiving/route profile for a RB.')
-    if (passBlock != null && passBlock >= 65) strengths.push('Usable pass-protection profile.')
-
-    if (runGrade != null && runGrade < 70) risks.push('Run grade is below ideal prospect threshold.')
-    if (yco != null && yco < 2.4 && attempts != null && attempts >= 120) risks.push('Yards-after-contact profile is modest for workload.')
-    if (fumbles != null && fumbles >= 4) risks.push('Fumble count is a ball-security concern.')
-    if (targets != null && targets < 10) risks.push('Limited receiving sample.')
-
-    badges.push('RB data linked')
-  }
-
-
-  if ((pos === 'WR' || pos === 'TE') && wr) {
-    const routeGrade = safeNum(getAny(wr, ['route_grade', 'grades_pass_route']))
-    const offGrade = safeNum(getAny(wr, ['offense_grade', 'grades_offense']))
-    const yprr = safeNum(getAny(wr, ['yprr']))
-    const targets = safeNum(getAny(wr, ['targets']))
-    const yards = safeNum(getAny(wr, ['yards']))
-
-    if (routeGrade != null) drivers.push(`Route grade: ${routeGrade.toFixed(1)}`)
-    if (offGrade != null) drivers.push(`Offense grade: ${offGrade.toFixed(1)}`)
-    if (yprr != null) drivers.push(`YPRR: ${yprr.toFixed(2)}`)
-    if (targets != null) drivers.push(`Targets: ${targets.toFixed(0)}`)
-    if (yards != null) drivers.push(`Yards: ${yards.toFixed(0)}`)
-
-    if (routeGrade != null && routeGrade >= 80) strengths.push('Strong route-winning profile.')
-    if (yprr != null && yprr >= 2.5) strengths.push('High yards-per-route efficiency.')
-    if (offGrade != null && offGrade >= 80) strengths.push('Strong overall receiving profile.')
-    if (routeGrade != null && routeGrade < 65) risks.push('Route grade is below ideal draft-value threshold.')
-
-    badges.push(`${pos} data linked`)
-  }
-
-  if (player.av != null && Number(player.av) > 0) {
-    drivers.push(`Historical AV: ${player.av}`)
-  }
-
-  if (player.proBowls) strengths.push(`NFL outcome marker: ${player.proBowls} Pro Bowl(s).`)
-  if (player.allPro) strengths.push(`NFL outcome marker: ${player.allPro} All-Pro selection(s).`)
-
-  if (!strengths.length) strengths.push('Ranking is mainly supported by draft slot, model projection, and available profile data.')
-  if (!risks.length) risks.push('No major dataset red flag surfaced from the currently loaded fields.')
-
-  const summary = `${player.name} ranks here because the model combines draft slot/value, projected score, available PFF data, and position-specific production signals.`
-  const valueRead =
-    pick != null && projectedScore != null
-      ? projectedScore >= 80 && pick > 50
-        ? 'Potential value: model score is strong relative to projected draft slot.'
-        : projectedScore < 65 && pick <= 50
-          ? 'Possible overpay risk: draft slot is aggressive relative to model score.'
-          : 'Fair-value range: model score and draft slot are broadly aligned.'
-      : 'Value read is limited because pick or score data is missing.'
-
-  const seasonPffLinked = Boolean(ctx?.qbContext || ctx?.wrContext || ctx?.teContext || ctx?.rbContext)
-
-  const cleanedDrivers = drivers.filter((item) => {
-    if (seasonPffLinked && /^No PFF match/i.test(String(item))) return false
-    return true
-  })
-
-  if (seasonPffLinked && !cleanedDrivers.some((item) => /Season PFF data linked/i.test(String(item)))) {
-    cleanedDrivers.unshift('Season PFF data linked.')
-  }
-
-  const rbScoreReadySignal = ctx?.rbScoreReadySignal || null
-  const rbScoreReadyAdjustment = safeNum(rbScoreReadySignal?.recommendedAdjustment)
-
-  const qbTranslationSignal = ctx?.qbTranslationSignal || buildInlineQbTranslationSignal(player, ctx?.qbContext)
-  const qbTranslationAdjustment = safeNum(qbTranslationSignal?.adjustment)
-
-  const compSignal = ctx?.compSignal || null
-  const compAdjustment = safeNum(compSignal?.compAdjustment)
-  const compConfidence = safeNum(compSignal?.confidence)
-
-  if (compSignal && compAdjustment != null) {
-    badges.push('Comp signal')
-    drivers.push(`Comp signal: ${compAdjustment >= 0 ? '+' : ''}${compAdjustment.toFixed(1)}`)
-    if (compConfidence != null) drivers.push(`Comp confidence: ${compConfidence.toFixed(2)}`)
-    if (!compSignal.realDraftPrior) drivers.push('Comp signal context only: no real draft prior yet.')
-  }
-
-  if (rbScoreReadySignal && rbScoreReadyAdjustment != null && rbScoreReadyAdjustment !== 0) {
-    badges.push('RB score-ready signal')
-    drivers.push(`RB score-ready signal: ${rbScoreReadyAdjustment >= 0 ? '+' : ''}${rbScoreReadyAdjustment.toFixed(2)}`)
-  }
-
-  if (qbTranslationSignal && qbTranslationAdjustment != null && qbTranslationAdjustment !== 0) {
-    badges.push('QB translation signal')
-    drivers.push(`QB translation signal: ${qbTranslationAdjustment >= 0 ? '+' : ''}${qbTranslationAdjustment.toFixed(2)}`)
-  }
-
-  return {
-    player,
-    summary,
-    valueRead,
-    badges,
-    strengths,
-    risks,
-    drivers: cleanedDrivers,
-    compSignal,
-    rbScoreReadySignal,
-    qbTranslationSignal,
-  }
-}
-
-
-function fieldNumLoose(source: unknown, keys: string[], fallback = 0): number {
-  const r = asRecord(source)
-  if (!r) return fallback
-
-  for (const key of keys) {
-    const direct = numberField(r, key, Number.NaN)
-    if (Number.isFinite(direct)) return direct
-  }
-
-  const normalizedKeys = keys.map((k) => norm(k))
-  for (const [key, value] of Object.entries(r)) {
-    if (!normalizedKeys.includes(norm(key))) continue
-    const n = Number(value)
-    if (Number.isFinite(n)) return n
-  }
-
-  return fallback
-}
-
-function buildInlineQbTranslationSignal(player: Historical, qbContext: unknown): QbTranslationSignal | null {
-  if (player.pos !== 'QB' || !qbContext) return null
-
-  const pick = Number.isFinite(player.pick) ? player.pick : 999
-  const attempts = fieldNumLoose(qbContext, ['attempts', 'dropbacks'], 0)
-
-  const rawBtt = fieldNumLoose(qbContext, ['btt', 'bttPct', 'btt_rate', 'btt_pct', 'btt%', 'big_time_throw_rate'], 0)
-  const rawTwp = fieldNumLoose(qbContext, ['twp', 'twpPct', 'twp_rate', 'twp_pct', 'twp%', 'turnover_worthy_play_rate'], 0)
-
-  const btt = rawBtt > 12 && attempts > 0 ? (rawBtt / attempts) * 100 : rawBtt
-  const twp = rawTwp > 12 && attempts > 0 ? (rawTwp / attempts) * 100 : rawTwp
-
-  const pass = fieldNumLoose(qbContext, ['pass', 'passGrade', 'pass_grade', 'grades_pass', 'pff'], 0)
-  const run = fieldNumLoose(qbContext, ['run', 'runGrade', 'run_grade', 'grades_run'], 0)
-  const scrambles = fieldNumLoose(qbContext, ['scrambles'], 0)
-  const acc = fieldNumLoose(qbContext, ['acc', 'adjustedAccuracy', 'adjusted_completion_percent', 'accuracy_percent', 'adjustedCompletionPercent'], 0)
-  const adot = fieldNumLoose(qbContext, ['adot', 'avgDepthOfTarget', 'avg_depth_of_target'], 0)
-  const epa = fieldNumLoose(qbContext, ['epa', 'epa_per_play'], 0)
-
-  const traits: string[] = []
-  let adjustment = 0
-
-  const eliteScrambleCreation =
-    pick <= 100 &&
-    scrambles >= 40 &&
-    run >= 75 &&
-    acc >= 70
-
-  const top32CreationPlus =
-    pick <= 32 &&
-    scrambles >= 25 &&
-    btt >= 5.5 &&
-    adot >= 9.0 &&
-    acc >= 70
-
-  const day2LowPassLowAcc =
-    pick > 32 &&
-    pick <= 100 &&
-    pass < 75 &&
-    acc < 70
-
-  const highCapitalLowCreation =
-    pick <= 64 &&
-    btt < 4.5 &&
-    adot < 9.5 &&
-    epa < 0.35
-
-  const safeLimitedLowCreation =
-    pick > 20 &&
-    btt < 4.5 &&
-    twp <= 2.5 &&
-    acc >= 72
-
-  if (eliteScrambleCreation) {
-    adjustment += 0.35
-    traits.push('Elite scramble creation')
-  }
-
-  if (top32CreationPlus) {
-    traits.push('Top-32 creation plus')
-  }
-
-  if (day2LowPassLowAcc) {
-    adjustment -= 0.35
-    traits.push('Day-2 low pass/accuracy risk')
-  }
-
-  if (highCapitalLowCreation) {
-    adjustment -= 0.25
-    traits.push('High-capital low-creation risk')
-  }
-
-  if (safeLimitedLowCreation) {
-    adjustment -= 0.20
-    traits.push('Safe-limited low-creation risk')
-  }
-
-  if (!traits.length) return null
-
-  return {
-    adjustment: Math.max(-0.60, Math.min(0.50, Number(adjustment.toFixed(2)))),
-    traits,
-    pass,
-    run,
-    scrambles,
-    btt: Number(btt.toFixed(1)),
-    acc,
-    adot,
-    epa,
-  }
-}
-
-
-function PlayerExplanationModal({ explanation, onClose }: { explanation: any; onClose: () => void }) {
-  if (!explanation) return null
-
-  return <div className="explainOverlay" role="dialog" aria-modal="true">
-    <div className="explainModal">
-      <div className="explainHeader">
-        <div>
-          <p>Explain Player</p>
-          <h2>{explanation.player.name}</h2>
-          <small>{explanation.player.year} · {explanation.player.pos} · {explanation.player.school || 'No school'} · Pick #{explanation.player.pick}</small>
-        </div>
-        <button type="button" className="secondary" onClick={onClose}>Close</button>
-      </div>
-
-      <p className="explainSummary">{explanation.summary}</p>
-
-      <div className="explainBadges">
-        {explanation.badges.map((badge: string) => <span key={badge}>{badge}</span>)}
-      </div>
-
-      <div className="explainGrid">
-        <section>
-          <h3>Why the model likes him</h3>
-          <ul>{explanation.strengths.map((item: string) => <li key={item}>{item}</li>)}</ul>
-        </section>
-
-        <section>
-          <h3>Risks / limitations</h3>
-          <ul>{explanation.risks.map((item: string) => <li key={item}>{item}</li>)}</ul>
-        </section>
-
-        <section>
-          <h3>Model drivers</h3>
-          <ul>{explanation.drivers.map((item: string) => <li key={item}>{item}</li>)}</ul>
-        </section>
-
-        {explanation.qbTranslationSignal ? <section>
-          <h3>QB translation signal</h3>
-          <p>
-            Signal: <strong>{Number(explanation.qbTranslationSignal.adjustment || 0) >= 0 ? '+' : ''}{Number(explanation.qbTranslationSignal.adjustment || 0).toFixed(2)}</strong>
-            {' · '}Status: read-only / not applied to ranking
-          </p>
-          {explanation.qbTranslationSignal.primaryComp?.name ? <>
-            <h4>Primary 2027 QB comp</h4>
-            <p>
-              <strong>{explanation.qbTranslationSignal.primaryComp.name}</strong>
-              {explanation.qbTranslationSignal.primaryComp.archetype ? <> · {explanation.qbTranslationSignal.primaryComp.archetype}</> : null}
-              {Number(explanation.qbTranslationSignal.primaryComp.distance || 0) > 0 ? <> · Distance: {Number(explanation.qbTranslationSignal.primaryComp.distance || 0).toFixed(2)}</> : null}
-            </p>
-          </> : null}
-          {explanation.qbTranslationSignal.traits?.length ? <>
-            <h4>Traits</h4>
-            <ul>
-              {explanation.qbTranslationSignal.traits.map((t: string, i: number) => (
-                <li key={`qb-translation-${i}`}>
-                  {t}{t === 'Top-32 creation plus' ? ' — context only' : ''}
-                </li>
-              ))}
-            </ul>
-          </> : null}
-          <h4>Signal inputs</h4>
-          <p>
-            Run grade: {Number(explanation.qbTranslationSignal.run || 0).toFixed(1)}
-            {' · '}Scrambles: {Number(explanation.qbTranslationSignal.scrambles || 0).toFixed(0)}
-            {' · '}BTT%: {Number(explanation.qbTranslationSignal.btt || 0).toFixed(1)}
-            {' · '}Adj. accuracy: {Number(explanation.qbTranslationSignal.acc || 0).toFixed(1)}
-          </p>
-        </section> : null}
-
-        {explanation.rbScoreReadySignal ? <section>
-          <h3>RB score-ready signal</h3>
-          <p>
-            Adjustment candidate: <strong>{Number(explanation.rbScoreReadySignal.recommendedAdjustment || 0) >= 0 ? '+' : ''}{Number(explanation.rbScoreReadySignal.recommendedAdjustment || 0).toFixed(2)}</strong>
-            {' · '}Status: read-only / not applied to ranking
-          </p>
-          {explanation.rbScoreReadySignal.quantumTraits?.length ? <>
-            <h4>Validated RB traits</h4>
-            <ul>
-              {explanation.rbScoreReadySignal.quantumTraits
-                .filter((t: any) => t.scoreReady)
-                .map((t: any) => (
-                  <li key={`rb-signal-${t.traitKey}`}>{t.label}</li>
-                ))}
-            </ul>
-          </> : null}
-          {explanation.rbScoreReadySignal.reasons?.length ? <>
-            <h4>Reason</h4>
-            <ul>
-              {explanation.rbScoreReadySignal.reasons.map((r: string, i: number) => (
-                <li key={`rb-signal-reason-${i}`}>{r}</li>
-              ))}
-            </ul>
-          </> : null}
-        </section> : null}
-
-        {explanation.compSignal ? <section>
-          <h3>Historical comp signal</h3>
-          <p>
-            Adjustment: <strong>{Number(explanation.compSignal.compAdjustment || 0) >= 0 ? '+' : ''}{Number(explanation.compSignal.compAdjustment || 0).toFixed(1)}</strong>
-            {' · '}Confidence: {Number(explanation.compSignal.confidence || 0).toFixed(2)}
-            {!explanation.compSignal.realDraftPrior ? ' · Context only: no real draft prior' : ''}
-          </p>
-          {explanation.compSignal.projectionComps?.length ? <>
-            <h4>Projection comps</h4>
-            <ul>
-              {explanation.compSignal.projectionComps.slice(0, 4).map((c: any) => (
-                <li key={`proj-${c.name}-${c.year}`}>{c.name} {c.year} · Pick #{c.pick} · Δ{Number(c.delta || 0).toFixed(1)}</li>
-              ))}
-            </ul>
-          </> : null}
-          {explanation.compSignal.styleComps?.length ? <>
-            <h4>Style comps</h4>
-            <ul>
-              {explanation.compSignal.styleComps.slice(0, 4).map((c: any) => (
-                <li key={`style-${c.name}-${c.year}`}>{c.name} {c.year} · Pick #{c.pick} · Δ{Number(c.delta || 0).toFixed(1)}</li>
-              ))}
-            </ul>
-          </> : null}
-        </section> : null}
-
-        <section>
-          <h3>Value read</h3>
-          <p>{explanation.valueRead}</p>
-        </section>
-      </div>
-    </div>
-  </div>
-}
-
-
-
-function pffSeasonMapKey(year: number, name: string) {
-  return `${clean(name)}|${Number(year)}`
-}
-
-function buildLatestPffSeasonMap(seasons: any[]) {
-  const out = new Map<string, any>()
-
-  for (const row of seasons || []) {
-    const name = row.name || row.player || row.player_name || ''
-    const season = Number(row.season || row.year)
-    if (!name || !Number.isFinite(season)) continue
-
-    for (let draftYear = season + 1; draftYear <= 2030; draftYear++) {
-      const key = pffSeasonMapKey(draftYear, name)
-      const current = out.get(key)
-      const currentSeason = Number(current?.season || current?.year || 0)
-
-      if (!current || season > currentSeason) {
-        out.set(key, row)
-      }
-    }
-  }
-
-  return out
-}
-
 
 function ClassExplorer({ pool, history, pffProfiles, pffLookup, y1Data, careerStats, histFlagMap, currentName, currentYear, saved, projectionOverlay, compSignalMap, rbScoreReadyMap, qbTranslationMap, qbPffSeasons, wrPffSeasons, tePffSeasons, rbPffSeasons }: { pool: Historical[]; history: Historical[]; pffProfiles: PffProfile[]; pffLookup: Map<string, PffProfile>; y1Data?: Y1Data; careerStats?: CareerStatMap; histFlagMap: Map<string, HistoricalOutcomeFlag>; currentName: string; currentYear: number; saved: SavedProspect[]; projectionOverlay: Map<string, PositionProjectionOverlay>; compSignalMap: Map<string, PositionCompSignal>; rbScoreReadyMap: Map<string, RbScoreReadySignal>; qbTranslationMap: Map<string, QbTranslationSignal>; qbPffSeasons: QbPffSeason[]; wrPffSeasons: WrPffSeason[]; tePffSeasons: any[]; rbPffSeasons: any[]; }) {
-
-  // QB v11 score map — loaded directly from prospect files so scores
-  // are available as soon as the component mounts, independent of overlay timing
-  const [qbV11Map, setQbV11Map] = useState<Map<string, number>>(new Map())
-  useEffect(() => {
-    let cancelled = false
-    const base = import.meta.env.BASE_URL || '/'
-    const files = ['prospects_2024_qb.json', 'prospects_2025_qb.json', 'prospects_2026_qb.json', 'prospects_2027_qb.json']
-    Promise.all(files.map(f => fetch(`${base}data/${f}`).then(r => r.ok ? r.json() : []).catch(() => [])))
-      .then(payloads => {
-        if (cancelled) return
-        const map = new Map<string, number>()
-        for (const records of payloads) {
-          if (!Array.isArray(records)) continue
-          for (const r of records) {
-            const name = r?.name
-            const year = Number(r?.year || r?.draftSeason || r?.draftYear)
-            const score = Number(r?.qbProjectionScore ?? r?.grade ?? r?.score)
-            if (name && Number.isFinite(year) && Number.isFinite(score) && score > 0) {
-              map.set(projectionOverlayKey(year, 'QB', name), score)
-            }
-          }
-        }
-        setQbV11Map(map)
-      })
-    return () => { cancelled = true }
-  }, [])
-
-  const getQbV11Score = (player: Historical): number | null => {
-    if (String(player.pos || '').toUpperCase() !== 'QB') return null
-    const v = qbV11Map.get(projectionOverlayKey(player.year, player.pos, player.name))
-    return v != null ? v : null
-  }
 
   const years = useMemo(() => {
     const set = new Set<number>()
@@ -2890,41 +2364,7 @@ function ClassExplorer({ pool, history, pffProfiles, pffLookup, y1Data, careerSt
   const [sortDir, setSortDir] = useState<SortDir>('asc')
   const [expandedId, setExpandedId] = useState<string | null>(null)
   const [showScatter, setShowScatter] = useState(false)
-  const [explanation, setExplanation] = useState<any | null>(null)
-  const [v57AuditRows, setV57AuditRows] = useState<any[]>([])
 
-  useEffect(() => {
-    let cancelled = false
-    const base = import.meta.env.BASE_URL || './'
-    fetch(`${base}data/model/v57_current_prospect_audit.json`)
-      .then((r) => r.ok ? r.json() : null)
-      .then((payload) => {
-        if (!cancelled && payload?.allScored?.length) setV57AuditRows(payload.allScored)
-      })
-      .catch(() => {
-        if (!cancelled) setV57AuditRows([])
-      })
-    return () => { cancelled = true }
-  }, [])
-
-  const v57ScoreMap = useMemo(() => {
-    const out = new Map<string, any>()
-    for (const row of v57AuditRows) {
-      const key = `${clean(row.name)}|${String(row.pos || '').toUpperCase()}|${Number(row.year)}`
-      out.set(key, row)
-    }
-    return out
-  }, [v57AuditRows])
-
-  const getV57Row = (player: Historical) => {
-    const key = `${clean(player.name)}|${String(player.pos || '').toUpperCase()}|${Number(player.year)}`
-    return v57ScoreMap.get(key) ?? null
-  }
-
-  const latestQbPffMap = useMemo(() => buildLatestPffSeasonMap(qbPffSeasons), [qbPffSeasons])
-  const latestWrPffMap = useMemo(() => buildLatestPffSeasonMap(wrPffSeasons), [wrPffSeasons])
-  const latestTePffMap = useMemo(() => buildLatestPffSeasonMap(tePffSeasons), [tePffSeasons])
-  const latestRbPffMap = useMemo(() => buildLatestPffSeasonMap(rbPffSeasons), [rbPffSeasons])
 
   // Persistent cache: avoids recomputing the same player on year revisits
   const projCache = useRef(new Map<string, { av: number; score: number }>())
@@ -2976,7 +2416,7 @@ function ClassExplorer({ pool, history, pffProfiles, pffLookup, y1Data, careerSt
     const out = new Map<string, { av: number; score: number }>()
     if (!useProjections) return out
     // Cache key encodes inputs that affect projection output
-    const inputSig = `${history.length}|${pffProfiles.length}|${y1Data?.qb.length ?? 0}|${y1Data?.wr.length ?? 0}|${y1Data?.rb.length ?? 0}|${Object.keys(careerStats ?? {}).length}|overlay:${projectionOverlay.size}|qbv11:${qbV11Map.size}`
+    const inputSig = `${history.length}|${pffProfiles.length}|${y1Data?.qb.length ?? 0}|${y1Data?.wr.length ?? 0}|${y1Data?.rb.length ?? 0}|${Object.keys(careerStats ?? {}).length}|overlay:${projectionOverlay.size}`
     for (const player of deferredFiltered) {
       const cacheKey = `${player.id}|${inputSig}`
       const cached = projCache.current.get(cacheKey)
@@ -2991,17 +2431,15 @@ function ClassExplorer({ pool, history, pffProfiles, pffLookup, y1Data, careerSt
           ? { ...synthesized, wrTrajectory: wrContext.trajectory }
           : synthesized
       const projected = project(synthesizedWithContext, history, pffProfiles, player.id, y1Data, careerStats, undefined, qbContext?.trajectory?.gradeDelta ?? null)
-      const isQb = String(player.pos || '').toUpperCase() === 'QB'
-      const qbV11Score = getQbV11Score(player)
       const result = {
         av: projected.expectedAv,
-        score: qbV11Score != null ? qbV11Score : projected.score,
+        score: resolveFinalScore(player, projected, projectionOverlay).score,
       }
       projCache.current.set(cacheKey, result)
       out.set(player.id, result)
     }
     return out
-  }, [deferredFiltered, history, pffProfiles, pffLookup, useProjections, y1Data, careerStats, qbPffSeasons, wrPffSeasons, projectionOverlay, qbV11Map])
+  }, [deferredFiltered, history, pffProfiles, pffLookup, useProjections, y1Data, careerStats, qbPffSeasons, wrPffSeasons, projectionOverlay])
 
   // O(1) player-to-PFF lookup for this class
   const pffMap = useMemo(() => {
@@ -3139,8 +2577,7 @@ function ClassExplorer({ pool, history, pffProfiles, pffLookup, y1Data, careerSt
         </button>
       ))}
     </div>
-    {useProjections ? <p className="hint">Projected AV and Score use the calibrated 2016-2023 model plus each player's draft/combine and matched PFF profile when available.</p> : null}
-    {explanation ? <PlayerExplanationModal explanation={explanation} onClose={() => setExplanation(null)} /> : null}
+    {useProjections ? <p className="hint">Final Score and Projected AV use the calibrated 2016-2023 model plus each player's draft/combine and matched PFF profile when available. QBs use the Final QB Model when available.</p> : null}
     {rows.length ? <TableWrap>
       <table className="classTable">
         <thead>
@@ -3152,9 +2589,8 @@ function ClassExplorer({ pool, history, pffProfiles, pffLookup, y1Data, careerSt
             <ClassHeader label="G" sortKey="games" active={effectiveSortKey} dir={sortDir} onSort={toggleSort} />
             <ClassHeader label="St" sortKey="starts" active={effectiveSortKey} dir={sortDir} onSort={toggleSort} />
             <ClassHeader label="AV" sortKey="av" active={effectiveSortKey} dir={sortDir} onSort={toggleSort} />
-            <th title="PFF college composite grade">PFF</th>
             {useProjections ? <ClassHeader label="Proj AV" sortKey="projAv" active={effectiveSortKey} dir={sortDir} onSort={toggleSort} /> : null}
-            {useProjections ? <ClassHeader label="Score" sortKey="projScore" active={effectiveSortKey} dir={sortDir} onSort={toggleSort} /> : null}
+            {useProjections ? <ClassHeader label="Final Score" sortKey="projScore" active={effectiveSortKey} dir={sortDir} onSort={toggleSort} /> : null}
             <ClassHeader label="PB" sortKey="pb" active={effectiveSortKey} dir={sortDir} onSort={toggleSort} />
             <ClassHeader label="AP" sortKey="ap" active={effectiveSortKey} dir={sortDir} onSort={toggleSort} />
             <ClassHeader label="Outcome" sortKey="outcome" active={effectiveSortKey} dir={sortDir} onSort={toggleSort} />
@@ -3169,27 +2605,9 @@ function ClassExplorer({ pool, history, pffProfiles, pffLookup, y1Data, careerSt
             const score = projected ? Math.round(projected.score) : 0
             const outcomeFlag = histFlagMap.get(player.id) ?? null
             const pffProfile = pffMap.get(player.id) ?? null
-            const qbPffContext = player.pos === 'QB' ? getQbPffContext(player.year, player.name, qbPffSeasons) : null
-            const wrPffContext = player.pos === 'WR' ? getWrPffContext(player.year, player.name, wrPffSeasons) : null
-            const pffContextScore =
-              pffProfile?.pff.composite ??
-              qbPffContext?.careerWeightedPassGrade ??
-              qbPffContext?.latestSeason?.grades_pass ??
-              wrPffContext?.careerWeightedRouteGrade ??
-              wrPffContext?.careerWeightedOffenseGrade ??
-              wrPffContext?.latestSeason?.route_grade ??
-              wrPffContext?.latestSeason?.offense_grade ??
-              null
-            const pffContextLabel = pffProfile
-              ? 'PFF profile composite'
-              : qbPffContext
-                ? 'QB PFF season context'
-                : wrPffContext
-                  ? 'WR PFF season context'
-                  : 'No PFF match'
             const isExpanded = expandedId === player.id
             const canExpand = pffProfile !== null || outcomeFlag !== null
-            const colCount = 12 + (useProjections ? 2 : 0)
+            const colCount = 10 + (useProjections ? 2 : 0)
             const posRank = posRankMap.get(player.id)
             const rowEls: React.ReactNode[] = [
               <tr
@@ -3202,67 +2620,25 @@ function ClassExplorer({ pool, history, pffProfiles, pffLookup, y1Data, careerSt
                   <b>{player.name}</b>
                   {isSaved && <span className="savedBadge" title="Saved prospect">★</span>}
                   <small>{player.school || 'No school'}</small>
-                  <button
-                    type="button"
-                    className="explainBtn"
-                    onClick={(e) => {
-                      e.stopPropagation()
-                      const pffKey = pffSeasonMapKey(player.year, player.name)
-                      setExplanation(buildPlayerExplanation(player, {
-                        projected,
-                        pffContextScore,
-                        pffContextLabel,
-                        qbContext: player.pos === 'QB' ? latestQbPffMap.get(pffKey) : null,
-                        wrContext: player.pos === 'WR' ? latestWrPffMap.get(pffKey) : null,
-                        teContext: player.pos === 'TE' ? latestTePffMap.get(pffKey) : null,
-                        rbContext: player.pos === 'RB' ? latestRbPffMap.get(pffKey) : null,
-                        compSignal: compSignalMap.get(projectionOverlayKey(player.year, player.pos, player.name)) ?? null,
-                        rbScoreReadySignal: rbScoreReadyMap.get(projectionOverlayKey(player.year, player.pos, player.name)) ?? null,
-                        qbTranslationSignal:
-                          qbTranslationMap.get(projectionOverlayKey(player.year, player.pos, player.name)) ??
-                          qbTranslationMap.get(projectionOverlayKey(player.year, 'QB', player.name)) ??
-                          qbTranslationMap.get(projectionOverlayKey(currentYear, 'QB', player.name)) ??
-                          null,
-                      }))
-                    }}
-                  >
-                    Explain
-                  </button>
                 </td>
                 <td><span className="posCell">{player.pos}{posRank != null && <span className="posRank">#{posRank}</span>}</span></td>
                 <td>{player.pick >= 260 ? 'UDFA' : player.pick}</td>
                 <td>{player.games || 0}</td>
                 <td>{player.starts || 0}</td>
                 <td>{player.av || 0}</td>
-                <td className="pffCol" title={pffContextLabel}>
-                  {(() => {
-                    const qbV11Score = getQbV11Score(player)
-                    const effectiveScore = qbV11Score ?? pffContextScore
-                    return effectiveScore != null ? Number(effectiveScore).toFixed(0) : '—'
-                  })()}
-                </td>
                 {useProjections ? <td>{projected ? projected.av.toFixed(1) : '-'}</td> : null}
                 {useProjections ? (() => {
-                  const v57 = getV57Row(player)
-                  const qbV11Score = getQbV11Score(player)
-                  const displayScore = qbV11Score != null
-                    ? qbV11Score
-                    : v57?.v57Percentile != null
-                      ? Number(v57.v57Percentile)
-                      : (projected ? projected.score : null)
-                  const delta = v57?.v57Delta != null ? Number(v57.v57Delta) : null
-                  const tier = (String(player.pos || '').toUpperCase() === 'QB') && qbV11Score != null ? getQbV11Tier(qbV11Score) : null
-                  const title =
-                    tier
-                      ? `QB v11 · ${tier.label} tier · ${tier.hitRate}% hit rate historically (avg career AV ${tier.avgAv})`
-                      : v57
-                        ? `V5.7P score${delta != null ? ` · Δ ${delta > 0 ? '+' : ''}${delta.toFixed(1)}` : ''}${v57.flag ? ` · ${v57.flag}` : ''}`
-                        : 'V4 fallback score'
+                  const finalScore = projected ? projected.score : null
+                  const isQb = String(player.pos || '').toUpperCase() === 'QB'
+                  const tier = isQb && finalScore != null ? getQbV11Tier(finalScore) : null
+                  const title = tier
+                    ? `Final QB Model · ${tier.label} tier · ${tier.hitRate}% historical hit rate (avg career AV ${tier.avgAv})`
+                    : 'Projection model score'
                   return <td
                     title={title}
-                    style={{ color: displayScore != null ? scoreColor(displayScore) : undefined, fontWeight: displayScore != null ? 800 : undefined }}
+                    style={{ color: finalScore != null ? scoreColor(finalScore) : undefined, fontWeight: finalScore != null ? 800 : undefined }}
                   >
-                    {displayScore != null ? Math.round(displayScore) : '-'}
+                    {finalScore != null ? Math.round(finalScore) : '-'}
                   </td>
                 })() : null}
                 <td>{player.proBowls || 0}</td>
@@ -3315,7 +2691,6 @@ function ClassExplorer({ pool, history, pffProfiles, pffLookup, y1Data, careerSt
               <td>{classSummary.avgG.toFixed(0)}</td>
               <td>{classSummary.avgSt.toFixed(0)}</td>
               <td>{classSummary.avgAv.toFixed(1)}</td>
-              <td>—</td>
               {useProjections ? <td>{classSummary.avgProjAv != null ? classSummary.avgProjAv.toFixed(1) : '—'}</td> : null}
               {useProjections ? <td style={{ color: classSummary.avgProjScore != null ? scoreColor(classSummary.avgProjScore) : undefined }}>{classSummary.avgProjScore ?? '—'}</td> : null}
               <td>{classSummary.totalPb}</td>
@@ -4518,6 +3893,37 @@ function projectionOverlayKey(year: number, pos: string, name: string): string {
   return `${Number(year)}|${String(pos || '').toUpperCase()}|${clean(name)}`
 }
 
+// Single source of truth for the score shown anywhere in the UI. QB resolves to the
+// final QB model output from the projection overlay when present; every other position
+// uses the base projection score until its own model is rebuilt.
+function resolveFinalScore(
+  player: { name: string; pos: string; year?: number; draftSeason?: number },
+  projection: { score?: number } | null | undefined,
+  projectionOverlay: Map<string, PositionProjectionOverlay>,
+): FinalScoreResult {
+  const pos = String(player.pos || '').toUpperCase()
+  const year = Number(player.year ?? player.draftSeason ?? 0)
+  const baseScore = Number(projection?.score)
+  const fallback: FinalScoreResult = {
+    score: Number.isFinite(baseScore) ? baseScore : 0,
+    model: 'Projection model',
+    source: 'projection',
+    tier: null,
+  }
+
+  if (pos !== 'QB') return fallback
+
+  const overlay = projectionOverlay.get(projectionOverlayKey(year, pos, player.name))
+  if (!overlay || !Number.isFinite(overlay.score) || overlay.score <= 0) return fallback
+
+  return {
+    score: overlay.score,
+    model: 'Final QB Model',
+    source: overlay.source || overlay.model || 'overlay',
+    tier: overlay.tier ?? getQbV11Tier(overlay.score).label,
+  }
+}
+
 
 function normalizeCompList(value: unknown): PositionCompSignal['projectionComps'] {
   if (!Array.isArray(value)) return []
@@ -4817,6 +4223,7 @@ function buildProjectionOverlayMap(payloads: unknown): Map<string, PositionProje
       const pff = asRecord(r.pff) ?? undefined
 
       const score =
+        numberField(r, 'finalScore', 0) ||
         numberField(r, 'grade', 0) ||
         numberField(r, 'score', 0) ||
         (forecast ? numberField(forecast, 'final', 0) : 0)
@@ -4834,6 +4241,7 @@ function buildProjectionOverlayMap(payloads: unknown): Map<string, PositionProje
         score,
         av,
         grade: numberField(r, 'grade', score),
+        tier: stringField(r, 'tier', '') || undefined,
         model,
         source: stringField(r, 'source', model),
         forecast,
