@@ -376,15 +376,22 @@ export const rasBlendByGroup: Record<string, number> = {
   QB: 0.20, SKILL: 0.55, OL: 0.60, FRONT: 0.55, DB: 0.65,
 }
 
+// Size (height/weight percentile within position) weight halved for every group and the
+// freed weight folded into draft capital. Walk-forward backtest (scripts/evaluate-model.mts
+// --walk-forward) showed size is the single worst-offending signal of those tested: zeroing
+// its weight raised rank ρ in all five groups (e.g. OL 0.531→0.555, DB CB 0.502→0.508,
+// SKILL RB 0.579→0.586), more than any other signal removal. A half-weight cut keeps most
+// of that recovered ρ while still letting genuine size outliers (e.g. undersized OL) move
+// the score some.
 export const signalWeights: Record<string, { draft: number; athletic: number; size: number; age: number; strength: number }> = {
-  QB:    { draft: .55, athletic: .08, size: .08, age: .19, strength: .10 },
-  SKILL: { draft: .45, athletic: .28, size: .05, age: .15, strength: .07 },
-  // OL: athletic strongly predictive (r=−0.25 to −0.30); age and size both matter
-  OL:    { draft: .37, athletic: .21, size: .19, age: .13, strength: .10 },
+  QB:    { draft: .59,  athletic: .08, size: .04,  age: .19, strength: .10 },
+  SKILL: { draft: .475, athletic: .28, size: .025, age: .15, strength: .07 },
+  // OL: athletic strongly predictive (r=−0.25 to −0.30); age matters; size effect is weak net
+  OL:    { draft: .465, athletic: .21, size: .095, age: .13, strength: .10 },
   // FRONT: age r=−0.327 and bench r=0.219 are the dominant signals
-  FRONT: { draft: .33, athletic: .18, size: .09, age: .18, strength: .22 },
+  FRONT: { draft: .375, athletic: .18, size: .045, age: .18, strength: .22 },
   // DB: cone/shuttle r=−0.21 to −0.22, age r=−0.294 → raise athletic+age
-  DB:    { draft: .38, athletic: .34, size: .05, age: .19, strength: .04 },
+  DB:    { draft: .405, athletic: .34, size: .025, age: .19, strength: .04 },
 }
 
 // ── Utility ───────────────────────────────────────────────────────────────────
