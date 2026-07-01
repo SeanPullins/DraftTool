@@ -1317,12 +1317,19 @@ export function project(input: Prospect, history: Historical[], pffProfiles: Pff
   const histExpectedAv = comps.reduce((sum, c) => sum + c.player.av * c.sim, 0) / histWeight
   const pffExpectedAv = pffComps.reduce((sum, c) => sum + (c.profile.nfl?.av || 0) * c.sim, 0) / pffWeight
   const compExpectedAv = blend(histExpectedAv, pffExpectedAv, pffBlend)
-  // Ablation (walk-forward): 'Calib only (cb=1)' → +0.030 ρ vs current blend.
-  // Comp AV estimates degrade in WF mode because 90%+ of historical players lack real
-  // PFF data, making comp selection near-random beyond draft capital. Increasing
-  // calibBlend captures most of the regression benefit while preserving comp influence
-  // for floor/ceiling range. QB comps stay at low blend (QB dynamics differ from OLS).
-  const calibBlend = opts?.calibBlendOverride ?? (grp === 'QB' ? 0.20 : (input.pick <= 32 ? 0.55 : input.pick <= 64 ? 0.40 : 0.25))
+  // A prior tiered version of this (QB 0.20, Rd1 0.55, Rd2 0.40, else 0.25) was based on
+  // the old single global calibratedAvModel, which lacked per-position-group coefficients
+  // -- its comment claimed "QB dynamics differ from OLS" as the reason to keep QB's blend
+  // low. Re-tested after the walk-forward-CV refit (scripts/fit-calibration-model.mts,
+  // which fits QB its own regression instead of sharing one global model): raising
+  // calibBlend improves walk-forward rank rho monotonically and *every* position group
+  // benefits, QB most of all (its per-group confirmation rho of 0.74 was the best of any
+  // group). Comp AV estimates degrade in walk-forward mode because 90%+ of historical
+  // players lack real PFF data, making comp selection close to draft-capital-only noise
+  // beyond what the regression already captures directly. Held at 0.85 rather than 1.0
+  // to keep a real (if now minority) share of comp-driven differentiation, since that's
+  // part of what this tool is for.
+  const calibBlend = opts?.calibBlendOverride ?? 0.85
   const expectedAv = blend(compExpectedAv, calibratedAv, calibBlend)
   const posAvValues = pool.filter((p) => p.av >= 0).map((p) => p.av)
   const posRelScore = posAvValues.length >= 15 ? pct(expectedAv, posAvValues) : avToScore(expectedAv)
