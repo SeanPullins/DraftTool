@@ -108,7 +108,11 @@ export function predictGbm(model: GbmModel, x: number[]): number {
   return model.initialValue + model.learningRate * model.trees.reduce((s, t) => s + predictTree(t, x), 0)
 }
 
-export function fitGbm(X: number[][], y: number[], params: GbmParams): GbmModel {
+// onTreeAdded, if given, fires after each tree with the ensemble-so-far -- lets a
+// caller record CV metrics at every tree count from a single fit (boosting is additive,
+// so this is equivalent to, but far cheaper than, refitting separately per numTrees
+// candidate when tuning that hyperparameter).
+export function fitGbm(X: number[][], y: number[], params: GbmParams, onTreeAdded?: (treeIndex: number, modelSoFar: GbmModel) => void): GbmModel {
   const n = X.length
   const allFeatures = Array.from({ length: X[0].length }, (_, i) => i)
   const initialValue = y.reduce((s, v) => s + v, 0) / n
@@ -122,6 +126,9 @@ export function fitGbm(X: number[][], y: number[], params: GbmParams): GbmModel 
     // the true current error everywhere, per standard stochastic gradient boosting.
     for (let i = 0; i < n; i++) residual[i] -= params.learningRate * predictTree(tree, X[i])
     trees.push(tree)
+    // Snapshot the array -- `trees` keeps growing after this callback fires, so a live
+    // reference would silently include trees added on later iterations too.
+    if (onTreeAdded) onTreeAdded(t, { initialValue, learningRate: params.learningRate, trees: [...trees] })
   }
 
   return { initialValue, learningRate: params.learningRate, trees }
