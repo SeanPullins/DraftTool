@@ -116,7 +116,7 @@ describe('calibratedExpectedAv', () => {
 
 function makeHistorical(overrides: Partial<Historical> = {}): Historical {
   return {
-    id: 'test-1', name: 'Test Player', school: 'Test U', year: 2018,
+    id: 'test-1', name: 'Test Player', school: 'Test U', team: 'TST', year: 2018,
     pos: 'WR', pick: 15, age: 22,
     height: 73, weight: 205, forty: 4.4, vertical: 38, broad: 125,
     cone: 6.9, shuttle: 4.2, bench: 0,
