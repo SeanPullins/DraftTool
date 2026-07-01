@@ -19,57 +19,20 @@
 //
 // Usage: node --experimental-strip-types scripts/fit-calibration-model.mts
 
-import { clean, project, buildCalibrationFeatureValues, group, compCutoffForGroup, calibratedAvModel } from '../src/model.ts'
-import type { Historical, Prospect, ModelSignal, CalibrationModel, CalibrationModelSet } from '../src/model.ts'
-import { loadEvalData, toProspect, getRas, KNOWN_POSITIONS, spearman, mae, bias as computeBias } from './lib/eval-data.mts'
+import { compCutoffForGroup } from '../src/model.ts'
+import type { ModelSignal, CalibrationModel, CalibrationModelSet } from '../src/model.ts'
+import { loadEvalData, spearman, mae, bias as computeBias } from './lib/eval-data.mts'
 import { ridgeFit, predictRidge, type FittedRidge } from './lib/ridge.mts'
+import { buildTrainingRows, GROUP_FEATURES, GLOBAL_FEATURES, GROUPS, type Grp, type TrainingRow as Row } from './lib/training-rows.mts'
 
 const DATA = new URL('../public/data/', import.meta.url).pathname
 
-// ── Feature schema ────────────────────────────────────────────────────────────
-
-// Position dummies only make sense in the global (cross-position) model; a
-// per-group model trains on a single group so they'd just be constant columns.
-const GROUP_FEATURES: ModelSignal[] = ['draftScore', 'logPick', 'pffComp', 'pffGrade', 'pffProd', 'pffEff', 'pffClean', 'hasPff', 'ageScore', 'athletic', 'size', 'strength']
-const GLOBAL_FEATURES: ModelSignal[] = [...GROUP_FEATURES, 'isQB', 'isSkill', 'isOL', 'isFront', 'isDB']
-
-const GROUPS = ['QB', 'SKILL', 'OL', 'FRONT', 'DB'] as const
-type Grp = typeof GROUPS[number]
-
-// ── Build the training corpus (features computed walk-forward, once) ─────────
-
-type Row = { year: number; grp: Grp; pick: number; av: number; currentModelScore: number; features: Record<ModelSignal, number> }
-
 console.log('Loading data...')
-const { pool, pffProfiles, pffByKey, rasLookup, qbPffSeasons, y1NflStats } = loadEvalData(DATA)
+const evalData = loadEvalData(DATA)
 
-const evalSet = pool.filter((p) => p.year >= 2000 && p.year <= 2020 && p.pick < 260 && KNOWN_POSITIONS.has(p.pos))
-console.log(`Computing walk-forward features for ${evalSet.length} players...`)
-
-const rows: Row[] = []
-let done = 0
-for (const player of evalSet) {
-  const pff      = pffByKey.get(`${clean(player.name)}|${player.year}`)
-  const rasRec   = getRas(player.name, player.year, player.pos, rasLookup)
-  const prospect = toProspect(player, qbPffSeasons, pff, rasRec)
-  // Walk-forward: this player's features only ever see strictly-earlier draft years,
-  // exactly like scripts/evaluate-model.mts --walk-forward and exactly like a real
-  // "score a new prospect today" call would only ever see the past.
-  const wfPool        = pool.filter((p) => p.year < player.year)
-  const wfPffProfiles = pffProfiles.filter((p) => p.draftSeason < player.year)
-  const proj = project(prospect, wfPool, wfPffProfiles, player.id, undefined, undefined, undefined, prospect.qbTrajectory?.gradeDelta ?? null, true, undefined, y1NflStats, null)
-  const features = buildCalibrationFeatureValues(prospect, proj.signals)
-  // Pin the ORIGINAL single hand-fit global model for the "current production" baseline
-  // comparison below, regardless of what project()'s own default currently resolves to --
-  // project() now defaults to this script's own output (see the wiring commit), so
-  // without pinning, re-running this script after that wiring would compare the new fit
-  // against itself instead of against the pre-refit baseline.
-  const oldProj = project(prospect, wfPool, wfPffProfiles, player.id, undefined, undefined, undefined, prospect.qbTrajectory?.gradeDelta ?? null, true, undefined, y1NflStats, { global: calibratedAvModel })
-  rows.push({ year: player.year, grp: (group[player.pos] ?? 'SKILL') as Grp, pick: player.pick, av: player.av, currentModelScore: oldProj.score, features })
-  done++
-  if (done % 1000 === 0) process.stdout.write(`  ${done}/${evalSet.length}\r`)
-}
-console.log(`  ${done}/${evalSet.length} done`)
+console.log('Computing walk-forward features...')
+const rows: Row[] = buildTrainingRows(evalData, 2000, 2020, (done, total) => process.stdout.write(`  ${done}/${total}\r`))
+console.log(`  ${rows.length} rows done`)
 
 function toMatrix(subset: Row[], featureNames: ModelSignal[]): { X: number[][]; y: number[] } {
   return {
