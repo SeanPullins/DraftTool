@@ -50,23 +50,6 @@ type PatternAlert = {
   description: string
 }
 type Projection = ReturnType<typeof project>
-type PositionProjectionOverlay = {
-  score: number
-  av: number
-  model: string
-  source: string
-  grade?: number
-  tier?: string
-  forecast?: Record<string, unknown>
-  pff?: Record<string, unknown>
-}
-
-type FinalScoreResult = {
-  score: number
-  model: string
-  source: string
-  tier: string | null
-}
 
 type PositionCompSignal = {
   compAdjustment: number
@@ -253,7 +236,6 @@ function App() {
   const [collegeShardPos, setCollegeShardPos] = useState<string>('QB')
   const [collegeShardLoading, setCollegeShardLoading] = useState(false)
 
-  const [projectionOverlay, setProjectionOverlay] = useState<Map<string, PositionProjectionOverlay>>(new Map())
   const [compSignalMap, setCompSignalMap] = useState<Map<string, PositionCompSignal>>(new Map())
   const [rbScoreReadyMap, setRbScoreReadyMap] = useState<Map<string, RbScoreReadySignal>>(new Map())
   const [rasLookup, setRasLookup] = useState<AppRasLookup | null>(null)
@@ -338,15 +320,7 @@ function App() {
     () => project(projectedInput, prospects, pffProfiles, undefined, y1Data, careerStats, activeInjuryFlag?.severity, activeQbGradeDelta),
     [projectedInput, prospects, pffProfiles, y1Data, careerStats, activeInjuryFlag, activeQbGradeDelta],
   )
-  // Authoritative score for the active player, resolved through the shared helper.
-  const displayScore = useMemo(
-    () => resolveFinalScore(
-      { name: input.name, pos: input.pos, year: input.draftSeason },
-      projection,
-      projectionOverlay,
-    ).score,
-    [input.name, input.pos, input.draftSeason, projection, projectionOverlay],
-  )
+  const displayScore = projection.score
 
   const histFlagMap = useMemo(
     () => buildHistoricalFlagMap(
@@ -379,15 +353,11 @@ function App() {
         const patternAlerts = extractPatternAlerts(projection.fullComps, histFlagMap)
         const historical = lookupPool.find((h) => clean(h.name) === clean(player.name) && h.year === player.draftSeason && h.pos === player.pos) ?? null
         const earlyFlag = historical ? (histFlagMap.get(historical.id) ?? null) : null
-        const finalScore = resolveFinalScore(
-          { name: player.name, pos: player.pos, year: player.draftSeason },
-          projection,
-          projectionOverlay,
-        ).score
+        const finalScore = projection.score
         return { player, projection, patternAlerts, earlyFlag, finalScore }
       })
       .sort((a, b) => b.finalScore - a.finalScore),
-    [saved, prospects, pffProfiles, y1Data, careerStats, histFlagMap, lookupPool, qbPffSeasons, wrPffSeasons, projectionOverlay],
+    [saved, prospects, pffProfiles, y1Data, careerStats, histFlagMap, lookupPool, qbPffSeasons, wrPffSeasons],
   )
 
   const orderedBoard = useMemo(() => {
@@ -510,50 +480,6 @@ function App() {
       }
     }
     load()
-  }, [])
-
-  useEffect(() => {
-    let cancelled = false
-
-    async function loadProjectionOverlay() {
-      const files = [
-        'prospects_2024_qb.json',
-        'prospects_2025_qb.json',
-        'prospects_2026_qb.json',
-        'prospects_2027_qb.json',
-
-        'prospects_2024_wr.json',
-        'prospects_2025_wr.json',
-        'prospects_2026_wr.json',
-        'prospects_2027_wr.json',
-
-        'prospects_2024_te.json',
-        'prospects_2025_te.json',
-        'prospects_2026_te.json',
-        'prospects_2027_te.json',
-
-        'prospects_2025_rb.json',
-        'prospects_2026_rb.json',
-        'prospects_2027_rb.json',
-
-        // Authoritative final QB model output, when generated. Loaded last so it
-        // overrides the per-prospect-file QB scores for the same player/year.
-        'model/qb_final_scores.json',
-      ]
-
-      const payloads = await Promise.all(
-        files.map((file) =>
-          fetch(`${assetBase}data/${file}`)
-            .then((r) => r.ok ? r.json() : null)
-            .catch(() => null)
-        )
-      )
-
-      if (!cancelled) setProjectionOverlay(buildProjectionOverlayMap(payloads))
-    }
-
-    loadProjectionOverlay()
-    return () => { cancelled = true }
   }, [])
 
   useEffect(() => {
@@ -894,7 +820,7 @@ function App() {
     </div>
 
     {error ? <section className="panel empty">{error}</section> : page === 'class' ? <div className="classPage">
-      <ClassExplorer pool={lookupPool} history={prospects} pffProfiles={pffProfiles} pffLookup={pffLookup} y1Data={y1Data} careerStats={careerStats} histFlagMap={histFlagMap} currentName={input.name} currentYear={input.draftSeason} saved={saved} projectionOverlay={projectionOverlay} compSignalMap={compSignalMap} rbScoreReadyMap={rbScoreReadyMap} qbTranslationMap={qbTranslationMap} qbPffSeasons={qbPffSeasons} wrPffSeasons={wrPffSeasons} tePffSeasons={tePffSeasons} rbPffSeasons={rbPffSeasons} />
+      <ClassExplorer pool={lookupPool} history={prospects} pffProfiles={pffProfiles} pffLookup={pffLookup} y1Data={y1Data} careerStats={careerStats} histFlagMap={histFlagMap} currentName={input.name} currentYear={input.draftSeason} saved={saved} compSignalMap={compSignalMap} rbScoreReadyMap={rbScoreReadyMap} qbTranslationMap={qbTranslationMap} qbPffSeasons={qbPffSeasons} wrPffSeasons={wrPffSeasons} tePffSeasons={tePffSeasons} rbPffSeasons={rbPffSeasons} />
     </div> : page === 'players' ? <div className="classPage">
       <PlayerBrowser pool={lookupPool} history={prospects} histFlagMap={histFlagMap} onOpenModal={openModal} onCompare={handleCompare} />
     </div> : page === 'compare' ? <div className="classPage">
@@ -2355,7 +2281,7 @@ function getAny(obj: any, keys: string[]): any {
 }
 
 
-function ClassExplorer({ pool, history, pffProfiles, pffLookup, y1Data, careerStats, histFlagMap, currentName, currentYear, saved, projectionOverlay, compSignalMap, rbScoreReadyMap, qbTranslationMap, qbPffSeasons, wrPffSeasons, tePffSeasons, rbPffSeasons }: { pool: Historical[]; history: Historical[]; pffProfiles: PffProfile[]; pffLookup: Map<string, PffProfile>; y1Data?: Y1Data; careerStats?: CareerStatMap; histFlagMap: Map<string, HistoricalOutcomeFlag>; currentName: string; currentYear: number; saved: SavedProspect[]; projectionOverlay: Map<string, PositionProjectionOverlay>; compSignalMap: Map<string, PositionCompSignal>; rbScoreReadyMap: Map<string, RbScoreReadySignal>; qbTranslationMap: Map<string, QbTranslationSignal>; qbPffSeasons: QbPffSeason[]; wrPffSeasons: WrPffSeason[]; tePffSeasons: any[]; rbPffSeasons: any[]; }) {
+function ClassExplorer({ pool, history, pffProfiles, pffLookup, y1Data, careerStats, histFlagMap, currentName, currentYear, saved, compSignalMap, rbScoreReadyMap, qbTranslationMap, qbPffSeasons, wrPffSeasons, tePffSeasons, rbPffSeasons }: { pool: Historical[]; history: Historical[]; pffProfiles: PffProfile[]; pffLookup: Map<string, PffProfile>; y1Data?: Y1Data; careerStats?: CareerStatMap; histFlagMap: Map<string, HistoricalOutcomeFlag>; currentName: string; currentYear: number; saved: SavedProspect[]; compSignalMap: Map<string, PositionCompSignal>; rbScoreReadyMap: Map<string, RbScoreReadySignal>; qbTranslationMap: Map<string, QbTranslationSignal>; qbPffSeasons: QbPffSeason[]; wrPffSeasons: WrPffSeason[]; tePffSeasons: any[]; rbPffSeasons: any[]; }) {
 
   const years = useMemo(() => {
     const set = new Set<number>()
@@ -2423,7 +2349,7 @@ function ClassExplorer({ pool, history, pffProfiles, pffLookup, y1Data, careerSt
     const out = new Map<string, { av: number; score: number }>()
     if (!useProjections) return out
     // Cache key encodes inputs that affect projection output
-    const inputSig = `${history.length}|${pffProfiles.length}|${y1Data?.qb.length ?? 0}|${y1Data?.wr.length ?? 0}|${y1Data?.rb.length ?? 0}|${Object.keys(careerStats ?? {}).length}|overlay:${projectionOverlay.size}`
+    const inputSig = `${history.length}|${pffProfiles.length}|${y1Data?.qb.length ?? 0}|${y1Data?.wr.length ?? 0}|${y1Data?.rb.length ?? 0}|${Object.keys(careerStats ?? {}).length}`
     for (const player of deferredFiltered) {
       const cacheKey = `${player.id}|${inputSig}`
       const cached = projCache.current.get(cacheKey)
@@ -2440,13 +2366,13 @@ function ClassExplorer({ pool, history, pffProfiles, pffLookup, y1Data, careerSt
       const projected = project(synthesizedWithContext, history, pffProfiles, player.id, y1Data, careerStats, undefined, qbContext?.trajectory?.gradeDelta ?? null)
       const result = {
         av: projected.expectedAv,
-        score: resolveFinalScore(player, projected, projectionOverlay).score,
+        score: projected.score,
       }
       projCache.current.set(cacheKey, result)
       out.set(player.id, result)
     }
     return out
-  }, [deferredFiltered, history, pffProfiles, pffLookup, useProjections, y1Data, careerStats, qbPffSeasons, wrPffSeasons, projectionOverlay])
+  }, [deferredFiltered, history, pffProfiles, pffLookup, useProjections, y1Data, careerStats, qbPffSeasons, wrPffSeasons])
 
   // O(1) player-to-PFF lookup for this class
   const pffMap = useMemo(() => {
@@ -2584,7 +2510,7 @@ function ClassExplorer({ pool, history, pffProfiles, pffLookup, y1Data, careerSt
         </button>
       ))}
     </div>
-    {useProjections ? <p className="hint">Final Score and Projected AV use the calibrated 2016-2023 model plus each player's draft/combine and matched PFF profile when available. QBs use the Final QB Model when available.</p> : null}
+    {useProjections ? <p className="hint">Final Score and Projected AV use the calibrated 2016-2023 model plus each player's draft/combine and matched PFF profile when available.</p> : null}
     {rows.length ? <TableWrap>
       <table className="classTable">
         <thead>
@@ -3900,37 +3826,6 @@ function projectionOverlayKey(year: number, pos: string, name: string): string {
   return `${Number(year)}|${String(pos || '').toUpperCase()}|${clean(name)}`
 }
 
-// Single source of truth for the score shown anywhere in the UI. QB resolves to the
-// final QB model output from the projection overlay when present; every other position
-// uses the base projection score until its own model is rebuilt.
-function resolveFinalScore(
-  player: { name: string; pos: string; year?: number; draftSeason?: number },
-  projection: { score?: number } | null | undefined,
-  projectionOverlay: Map<string, PositionProjectionOverlay>,
-): FinalScoreResult {
-  const pos = String(player.pos || '').toUpperCase()
-  const year = Number(player.year ?? player.draftSeason ?? 0)
-  const baseScore = Number(projection?.score)
-  const fallback: FinalScoreResult = {
-    score: Number.isFinite(baseScore) ? baseScore : 0,
-    model: 'Projection model',
-    source: 'projection',
-    tier: null,
-  }
-
-  if (pos !== 'QB') return fallback
-
-  const overlay = projectionOverlay.get(projectionOverlayKey(year, pos, player.name))
-  if (!overlay || !Number.isFinite(overlay.score) || overlay.score <= 0) return fallback
-
-  return {
-    score: overlay.score,
-    model: 'Final QB Model',
-    source: overlay.source || overlay.model || 'overlay',
-    tier: overlay.tier ?? getQbV11Tier(overlay.score).label,
-  }
-}
-
 
 function normalizeCompList(value: unknown): PositionCompSignal['projectionComps'] {
   if (!Array.isArray(value)) return []
@@ -4195,64 +4090,6 @@ function buildCompSignalMap(payload: unknown): Map<string, PositionCompSignal> {
         avgCompDelta: numberField(r, 'avgCompDelta', 0),
         projectionComps: normalizeCompList(r.projectionComps),
         styleComps: normalizeCompList(r.styleComps),
-      })
-    }
-  }
-
-  return map
-}
-
-
-function buildProjectionOverlayMap(payloads: unknown): Map<string, PositionProjectionOverlay> {
-  const map = new Map<string, PositionProjectionOverlay>()
-  if (!Array.isArray(payloads)) return map
-
-  for (const payload of payloads) {
-    if (!payload || typeof payload !== 'object') continue
-
-    const model = stringField(payload as Record<string, unknown>, 'model', 'generated_projection')
-    // QB prospect files are plain arrays; other position files wrap records in an object
-    const records = Array.isArray(payload)
-      ? payload
-      : (payload as { records?: unknown[] }).records
-    if (!Array.isArray(records)) continue
-
-    for (const entry of records) {
-      const r = asRecord(entry)
-      if (!r) continue
-
-      const name = stringField(r, 'name', '')
-      const pos = norm(stringField(r, 'pos', stringField(r, 'position', '')))
-      const year = numberField(r, 'year', numberField(r, 'draftSeason', numberField(r, 'draftYear', 0)))
-      if (!name || !year || !positions.includes(pos)) continue
-
-      const forecast = asRecord(r.forecast) ?? undefined
-      const pff = asRecord(r.pff) ?? undefined
-
-      const score =
-        numberField(r, 'finalScore', 0) ||
-        numberField(r, 'grade', 0) ||
-        numberField(r, 'score', 0) ||
-        (forecast ? numberField(forecast, 'final', 0) : 0)
-
-      if (!score) continue
-
-      const av =
-        forecast ? (
-          numberField(forecast, 'projectedAv', 0) ||
-          numberField(forecast, 'av', 0) ||
-          Math.round(score * 0.55)
-        ) : Math.round(score * 0.55)
-
-      map.set(projectionOverlayKey(year, pos, name), {
-        score,
-        av,
-        grade: numberField(r, 'grade', score),
-        tier: stringField(r, 'tier', '') || undefined,
-        model,
-        source: stringField(r, 'source', model),
-        forecast,
-        pff,
       })
     }
   }
