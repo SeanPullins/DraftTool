@@ -1,6 +1,8 @@
 // Pure model functions and types — no React dependencies.
 // Extracted to enable unit testing without the full component tree.
 
+import { fittedCalibrationModels } from './fittedCalibrationModels.ts'
+
 // ── Types ─────────────────────────────────────────────────────────────────────
 
 export type Category = 'Bust' | 'Reserve' | 'Role' | 'Starter' | 'High-end starter' | 'Star'
@@ -1299,12 +1301,15 @@ export function project(input: Prospect, history: Historical[], pffProfiles: Pff
     .10
   ) : 0
   const rawScore = baseScore * (1 - pffBlend) + pffSignal * pffBlend
-  const calibModel = calibModels
-    ? ((calibModels[grp as keyof CalibrationModelSet] as CalibrationModel | undefined) ?? calibModels.global)
-    : null
-  const calibratedAv = calibModel
-    ? calibratedExpectedAvFromModel(input, { draft, athletic, size, age, strength }, calibModel)
-    : calibratedExpectedAv(input, { draft, athletic, size, age, strength })
+  // Callers (App.tsx) never pass calibModels explicitly, so this default is what
+  // production actually runs on. It used to silently fall back to a single global
+  // hand-fit model for every position; it now uses the walk-forward-CV-fit,
+  // per-position-group models from scripts/fit-calibration-model.mts (falling back
+  // to that fit's own global model for any group it lacks -- see that script's
+  // "too little mature data" check).
+  const modelSet = calibModels ?? fittedCalibrationModels
+  const calibModel = (modelSet[grp as keyof CalibrationModelSet] as CalibrationModel | undefined) ?? modelSet.global
+  const calibratedAv = calibratedExpectedAvFromModel(input, { draft, athletic, size, age, strength }, calibModel)
 
   const comps = pool.map((p) => ({ player: p, sim: sim(input, p, y1Data, careerStats, grpCutoff, y1NflStats) })).sort((a, b) => b.sim - a.sim).slice(0, 80)
   const histWeight = comps.reduce((sum, c) => sum + c.sim, 0) || 1

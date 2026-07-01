@@ -19,9 +19,9 @@
 //
 // Usage: node --experimental-strip-types scripts/fit-calibration-model.mts
 
-import { clean, project, buildCalibrationFeatureValues, group, compCutoffForGroup } from '../src/model.ts'
+import { clean, project, buildCalibrationFeatureValues, group, compCutoffForGroup, calibratedAvModel } from '../src/model.ts'
 import type { Historical, Prospect, ModelSignal, CalibrationModel, CalibrationModelSet } from '../src/model.ts'
-import { loadEvalData, toProspect, getRas, KNOWN_POSITIONS, spearman, mae } from './lib/eval-data.mts'
+import { loadEvalData, toProspect, getRas, KNOWN_POSITIONS, spearman, mae, bias as computeBias } from './lib/eval-data.mts'
 import { ridgeFit, predictRidge, type FittedRidge } from './lib/ridge.mts'
 
 const DATA = new URL('../public/data/', import.meta.url).pathname
@@ -57,13 +57,15 @@ for (const player of evalSet) {
   // "score a new prospect today" call would only ever see the past.
   const wfPool        = pool.filter((p) => p.year < player.year)
   const wfPffProfiles = pffProfiles.filter((p) => p.draftSeason < player.year)
-  // calibModels=null here means project() falls back to the CURRENT hand-fit
-  // calibratedAvModel -- so proj.score below doubles as "what production does today"
-  // for the same walk-forward row, letting us compare the new regression fairly
-  // against the currently-deployed full scoring pipeline (comps + rawScore + this).
   const proj = project(prospect, wfPool, wfPffProfiles, player.id, undefined, undefined, undefined, prospect.qbTrajectory?.gradeDelta ?? null, true, undefined, y1NflStats, null)
   const features = buildCalibrationFeatureValues(prospect, proj.signals)
-  rows.push({ year: player.year, grp: (group[player.pos] ?? 'SKILL') as Grp, pick: player.pick, av: player.av, currentModelScore: proj.score, features })
+  // Pin the ORIGINAL single hand-fit global model for the "current production" baseline
+  // comparison below, regardless of what project()'s own default currently resolves to --
+  // project() now defaults to this script's own output (see the wiring commit), so
+  // without pinning, re-running this script after that wiring would compare the new fit
+  // against itself instead of against the pre-refit baseline.
+  const oldProj = project(prospect, wfPool, wfPffProfiles, player.id, undefined, undefined, undefined, prospect.qbTrajectory?.gradeDelta ?? null, true, undefined, y1NflStats, { global: calibratedAvModel })
+  rows.push({ year: player.year, grp: (group[player.pos] ?? 'SKILL') as Grp, pick: player.pick, av: player.av, currentModelScore: oldProj.score, features })
   done++
   if (done % 1000 === 0) process.stdout.write(`  ${done}/${evalSet.length}\r`)
 }
@@ -76,14 +78,29 @@ function toMatrix(subset: Row[], featureNames: ModelSignal[]): { X: number[][]; 
   }
 }
 
-function fitAndScore(train: Row[], test: Row[], featureNames: ModelSignal[], alpha: number): { rho: number; maeAv: number } | null {
+// Fitting on log1p(AV) and back-transforming with expm1 is a standard log-linear
+// regression -- but E[expm1(predicted)] systematically UNDER-estimates E[AV | X] for a
+// right-skewed target like AV, regardless of ridge alpha (Jensen's-inequality-style
+// retransformation bias; this showed up as a -6 to -9 AV bias even at near-zero
+// regularization when this was first fit without a correction). Duan's smearing
+// estimator fixes it: a single multiplicative correction, computed from training
+// residuals, applied uniformly. In log1p/expm1 space the correction reduces to just
+// adding log(mean(exp(residual))) to the intercept -- see chat/commit for the algebra.
+function fitWithSmearing(X: number[][], y: number[], alpha: number): FittedRidge {
+  const fit = ridgeFit(X, y, alpha)
+  const residuals = X.map((x, i) => y[i] - predictRidge(fit, x))
+  const smearLog = Math.log(residuals.reduce((s, r) => s + Math.exp(r), 0) / residuals.length)
+  return { ...fit, intercept: fit.intercept + smearLog }
+}
+
+function fitAndScore(train: Row[], test: Row[], featureNames: ModelSignal[], alpha: number): { rho: number; maeAv: number; biasAv: number } | null {
   if (train.length < featureNames.length * 5 || test.length < 5) return null
   const { X, y } = toMatrix(train, featureNames)
-  const fit = ridgeFit(X, y, alpha)
+  const fit = fitWithSmearing(X, y, alpha)
   const testX = toMatrix(test, featureNames).X
   const predAv = testX.map((x) => Math.max(0, Math.expm1(predictRidge(fit, x))))
   const actual = test.map((r) => r.av)
-  return { rho: spearman(predAv, actual), maeAv: mae(predAv, actual) }
+  return { rho: spearman(predAv, actual), maeAv: mae(predAv, actual), biasAv: computeBias(predAv, actual) }
 }
 
 // ── Step 1-2: walk-forward alpha search, tuning years only (<=2015) ──────────
@@ -91,21 +108,32 @@ function fitAndScore(train: Row[], test: Row[], featureNames: ModelSignal[], alp
 const ALPHAS = [0.3, 1, 3, 10, 30, 100, 300]
 const TUNE_FOLD_YEARS = Array.from({ length: 2015 - 2007 + 1 }, (_, i) => 2007 + i) // 2007..2015
 
+// Ridge shrinkage compresses predictions toward the mean; run through the nonlinear
+// expm1 back-transform, that compression shows up as systematic under-prediction for
+// high-AV players (mostly early picks) even when it doesn't hurt rank correlation at
+// all -- rho only cares about order, not scale. Penalizing |bias| in the alpha
+// objective catches this; picking on rho alone previously chose alpha=300 for several
+// groups and produced a -10 AV bias for round-1 picks in the full eval.
+const BIAS_PENALTY = 0.006
+
 function tuneAlpha(subset: Row[], featureNames: ModelSignal[], label: string): number {
-  let best = { alpha: ALPHAS[0], rho: -Infinity }
+  let best = { alpha: ALPHAS[0], score: -Infinity, rho: 0, biasAv: 0 }
   for (const alpha of ALPHAS) {
     const rhos: number[] = []
+    const biases: number[] = []
     for (const foldYear of TUNE_FOLD_YEARS) {
       const train = subset.filter((r) => r.year < foldYear)
       const test  = subset.filter((r) => r.year === foldYear)
       const scored = fitAndScore(train, test, featureNames, alpha)
-      if (scored && !isNaN(scored.rho)) rhos.push(scored.rho)
+      if (scored && !isNaN(scored.rho)) { rhos.push(scored.rho); biases.push(scored.biasAv) }
     }
     if (!rhos.length) continue
-    const meanRho = rhos.reduce((s, r) => s + r, 0) / rhos.length
-    if (meanRho > best.rho) best = { alpha, rho: meanRho }
+    const meanRho  = rhos.reduce((s, r) => s + r, 0) / rhos.length
+    const meanBias = biases.reduce((s, b) => s + b, 0) / biases.length
+    const score = meanRho - BIAS_PENALTY * Math.abs(meanBias)
+    if (score > best.score) best = { alpha, score, rho: meanRho, biasAv: meanBias }
   }
-  console.log(`  [${label}] chosen alpha=${best.alpha}  (mean walk-forward CV rho=${best.rho.toFixed(3)} over ${TUNE_FOLD_YEARS.length} folds, years<=2015 only)`)
+  console.log(`  [${label}] chosen alpha=${best.alpha}  (mean CV rho=${best.rho.toFixed(3)}, mean CV bias=${best.biasAv.toFixed(1)} AV, over ${TUNE_FOLD_YEARS.length} folds, years<=2015 only)`)
   return best.alpha
 }
 
@@ -126,7 +154,7 @@ function confirm(subset: Row[], featureNames: ModelSignal[], alpha: number, labe
   const test  = subset.filter((r) => r.year >= 2016 && r.year <= 2020)
   const scored = fitAndScore(train, test, featureNames, alpha)
   if (!scored) { console.log(`  [${label}] insufficient data (train=${train.length} test=${test.length})`); return }
-  console.log(`  [${label}] n_train=${train.length} n_test=${test.length}  rho=${scored.rho.toFixed(3)}  MAE=${scored.maeAv.toFixed(1)}`)
+  console.log(`  [${label}] n_train=${train.length} n_test=${test.length}  rho=${scored.rho.toFixed(3)}  MAE=${scored.maeAv.toFixed(1)}  bias=${scored.biasAv.toFixed(1)}`)
 }
 
 confirm(rows, GLOBAL_FEATURES, globalAlpha, 'global')
@@ -150,7 +178,7 @@ console.log('\n── Final refit on all mature data (this is what ships) ──
 
 function buildModel(subset: Row[], featureNames: ModelSignal[], alpha: number): CalibrationModel {
   const { X, y } = toMatrix(subset, featureNames)
-  const fit: FittedRidge = ridgeFit(X, y, alpha)
+  const fit: FittedRidge = fitWithSmearing(X, y, alpha)
   return {
     intercept: fit.intercept,
     features: featureNames.map((name, i) => ({ name, coef: fit.coefs[i], mean: fit.means[i], sd: fit.sds[i] })),
