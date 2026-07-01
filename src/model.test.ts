@@ -257,7 +257,16 @@ describe('project (regression)', () => {
   })
 
   it('QB declining trajectory reduces score', () => {
-    const p = makeProspect({ pos: 'QB', pick: 1 })
+    // gradeDelta only moves the score when paired with a qbTrajectory of sufficient
+    // volume confidence (see trajectoryAdj's volFactor gate in project()) — production
+    // always derives both from the same computeQbTrajectory() call, so the fixture
+    // must mirror that pairing instead of passing gradeDelta on its own.
+    const trajectory = {
+      latestSeason: 2024, priorSeason: 2023, latestVolume: 'high' as const, priorVolume: 'high' as const,
+      gradeDelta: null, accuracyDelta: null, bttRateDelta: null, twpRateDelta: null,
+      epaDelta: null, positiveEpaDelta: null, trajectoryScore: 50, trajectoryLabel: 'unknown' as const,
+    }
+    const p = makeProspect({ pos: 'QB', pick: 1, qbTrajectory: trajectory })
     const stable = project(p, history, pffProfiles, undefined, undefined, undefined, undefined, 0)
     const declining = project(p, history, pffProfiles, undefined, undefined, undefined, undefined, -15)
     expect(stable.score).toBeGreaterThan(declining.score)

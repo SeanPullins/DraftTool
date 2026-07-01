@@ -1,6 +1,8 @@
 // Pure model functions and types — no React dependencies.
 // Extracted to enable unit testing without the full component tree.
 
+import { fittedCalibrationModels } from './fittedCalibrationModels.ts'
+
 // ── Types ─────────────────────────────────────────────────────────────────────
 
 export type Category = 'Bust' | 'Reserve' | 'Role' | 'Starter' | 'High-end starter' | 'Star'
@@ -316,7 +318,7 @@ export type CareerSeasonStat = {
 
 export type CareerStatMap = Record<string, CareerSeasonStat[]>
 
-export type ModelSignal = 'draftScore' | 'logPick' | 'pffComp' | 'pffGrade' | 'pffProd' | 'pffEff' | 'pffClean' | 'ageScore' | 'athletic' | 'size' | 'isQB' | 'isSkill' | 'isOL' | 'isFront' | 'isDB'
+export type ModelSignal = 'draftScore' | 'logPick' | 'pffComp' | 'pffGrade' | 'pffProd' | 'pffEff' | 'pffClean' | 'hasPff' | 'ageScore' | 'athletic' | 'size' | 'strength' | 'isQB' | 'isSkill' | 'isOL' | 'isFront' | 'isDB'
 
 // ── Constants ─────────────────────────────────────────────────────────────────
 
@@ -343,9 +345,14 @@ export const calibratedAvModel: CalibrationModel = {
     { name: 'pffProd', coef: 0.1217359963782789, mean: 44.823447401774374, sd: 26.970209736123333 },
     { name: 'pffEff', coef: -0.16542264368432483, mean: 76.55031685678067, sd: 14.41636658020626 },
     { name: 'pffClean', coef: 0.02570371785419989, mean: 66.59353612167301, sd: 15.646482576825223 },
+    // hasPff/strength: placeholder zero-coef entries pending the walk-forward CV refit
+    // (scripts/fit-calibration-model.mts) — added so the feature schema is stable and
+    // callers don't need updating twice; contribute nothing until refit with real data.
+    { name: 'hasPff', coef: 0, mean: 50, sd: 1 },
     { name: 'ageScore', coef: 0.0629739702621933, mean: 61.667934093789604, sd: 13.903387389522521 },
     { name: 'athletic', coef: 0.08308460771343065, mean: 53.28770293332807, sd: 16.108057294946907 },
     { name: 'size', coef: -0.02159427729646015, mean: 57.2611301521237, sd: 22.821943730203717 },
+    { name: 'strength', coef: 0, mean: 50, sd: 1 },
     { name: 'isQB', coef: -0.3413377811446161, mean: 0.08238276299112801, sd: 0.27494698280409635 },
     { name: 'isSkill', coef: -0.1898380898326027, mean: 0.2572877059569075, sd: 0.43713927107998507 },
     { name: 'isOL', coef: 0.2564974833852538, mean: 0.19011406844106463, sd: 0.3923910159800472 },
@@ -376,15 +383,22 @@ export const rasBlendByGroup: Record<string, number> = {
   QB: 0.20, SKILL: 0.55, OL: 0.60, FRONT: 0.55, DB: 0.65,
 }
 
+// Size (height/weight percentile within position) weight halved for every group and the
+// freed weight folded into draft capital. Walk-forward backtest (scripts/evaluate-model.mts
+// --walk-forward) showed size is the single worst-offending signal of those tested: zeroing
+// its weight raised rank ρ in all five groups (e.g. OL 0.531→0.555, DB CB 0.502→0.508,
+// SKILL RB 0.579→0.586), more than any other signal removal. A half-weight cut keeps most
+// of that recovered ρ while still letting genuine size outliers (e.g. undersized OL) move
+// the score some.
 export const signalWeights: Record<string, { draft: number; athletic: number; size: number; age: number; strength: number }> = {
-  QB:    { draft: .55, athletic: .08, size: .08, age: .19, strength: .10 },
-  SKILL: { draft: .45, athletic: .28, size: .05, age: .15, strength: .07 },
-  // OL: athletic strongly predictive (r=−0.25 to −0.30); age and size both matter
-  OL:    { draft: .37, athletic: .21, size: .19, age: .13, strength: .10 },
+  QB:    { draft: .59,  athletic: .08, size: .04,  age: .19, strength: .10 },
+  SKILL: { draft: .475, athletic: .28, size: .025, age: .15, strength: .07 },
+  // OL: athletic strongly predictive (r=−0.25 to −0.30); age matters; size effect is weak net
+  OL:    { draft: .465, athletic: .21, size: .095, age: .13, strength: .10 },
   // FRONT: age r=−0.327 and bench r=0.219 are the dominant signals
-  FRONT: { draft: .33, athletic: .18, size: .09, age: .18, strength: .22 },
+  FRONT: { draft: .375, athletic: .18, size: .045, age: .18, strength: .22 },
   // DB: cone/shuttle r=−0.21 to −0.22, age r=−0.294 → raise athletic+age
-  DB:    { draft: .38, athletic: .34, size: .05, age: .19, strength: .04 },
+  DB:    { draft: .405, athletic: .34, size: .025, age: .19, strength: .04 },
 }
 
 // ── Utility ───────────────────────────────────────────────────────────────────
@@ -532,8 +546,16 @@ function pickRangeBaseline(pick: number): { av: number; weight: number } {
   return                   { av:  7.4, weight: 0.35 }
 }
 
-export function calibratedExpectedAv(input: Prospect, signals: { draft: number; athletic: number; size: number; age: number }) {
-  const values: Record<ModelSignal, number> = {
+export type CalibrationSignals = { draft: number; athletic: number; size: number; age: number; strength?: number }
+
+// Single source of truth for the calibration-regression feature vector — used at both
+// runtime (here) and training time (scripts/fit-calibration-model.mts imports this
+// directly) so the two can never drift the way model.ts and the old
+// scripts/fit-calibration-models.py did. hasPff distinguishes a real matched PFF
+// profile from toProspect()'s placeholder-70 defaults (see the pffBlend gating fix);
+// strength defaults to the same neutral 50 used when there isn't enough bench data.
+export function buildCalibrationFeatureValues(input: Prospect, signals: CalibrationSignals): Record<ModelSignal, number> {
+  return {
     draftScore: signals.draft,
     logPick: Math.log(clamp(input.pick, 1, 260)),
     pffComp: input.pffComposite,
@@ -541,46 +563,29 @@ export function calibratedExpectedAv(input: Prospect, signals: { draft: number; 
     pffProd: input.pffProduction,
     pffEff: input.pffEfficiency,
     pffClean: input.pffClean,
+    hasPff: input.pffProfileId !== '' ? 1 : 0,
     ageScore: signals.age,
     athletic: signals.athletic,
     size: signals.size,
+    strength: signals.strength ?? 50,
     isQB: input.pos === 'QB' ? 1 : 0,
     isSkill: group[input.pos] === 'SKILL' ? 1 : 0,
     isOL: group[input.pos] === 'OL' ? 1 : 0,
     isFront: group[input.pos] === 'FRONT' ? 1 : 0,
     isDB: group[input.pos] === 'DB' ? 1 : 0,
   }
-  const logAv = calibratedAvModel.features.reduce(
-    (sum, feature) => sum + feature.coef * ((values[feature.name] - feature.mean) / feature.sd),
-    calibratedAvModel.intercept,
-  )
-  const modelAv = clamp(Math.expm1(logAv), 0, 110)
-  const { av: baselineAv, weight } = pickRangeBaseline(input.pick)
-  return blend(modelAv, baselineAv, weight)
+}
+
+export function calibratedExpectedAv(input: Prospect, signals: CalibrationSignals) {
+  return calibratedExpectedAvFromModel(input, signals, calibratedAvModel)
 }
 
 export function calibratedExpectedAvFromModel(
   input: Prospect,
-  signals: { draft: number; athletic: number; size: number; age: number },
+  signals: CalibrationSignals,
   model: CalibrationModel,
 ): number {
-  const values: Record<ModelSignal, number> = {
-    draftScore: signals.draft,
-    logPick: Math.log(clamp(input.pick, 1, 260)),
-    pffComp: input.pffComposite,
-    pffGrade: input.pffGrade,
-    pffProd: input.pffProduction,
-    pffEff: input.pffEfficiency,
-    pffClean: input.pffClean,
-    ageScore: signals.age,
-    athletic: signals.athletic,
-    size: signals.size,
-    isQB: input.pos === 'QB' ? 1 : 0,
-    isSkill: group[input.pos] === 'SKILL' ? 1 : 0,
-    isOL: group[input.pos] === 'OL' ? 1 : 0,
-    isFront: group[input.pos] === 'FRONT' ? 1 : 0,
-    isDB: group[input.pos] === 'DB' ? 1 : 0,
-  }
+  const values = buildCalibrationFeatureValues(input, signals)
   const logAv = model.features.reduce(
     (sum, f) => sum + f.coef * ((values[f.name] - f.mean) / (f.sd > 0 ? f.sd : 1)),
     model.intercept,
@@ -1283,7 +1288,12 @@ export function project(input: Prospect, history: Historical[], pffProfiles: Pff
   const pffComps = pffPool.map((profile) => ({ profile, sim: pffSim(input, profile, grp, preDraft) })).sort((a, b) => b.sim - a.sim).slice(0, 80)
   // Position and pick-aware PFF blend: SKILL has real signal; QB gated by projected pick
   // range (PFF near-zero for picks 33+ QBs); OL/LB/DB/FRONT get small blends only.
-  const pffBlend = pffComps.length >= 12 ? (
+  // Gated on the prospect actually having a matched PFF profile — without one, pffComposite/
+  // grade/production/efficiency/clean are all placeholder defaults (see toProspect()), so
+  // pffSim() similarity and pffSignal would be computed from fabricated values instead of
+  // this player's real production data.
+  const hasInputPff = input.pffProfileId !== ''
+  const pffBlend = (hasInputPff && pffComps.length >= 12) ? (
     grp === 'SKILL'    ? .35 :
     grp === 'QB'       ? (input.pick <= 32 ? .28 : input.pick <= 64 ? .14 : .07) :
     grp === 'OL'       ? .12 :
@@ -1291,12 +1301,15 @@ export function project(input: Prospect, history: Historical[], pffProfiles: Pff
     .10
   ) : 0
   const rawScore = baseScore * (1 - pffBlend) + pffSignal * pffBlend
-  const calibModel = calibModels
-    ? ((calibModels[grp as keyof CalibrationModelSet] as CalibrationModel | undefined) ?? calibModels.global)
-    : null
-  const calibratedAv = calibModel
-    ? calibratedExpectedAvFromModel(input, { draft, athletic, size, age }, calibModel)
-    : calibratedExpectedAv(input, { draft, athletic, size, age })
+  // Callers (App.tsx) never pass calibModels explicitly, so this default is what
+  // production actually runs on. It used to silently fall back to a single global
+  // hand-fit model for every position; it now uses the walk-forward-CV-fit,
+  // per-position-group models from scripts/fit-calibration-model.mts (falling back
+  // to that fit's own global model for any group it lacks -- see that script's
+  // "too little mature data" check).
+  const modelSet = calibModels ?? fittedCalibrationModels
+  const calibModel = (modelSet[grp as keyof CalibrationModelSet] as CalibrationModel | undefined) ?? modelSet.global
+  const calibratedAv = calibratedExpectedAvFromModel(input, { draft, athletic, size, age, strength }, calibModel)
 
   const comps = pool.map((p) => ({ player: p, sim: sim(input, p, y1Data, careerStats, grpCutoff, y1NflStats) })).sort((a, b) => b.sim - a.sim).slice(0, 80)
   const histWeight = comps.reduce((sum, c) => sum + c.sim, 0) || 1
@@ -1304,12 +1317,19 @@ export function project(input: Prospect, history: Historical[], pffProfiles: Pff
   const histExpectedAv = comps.reduce((sum, c) => sum + c.player.av * c.sim, 0) / histWeight
   const pffExpectedAv = pffComps.reduce((sum, c) => sum + (c.profile.nfl?.av || 0) * c.sim, 0) / pffWeight
   const compExpectedAv = blend(histExpectedAv, pffExpectedAv, pffBlend)
-  // Ablation (walk-forward): 'Calib only (cb=1)' → +0.030 ρ vs current blend.
-  // Comp AV estimates degrade in WF mode because 90%+ of historical players lack real
-  // PFF data, making comp selection near-random beyond draft capital. Increasing
-  // calibBlend captures most of the regression benefit while preserving comp influence
-  // for floor/ceiling range. QB comps stay at low blend (QB dynamics differ from OLS).
-  const calibBlend = opts?.calibBlendOverride ?? (grp === 'QB' ? 0.20 : (input.pick <= 32 ? 0.55 : input.pick <= 64 ? 0.40 : 0.25))
+  // A prior tiered version of this (QB 0.20, Rd1 0.55, Rd2 0.40, else 0.25) was based on
+  // the old single global calibratedAvModel, which lacked per-position-group coefficients
+  // -- its comment claimed "QB dynamics differ from OLS" as the reason to keep QB's blend
+  // low. Re-tested after the walk-forward-CV refit (scripts/fit-calibration-model.mts,
+  // which fits QB its own regression instead of sharing one global model): raising
+  // calibBlend improves walk-forward rank rho monotonically and *every* position group
+  // benefits, QB most of all (its per-group confirmation rho of 0.74 was the best of any
+  // group). Comp AV estimates degrade in walk-forward mode because 90%+ of historical
+  // players lack real PFF data, making comp selection close to draft-capital-only noise
+  // beyond what the regression already captures directly. Held at 0.85 rather than 1.0
+  // to keep a real (if now minority) share of comp-driven differentiation, since that's
+  // part of what this tool is for.
+  const calibBlend = opts?.calibBlendOverride ?? 0.85
   const expectedAv = blend(compExpectedAv, calibratedAv, calibBlend)
   const posAvValues = pool.filter((p) => p.av >= 0).map((p) => p.av)
   const posRelScore = posAvValues.length >= 15 ? pct(expectedAv, posAvValues) : avToScore(expectedAv)
