@@ -1290,7 +1290,12 @@ export function project(input: Prospect, history: Historical[], pffProfiles: Pff
   const pffComps = pffPool.map((profile) => ({ profile, sim: pffSim(input, profile, grp, preDraft) })).sort((a, b) => b.sim - a.sim).slice(0, 80)
   // Position and pick-aware PFF blend: SKILL has real signal; QB gated by projected pick
   // range (PFF near-zero for picks 33+ QBs); OL/LB/DB/FRONT get small blends only.
-  const pffBlend = pffComps.length >= 12 ? (
+  // Gated on the prospect actually having a matched PFF profile — without one, pffComposite/
+  // grade/production/efficiency/clean are all placeholder defaults (see toProspect()), so
+  // pffSim() similarity and pffSignal would be computed from fabricated values instead of
+  // this player's real production data.
+  const hasInputPff = input.pffProfileId !== ''
+  const pffBlend = (hasInputPff && pffComps.length >= 12) ? (
     grp === 'SKILL'    ? .35 :
     grp === 'QB'       ? (input.pick <= 32 ? .28 : input.pick <= 64 ? .14 : .07) :
     grp === 'OL'       ? .12 :
