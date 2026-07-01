@@ -98,6 +98,7 @@ export function toHistorical(cr: Record<string, string>, dr: Record<string, stri
     id:       `${year}-${cr.player_name || dr?.pfr_player_name || 'unknown'}-${idx}`,
     name:     cr.player_name || dr?.pfr_player_name || 'Unknown',
     school:   cr.school || dr?.college || '',
+    team:     dr?.team ?? '',
     year,
     pos:      norm(cr.pos || dr?.position || ''),
     pick:     n(cr.draft_ovr) || n(dr?.pick) || 260,

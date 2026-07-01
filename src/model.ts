@@ -39,6 +39,7 @@ export type Historical = {
   id: string
   name: string
   school: string
+  team: string
   year: number
   pos: string
   pick: number

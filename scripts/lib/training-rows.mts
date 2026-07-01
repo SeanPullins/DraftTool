@@ -21,6 +21,7 @@ export type TrainingRow = {
   pick: number
   av: number
   school: string
+  team: string   // drafting team -- only ever known POST-draft; not usable for pre-draft prospect scoring
   currentModelScore: number   // full production pipeline score, OLD pre-refit calibratedAvModel pinned (fair baseline)
   features: Record<ModelSignal, number>
 }
@@ -47,7 +48,7 @@ export function buildTrainingRows(data: EvalData, yearMin = 2000, yearMax = 2020
     // last produced, so without pinning, re-running a fitting script after wiring its
     // output in would compare the new fit against itself instead of the pre-refit baseline.
     const oldProj = project(prospect, wfPool, wfPffProfiles, player.id, undefined, undefined, undefined, prospect.qbTrajectory?.gradeDelta ?? null, true, undefined, y1NflStats, { global: calibratedAvModel })
-    rows.push({ year: player.year, grp: (group[player.pos] ?? 'SKILL') as Grp, pick: player.pick, av: player.av, school: player.school, currentModelScore: oldProj.score, features })
+    rows.push({ year: player.year, grp: (group[player.pos] ?? 'SKILL') as Grp, pick: player.pick, av: player.av, school: player.school, team: player.team, currentModelScore: oldProj.score, features })
     done++
     if (onProgress && done % 1000 === 0) onProgress(done, evalSet.length)
   }
