@@ -316,7 +316,7 @@ export type CareerSeasonStat = {
 
 export type CareerStatMap = Record<string, CareerSeasonStat[]>
 
-export type ModelSignal = 'draftScore' | 'logPick' | 'pffComp' | 'pffGrade' | 'pffProd' | 'pffEff' | 'pffClean' | 'ageScore' | 'athletic' | 'size' | 'isQB' | 'isSkill' | 'isOL' | 'isFront' | 'isDB'
+export type ModelSignal = 'draftScore' | 'logPick' | 'pffComp' | 'pffGrade' | 'pffProd' | 'pffEff' | 'pffClean' | 'hasPff' | 'ageScore' | 'athletic' | 'size' | 'strength' | 'isQB' | 'isSkill' | 'isOL' | 'isFront' | 'isDB'
 
 // ── Constants ─────────────────────────────────────────────────────────────────
 
@@ -343,9 +343,14 @@ export const calibratedAvModel: CalibrationModel = {
     { name: 'pffProd', coef: 0.1217359963782789, mean: 44.823447401774374, sd: 26.970209736123333 },
     { name: 'pffEff', coef: -0.16542264368432483, mean: 76.55031685678067, sd: 14.41636658020626 },
     { name: 'pffClean', coef: 0.02570371785419989, mean: 66.59353612167301, sd: 15.646482576825223 },
+    // hasPff/strength: placeholder zero-coef entries pending the walk-forward CV refit
+    // (scripts/fit-calibration-model.mts) — added so the feature schema is stable and
+    // callers don't need updating twice; contribute nothing until refit with real data.
+    { name: 'hasPff', coef: 0, mean: 50, sd: 1 },
     { name: 'ageScore', coef: 0.0629739702621933, mean: 61.667934093789604, sd: 13.903387389522521 },
     { name: 'athletic', coef: 0.08308460771343065, mean: 53.28770293332807, sd: 16.108057294946907 },
     { name: 'size', coef: -0.02159427729646015, mean: 57.2611301521237, sd: 22.821943730203717 },
+    { name: 'strength', coef: 0, mean: 50, sd: 1 },
     { name: 'isQB', coef: -0.3413377811446161, mean: 0.08238276299112801, sd: 0.27494698280409635 },
     { name: 'isSkill', coef: -0.1898380898326027, mean: 0.2572877059569075, sd: 0.43713927107998507 },
     { name: 'isOL', coef: 0.2564974833852538, mean: 0.19011406844106463, sd: 0.3923910159800472 },
@@ -539,8 +544,16 @@ function pickRangeBaseline(pick: number): { av: number; weight: number } {
   return                   { av:  7.4, weight: 0.35 }
 }
 
-export function calibratedExpectedAv(input: Prospect, signals: { draft: number; athletic: number; size: number; age: number }) {
-  const values: Record<ModelSignal, number> = {
+export type CalibrationSignals = { draft: number; athletic: number; size: number; age: number; strength?: number }
+
+// Single source of truth for the calibration-regression feature vector — used at both
+// runtime (here) and training time (scripts/fit-calibration-model.mts imports this
+// directly) so the two can never drift the way model.ts and the old
+// scripts/fit-calibration-models.py did. hasPff distinguishes a real matched PFF
+// profile from toProspect()'s placeholder-70 defaults (see the pffBlend gating fix);
+// strength defaults to the same neutral 50 used when there isn't enough bench data.
+export function buildCalibrationFeatureValues(input: Prospect, signals: CalibrationSignals): Record<ModelSignal, number> {
+  return {
     draftScore: signals.draft,
     logPick: Math.log(clamp(input.pick, 1, 260)),
     pffComp: input.pffComposite,
@@ -548,46 +561,29 @@ export function calibratedExpectedAv(input: Prospect, signals: { draft: number; 
     pffProd: input.pffProduction,
     pffEff: input.pffEfficiency,
     pffClean: input.pffClean,
+    hasPff: input.pffProfileId !== '' ? 1 : 0,
     ageScore: signals.age,
     athletic: signals.athletic,
     size: signals.size,
+    strength: signals.strength ?? 50,
     isQB: input.pos === 'QB' ? 1 : 0,
     isSkill: group[input.pos] === 'SKILL' ? 1 : 0,
     isOL: group[input.pos] === 'OL' ? 1 : 0,
     isFront: group[input.pos] === 'FRONT' ? 1 : 0,
     isDB: group[input.pos] === 'DB' ? 1 : 0,
   }
-  const logAv = calibratedAvModel.features.reduce(
-    (sum, feature) => sum + feature.coef * ((values[feature.name] - feature.mean) / feature.sd),
-    calibratedAvModel.intercept,
-  )
-  const modelAv = clamp(Math.expm1(logAv), 0, 110)
-  const { av: baselineAv, weight } = pickRangeBaseline(input.pick)
-  return blend(modelAv, baselineAv, weight)
+}
+
+export function calibratedExpectedAv(input: Prospect, signals: CalibrationSignals) {
+  return calibratedExpectedAvFromModel(input, signals, calibratedAvModel)
 }
 
 export function calibratedExpectedAvFromModel(
   input: Prospect,
-  signals: { draft: number; athletic: number; size: number; age: number },
+  signals: CalibrationSignals,
   model: CalibrationModel,
 ): number {
-  const values: Record<ModelSignal, number> = {
-    draftScore: signals.draft,
-    logPick: Math.log(clamp(input.pick, 1, 260)),
-    pffComp: input.pffComposite,
-    pffGrade: input.pffGrade,
-    pffProd: input.pffProduction,
-    pffEff: input.pffEfficiency,
-    pffClean: input.pffClean,
-    ageScore: signals.age,
-    athletic: signals.athletic,
-    size: signals.size,
-    isQB: input.pos === 'QB' ? 1 : 0,
-    isSkill: group[input.pos] === 'SKILL' ? 1 : 0,
-    isOL: group[input.pos] === 'OL' ? 1 : 0,
-    isFront: group[input.pos] === 'FRONT' ? 1 : 0,
-    isDB: group[input.pos] === 'DB' ? 1 : 0,
-  }
+  const values = buildCalibrationFeatureValues(input, signals)
   const logAv = model.features.reduce(
     (sum, f) => sum + f.coef * ((values[f.name] - f.mean) / (f.sd > 0 ? f.sd : 1)),
     model.intercept,
@@ -1307,8 +1303,8 @@ export function project(input: Prospect, history: Historical[], pffProfiles: Pff
     ? ((calibModels[grp as keyof CalibrationModelSet] as CalibrationModel | undefined) ?? calibModels.global)
     : null
   const calibratedAv = calibModel
-    ? calibratedExpectedAvFromModel(input, { draft, athletic, size, age }, calibModel)
-    : calibratedExpectedAv(input, { draft, athletic, size, age })
+    ? calibratedExpectedAvFromModel(input, { draft, athletic, size, age, strength }, calibModel)
+    : calibratedExpectedAv(input, { draft, athletic, size, age, strength })
 
   const comps = pool.map((p) => ({ player: p, sim: sim(input, p, y1Data, careerStats, grpCutoff, y1NflStats) })).sort((a, b) => b.sim - a.sim).slice(0, 80)
   const histWeight = comps.reduce((sum, c) => sum + c.sim, 0) || 1
