@@ -87,7 +87,7 @@ function candidates(): ParamCandidate[] {
     for (const learningRate of LEARNING_RATES) {
       out.push({
         numTrees: MAX_TREES, maxDepth, learningRate, minLeafSize: MIN_LEAF_SIZE,
-        rowSubsample: ROW_SUBSAMPLE, colSubsample: COL_SUBSAMPLE,
+        rowSubsample: ROW_SUBSAMPLE, colSubsample: COL_SUBSAMPLE, lambdaL2: 1,
         key: `depth=${maxDepth},lr=${learningRate}`,
       })
     }

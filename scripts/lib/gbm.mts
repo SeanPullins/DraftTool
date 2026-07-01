@@ -24,19 +24,28 @@ export type GbmParams = {
   minLeafSize: number
   rowSubsample: number     // fraction of rows sampled per tree, (0, 1]
   colSubsample: number     // fraction of features sampled per tree, (0, 1]
+  lambdaL2: number         // leaf-value regularization; shrinks small-sample leaves toward 0
 }
 
-function mean(values: number[], idx: number[]): number {
+// L2-regularized leaf value: sum(residual)/(n + lambda) instead of a plain mean. This is
+// the standard Newton-step leaf value for L2 loss (gradient=-residual, hessian=1 per row),
+// simplified to only regularize the leaf value rather than also folding lambda into the
+// split-gain search (a common practical shortcut for hand-rolled trees). Absent entirely
+// from the first GBM trial this session, which used minLeafSize=8 and no L2 term at all --
+// roughly 10x weaker leaf-size regularization than APEX's min_data_in_leaf=80/lambda_l2=5,
+// and likely a real factor (on top of predicting the wrong target) in why that trial lost
+// outright to ridge on training sets this small (QB is ~260 rows).
+function regularizedMean(values: number[], idx: number[], lambda: number): number {
   let s = 0
   for (const i of idx) s += values[i]
-  return s / idx.length
+  return s / (idx.length + lambda)
 }
 
 // Build one CART regression tree minimizing SSE, restricted to row indices `idx` and
 // candidate feature indices `featureIdx` (the latter re-sampled fresh at every node,
 // matching how random-forest-style column subsampling is usually implemented).
 function buildTree(X: number[][], residual: number[], idx: number[], allFeatures: number[], depth: number, params: GbmParams): TreeNode {
-  const nodeMean = mean(residual, idx)
+  const nodeMean = regularizedMean(residual, idx, params.lambdaL2)
   if (depth >= params.maxDepth || idx.length < params.minLeafSize * 2) {
     return { leaf: true, value: nodeMean }
   }
@@ -134,6 +143,23 @@ export function fitGbm(X: number[][], y: number[], params: GbmParams, onTreeAdde
   return { initialValue, learningRate: params.learningRate, trees }
 }
 
+// Seed-bagged ensemble: fit N independent GBMs (each with its own row/feature subsampling
+// draws, which differ naturally across calls even without an explicit seed) and average
+// their predictions. Matches APEX's "5-seed bagged" design -- averaging over independently
+// randomized fits reduces variance beyond what a single fit's own subsampling gets you,
+// which matters more the smaller the training set is.
+export type BaggedGbmModel = { models: GbmModel[] }
+
+export function fitBaggedGbm(X: number[][], y: number[], params: GbmParams, numSeeds: number): BaggedGbmModel {
+  const models: GbmModel[] = []
+  for (let s = 0; s < numSeeds; s++) models.push(fitGbm(X, y, params))
+  return { models }
+}
+
+export function predictBaggedGbm(model: BaggedGbmModel, x: number[]): number {
+  return model.models.reduce((s, m) => s + predictGbm(m, x), 0) / model.models.length
+}
+
 // Self-check: y has a pure interaction/step structure ((x1>5)+(x2>5)*2) that no linear
 // model could fit but a tree ensemble should recover almost exactly. Runs at import
 // time so a broken tree-builder fails loudly before it's ever used on real data.
@@ -146,12 +172,21 @@ function selfCheck() {
     X.push([x1, x2])
     y.push((x1 > 5 ? 10 : 0) + (x2 > 5 ? 5 : 0))
   }
-  const model = fitGbm(X, y, { numTrees: 40, maxDepth: 3, learningRate: 0.3, minLeafSize: 5, rowSubsample: 0.8, colSubsample: 1 })
+  const params: GbmParams = { numTrees: 40, maxDepth: 3, learningRate: 0.3, minLeafSize: 5, rowSubsample: 0.8, colSubsample: 1, lambdaL2: 1 }
+  const model = fitGbm(X, y, params)
   const cases: Array<[number[], number]> = [[[1, 1], 0], [[9, 1], 10], [[1, 9], 5], [[9, 9], 15]]
   for (const [x, expected] of cases) {
     const pred = predictGbm(model, x)
     if (Math.abs(pred - expected) > 1.5) {
       throw new Error(`gbm self-check failed: predict(${x}) expected≈${expected}, got ${pred.toFixed(2)}`)
+    }
+  }
+  // Bagged version should be at least as accurate on this noiseless synthetic case.
+  const bagged = fitBaggedGbm(X, y, params, 3)
+  for (const [x, expected] of cases) {
+    const pred = predictBaggedGbm(bagged, x)
+    if (Math.abs(pred - expected) > 1.5) {
+      throw new Error(`bagged gbm self-check failed: predict(${x}) expected≈${expected}, got ${pred.toFixed(2)}`)
     }
   }
 }
